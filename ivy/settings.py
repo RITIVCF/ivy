@@ -11,19 +11,25 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+conf = open(os.path.join(BASE_DIR, "ivy/settings.json"))
+lines = [line.strip() for line in conf]
+joined = " ".join(lines)
+jsonConf = json.loads(joined)
+DEBUG = jsonConf["DEBUG"]
+SECRET_KEY = jsonConf["SECRET_KEY"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'SECRET_KEY_HERE'
+#SECRET_KEY = 'SECRET_KEY_HERE'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
 ALLOWED_HOSTS = []
 
