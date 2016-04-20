@@ -1,0 +1,96 @@
+body{
+  background-color: white;
+  /*background-color: black;*/
+  color: black;
+  font-size: 20px;/*16px is the standard: https://artsassistance.com/best-font-size-websites/*/
+  margin: 0;
+  padding: 0;
+}
+header{
+  width: 100%;
+  height: 150px;
+  margin: 0;
+  padding: 0;
+  background-color: #0A1808; /*dark green*/
+  color: #eee;
+}
+nav{
+  /*width: 100%;*/
+  height: 50px;
+  /*margin: 10%;*/
+  background: #339623;
+  color: #eee;
+}
+nav #current{
+  color: #0A1808;
+  font-weight: bold;
+}
+#content{
+  /*width: 100%;*/
+  height: 300px;
+  /*margin: 0;
+  padding: 0;*/
+  padding: 0 5%;
+  /*margin-left: auto;*/
+  /*margin-right: auto;*/
+  border: 1px solid #123D0B;
+  /*background: red;*/
+}
+footer{
+  width: 100%;
+  height: 200px;
+  background-color: #0A1808; /*dark green*/
+  color: #eee;
+}
+h1{
+  /*color: orange;*/
+}
+button{
+  background: #123D0B;
+  color: white;
+  width: 150px;
+  height: 50px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  margin: 2%;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+button:hover{
+  background-color: #339623; /* Green */
+  color: white;
+}
+#btn2{
+  background: #5DDD49;
+  color: #123D0B;
+}
+#btn2:hover{
+  background: white;
+  /*color: #5DDD49;*/
+  border: 2px solid #5DDD49;
+}
+#btn3{
+  background: #339623;
+  color: white;
+}
+#btn3:hover{
+  background: white;
+  color: #123D0B;
+  border: 2px solid #5DDD49;
+}
+#btn4{
+  background: #339623;
+  color: white;
+}
+#btn4:hover{
+  background: #5DDD49;
+  color: #123D0B;
+  /*border: 2px solid #5DDD49;*/
+}
+a{
+  color: #339623;
+}
+a:hover{
+  color: #5DDD49;
+}
