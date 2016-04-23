@@ -17,6 +17,8 @@ standard-minifier-js    # JS minifier run for production mode
 es5-shim                # ECMAScript 5 compatibility for older browsers.
 ecmascript              # Enable ECMAScript2015+ syntax in app code
 
+autopublish      #For prototyping only. will remove later when doing server writes
+insecure         #For prototyping only. will remove later when doing server writes
 jsx
 react-meteor-data
 react-runtime@=0.14.3
@@ -29,3 +31,5 @@ accounts-password
 fortawesome:fontawesome
 less
 nemo64:bootstrap
+meteortoys:allthings
+ultimatejs:tracker-react
