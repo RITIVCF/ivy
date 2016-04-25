@@ -43,9 +43,6 @@ maroon = #6A2140
 light-red = #CA5765
 pink = #CF256D
 orange = #E8846B
-gold = #FCB816
-dark-grey = #7c8081
-dark-blue = #1A3D6D
 
 z = {
     neg: -7,
@@ -76,60 +73,57 @@ html
 *, *:before, *:after
     box-sizing: inherit
 
-body, input, select, textarea
-    font-family 'Montserrat', sans-serif
-    color #7c8081
-    font-size 15pt
-    font-weight 300
-    letter-spacing 0.025em
-    line-height 1.75em
+body
+    background light-grey
+    padding: 70px 0 150px
+    font-family: 'Open Sans', sans-serif
 
 header
-    color #FFF
-    background: dark-blue
+    color #FFF 
+    background: purp
     padding 20px 5%
     fixed top left
     width 100%
-    height 70px
+    height 70px  
     z-index: z.header
     shadow-level(2)
     clearfix()
     h2
         margin 0
-        font-weight 100
-        font-size 1.6em
+        font-weight 100 
+        font-size 1.6em 
         float left
     nav
         float right
-        a
+        a 
             color: #FFF
             text-decoration: none
             line-height: 36px
             font-size: 1.2em
             display: inline-block
             border-bottom 4px solid transparent
-            trans()
+            trans() 
             + a
                 margin-left: 30px
             &:hover
-                border-color teal
+                border-color teal 
 
 
 p
-    color #333
+    color #333 
 
 .page-title
     text-transform uppercase
-    font-weight 800
-    margin-bottom 30px
+    font-weight 800 
+    margin-bottom 30px 
 
 .main-layout
     lost-center 90%
-    margin-top 20px
+    margin-top 20px 
     +above($large)
         lost-center 70%
         margin-top 40px
-
+    
 .btn, button
     display inline-block
     cursor pointer
@@ -176,7 +170,7 @@ p
         shadow-level(0)
         &:hover
             background #FFF
-            color dark-purp
+            color dark-purp 
             border-color @background
             shadow-level(1)
     &.btn-confirmation
@@ -189,7 +183,7 @@ p
     &.btn-cancel
         color #FFF
         background transparent
-        border solid 2px #FFF
+        border solid 2px #FFF 
         opacity 0.4
         shadow-level(-1)
         &:hover
@@ -199,7 +193,14 @@ p
             shadow-level(2)
             border-color @background
 
-
+input, select, textarea
+    color purp
+    background #FFF
+    border solid 2px light-grey
+    border-radius 2px
+    font-weight 800
+    padding 6px 10px
+    margin-bottom 10px  
 
 input::-webkit-input-placeholder
     color: #ddd
@@ -220,13 +221,13 @@ input:-ms-input-placeholder
         text-transform uppercase
         font-weight 800
         color #FFF
-        font-size 1.2em
-        padding 10px
+        font-size 1.2em 
+        padding 10px 
         display block
         text-align center
         letter-spacing 2px
     input
-        width 100%
+        width 100% 
         margin 0
         font-size 2em
         font-weight 800
@@ -237,31 +238,31 @@ input:-ms-input-placeholder
 .resolutions
     list-style none
     padding 0
-    margin 40px 0
+    margin 40px 0 
     lost-center 700px
     li
-        font-size 2em
-        margin-bottom 8px
+        font-size 2em 
+        margin-bottom 8px 
         input
-            margin-right 10px
+            margin-right 10px 
         &.checked
-            color #CCC
+            color #CCC 
         button
             padding 10px
-            margin-left 40px
-            line-height 0.5
+            margin-left 40px  
+            line-height 0.5 
             float right
-
+    
 .panel-body
     .form-group
-        lost-column 1/2
+        lost-column 1/2 
 
 .side-nav
     fixed bottom left
     height 100px
     width 100%
-    overflow hidden
-    background grey
+    overflow hidden 
+    background dark-purp
     color #FFF
     z-index: z.header
     shadow-level(2)
@@ -269,7 +270,7 @@ input:-ms-input-placeholder
         margin 0
         padding 0
         display flex
-        justify-content space-between
+        justify-content space-between 
         list-style none
     a
         color #FFF
@@ -279,18 +280,18 @@ input:-ms-input-placeholder
         text-align center
         trans()
         &:hover, &.active
-            background purp
+            background purp 
     i
         display block
         font-size 2em
-        margin-bottom 10px
+        margin-bottom 10px 
     +above($med)
         height 100%
         z-index: z.mid
         padding 120px 0
         fixed top left
         width $side-nav
-        ul
+        ul 
             display block
         shadow-level(-1)
         a
@@ -303,20 +304,20 @@ input:-ms-input-placeholder
             padding 20px 20px
             &:hover, &.active
                 border-left 10px solid teal
-
+        
 .completed
     color #FFF
     background teal
     border-radius 5px
     padding 5px
-    margin-left 20px
+    margin-left 20px 
     animation complete 0.6s ease
-    font-size 0.6em
-
+    font-size 0.6em 
+    
 #login-dropdown-list
     right -1px
-    left auto
-
+    left auto  
+    
 #login-sign-in-link, #login-name-link
     margin-left: 30px
 
@@ -326,14 +327,14 @@ input:-ms-input-placeholder
         opacity 0
         transform translate3d(0,-30px,0)
     100%
-        opacity 1
+        opacity 1 
         transform translate3d(0, 0,0)
 
 .resolutionLoad-enter
     opacity: 0
     animation: slideIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)
 
-.resolutionLoad-leave
+.resolutionLoad-leave 
     animation: slideOut 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)
     opacity: 1.0
 
@@ -360,15 +361,15 @@ input:-ms-input-placeholder
     100%
         opacity 1
         transform translate3d(0, 0, 0)
-
+        
 .route-enter, .route-appear
     opacity: 0
     animation: slideIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)
 
-.route-leave
+.route-leave 
     animation: slideOut 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)
     opacity: 1.0
-
+    
 .route-appear
     opacity: 0
     animation: slideUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)

@@ -5,5 +5,10 @@ Meteor.methods({
         complete: false,
         createdAt: new Date()
     });
+  },
+  addEthnicity(ethnicity){
+    Ethnicities.insert({
+      name: ethnicity
+    });
   }
 })
