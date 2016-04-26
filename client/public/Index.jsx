@@ -5,7 +5,7 @@ export default class IndexWrapper extends TrackerReact(React.Component){
   render(){
     return (
       <div>
-        <h1>This is the Hompage</h1>
+        <h1>This is the Homepage</h1>
         <h2>WE ARE A VIBRANT CAMPUS MINISTRY THAT ESTABLISHES AND
           ADVANCES WITNESSING COMMUNITIES OF STUDENTS AND FACULTY.</h2>
         <p>We minister to students and faculty through small group Bible
