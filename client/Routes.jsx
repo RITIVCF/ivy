@@ -7,10 +7,14 @@ import {FormLayout} from './layouts/FormLayout.jsx';
 import {PublicLayout} from './layouts/PublicLayout.jsx';
 
 //Wrappers
+import DashboardWrapper from './ivy/Dashboard.jsx';
 import ResolutionsWrapper from './resolutions/ResolutionsWrapper.jsx';
+import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
+import EventWorkspace from './event/EventWorkspace.jsx';
+import EventSummary from './event/EventSummary.jsx';
+	// Public Wrappers
 import AboutWrapper from './public/AboutWrapper.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
-import EthnicityWrapper from './member/EthnicityWrapper.jsx';
 import ContactWrapper from './contact/ContactWrapper.jsx';
 import IndexWrapper from './public/Index.jsx';
 import SmallGroupWrapper from './public/smallgroup/SmallGroupWrapper.jsx';
@@ -31,7 +35,15 @@ FlowRouter.route('/',{
 FlowRouter.route('/ivy',{
 	action() {
 		mount(MainLayout, {
-			content: (<ResolutionsWrapper />)
+			content: (<DashboardWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/ivy/events',{
+	action() {
+		mount(MainLayout, {
+			content: (<EventSummary />)
 		})
 	}
 });
@@ -116,9 +128,9 @@ FlowRouter.route('/forms/contact', {
 	}
 });
 
-FlowRouter.route('/forms/ethnicity', {
+FlowRouter.route('/ivy/ethnicity', {
 	action() {
-		mount(FormLayout, {
+		mount(MainLayout, {
 				content: (<EthnicityWrapper />)
 			}
 		)

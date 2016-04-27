@@ -10,5 +10,14 @@ Meteor.methods({
     Ethnicities.insert({
       name: ethnicity
     });
+  },
+  addBlankEvent(){
+    return Events.insert({
+      name: "New Event",
+      createdAt: new Date(),
+      published: false,
+      edit: [],
+      view: []
+    });
   }
 })

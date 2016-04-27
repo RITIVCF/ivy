@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-//import EthnicitySelect from './ethnicityselect.jsx';
+
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import EthnicitySingle from './ethnicitysingle.jsx';
+import EthnicitySelect from '../ethnicity/EthnicitySelect.jsx';
 
 
 export default class MemberForm extends TrackerReact(React.Component) {
@@ -59,7 +59,7 @@ export default class MemberForm extends TrackerReact(React.Component) {
           <label>Ethnicity:*</label>
             <select ref="ethn">
               {this.ethnicities().map( (ethnicity)=>{
-                return <EthnicitySingle key={ethnicity._id} ethnicity={ethnicity} />
+                return <EthnicitySelect key={ethnicity._id} ethnicity={ethnicity} />
               })}
             </select>
           <label>Campus Affiliations:</label>

@@ -17,6 +17,7 @@ export const PublicLayout = ({content}) => (
 									</ul>
 								</li>
 								<li class="button special"><a href="#cta">Questions</a></li>
+								<li class="button special"><a href="/forms/member">Become a Member</a></li>
 							</ul>
             </nav>
         </header>

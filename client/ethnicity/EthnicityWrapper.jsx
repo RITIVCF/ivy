@@ -1,12 +1,12 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EthnicitiesForm from './EthnicitiesForm.jsx';
-import EthnicitySingle from './ethnicitysingle.jsx';
+import EthnicitySelect from './EthnicitySelect.jsx';
 
 
 Ethnicities = new Mongo.Collection("ethnicities");
 
-export default class ResolutionsWrapper extends TrackerReact(React.Component) {
+export default class EthnicityWrapper extends TrackerReact(React.Component) {
 	ethnicities() {
 		return Ethnicities.find().fetch();
 	}
@@ -19,7 +19,7 @@ export default class ResolutionsWrapper extends TrackerReact(React.Component) {
             <EthnicitiesForm />
 						<select className="ethnicities">
                 {this.ethnicities().map( (ethnicity)=>{
-                    return <EthnicitySingle key={ethnicity._id} ethnicity={ethnicity} />
+                    return <EthnicitySelect key={ethnicity._id} ethnicity={ethnicity} />
                 })}
             </select>
 		</div>
