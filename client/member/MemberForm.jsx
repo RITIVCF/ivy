@@ -12,6 +12,11 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
     //Meteor.call('addMember');
     }
+    check(event){
+      event.preventDefault();
+      console.log(this);
+    }
+
     ethnicities() {
       return Ethnicities.find().fetch();
     }
@@ -64,13 +69,13 @@ export default class MemberForm extends TrackerReact(React.Component) {
             </select>
           <label>Campus Affiliations:</label>
           <label>Nursing:</label>
-          <input ref="nursing" type="checkbox"></input>
+          <input ref="nursing" type="checkbox" onClick={this.check.bind(this)}></input>
           <label>Greek Life:</label>
           <input ref="greek" type="checkbox"></input>
           <label>Arts:</label>
           <input ref="arts" type="checkbox"></input>
-          <label>Atheltics:</label>
-          <input ref="atheltics" type="checkbox"></input>
+          <label>Athletics:</label>
+          <input ref="athletics" type="checkbox"></input>
           <label>Community Involvement:</label>
           <label>I attend church regularly:</label>
           <input ref="church" type="checkbox"></input>
@@ -78,7 +83,6 @@ export default class MemberForm extends TrackerReact(React.Component) {
           <input ref="volunteer" type="checkbox"></input>
           <input type="submit"></input>
         </form>
-        <a href="/about"><button>Cancel</button></a>
       </div>
       )
     }

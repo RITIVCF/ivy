@@ -20,7 +20,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 
 		return (
 		<div>
-			<h1>Event Workspace</h1>  // Hiddn behind header until styled correctly
+			<h1>Event Workspace</h1>
 				<h1>Event Workspace</h1>
 			<div className="sidebar">
 

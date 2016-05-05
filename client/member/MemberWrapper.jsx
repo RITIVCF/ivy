@@ -8,8 +8,10 @@ Contacts = new Mongo.Collection('contacts');
 export default class MemberWrapper extends TrackerReact(React.Component){
   render() {
     return (
-      <div>
+      <div id="card" className="card">
+        <div className="front">
         <MemberForm />
+        </div>
       </div>
     )
   }

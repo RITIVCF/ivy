@@ -19,6 +19,8 @@ ecmascript              # Enable ECMAScript2015+ syntax in app code
 
 autopublish      #For prototyping only. will remove later when doing server writes
 accounts-ui
+accounts-password
+accounts-google
 jsx
 react-meteor-data
 react-runtime@=0.14.3
@@ -27,7 +29,6 @@ kadira:flow-router
 kadira:react-layout
 fourseven:scss
 reywood:bootstrap3-sass
-accounts-password
 fortawesome:fontawesome
 less
 nemo64:bootstrap

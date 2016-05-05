@@ -1,4 +1,6 @@
 accounts-base@1.2.5
+accounts-google@1.0.8
+accounts-oauth@1.1.11
 accounts-password@1.1.7
 accounts-ui@1.1.8
 accounts-ui-unstyled@1.1.11
@@ -36,6 +38,7 @@ fastclick@1.0.10
 fortawesome:fontawesome@4.5.0
 fourseven:scss@3.4.1
 geojson-utils@1.0.7
+google@1.1.10
 gwendall:body-events@0.1.6
 hot-code-push@1.0.3
 html-tools@1.0.8
@@ -84,6 +87,8 @@ nemo64:bootstrap@3.3.5_2
 nemo64:bootstrap-data@3.3.5
 npm-bcrypt@0.7.8_2
 npm-mongo@1.4.42
+oauth@1.1.9
+oauth2@1.1.8
 observe-sequence@1.0.10
 ordered-dict@1.0.6
 promise@0.6.6

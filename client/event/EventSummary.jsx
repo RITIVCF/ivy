@@ -2,7 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
 
-
+// Instead of event "types" it needs to be event "tags"
 Events = new Mongo.Collection("events");
 
 export default class EventSummary extends TrackerReact(React.Component) {
@@ -10,20 +10,26 @@ export default class EventSummary extends TrackerReact(React.Component) {
     event.preventDefault();
     //creates a new event and opens event details in event workspace
     console.log("This button creates a new event");
-    var id = Meteor.call('addBlankEvent');
-    console.log("Created new event with id: "+id.toString());
+    var id = Meteor.call('addBlankEvent',function(error, result){
+      if(error){
+        console.log(error.reason);
+        return;
+      }
+      console.log(result);
+      location.assign("events/workspace");
+    });
+
   }
 
   events(){
     // pulls upcoming, published events
-
-    return Events.find({published: true, date: {$gt: Date()}}).fetch();
+    return Events.find({published: true, start: {$gt: new Date()} }).fetch();
   }
 
   myunpublished(){
     // pulls users's unpublished events
     var testuserID = 5;
-    return Events.find({published: false,edit:testuserID}).fetch();
+    return Events.find({published: false, edit:testuserID}).fetch();
   }
 
   myscheduled(){
@@ -32,19 +38,39 @@ export default class EventSummary extends TrackerReact(React.Component) {
     return Events.find({edit: testuserID }).fetch();
   }
 
-	render() {
+  openPopup(event){
+    event.preventDefault();/*
+    $('<div id="__msg_overlay">').css({
+      "width" : "100%"
+    , "height" : "100%"
+    , "background" : "#000"
+    , "position" : "fixed"
+    , "top" : "0"
+    , "left" : "0"
+    , "zIndex" : "50"
+    , "MsFilter" : "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)"
+    , "filter" : "alpha(opacity=60)"
+    , "MozOpacity" : 0.6
+    , "KhtmlOpacity" : 0.6
+    , "opacity" : 0.6
 
+}).appendTo(document.body);*/
+  }
+
+	render() {
+    document.title=" RIT IVCF - Event Summary Page";
 		return (
 		<div>
       <h1>Event Summary Page</h1>
 			<div className="sidebar">
         <ul>
           <li><button onClick={this.createNew.bind(this)}>New</button></li>
+          <li><button onClick={this.openPopup.bind(this)}>Test Popup</button></li>
         </ul>
 
 			</div>
 			<div className="summary">
-        <h2>Event Summary Page</h2>
+        {/*<h2>Event Summary Page</h2>*/}
         <div className="myschedule">
           <h1>My Schedule</h1>
           {this.myscheduled().map( (ivevent)=>{
