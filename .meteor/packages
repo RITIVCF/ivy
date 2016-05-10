@@ -33,5 +33,6 @@ fortawesome:fontawesome
 less
 nemo64:bootstrap
 meteortoys:allthings
+momentjs:moment
 ultimatejs:tracker-react@=1.0.0
 stolinski:stylus-multi

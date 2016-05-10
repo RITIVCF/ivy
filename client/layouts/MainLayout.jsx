@@ -4,7 +4,7 @@ import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
 export const MainLayout = ({content}) => (
 	<div className="main-layout">
 				<header id="header">
-					<a href="/"><h1>Ivy</h1></a>
+					<a href="/">RIT IVCF</a>
             <nav id="nav">
 							<ul>
 								<li><AccountsUIWrapper /></li>
