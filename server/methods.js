@@ -35,9 +35,21 @@ Meteor.methods({
     return id;
   },
   updateName(name){
-    console.log(name);
-    Meteor.users.update(this.userId, {
-      $set: {"name": name}
-    });
+    console.log("Before: "+name);
+    Meteor.users.update(Meteor.userId(), {$set: {"profile.name": name}});
+
+  },
+  updateEmail(email){
+    console.log("Email:"+email);
+    Meteor.users.update(Meteor.userId(), {$set: {"emails.address": email}});  // use . notation to change nested documents
+  },
+  updateEthnicity(ethn){
+    Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ethn}});
+  },
+  toggleInternational(intl){
+    if(intl){
+      Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ""}}); //If international, clear ethnicity
+    }
+    Meteor.users.update(Meteor.userId(), {$set: {"intl": !intl}}); // Change intl status
   }
 })

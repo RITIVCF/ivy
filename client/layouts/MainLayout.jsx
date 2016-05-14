@@ -11,6 +11,7 @@ export const MainLayout = ({content}) => (
                 <li class="current"><a href="/forms/contact">Select Contact Form</a></li>
                 <li class="current"><a href="/ethnicity">Add Ethnicity</a></li>
 								<li class="current"><a href="/events">Event Summary</a></li>
+								<li class="current"><a href="/calendar">Event Calendar</a></li>
 							</ul>
             </nav>
         </header>

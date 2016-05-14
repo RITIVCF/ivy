@@ -12,6 +12,7 @@ import ResolutionsWrapper from './resolutions/ResolutionsWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
 import EventSummary from './event/EventSummary.jsx';
+import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
 
 
@@ -27,6 +28,14 @@ FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
 			content: (<UserProfileWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/calendar', {
+	action() {
+		mount(MainLayout, {
+			content: (<EventCalendarWrapper />)
 		})
 	}
 });
