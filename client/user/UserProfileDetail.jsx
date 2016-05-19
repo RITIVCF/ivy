@@ -66,7 +66,7 @@ export default class UserProfileDetail extends Component {
     console.log(this.props.userdetail);
     console.log(this.props.userdetail.profile.name);
     var name = this.props.userdetail.profile.name;
-    var email = this.props.userdetail.emails.address;
+    var email = this.props.userdetail.emails[0].address;
     return (
       <div>
         <div class="header">
@@ -87,13 +87,18 @@ export default class UserProfileDetail extends Component {
               onChange={this.handleEmailChange}
               value={email}
             />
+          {/*}
           <label for="intl">International Student</label>
           <input type="checkbox" ref="intl" id="intl" onChange={this.handleIntlChange.bind(this)} />
-          <select ref="ethn" > {/*onChange={this.handleEthnChange.bind(this)}*/}
+          <select ref="ethn" > {/*onChange={this.handleEthnChange.bind(this)}
             {this.ethnicities().map( (ethnicity)=>{
               return <EthnicitySelect key={ethnicity._id} ethnicity={ethnicity} />
             })}
-          </select>
+          </select>*/}
+            </form>
+            <form>
+              <input type="text" ref="newemail" />
+              <button onClick={this.addEmail.bind(this)}>Add Email</button>
             </form>
           </div>
         </div>

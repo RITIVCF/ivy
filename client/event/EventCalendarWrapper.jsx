@@ -17,10 +17,16 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     if (end._isAMomentObject) {
       end = end._d;
     }
-    e = Events.find({createdAt: /*{}*/{$gte: start, $lt: end}}).fetch();
+    e = Events.find({$or:
+                      [{start: {$gte: start, $lt: end}},
+                        {end: {$gte: start, $lt: end}},
+                        {$and:
+                          [{start: {$lte: start}},
+                            {end: {$gt: end}}]}
+                      ]}).fetch();
     e = e.map((event) => {
       // Add a "start" key for now
-      event.start = event.createdAt;
+      //event.start = event.createdAt;
       // Copy name to title for FullCalendar
       event.title = event.name;
       return event;

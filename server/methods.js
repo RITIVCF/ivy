@@ -16,8 +16,8 @@ Meteor.methods({
       name: "New Event",     // Name  *publicly visable
       createdAt: new Date(),   //Date created
       published: false,    // published to the public calendar
-      edit: [],      // user IDs that have edit permission
-      view: [],     // user IDs that have view permission
+      permUser: [],      // {UserID: true/false}   true=edit, false=view
+      permGroup: [],     // {GroupID: true/false}    true=edit, false=view
       start: "",    // date time object
       end: "",      // Date time object
       description: "", // public description
@@ -41,7 +41,7 @@ Meteor.methods({
   },
   updateEmail(email){
     console.log("Email:"+email);
-    Meteor.users.update(Meteor.userId(), {$set: {"emails.address": email}});  // use . notation to change nested documents
+    Meteor.users.update(Meteor.userId(), {$set: {"emails[0].address": email}});  // use . notation to change nested documents
   },
   updateEthnicity(ethn){
     Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ethn}});
