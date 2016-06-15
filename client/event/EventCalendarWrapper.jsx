@@ -6,7 +6,23 @@ import EventCalendar from './EventCalendar.jsx';
 //Events = new Mongo.Collection("events");
 
 export default class EventCalendarWrapper extends TrackerReact(React.Component) {
+  constructor() {
+    super();
 
+    this.state = {
+      subscription: {
+        Events: Meteor.subscribe("publishedEvents")
+      }
+    };
+  }
+
+  componentWillUnmount() {
+    this.state.subscription.Events.stop();
+  }
+
+  getEvents(){
+    return Events.find().fetch();
+  }
 
   fetchScheduled(start, end, timezone, callback) {
     // FullCalendar calls this function with a start time, end time, timezone
@@ -17,7 +33,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     if (end._isAMomentObject) {
       end = end._d;
     }
-    e = Events.find({$or:
+    e = Events.find({published:true, $or:
                       [{start: {$gte: start, $lt: end}},
                         {end: {$gte: start, $lt: end}},
                         {$and:
@@ -35,7 +51,11 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
   }
 
 	render() {
-
+    document.title="Ivy - Event Calendar";
+    events = this.getEvents();
+    if(!events){
+  		return (<div>Loading...</div>);
+  	}
 		return (
 		<div>
       <h1>Event Calendar</h1>

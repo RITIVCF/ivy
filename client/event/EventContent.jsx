@@ -74,6 +74,8 @@ export default class EventContent extends Component {
     return (
       <div>
         {this.renderContent()}
+        <a href={"/forms/signin/" + this.props.event._id}><button>Form</button></a>
+        <a href={"/forms/rsvp/"+ this.props.event._id}><button>RSVP</button></a>
       </div>
     )
   }

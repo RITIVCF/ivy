@@ -13,26 +13,33 @@ Meteor.methods({
   },
   addBlankEvent(){
     var id = Events.insert({
-      name: "New Event",     // Name  *publicly visable
+      name: "New Event",     // Name  *publicly visab
       createdAt: new Date(),   //Date created
       published: false,    // published to the public calendar
       permUser: [],      // {UserID: true/false}   true=edit, false=view
       permGroup: [],     // {GroupID: true/false}    true=edit, false=view
-      start: "",    // date time object
-      end: "",      // Date time object
+      start: new Date(),    // date time object
+      end: new Date(),      // Date time object
+      workpad: "",      // text area for working
       description: "", // public description
       notes: "",   // the notes field for all the workspace
       location: "",  // text area for location
       host: "", // user ID of the host
-      owner: "", // user ID of the creator and owner. Can be changed.
+      owner: Meteor.userId(), // user ID of the creator and owner. Can be changed.
       tags: [],     // tags to sort events by, not type as there can be more than one type potentially
       notes: [],    // This is an array of note objects  {note: "text", createdAt: "DateTime", createdBy: "user ID"}
       attachements: [],  // This is an array of text objects pointing to different attachements
       attendees: [],     // This is an array of user Ids of people who attended
       rsvps: [],         // This is an array of {userId: , rsvp: [yes, no, interested]} of people who RSVPed to this event (Mostly for conference sign ups and such)
-      pic: ""   // pointer to image location, less we deem sending pictures to the database better
+      pic: "",   // pointer to image location, less we deem sending pictures to the database better
+      reserved: false, //room reserved
+      evr: false,  // registered with university
+      jobs: []     // {id: userid, jobname: "Job Name"}
     });
     return id;
+  },
+  deleteEvent(eid){
+    Events.remove({_id:eid});
   },
   updateName(name){
     console.log("Before: "+name);
@@ -51,5 +58,83 @@ Meteor.methods({
       Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ""}}); //If international, clear ethnicity
     }
     Meteor.users.update(Meteor.userId(), {$set: {"intl": !intl}}); // Change intl status
+  },
+  updateEventStart(eid,datetime){
+    Events.update(eid,{$set: {"start":datetime}});
+  },
+  updateEventEnd(eid,datetime){
+    Events.update(eid,{$set: {"end":datetime}});
+  },
+  togglePublishEvent(eid,status){
+
+    if(status){
+      status = false;
+    }
+    else {
+      status = true;
+    }
+    Events.update(eid, {$set: {"published": status}});
+  },
+  updateEventDescription(eid,description){
+    Events.update(eid,{$set: {"description":description}});
+  },
+  updateEventName(eid,name){
+    Events.update(eid,{$set: {"name": name}});
+  },
+  updateEventLocation(eid,location){
+    Events.update(eid,{$set: {"location": location}});
+  },
+  updateEventWorkpad(eid,text){
+    Events.update(eid,{$set: {"workpad": text}});
+  },
+  updateEventReserved(eid,status){
+    if(status){
+      status = false;
+    }
+    else {
+      status = true;
+    }
+    Events.update(eid,{$set: {"reserved": status}});
+  },
+  updateEventEVR(eid,status){
+    if(status){
+      status = false;
+    }
+    else {
+      status = true;
+    }
+    Events.update(eid,{$set: {"evr": status}});
+  },
+
+
+  // Churches stuff
+  addBlankChurch(){
+    var id = Churches.insert({
+      name: "New Church",     // Name  *publicly visab
+      url: "",
+      times: [{day:"Sunday",time:"10:00am"}],
+      contacts: [],      //User Ids
+      active: false
+    });
+    return id;
+  },
+  deleteChurch(cid){
+    Churches.remove({_id:cid});
+  },
+  toggleActiveChurch(cid,status){
+
+    if(status){
+      status = false;
+    }
+    else {
+      status = true;
+    }
+    Churches.update(cid, {$set: {"active": status}});
+  },
+  updateChurchName(cid,text){
+    Churches.update(cid,{$set: {"name": text}});
+  },
+  updateChurchURL(cid,text){
+    Churches.update(cid,{$set: {"url": text}});
   }
 })

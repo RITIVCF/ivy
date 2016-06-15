@@ -52,7 +52,7 @@ export default class UserProfileDetail extends Component {
   handleEthnChange(event){
     event.preventDefault();
     var ethn = this.refs.ethn.value;
-    Meteor.call('updateEthnicity', intl);
+    Meteor.call('updateEthnicity', ethn);
   }
 
 

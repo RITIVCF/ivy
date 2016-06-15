@@ -1,41 +1,63 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
+import EventWorkspace from './EventWorkspace.jsx';
 
 // Instead of event "types" it needs to be event "tags"
-Events = new Mongo.Collection("events");
+//Events = new Mongo.Collection("events");
 
 export default class EventSummary extends TrackerReact(React.Component) {
+  constructor() {
+    super();
+
+    this.state = {
+      subscription: {
+        Events: Meteor.subscribe("allEvents")
+      }
+    };
+  }
+
+  componentWillUnmount() {
+    this.state.subscription.Events.stop();
+  }
+
   createNew(event){
     event.preventDefault();
+    console.log(event);
+    console.log(this);
     //creates a new event and opens event details in event workspace
     console.log("This button creates a new event");
-    var id = Meteor.call('addBlankEvent',function(error, result){
+    Meteor.call('addBlankEvent', function(error, result){
       if(error){
         console.log(error.reason);
         return;
       }
-      console.log(result);
-      location.assign("events/workspace");
+      console.log("Event ID: " + result);
+      console.log(this);
+      location.assign("/events/workspace/"+result);
+      //this.Session.set("eventId",result);
+      //location.assign("/events");
+
+      //this.props.parent.state.eventId = result;
+      //setID(result);
     });
 
   }
 
+
   events(){
     // pulls upcoming, published events
-    return Events.find({published: true, start: {$gt: new Date()} }).fetch();
+    return Events.find({published: true, end: {$gt: new Date()} }).fetch();
   }
 
   myunpublished(){
     // pulls users's unpublished events
-    var testuserID = 5;
-    return Events.find({published: false, edit:testuserID}).fetch();
+    return Events.find({published: false, owner: Meteor.userId()}).fetch();
   }
 
   myscheduled(){
     // pulls events on which a user is scheduled
-    var testuserID = 7;
-    return Events.find({edit: testuserID }).fetch();
+    return Events.find({end: {$gt: new Date()}, jobs:{_id:"BtbQJmvLGrkFNj8ck"} }).fetch();
   }
 
   openPopup(event){
@@ -58,39 +80,38 @@ export default class EventSummary extends TrackerReact(React.Component) {
   }
 
 	render() {
-    document.title=" RIT IVCF - Event Summary Page";
+    document.title="Ivy - Event Dashboard";
 		return (
-		<div>
-      <h1>Event Summary Page</h1>
-			<div className="sidebar">
-        <ul>
-          <li><button onClick={this.createNew.bind(this)}>New</button></li>
-          <li><button onClick={this.openPopup.bind(this)}>Test Popup</button></li>
-        </ul>
-
-			</div>
-			<div className="summary">
-        {/*<h2>Event Summary Page</h2>*/}
+      <div>
+        <nav className="navbar-default navbar-side" role="navigation">
+          <ul className="nav navbar-nav">
+            <li><button className="button alert" onClick={this.createNew.bind(this)}>New</button></li>
+          </ul>
+        </nav>
+        <br></br>
+      <div className="summary">
+              <h1>Event Dashboard</h1>
         <div className="myschedule">
           <h1>My Schedule</h1>
           {this.myscheduled().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id} ivevent={ivevent} />
+              return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
           })}
         </div>
         <div className="upcoming">
-          <h1>Upcoming Events</h1>
+          <h1>Published Future Events</h1>
           {this.events().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id} ivevent={ivevent} />
+              return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this}/>
           })}
         </div>
         <div className="myunpublished">
-          <h1>My Unpublished Events</h1>
+          <h1>View/Edit Unpublished Events</h1>
           {this.myunpublished().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id} ivevent={ivevent} />
+              return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this} />
           })}
         </div>
-			</div>
-		</div>
-		)
+      </div>
+      <a href="/events/old"><button className="button new">View old events</button></a>
+    </div>
+  )
 	}
 }
