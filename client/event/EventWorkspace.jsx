@@ -80,7 +80,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 		return (
 
 		<div>
-			{Meteor.userId()!=ev.owner ? <PermissionWindow ref="overlay" parent={this} />:""}
+			{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} />:""}
 			<article id="main">
         <header className="special container">
           <h2>Event Workspace</h2>

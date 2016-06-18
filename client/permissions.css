@@ -1,0 +1,110 @@
+.hidden
+{
+    display: none;
+}
+
+#overlay
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, .75);
+}
+
+#popup
+{
+    width: 50%;
+    height: 90%;
+    position: fixed;
+    top: 5%;
+    left: 25%;
+    border-radius: 15px;
+    z-index: 11;
+    background-color: rgb(242, 242, 242);
+    border: 2px solid rgb(220, 220, 220);
+    padding: 5px;
+}
+
+#permBlock
+{
+   border: 2px solid rgb(200, 200, 200);
+}
+
+#headerRow
+{
+    background-color: rgb(220, 220, 220);
+    border-bottom: 2px solid rgb(200, 200, 200);
+}
+
+#nameHeader, #editHeader, #viewHeader, .permHolder
+{
+    display: inline-block;
+    border-left: 2px solid rgb(200, 200, 200);
+    width: calc(15% - 17px);
+    padding: 5px;
+}
+
+#nameHeader, .permHolder
+{
+    width: 70%;
+    border-left: 0px;
+}
+
+#permList
+{
+    min-height: 100px;
+    background-color: rgb(255, 255, 255);
+}
+
+.groupsPerm .permHolder::before
+{
+    content: "{} ";
+}
+
+.usersPerm .permHolder::before
+{
+    content: "[] ";
+}
+
+.usersPerm, .groupsPerm
+{
+
+}
+
+.editButtonWrapper, .viewButtonWrapper
+{
+    display: inline-block;
+    width: calc(15% - 5px);
+    text-align: center;
+}
+
+#permWindowOwner
+{
+    display: inline-block;
+    width: 90%;
+}
+
+#permWindowOwner, #changeOwner
+{
+    position: relative;
+    top: -15px;
+}
+
+#addRemove, #cancelApply
+{
+    margin-top: 10px;
+    text-align: right;
+}
+
+#addRemove
+{
+    padding-right: 5px;
+}
+
+#addRemove *, #cancelApply *
+{
+    margin-right: 5px;
+}
