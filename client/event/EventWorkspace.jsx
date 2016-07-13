@@ -9,6 +9,7 @@ import EventName from './components/EventName.jsx';
 import EventDescription from './components/EventDescription.jsx';
 import EventLocation from './components/EventLocation.jsx';
 import EventWorkpad	from './components/EventWorkpad.jsx';
+import EventTags from './components/EventTags.jsx';
 
 //Events = new Mongo.Collection("events");
 
@@ -93,6 +94,9 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 				<ButtonDelete eid={this.props.eid} />
 				<EventDateControls eid={this.props.eid} />
 				<EventLocation eid={this.props.eid} />
+				<label>Tags</label>
+				<EventTags eid={this.props.eid} />
+
 			{/*}	<label>Reserved</label>
 				<input type="checkbox" ref="reserved" {reserved ? "checked":""} onBlur={this.updateReserved.bind(this)} onChange={this.handleReservedChange} />
 				<label>EVR</label>

@@ -11,8 +11,7 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Events: Meteor.subscribe("allEvents"),
-				Users: Meteor.subscribe("allUsers")
+        Events: Meteor.subscribe("allEvents")
       }
     };
   }

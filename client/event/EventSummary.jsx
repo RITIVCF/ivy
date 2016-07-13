@@ -83,14 +83,14 @@ export default class EventSummary extends TrackerReact(React.Component) {
     document.title="Ivy - Event Dashboard";
 		return (
       <div>
-        <nav className="navbar-default navbar-side" role="navigation">
-          <ul className="nav navbar-nav">
+        <h1>Event Dashboard</h1>
+        <div className="sidebar">
+          <ul>
             <li><button className="button alert" onClick={this.createNew.bind(this)}>New</button></li>
           </ul>
-        </nav>
-        <br></br>
+        </div>
       <div className="summary">
-              <h1>Event Dashboard</h1>
+
         <div className="myschedule">
           <h1>My Schedule</h1>
           {this.myscheduled().map( (ivevent)=>{

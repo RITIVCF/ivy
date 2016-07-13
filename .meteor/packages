@@ -37,4 +37,5 @@ momentjs:moment@=2.12.0
 ultimatejs:tracker-react@=1.0.0
 stolinski:stylus-multi
 rzymek:fullcalendar
+
 session

@@ -11,13 +11,15 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Events: Meteor.subscribe("allEvents")
+        Events: Meteor.subscribe("allEvents"),
+				Users: Meteor.subscribe("allUsers")
       }
     };
   }
 
   componentWillUnmount() {
     this.state.subscription.Events.stop();
+		this.state.subscription.Users.stop();
   }
 
 	getEvent(){

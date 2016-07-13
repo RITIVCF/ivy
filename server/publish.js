@@ -11,7 +11,10 @@ Meteor.publish("allEvents", function(){
 });
 
 Meteor.publish("allUsers", function(){
-  return Meteor.users.find();
+  const options = {
+    fields: { name: 1 }
+  }
+  return Meteor.users.find({}, options);
 })
 
 Meteor.publish("publishedEvents", function(){
@@ -40,4 +43,21 @@ Meteor.publish("allChurches", function(){
 
 Meteor.publish("activeChurches", function(){
   return Churches.find({active: true});
+});
+
+/*  User fields */
+Meteor.publish("userSelf", function(){
+  const selector = {
+    _id: this.userId
+  };
+  const options = {
+    fields: {
+    name: 1,
+    addresses: 1,
+    phone: 1,
+    newsletter: 1,
+    gender: 1
+     }
+  }
+  return Meteor.users.find(selector, options);
 });

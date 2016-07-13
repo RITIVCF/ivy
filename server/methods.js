@@ -6,6 +6,36 @@ Meteor.methods({
         createdAt: new Date()
     });
   },
+  addMailingAddress(){
+    Meteor.users.update(Meteor.userId(), {$addToSet: {"addresses":
+    {
+      line1: "",
+      line2: "",
+      line3: "",
+      city: "",
+      state: "",
+      zip: "",
+      primary: "false"
+    }
+  }});
+  },
+  updateMailingAddress(oldline, lin1, lin2, lin3, cit, stte, zp){
+    //Meteor.users.update(Meteor.userId(), {$pull: {"addresses":{"line1":oldline}}});
+    Meteor.users.update({"_id":Meteor.userId(), "addresses.line1": oldline} , {$set: {"addresses.$":
+    {
+      line1: lin1,
+      line2: lin2,
+      line3: lin3,
+      city: cit,
+      state: stte,
+      zip: zp,
+      primary: "false"
+    }
+  }});
+  },
+  removeMailingAddress(lin1){
+    Meteor.users.update(Meteor.userId(), {$pull: {"addresses":{"line1":lin1}}});
+  },
   addEthnicity(ethnicity){
     Ethnicities.insert({
       name: ethnicity
@@ -42,14 +72,24 @@ Meteor.methods({
     Events.remove({_id:eid});
   },
   updateName(name){
-    console.log("Before: "+name);
-    Meteor.users.update(Meteor.userId(), {$set: {"profile.name": name}});
+    //console.log("Before: "+name);
+    Meteor.users.update(Meteor.userId(), {$set: {"name": name}});
 
   },
+  updatePhone(phone){
+    Meteor.users.update(Meteor.userId(), {$set: {"phone": phone}});
+  },
+  updateNewsletter(status){
+    Meteor.users.update(Meteor.userId(), {$set: {"newsletter": status}});
+  },
+  updateGender(gender){
+    Meteor.users.update(Meteor.userId(), {$set: {"gender": gender}});
+  },
+  /*
   updateEmail(email){
     console.log("Email:"+email);
-    Meteor.users.update(Meteor.userId(), {$set: {"emails[0].address": email}});  // use . notation to change nested documents
-  },
+    Meteor.users.update(Meteor.userId(), {$set: {"emails.$.address": email}});  // use . notation to change nested documents
+  }, */
   updateEthnicity(ethn){
     Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ethn}});
   },

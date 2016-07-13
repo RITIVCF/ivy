@@ -33,6 +33,9 @@ export const MainLayout = ({content}) => (
 								<li>
 									<a href="/attendance">Attendance</a>
 								</li>
+								<li>
+									<a href="/profile">User Profile</a>
+								</li>
 						</ul>
 					<div className="header-right">
 						<AccountsUIWrapper />

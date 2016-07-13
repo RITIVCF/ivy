@@ -7,7 +7,7 @@ import {FormLayout} from './layouts/FormLayout.jsx';
 
 //Wrappers
 import DashboardWrapper from './Dashboard.jsx';
-import UserProfileWrapper from './user/UserProfileWrapper.jsx';
+import UserProfile from './user/UserProfile.jsx';
 import ResolutionsWrapper from './resolutions/ResolutionsWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
@@ -38,7 +38,7 @@ FlowRouter.route('/',{
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
-			content: (<UserProfileWrapper />)
+			content: (<UserProfile />)
 		})
 	}
 });

@@ -1,10 +1,25 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import UserProfileDetail from './UserProfileDetail.jsx';
+import UserProfile from './UserProfile.jsx';
 
 
 
 export default class UserProfileWrapper extends TrackerReact(React.Component) {
+	constructor() {
+    super();
+
+    this.state = {
+      subscription: {
+        user: Meteor.subscribe("userSelf")
+
+      }
+    };
+  }
+
+	componentWillUnmount() {
+    this.state.subscription.user.stop();
+  }
+
 	userDetails() {
 		return Meteor.users.find({_id : Meteor.userId()}).fetch();
 	}
@@ -13,9 +28,9 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 
 		return (
 		<div>
-			<h1>This is still hidden unfortunately</h1>
+			<h1>My User Profile</h1>
 			{this.userDetails().map( (userdetail)=>{
-				return <UserProfileDetail key={userdetail._id} userdetail={userdetail} />
+				return <UserProfile key={userdetail._id} userdetail={userdetail} />
 			})}
 		</div>
 		)
