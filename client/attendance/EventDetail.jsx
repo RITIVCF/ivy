@@ -50,6 +50,8 @@ export default class EventDetail extends TrackerReact(React.Component) {
 					<thead>
 						<tr>
 							<th>Name</th>
+							<th>Email</th>
+							<th>Phone</th>
 							<th>First Time?</th>
 							<th>Ticket</th>
 						</tr>

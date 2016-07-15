@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 __pycache__
 settings.json
+.meteor/dev_bundle/*
 *.pyc
 db.sqlite3
 =======

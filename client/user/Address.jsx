@@ -20,7 +20,7 @@ export default class Address extends Component {
 
   closeedit(event){
     event.preventDefault();
-    Meteor.call("updateMailingAddress", this.props.address.line1, this.refs.line1.value, this.refs.line2.value, this.refs.line3.value,
+    Meteor.call("updateMailingAddress", this.props.user._id, this.props.address.line1, this.refs.line1.value, this.refs.line2.value, this.refs.line3.value,
       this.refs.city.value, this.refs.state.value, this.refs.zip.value);
     this.setState({
       editting: false
@@ -36,7 +36,7 @@ export default class Address extends Component {
 
   remove(event){
     event.preventDefault();
-    Meteor.call("removeMailingAddress", this.props.address.line1);
+    Meteor.call("removeMailingAddress", this.props.user._id, this.props.address.line1);
   }
 
   handleLine1Change(event){

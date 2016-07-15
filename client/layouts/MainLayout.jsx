@@ -1,6 +1,8 @@
 import React from 'react';
 import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
 
+
+
 // <nav className="navbar navbar-default nabar-cls-top" role="navigation" style={margin-bottom: "0"} >
 // <img src="images/userpics/account.png" class="img-thumbnail" />
 // Print user's Name here
@@ -44,7 +46,7 @@ export const MainLayout = ({content}) => (
 
 
         <main>
-		    {content}
+		    	{content}
         </main>
 				<footer>
 				</footer>

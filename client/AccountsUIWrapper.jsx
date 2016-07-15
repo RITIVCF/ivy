@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
+import { Accounts } from 'meteor/accounts-base';
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_ONLY'
+});
 
 export default class AccountsUIWrapper extends Component {
   componentDidMount() {

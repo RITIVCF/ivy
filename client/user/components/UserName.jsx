@@ -6,7 +6,7 @@ export default class UserName extends Component {
   updateName(event){  // Need one of these for each component
     event.preventDefault();
     var text= this.refs.username.value.trim();
-    Meteor.call('updateName', text);
+    Meteor.call('updateName', this.props.user._id, text);
     console.log(text);
     //this.state.value = text;
   }
@@ -24,14 +24,11 @@ export default class UserName extends Component {
 
   render(){
 
-    let user = this.getUser();
-    console.log("UserName:");
-    console.log(user);
+    let user = this.props.user;
 
-  	if(!user){
+  	if(!user.name){
   		return (<div>Loading...</div>);
   	}
-  	var name = user.name;
 
     return(
       <div>

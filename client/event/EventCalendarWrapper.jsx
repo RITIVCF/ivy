@@ -53,8 +53,8 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	render() {
     document.title="Ivy - Event Calendar";
     events = this.getEvents();
-    if(!events){
-  		return (<div>Loading...</div>);
+    if(!this.state.subscription.Events.ready()){
+  		return (<div></div>);
   	}
 		return (
 		<div>

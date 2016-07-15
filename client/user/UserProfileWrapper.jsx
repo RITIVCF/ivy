@@ -5,33 +5,47 @@ import UserProfile from './UserProfile.jsx';
 
 
 export default class UserProfileWrapper extends TrackerReact(React.Component) {
-	constructor() {
-    super();
+	constructor(props) {
+    super(props);
 
-    this.state = {
-      subscription: {
-        user: Meteor.subscribe("userSelf")
-
+		if(typeof props.uid === 'undefined'){
+      this.state = {
+        subscription: {
+          Ethnicities: Meteor.subscribe("allEthnicities"),
+          user: Meteor.subscribe("userSelf", Meteor.userId())
+        }
       }
-    };
+    }
+    else{
+      this.state = {
+        subscription: {
+          Ethnicities: Meteor.subscribe("allEthnicities"),
+          user: Meteor.subscribe("userSelf", this.props.uid),
+					userself: Meteor.subscribe("userSelf", Meteor.userId())
+          }
+        };
+
+    }
   }
 
 	componentWillUnmount() {
     this.state.subscription.user.stop();
+		this.state.subscription.Ethnicities.stop();
+		console.log("Wrapper unmounted");
   }
 
-	userDetails() {
-		return Meteor.users.find({_id : Meteor.userId()}).fetch();
+
+	componentWillMount(){
+		console.log("Wrapper Mounted");
 	}
 
 	render() {
-
+		if(!this.state.subscription.user.ready()){
+      return(<div></div>)
+    }
 		return (
 		<div>
-			<h1>My User Profile</h1>
-			{this.userDetails().map( (userdetail)=>{
-				return <UserProfile key={userdetail._id} userdetail={userdetail} />
-			})}
+			<UserProfile uid={this.props.uid}  />
 		</div>
 		)
 	}

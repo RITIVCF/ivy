@@ -5,15 +5,15 @@ import React, {Component} from 'react';
 export default class EventTags extends Component {
   updateTags(event){
 		event.preventDefault();
-
-		console.log(this.refs);
-    /*
-    this.refs.map((ref)=>{
-      Meteor.call("updateEventTags",)
-    })
-		Meteor.call("updateEventTags", this.props.eid, this.refs);
-    */
-		//this.state.value = this.refs.name;
+    var tags = [];   // Initiate tags
+    for (var property in this.refs) {   // iterate over properties
+      if (this.refs.hasOwnProperty(property)) {   // make sure they aren't inhereted properties, only relevant
+        if(this.refs[property].checked){ // is it checked?
+            tags.push(property); // yes, add to array
+        }
+      }
+    }
+		Meteor.call("updateEventTags", this.props.eid, tags);  // write over array in database
 	}
 
 
@@ -35,7 +35,7 @@ export default class EventTags extends Component {
     return(
       <div>
     {Meteor.settings.public.eventtags.map( (tag)=>{
-      return <label>{tag}<input type="checkbox" ref={tag} onClick={this.updateTags.bind(this)} checked={tags.includes(tag) ? "checked": ""} /></label>
+      return <label>{tag}<input type="checkbox" ref={tag} readOnly={true} name={tag} onClick={this.updateTags.bind(this)} checked={tags.includes(tag) ? "checked": ""} /></label>
     })}
   </div>
   )

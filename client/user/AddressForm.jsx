@@ -10,21 +10,20 @@ export default class AddressForm extends Component {
   }*/
 
   addAddress(){
-    Meteor.call('addMailingAddress');
+    //Meteor.call('addMailingAddress');
+    Meteor.call('addMailingAddress', this.props.user._id);
   }
 
   render(){
-    let ev = this.props.addresses;
-  	//console.log(ev);
-  	if(!ev){
-  		return (<div>Loading...</div>);
-  	}
+    if(!this.props.user.addresses){
+      return(<div>Loading...</div>)
+    }
     return (
     <div>
         <button onClick={this.addAddress.bind(this)}>Add New Address</button>
       <ul>
-        {this.props.addresses.map( (address)=>{
-  				return <Address key={address.line1} address={address} />
+        {this.props.user.addresses.map( (address)=>{
+  				return <Address key={address.line1} user={this.props.user} address={address} />
   			})}
       </ul>
     </div>

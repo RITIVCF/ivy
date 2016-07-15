@@ -31,7 +31,7 @@ export default class EventWorkpad extends Component {
     return(
       <div>
         <label>Workspace</label>
-        <textarea ref="workpad" onBlur={this.updateWorkpad.bind(this)} onChange={this.handleWorkpadChange} >{workpad}</textarea>
+        <textarea ref="workpad" onBlur={this.updateWorkpad.bind(this)} onChange={this.handleWorkpadChange} value={workpad} />
       </div>
     )
   }

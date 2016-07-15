@@ -7,7 +7,7 @@ import {FormLayout} from './layouts/FormLayout.jsx';
 
 //Wrappers
 import DashboardWrapper from './Dashboard.jsx';
-import UserProfile from './user/UserProfile.jsx';
+import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import ResolutionsWrapper from './resolutions/ResolutionsWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
@@ -35,12 +35,38 @@ FlowRouter.route('/',{
 	}
 });
 
+let fireReload = false;
+
+function reloadCheck(context, redirect, stop) {
+  if (fireReload) {
+    console.log('Hugh is Awesome and also reloading screen...');
+    FlowRouter.reload();
+    stop();
+  }
+}
+
+function routeCleanup() {
+  fireReload = !fireReload;
+}
+
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
-			content: (<UserProfile />)
+			content: (<UserProfileWrapper />)
 		})
-	}
+	},
+	triggersEnter: [reloadCheck],
+  triggersExit: [routeCleanup]
+});
+
+FlowRouter.route('/profile/:uid',{
+	action(params) {
+		mount(MainLayout, {
+			content: (<UserProfileWrapper uid={params.uid} />)
+		})
+	},
+	triggersEnter: [reloadCheck],
+  triggersExit: [routeCleanup]
 });
 
 FlowRouter.route('/calendar', {

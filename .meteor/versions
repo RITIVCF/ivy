@@ -4,6 +4,7 @@ accounts-oauth@1.1.11
 accounts-password@1.1.7
 accounts-ui@1.1.8
 accounts-ui-unstyled@1.1.11
+alanning:roles@1.2.15
 allow-deny@1.0.3
 autoupdate@1.2.7
 babel-compiler@6.6.1

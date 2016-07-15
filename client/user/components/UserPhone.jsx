@@ -6,7 +6,7 @@ export default class UserPhone extends Component {
   updatePhone(event){  // Need one of these for each component
     event.preventDefault();
     var text= this.refs.phone.value.trim();
-    Meteor.call('updatePhone', text);
+    Meteor.call('updatePhone', this.props.user._id, text);
     console.log(text);
     this.state.value = text;
   }
@@ -23,12 +23,11 @@ export default class UserPhone extends Component {
 
 
   render(){
-    let user = this.getUser();
+    let user = this.props.user;
 
-  	if(!user){
+  	if(!user.phone){
   		return (<div>Loading...</div>);
   	}
-  	var phone = user.phone;
 
     return(
       <div>
@@ -37,7 +36,8 @@ export default class UserPhone extends Component {
             ref="phone"
             onBlur={this.updatePhone.bind(this)}
             onChange={this.handlePhoneChange}
-            value={phone}
+            value={user.phone}
+            placeholder="000-000-0000"
           />
       </div>
     )

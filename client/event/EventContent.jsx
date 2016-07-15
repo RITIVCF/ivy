@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
 
-export default class EventContent extends Component {
+export default class EventContent extends TrackerReact(React.Component) {
   openEvent(event){
     event.preventDefault();
   }

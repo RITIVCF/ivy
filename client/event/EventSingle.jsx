@@ -10,23 +10,25 @@ export default class EventSingle extends Component {
     return (
       <div className="panel">
         {this.props.ivevent.owner == Meteor.userId() ?
-        <a href={"/events/workspace/" + this.props.ivevent._id}>
-          <div>{/*Picture goes here*/}</div>
-          <div>{this.props.ivevent.name}</div>
-          <div>{this.props.ivevent.description}</div>
-          <div>{this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toDateString(): ""}</div>
-          <div>{this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toLocaleTimeString(): ""}</div>
-        </a>
+          <div>
+            <a href={"/events/workspace/" + this.props.ivevent._id}>
+              <div>{/*Picture goes here*/}</div>
+              <div>{this.props.ivevent.name}</div>
+              <div>{this.props.ivevent.description}</div>
+              <div>{this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toDateString(): ""}</div>
+              <div>{this.props.ivevent.start instanceof Date ? moment(this.props.ivevent.start).format("h:mm a"): ""}</div>
+            </a>
+            {this.props.showPubBtn  ?
+            <ButtonPublish published={this.props.ivevent.published} eid={this.props.ivevent._id} /> : "" }
+          </div>
         :
         <div>
           <div>{this.props.ivevent.name}</div>
           <div>{this.props.ivevent.description}</div>
           <div>{this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toDateString(): ""}</div>
-          <div>{this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toLocaleTimeString(): ""}</div>
+          <div>{this.props.ivevent.start instanceof Date ? moment(this.props.ivevent.start).format("h:mm a"): ""}</div>
         </div>
       }
-        {this.props.showPubBtn ?
-        <ButtonPublish published={this.props.ivevent.published} eid={this.props.ivevent._id} /> : "" }
       </div>
 
     )

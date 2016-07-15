@@ -10,7 +10,7 @@ export default class UserEmail extends Component {
   updateEmail(event){
     event.preventDefault();
     var text = this.refs.useremail.value.trim();
-    Meteor.call('updateEmail', text);
+    Meteor.call('updateEmail', this.props.user._id, text);
     console.log(text);
     this.state.value = text;
   }
@@ -18,17 +18,16 @@ export default class UserEmail extends Component {
   getUser(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
-		return Meteor.users.findOne(this.props.uid);
+		return Meteor.user();
 	}
 
 
   render(){
-    let user = this.getUser();
+    let user = this.props.user;
 
-  	if(!user){
+  	if(!user.email){
   		return (<div>Loading...</div>);
   	}
-  	var email = user.emails[0].address;
 
     return(
       <div>
@@ -37,8 +36,7 @@ export default class UserEmail extends Component {
             ref="useremail"
             onBlur={this.updateEmail.bind(this)}
             onChange={this.handleEmailChange}
-            value={email}
-            enabled="false"
+            value={user.email}
           />
       </div>
     )

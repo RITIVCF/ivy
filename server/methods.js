@@ -6,8 +6,8 @@ Meteor.methods({
         createdAt: new Date()
     });
   },
-  addMailingAddress(){
-    Meteor.users.update(Meteor.userId(), {$addToSet: {"addresses":
+  addMailingAddress(uid){
+    Meteor.users.update(uid, {$addToSet: {"addresses":
     {
       line1: "",
       line2: "",
@@ -19,9 +19,9 @@ Meteor.methods({
     }
   }});
   },
-  updateMailingAddress(oldline, lin1, lin2, lin3, cit, stte, zp){
+  updateMailingAddress(uid, oldline, lin1, lin2, lin3, cit, stte, zp){
     //Meteor.users.update(Meteor.userId(), {$pull: {"addresses":{"line1":oldline}}});
-    Meteor.users.update({"_id":Meteor.userId(), "addresses.line1": oldline} , {$set: {"addresses.$":
+    Meteor.users.update({"_id":uid, "addresses.line1": oldline} , {$set: {"addresses.$":
     {
       line1: lin1,
       line2: lin2,
@@ -33,8 +33,8 @@ Meteor.methods({
     }
   }});
   },
-  removeMailingAddress(lin1){
-    Meteor.users.update(Meteor.userId(), {$pull: {"addresses":{"line1":lin1}}});
+  removeMailingAddress(uid, lin1){
+    Meteor.users.update(uid, {$pull: {"addresses":{"line1":lin1}}});
   },
   addEthnicity(ethnicity){
     Ethnicities.insert({
@@ -71,33 +71,50 @@ Meteor.methods({
   deleteEvent(eid){
     Events.remove({_id:eid});
   },
-  updateName(name){
+  updateName(uid, name){
     //console.log("Before: "+name);
-    Meteor.users.update(Meteor.userId(), {$set: {"name": name}});
+    Meteor.users.update(uid, {$set: {"name": name}});
 
   },
-  updatePhone(phone){
-    Meteor.users.update(Meteor.userId(), {$set: {"phone": phone}});
+  updatePhone(uid, phone){
+    Meteor.users.update(uid, {$set: {"phone": phone}});
   },
-  updateNewsletter(status){
-    Meteor.users.update(Meteor.userId(), {$set: {"newsletter": status}});
+  updateNewsletter(uid, status){
+    Meteor.users.update(uid, {$set: {"newsletter": status}});
   },
-  updateGender(gender){
-    Meteor.users.update(Meteor.userId(), {$set: {"gender": gender}});
+  updateGender(uid, gender){
+    Meteor.users.update(uid, {$set: {"gender": gender}});
   },
-  /*
-  updateEmail(email){
-    console.log("Email:"+email);
-    Meteor.users.update(Meteor.userId(), {$set: {"emails.$.address": email}});  // use . notation to change nested documents
-  }, */
-  updateEthnicity(ethn){
-    Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ethn}});
+  updateGradTerm(uid, term){
+    Meteor.users.update(uid, {$set: {"gradterm": term}});
   },
-  toggleInternational(intl){
-    if(intl){
-      Meteor.users.update(Meteor.userId(), {$set: {"ethnicity": ""}}); //If international, clear ethnicity
+  updateCurrYear(uid, level){
+    Meteor.users.update(uid, {$set: {"curryear": level}});
+  },
+  updateEmail(uid, email){
+    Meteor.users.update(uid, {$set: {"email": email}});  // use . notation to change nested documents
+  },
+  updateUserAffiliations(uid, tag,addremove){
+    if(addremove){
+      Meteor.users.update(uid,{$pull: {"affiliations":tag}});
     }
-    Meteor.users.update(Meteor.userId(), {$set: {"intl": !intl}}); // Change intl status
+    else{
+        Meteor.users.update(uid,{$addToSet: {"affiliations": tag}});
+    }
+  },
+  updateCommunityLife(uid, tag, addremove){
+    if(addremove){
+      Meteor.users.update(uid,{$pull: {"communitylife":tag}});
+    }
+    else{
+        Meteor.users.update(uid,{$addToSet: {"communitylife": tag}});
+    }
+  },
+  updateEthnicity(uid, ethn){
+    Meteor.users.update(uid, {$set: {"ethn": ethn}});
+  },
+  updateUserIntl(uid, intl){
+    Meteor.users.update(uid, {$set: {"intl": intl}}); // Change intl status
   },
   updateEventStart(eid,datetime){
     Events.update(eid,{$set: {"start":datetime}});
@@ -127,6 +144,9 @@ Meteor.methods({
   updateEventWorkpad(eid,text){
     Events.update(eid,{$set: {"workpad": text}});
   },
+  updateEventTags(eid,tags){
+    Events.update(eid,{$set: {"tags": tags}});
+  },
   updateEventReserved(eid,status){
     if(status){
       status = false;
@@ -144,6 +164,14 @@ Meteor.methods({
       status = true;
     }
     Events.update(eid,{$set: {"evr": status}});
+  },
+
+  // Attendance stuff
+  createAttendanceRecord(eid,uid,first){
+    Events.update(eid,{$addToSet: {"attendees":{"_id":uid,"firsttime":first}}});
+  },
+  createRSVPRecord(eid,uid,rsvp){
+    Events.update(eid,{$addToSet: {"rsvps":{"_id":uid,"rsvp":rsvp}}});
   },
 
 

@@ -6,7 +6,7 @@ export default class UserNewsletter extends Component {
   updateNewsletter(event){  // Need one of these for each component
     event.preventDefault();
     var text= this.refs.newsletter.checked;
-    Meteor.call('updateNewsletter', text);
+    Meteor.call('updateNewsletter', this.props.user._id, text);
     console.log(text);
   }
 
@@ -18,21 +18,20 @@ export default class UserNewsletter extends Component {
 
 
   render(){
-    let user = this.getUser();
+    let user = this.props.user;
 
-  	if(!user){
+  	if(!user.newsletter){
   		return (<div>Loading...</div>);
   	}
-  	var newsletter = user.newsletter;
 
     return(
       <div>
-        <label>Newsletter</label>
+        <label>Would you like to receive the RIT IVCF Newsletter?</label>
           <input type="checkbox"
             readOnly={true}
             ref="newsletter"
             onClick={this.updateNewsletter.bind(this)}
-            checked={newsletter}
+            checked={user.newsletter}
           />
       </div>
     )

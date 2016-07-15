@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
 import EventContent from './EventContent.jsx';
 
-export default class EventCalendar extends Component {
+export default class EventCalendar extends TrackerReact(React.Component) {
 
   openEvent(event) {
     event.preventDefault();
@@ -63,7 +64,7 @@ export default class EventCalendar extends Component {
   }
 
   componentDidUpdate() {
-
+    
   }
 
   render() {

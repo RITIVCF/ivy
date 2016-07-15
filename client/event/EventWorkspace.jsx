@@ -92,7 +92,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 			<div className="secondary sidebar">
 				<ButtonPublish published={ev.published} eid={this.props.eid} />
 				<ButtonDelete eid={this.props.eid} />
-				<EventDateControls eid={this.props.eid} />
+				<EventDateControls ev={ev} />
 				<EventLocation eid={this.props.eid} />
 				<label>Tags</label>
 				<EventTags eid={this.props.eid} />
@@ -107,7 +107,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 					<EventDescription eid={this.props.eid} />
 					<EventWorkpad eid={this.props.eid} />
 			</div>
-      <RequestWrapper eid={ev.eid} />
+      {/*}<RequestWrapper eid={ev.eid} />*/}
 			</article>
 		</div>
 		)
