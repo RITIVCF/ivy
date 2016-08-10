@@ -1,37 +1,77 @@
 import React, {Component} from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import Contact from './Contact.jsx';
+import SelectOption from '../../sharedcomponents/SelectOption.jsx';
+import SelectContact from '../../sharedcomponents/SelectContact.jsx';
 
 
-
-export default class ChurchContactsControls extends Component {
-  updateWorkpad(event){
-		event.preventDefault();
-		Meteor.call("updateEventWorkpad", this.props.eid, this.refs.workpad.value);
-		//this.state.value = this.refs.name;
-	}
-
-  handleWorkpadChange(event){ // need one of these for each component
-    this.setState({workpad:event.target.value});
+export default class ChurchContactsControls extends TrackerReact(React.Component) {
+  constructor() {
+    super();
+    this.state = {
+      contact: false
+    }
   }
 
-  getEvent(){
+  addContact(contact){
+    //this.state.contact = contt;
+    console.log(this);
+		console.log(this);
+    console.log(contact);
+    console.log(this.props.ch._id);
+    var chid = this.props.ch._id;
+    Meteor.call("addChurchContact",this.props.ch._id, contact._id);
+    contact.component.state.value='';
+    contact.component.forceUpdate();
+	}
+
+  /*componentWillUpdate(){
+    console.log(this);
+    //console.log(contact);
+    console.log(this.props.ch._id);
+    var chid = this.props.ch._id;
+    if(false==true){
+        Meteor.call("addChurchContact",this.props.ch._id, this.state.contact._id);
+        this.state.contact = false;
+    }
+    this.refs.contact.state.value='';
+    this.refs.contact.forceUpdate();
+  }*/
+
+  unset(){
+    // does nothing. just needs to be here
+  }
+
+  getSelection(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
-		return Events.findOne(this.props.eid);
+		return Contacts.find().fetch();
 	}
+
+  getContactsInfo(){
+    console.log(this.props.ch.contacts);
+    return Contacts.find({_id:{$in:this.props.ch.contacts}}).fetch();
+  }
 
 
   render(){
-    let ev = this.getEvent();
-
-  	if(!ev){
+  	/*if(!this.state.subscription.users.ready()){
   		return (<div>Loading...</div>);
-  	}
-  	var workpad = ev.workpad;
-
+  	}*/
     return(
       <div>
-        <label>Workspace</label>
-        <textarea ref="workpad" onBlur={this.updateWorkpad.bind(this)} onChange={this.handleWorkpadChange} >{workpad}</textarea>
+        <h4>Church Contacts</h4>
+        <p>Choose a name from the list to add person</p>
+        <SelectContact
+          parent={this}
+          unset={this.unset.bind(this)}
+          updateContact={this.addContact.bind(this)}
+          ref="contact"  />
+        <ul>
+          {this.getContactsInfo().map((contact)=>{
+            return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
+          })}
+        </ul>
       </div>
     )
   }

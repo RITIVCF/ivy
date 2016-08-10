@@ -9,15 +9,32 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-        Events: Meteor.subscribe("publishedEvents")
-      }
-    };
+    this.state = {};
+
+    var thiz = this;
+     this.state.autorunHandle = Tracker.autorun(() => {
+       var start = this.state.start || new Date();
+       var end = this.state.end || new Date();
+       thiz.state.subscription = Meteor.subscribe('publishedEvents',
+         {$or: [
+             {start: {$gte: start, $lt: end}},
+             {end: {$gte: start, $lt: end}},
+             {$and: [
+                 {start: {$lte: start}},
+                 {end: {$gt: end}}
+               ]}
+         ]}, function() {
+           console.log("Subscription update");
+           Session.set("calendarUpdate", true);
+         });
+     });
+
   }
 
   componentWillUnmount() {
-    this.state.subscription.Events.stop();
+    this.state.subscription.stop();
+    this.state.autorunHandle.stop();
+    Session.set("calendarUpdate", null);
   }
 
   getEvents(){
@@ -53,14 +70,19 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	render() {
     document.title="Ivy - Event Calendar";
     events = this.getEvents();
-    if(!this.state.subscription.Events.ready()){
+    if(!events){
   		return (<div></div>);
   	}
+    var thiz = this;
+ 		var wrappedFetch = (s, e, t, c) => {
+       thiz.fetchScheduled(s, e, t, c, thiz);
+     };
+
 		return (
 		<div>
       <h1>Event Calendar</h1>
 			<div className="calendar">
-        <EventCalendar events={this.fetchScheduled} ref="calendar"/>
+        <EventCalendar events={wrappedFetch} ref="calendar"/>
       </div>
 		</div>
 		)

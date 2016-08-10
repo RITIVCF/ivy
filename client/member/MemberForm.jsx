@@ -2,37 +2,84 @@ import React, {Component} from 'react';
 
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EthnicitySelect from '../ethnicity/EthnicitySelect.jsx';
+import SelectOption from '../sharedcomponents/SelectOption.jsx';
 
 
 export default class MemberForm extends TrackerReact(React.Component) {
+  constructor(){
+    super();
+    this.state={
+      intl: false
+    };
+  }
+
   addMember(event){
     event.preventDefault();
+    console.log(event.target.value);
     console.log(this);
+    var cid = Meteor.user().contact;
 
-
-    //Meteor.call('addMember');
+    Meteor.call("updateGender", cid, this.refs.gender.value);
+    if(!this.refs.intl.checked){
+      Meteor.call("updateContactIntl", cid, this.refs.intl.checked);
+      Meteor.call("updateEthnicity", cid, this.refs.ethn.value);
     }
+    else{
+        Meteor.call("updateContactIntl", cid, this.refs.intl.checked);
+        Meteor.call("updateEthnicity", cid, "");
+    }
+    Meteor.call("updateGradTerm", cid, this.refs.gradterm.value);
+    Meteor.call("updateCurrYear", cid, this.refs.year.value);
+
+    //console.log(this.refs.affiliations);
+
+
+    for (var property in this.refs) {   // iterate over properties
+      if (this.refs.hasOwnProperty(property)) {   // make sure they aren't inhereted properties, only relevant
+        if(this.getAffiliations().indexOf(this.refs[property].name)+1){ // is it checked?
+          if(this.refs[property].checked){
+              Meteor.call("updateContactAffiliations", cid, this.refs[property].name, false); // false means add
+          }
+        }
+        if(this.getCommunityLife().indexOf(this.refs[property].name)+1){
+          if(this.refs[property].checked){ // is it checked?
+              Meteor.call("updateCommunityLife", cid, this.refs[property].name, false);
+          }
+        }
+      }
+    }
+
+    Meteor.call("updateMember", cid, true);
+
+    }
+
     check(event){
       event.preventDefault();
       console.log(this);
     }
 
     ethnicities() {
-      return Ethnicities.find().fetch();
+      return Options.findOne("ethnicities").vals;
     }
-    hideShowEthnicity(){
-      console.log(this);
-      /*
-      if(this.refs.intl.checked=true){
-        this.refs.ethn.disabled = true;
-        console.log("Disabled");
-      }
-      else {
-        this.refs.ethn.disabled = false;
-        console.log("Enabled");
-      }
-      */
 
+    hideShowEthnicity(){
+      this.setState({intl: this.refs.intl.checked});
+    }
+
+    getGradTerms(){
+      return Options.findOne({_id:"gradterms"}).vals;
+    }
+
+    getAffiliations(){
+      return Options.findOne({_id:"campusaffiliations"}).vals;
+    }
+
+    getCommunityLife(){
+      return Options.findOne({_id:"communitylife"}).vals;
+    }
+
+    getEthnicities(){
+      return Options.findOne({_id:"ethnicities"}).vals;
     }
 
     render() {
@@ -42,12 +89,12 @@ export default class MemberForm extends TrackerReact(React.Component) {
         <h2>Intervarsity requires we keep track of our membership information. Please update the fields below. Thank you!</h2>
         <form className="publicForm" onSubmit={this.addMember.bind(this)}>
           <label>Expected Graduation Term:*</label>
-          <select ref="term">
-            <option>Fall 2016</option>
-            <option>Spring 2017</option>
-            <option>Fall 2017</option>
-            <option>Spring 2018</option>
+          <select ref="gradterm">
+            {this.props.subscription.ready() ? this.getGradTerms().map( (term)=>{
+                return <SelectOption key={term} value={term} displayvalue={term}  />
+            }):<option></option>}
           </select>
+          <br/>
           <label>Current Year Level:*</label>
           <select ref="year">
             <option>1</option>
@@ -58,29 +105,42 @@ export default class MemberForm extends TrackerReact(React.Component) {
             <option>6</option>
             <option>7</option>
           </select>
+          <br/>
           <label>International Student:</label>
           <label>Yes:</label>
-          <input ref="intl" type="checkbox" onClick={this.hideShowEthnicity.bind(this)}></input>
-          <label>Ethnicity:*</label>
-            <select ref="ethn">
-              {this.ethnicities().map( (ethnicity)=>{
-                return <EthnicitySelect key={ethnicity._id} ethnicity={ethnicity} />
-              })}
+          <input ref="intl"
+            type="checkbox"
+            onClick={this.hideShowEthnicity.bind(this)}
+            />
+          {!this.state.intl ?
+          <label>Ethnicity:*
+          <select ref="ethn" >
+            <option value={""}></option>
+            {this.getEthnicities().map( (ethnicity)=>{
+              return <option key={ethnicity} value={ethnicity} >{ethnicity}</option>
+            })}
+          </select>
+        </label>:<div></div>}
+            <br />
+          <label>Gender: *
+            <select ref="gender" >
+              <option value={"na"}>Not Specified</option>
+              <option value={"male"}>Male</option>
+              <option value={"female"}>Female</option>
             </select>
+          </label>
+          <br/>
           <label>Campus Affiliations:</label>
-          <label>Nursing:</label>
-          <input ref="nursing" type="checkbox" onClick={this.check.bind(this)}></input>
-          <label>Greek Life:</label>
-          <input ref="greek" type="checkbox"></input>
-          <label>Arts:</label>
-          <input ref="arts" type="checkbox"></input>
-          <label>Athletics:</label>
-          <input ref="athletics" type="checkbox"></input>
+            {this.props.subscription.ready() ? this.getAffiliations().map( (tag)=>{
+              return <label key={tag} >{tag}: <input type="checkbox" ref={"affiliations."+tag} name={tag} />
+            </label>
+            }) :<div></div> }
+            <br/>
           <label>Community Involvement:</label>
-          <label>I attend church regularly:</label>
-          <input ref="church" type="checkbox"></input>
-          <label>I volunteer regularly:</label>
-          <input ref="volunteer" type="checkbox"></input>
+            {this.props.subscription.ready() ? this.getCommunityLife().map( (tag)=>{
+              return <label key={tag} >{tag}: <input type="checkbox" ref={"communitylife."+tag} name={tag} />
+            </label>
+            }) :<div></div>}
           <input type="submit"></input>
         </form>
       </div>

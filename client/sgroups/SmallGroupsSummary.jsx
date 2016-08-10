@@ -5,7 +5,7 @@ import SmallGroupsWorkspace from './SmallGroupsWorkspace.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
-Groups = new Mongo.Collection("groups");
+//Groups = new Mongo.Collection("groups");
 
 export default class SmallGroupsSummary extends TrackerReact(React.Component) {
   constructor() {
@@ -53,10 +53,10 @@ export default class SmallGroupsSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - SG Summary Page";
+    document.title="Ivy - Small Groups Dashboard";
 		return (
       <div>
-      <h1>SG Summary Page</h1>
+      <h1>Small Groups Dashboard</h1>
       <div className="sidebar">
         <ul>
           <li><button onClick={this.createNew.bind(this)}>New</button></li>

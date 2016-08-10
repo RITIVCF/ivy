@@ -3,11 +3,9 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ButtonActive from './components/ButtonActive.jsx';
 import ButtonDelete from './components/ButtonDelete.jsx';
 import ChurchContactsControls from './components/ChurchContactsControls.jsx';
-import ChurchDayTimeControls from './components/ChurchDayTimeControls.jsx';
+import ChurchTimes from './components/ChurchTimes.jsx';
 import ChurchName from './components/ChurchName.jsx';
 import ChurchURL from './components/ChurchURL.jsx';
-
-
 
 
 export default class ChurchesWorkspace extends TrackerReact(React.Component) {
@@ -16,13 +14,16 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Churches: Meteor.subscribe("allChurches")
-      }
+        Churches: Meteor.subscribe("allChurches"),
+				contacts: Meteor.subscribe("allContacts")
+      },
+			contact: false
     };
   }
 
   componentWillUnmount() {
     this.state.subscription.Churches.stop();
+		this.state.subscription.contacts.stop();
   }
 
 
@@ -33,7 +34,7 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		let ch = this.getChurch();
+		let ch = this.props.ch; //this.getChurch();
 
 		if(!ch){
 			return (<div>Loading...</div>);
@@ -44,18 +45,21 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 
 			<article id="main">
         <header className="special container">
-          <h2>Churches Workspace</h2>
+          {/*<h2>Churches Workspace</h2> */}
+					<h2>{ch.name}</h2>
         </header>
 
 			<div className="sidebar">
-				<ButtonActive cid={this.props.cid} active={ch.active} />
-				<ButtonDelete cid={this.props.cid} />
+				<ButtonActive ch={ch} />
+				<ButtonDelete ch={ch} />
 			</div>
 
 
 			<div className="Workspace">
-				<ChurchName cid={this.props.cid} />
-				<ChurchURL cid={this.props.cid} />
+				<ChurchName ch={ch} />
+				<ChurchURL ch={ch} />
+				<ChurchTimes ch={ch} />
+				<ChurchContactsControls ch={ch} />
 			</div>
 
 			</article>

@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import SelectContact from '../../sharedcomponents/SelectContact.jsx';
 
 export default class RSVPWrapper extends TrackerReact(React.Component){
   constructor(props) {
@@ -8,32 +9,60 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
     this.state = {
       subscription: {
         Event: Meteor.subscribe("Event", props.eid),
-        Users: Meteor.subscribe("allUsers")
-      }
+        Contacts: Meteor.subscribe("allContacts")
+      },
+      contact: false
     };
   }
 
   submit(event){
     event.preventDefault();
-    console.log("Event ID: "+this.props.eid);
-    console.log("user ID: "+ this.refs.user.value);
-    console.log("User Email: "+ this.refs.email.value);
-    console.log(event.target.elements.rsvp.value);
-    Meteor.call("createRSVPRecord",this.props.eid,this.refs.user.value,event.target.elements.rsvp.value);
+    var eid = this.props.eid;
+    var contact = this.state.contact;
+    var name = this.refs.user.state.value;
+    if( !contact ){
+      var id = Meteor.call("newContact",
+        this.refs.user.state.value,
+        this.refs.email.value,
+        this.refs.phone.value,
+        function(error, cid){
+          Meteor.call("createRSVPRecord",
+            eid,
+            cid,
+            event.target.elements.rsvp.value);
+        });
+    }
+    else{
+      Meteor.call("createRSVPRecord",
+        this.props.eid,
+        contact._id,
+        event.target.elements.rsvp.value);
+    }
+    this.refs.email.value="";
+    this.refs.phone.value="";
+    this.refs.user.state.value='';
+    this.refs.user.forceUpdate();
   }
 
   getEvent(){
     return Events.findOne(this.props.eid);
   }
 
-  getUsers(){
-    return Meteor.users.find().fetch();
+  getContacts(){
+    return Contacts.find().fetch();
   }
 
-  update(){
+  update(contt){
+    this.state.contact = contt;
+    this.refs.email.value = this.state.contact.email;
+    this.refs.phone.value = this.state.contact.phone;
     console.log(this);
-    var user = Meteor.users.findOne(this.refs.user.value);
-    this.refs.email.value = user.email;
+  }
+
+  unset(){
+    this.state.contact = false;
+    this.refs.email.value="";
+    this.refs.phone.value="";
   }
 
   render() {
@@ -41,11 +70,12 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
     if(!event){
       return(<div></div>)
     }
+    document.title = "Ivy - " + event.name + " RSVP";
     //var users =[];
     //let tempusers = this.getUsers();
-    let users = this.getUsers();
-    //if(!tempusers){
-    if(!users){
+    let contacts = this.getContacts();
+    //if(!tempcontacts){
+    if(!contacts){
       return(<div></div>)
     }
 
@@ -56,14 +86,16 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
           <h2>Thanks for letting us know!</h2>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <label>Name</label>
-            {/*}<input ref="name" type="text" />*/}
-              <select className="select" ref="user" onChange={this.update.bind(this)}>
-                {users.map( (user)=>{
-                    return <option value={user._id}>{user.name+" "+user.email}</option>
-                })}
-              </select>
+            <SelectContact parent={this}
+              unset={this.unset.bind(this)}
+              updateContact={this.update.bind(this)} ref="user"  />
+            <br />
             <label>Email</label>
             <input ref="email" type="text" />
+            <br />
+            <label>Phone</label>
+            <input ref="phone" type="text" />
+            <br />
             <h3>RSVP:</h3>
             <label>Yes</label>
             <input ref="rsvp" type="radio" name="rsvp" value="yes"></input>

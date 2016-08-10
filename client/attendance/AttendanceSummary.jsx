@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tracker } from 'meteor/tracker';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
 
@@ -8,11 +9,15 @@ import EventSingle from './EventSingle.jsx';
 export default class AttendanceSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
-
     this.state = {
-      subscription: {
-        Events: Meteor.subscribe("allEvents")
-      }
+      num: 10
+    };
+    console.log(this.state.num);
+    this.state = {
+      subscription:{
+        Events: Meteor.subscribe("pastEvents", this.state.num)
+      },
+      num:10
     };
   }
 
@@ -20,52 +25,44 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
     this.state.subscription.Events.stop();
   }
 
-  createNew(event){
+  // componentDidMount(){
+  //   console.log("logging state");
+  //   console.log(this.state);
+  //   var thiz = this;
+  //   Tracker.autorun(function(){
+  //     Meteor.subscribe("pastEvents", thiz.state.num);
+  //   });
+  // }
+
+  loadMore(){
     event.preventDefault();
-    console.log(event);
-    console.log(this);
-    //creates a new event and opens event details in event workspace
-    console.log("This button creates a new event");
-    Meteor.call('addBlankEvent', function(error, result){
-      if(error){
-        console.log(error.reason);
-        return;
-      }
-      console.log("Event ID: " + result);
-      console.log(this);
-      location.assign("/events/workspace/"+result);
-      //this.Session.set("eventId",result);
-      //location.assign("/events");
-
-      //this.props.parent.state.eventId = result;
-      //setID(result);
-    });
-
+    console.log("loading more");
+    console.log(this.state.num);
+    var incnum = this.state.num;
+    this.state.num = this.state.num + 10;
+    this.state.subscription.Events = Meteor.subscribe("pastEvents", this.state.num);
   }
 
-
   events(){
-    // pulls upcoming, published events
-    return Events.find({published: true, start: {$lt: new Date()} },{
-      sort: {start:0}// Sorts descending chronologically by start
-    }).fetch();
+    // pulls past, published events
+    return Events.find().fetch();
   }
 
 
 
 	render() {
-    document.title= "Ivy - Attendance Summary Page";
+    document.title= "Ivy - Attendance Dashboard";
 		return (
       <div>
       <div className="summary">
-        <div className="myschedule">
           <h1>Attendance Dashboard</h1>
-          {this.events().map( (ivevent)=>{
+          {this.state.subscription.Events.ready() ? this.events().map( (ivevent)=>{
               return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
-          })}
-        </div>
+          }):""}
+          {Events.find().fetch().length >= this.state.num ?
+          <button onClick={this.loadMore.bind(this)}>Load More</button>
+          :<div></div>}
       </div>
-      <a href="/events/old"><button>View old events</button></a>
     </div>
   )
 	}

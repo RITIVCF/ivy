@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectSearch from 'react-select-search';
+import SelectContact from '../../sharedcomponents/SelectContact.jsx';
 
 export default class SignInWrapper extends TrackerReact(React.Component){
   constructor(props) {
@@ -9,72 +9,140 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     this.state = {
       subscription: {
         Event: Meteor.subscribe("Event", props.eid),
-        Users: Meteor.subscribe("allUsers")
-      }
+        Contacts: Meteor.subscribe("allContacts")
+      },
+      contact: false
     };
+  }
+
+  componentWillUnmount(){
+    this.state.subscription.Event.stop();
+    this.state.subscription.Contacts.stop();
   }
 
   submit(event){
     event.preventDefault();
-    console.log("Event ID: "+this.props.eid);
-    console.log("user ID: "+ this.refs.user.value);
-    console.log("User Email: "+ this.refs.email.value);
-    console.log("First Time:" + this.refs.first.value);
-    Meteor.call("createAttendanceRecord",this.props.eid,this.refs.user.value,this.refs.first.value);
+    var eid = this.props.eid;
+    var contact = this.state.contact;
+    var evname = this.refs.evname.value;
+    var name = this.refs.user.state.value;
+    var newsletter = this.refs.newsletter.checked;
+    if( !contact ){
+      var id = Meteor.call("newContact",
+        this.refs.user.state.value,
+        this.refs.email.value,
+        this.refs.phone.value,
+        function(error, cid){
+          Meteor.call("addAttendanceTicket",
+            "New Contact: "+ name,
+            "New Contact at event: "+ evname,
+            "","", cid,
+            eid,
+            function(errr, tktId){
+              if(errr){
+                console.log(errr.reason);
+                return;
+              }
+              Meteor.call("createAttendanceRecord",
+              eid, cid,
+              true,
+              tktId);
+            });
+            if(newsletter){
+              Meteor.call("updateNewsletter", cid, true);
+            }
+        });
+
+    }
+    else{
+      Meteor.call("createAttendanceRecord",
+      this.props.eid,this.state.contact._id,
+      false,
+      "");
+      if(this.refs.newsletter){
+        Meteor.call("updateNewsletter", this.state.contact._id, true);
+      }
+    }
+    this.refs.email.value="";
+    this.refs.phone.value="";
+    this.refs.newsletter.checked=false;
+    this.refs.user.state.value='';
+    this.refs.user.forceUpdate();
   }
 
   getEvent(){
     return Events.findOne(this.props.eid);
   }
 
-  getUsers(){
-    return Meteor.users.find().fetch();
+  getContacts(){
+    return Contacts.find().fetch();
   }
 
-  update(){
+  update(contt){
+    this.state.contact = contt;
+    this.refs.email.value = this.state.contact.email;
+    this.refs.phone.value = this.state.contact.phone;
+    this.refs.newsletter.checked = this.state.contact.newsletter;
+    //this.setState({contact:contt});
+    //console.log(this);
+  }
+
+  log(){
+    console.log(this.state);
+  }
+
+  unset(){
     console.log(this);
-    var user = Meteor.users.findOne(this.refs.user.value);
-    this.refs.email.value = user.email;
+    this.state.contact = false;
+    this.refs.email.value="";
+    this.refs.phone.value="";
+    this.refs.newsletter.checked=false;
+    //this.clearFields.bind(this);
   }
 
   render() {
-
     let event = this.getEvent();
     if(!event){
       return(<div></div>)
     }
-    //var users =[];
-    //let tempusers = this.getUsers();
-    let users = this.getUsers();
-    //if(!tempusers){
-    if(!users){
+    document.title = "Ivy - " + event.name + " Sign In";
+    //var contacts =[];
+    //let tempcontacts = this.getContacts();
+    let contacts = this.getContacts();
+    //if(!tempcontacts){
+    if(!contacts){
       return(<div></div>)
     }
-    //tempusers.forEach(function(user){
-      //users.push({"name":user.name+" "+user.email,"value":user._id});  for Select Search
+    //tempcontacts.forEach(function(contact){
+      //contacts.push({"name":contact.name+" "+contact.email,"value":contact._id});  for Select Search
     //});
 
-    console.log(users);
+    //console.log(contacts);
 
 
     return (
       <div id="card" className="card">
         <div className="front">
           <h1>Welcome to {event.name}!</h1>
+          <input type="hidden" ref="evname" value={event.name} />
           <h2>Help text here...</h2>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <label>Name</label>
-            {/*}<input ref="name" type="text" />*/}
-            <select className="select" ref="user" onChange={this.update.bind(this)}>
-              {users.map( (user)=>{
-                  return <option value={user._id}>{user.name+" "+user.email}</option>
-              })}
-            </select>
-            {/*<SelectSearch options={users} name="name" placeholder="Choose your name" />*/}
+            <SelectContact
+              parent={this}
+              unset={this.unset.bind(this)}
+              updateContact={this.update.bind(this)}
+              ref="user"  />
+            <br />
             <label>Email</label>
             <input ref="email" type="text" />
-            <label>First Time (true or false)</label>
-            <input type="text" ref="first" />
+            <br />
+            <label>Phone</label>
+            <input ref="phone" type="text" />
+            <br />
+            <label>Subscribe to newsletter</label>
+            <input type="checkbox" ref="newsletter" />
+            <br/>
             <input type="submit" name="submit" />
           </form>
         </div>

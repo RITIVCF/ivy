@@ -15,22 +15,28 @@ export default class EthnicitySelect extends TrackerReact(React.Component) {
     console.log(event.target.value);
     if(!this.props.intl.checked){  // save ethnicity
       //console.log(this.state.value);
-      Meteor.call("updateEthnicity", this.props.user._id, event.target.value);
+      Meteor.call("updateEthnicity", this.props.contact._id, event.target.value);
     }
     else{
-        //Meteor.call("updateUserIntl", this.refs.intl.checked);
+        //Meteor.call("updateContactIntl", this.refs.intl.checked);
         //Meteor.call("updateEthnicity", "");
     }
 
 	}
 
+  getEthnicities(){
+    return Options.findOne({_id:"ethnicities"}).vals;
+  }
 
   render() {
-
+    if(!this.props.subscription.ready()){
+      return (<div></div>);
+    }
     return (
       <select className="ethnicities" ref="ethn" value={this.props.selected} onChange={this.update.bind(this)}>
-          {Meteor.settings.public.ethnicities.map( (ethnicity)=>{
-              return <SelectOption key={ethnicity} value={ethnicity}  />
+        <option value={""}></option>
+          {this.getEthnicities().map( (ethnicity)=>{
+              return <SelectOption key={ethnicity} value={ethnicity} displayvalue={ethnicity} />
           })}
       </select>
     )

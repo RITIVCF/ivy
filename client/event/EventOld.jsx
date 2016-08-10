@@ -24,8 +24,8 @@ export default class EventOld extends TrackerReact(React.Component) {
 
 
   events(){
-    // pulls upcoming, published events
-    return Events.find({start: {$lt: new Date()} },{sort: {start: 0}}).fetch();
+    // old events
+    return Events.find({start: {$lt: new Date()} },{sort: {start: -1}}).fetch();
   }
 
 

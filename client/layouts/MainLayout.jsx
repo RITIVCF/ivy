@@ -21,7 +21,7 @@ export const MainLayout = ({content}) => (
             </div>
 						<ul className="nav navbar-nav" id="main-menu">
                 <li>
-									<a href="/events">Events Dashboard</a>
+									<a href="/events">Event Dashboard</a>
 								</li>
 								<li>
 									<a href="/calendar">Event Calendar</a>
@@ -30,8 +30,14 @@ export const MainLayout = ({content}) => (
 									<a href="/churches">Churches Dashboard</a>
 								</li>
 								<li>
-									<a href="/sg">Small Groups Dashboard</a>
+									<a href="/tickets">Ticket Dashboard</a>
 								</li>
+								<li>
+									<a href="/contacts">Contact Dashboard</a>
+								</li>
+								{/*<li>
+									<a href="/sg">Small Groups Dashboard</a>
+								</li>*/}
 								<li>
 									<a href="/attendance">Attendance</a>
 								</li>

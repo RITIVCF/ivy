@@ -13,7 +13,7 @@ export default class EventTags extends Component {
         }
       }
     }
-		Meteor.call("updateEventTags", this.props.eid, tags);  // write over array in database
+		Meteor.call("updateEventTags", this.props.ev._id, tags);  // write over array in database
 	}
 
 
@@ -24,9 +24,13 @@ export default class EventTags extends Component {
 		return Events.findOne(this.props.eid);
 	}
 
+  getTags(){
+    return Options.findOne({_id:"eventtags"}).vals;
+  }
+
 
   render(){
-    let ev = this.getEvent();
+    let ev = this.props.ev;//this.getEvent();
 
   	if(!ev){
   		return (<div>Loading...</div>);
@@ -34,9 +38,17 @@ export default class EventTags extends Component {
   	var tags = ev.tags;
     return(
       <div>
-    {Meteor.settings.public.eventtags.map( (tag)=>{
-      return <label>{tag}<input type="checkbox" ref={tag} readOnly={true} name={tag} onClick={this.updateTags.bind(this)} checked={tags.includes(tag) ? "checked": ""} /></label>
-    })}
+    {/*this.props.subscription.ready() ? */ this.getTags().map( (tag)=>{
+      return <li key={tag}><label>{tag}
+        <input
+          type="checkbox"
+          ref={tag}
+          readOnly={true}
+          name={tag}
+          onClick={this.updateTags.bind(this)}
+          checked={(tags.indexOf(tag) != -1) ? "checked": ""}
+        /></label></li>
+    }) /* : <div></div>*/}
   </div>
   )
   }

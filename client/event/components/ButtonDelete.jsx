@@ -12,11 +12,12 @@ export default class ButtonDelete extends Component {
     else{
       console.log("you clicked 'no'.");
     }
+
   }
 
   render(){
     return (
-      <button onClick={this.deleteEvent.bind(this)}>Delete</button>
+      <button onClick={this.props.parent.openDelete()}>Delete</button>
     )
   }
 }

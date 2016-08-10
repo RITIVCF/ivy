@@ -4,7 +4,7 @@ import EthnicitiesForm from './EthnicitiesForm.jsx';
 import EthnicitySelect from './EthnicitySelect.jsx';
 
 
-Ethnicities = new Mongo.Collection("ethnicities");
+//Ethnicities = new Mongo.Collection("ethnicities");
 
 export default class EthnicityWrapper extends TrackerReact(React.Component) {
 	ethnicities() {

@@ -4,7 +4,7 @@ import EventSummary from './EventSummary.jsx';
 import EventWorkspace from './EventWorkspace.jsx';
 
 // Instead of event "types" it needs to be event "tags"
-Events = new Mongo.Collection("events");
+//Events = new Mongo.Collection("events");
 
 export default class EventsWrapper extends TrackerReact(React.Component) {
 	constructor() {

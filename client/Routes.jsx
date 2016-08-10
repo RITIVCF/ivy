@@ -4,11 +4,12 @@ import {mount} from 'react-mounter';
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
 //Wrappers
+import ErrorPage from './layouts/ErrorPage.jsx';
 import DashboardWrapper from './Dashboard.jsx';
-import UserProfileWrapper from './user/UserProfileWrapper.jsx';
-import ResolutionsWrapper from './resolutions/ResolutionsWrapper.jsx';
+import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
 import EventSummary from './event/EventSummary.jsx';
@@ -24,7 +25,11 @@ import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
 import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
 import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
 import AttendanceSummary from './attendance/AttendanceSummary.jsx';
-import EventDetail from './attendance/EventDetail.jsx';
+import EventDetailWrapper from './attendance/EventDetailWrapper.jsx';
+import TicketSummary from './tickets/TicketSummary.jsx';
+import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
+import ContactSummary from './contact/ContactSummary.jsx';
+import GroupsSummary from './groups/GroupsSummary.jsx';
 
 
 FlowRouter.route('/',{
@@ -35,38 +40,37 @@ FlowRouter.route('/',{
 	}
 });
 
-let fireReload = false;
+FlowRouter.route('/groups', {
+	action() {
+		mount(MainLayout, {
+			content: (<GroupsSummary />)
+		})
+	}
+});
 
-function reloadCheck(context, redirect, stop) {
-  if (fireReload) {
-    console.log('Hugh is Awesome and also reloading screen...');
-    FlowRouter.reload();
-    stop();
-  }
-}
-
-function routeCleanup() {
-  fireReload = !fireReload;
-}
 
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
-			content: (<UserProfileWrapper />)
+			content: (<ContactProfileWrapper />)
 		})
-	},
-	triggersEnter: [reloadCheck],
-  triggersExit: [routeCleanup]
+	}
 });
 
-FlowRouter.route('/profile/:uid',{
+FlowRouter.route('/profile/:cid',{
 	action(params) {
 		mount(MainLayout, {
-			content: (<UserProfileWrapper uid={params.uid} />)
+			content: (<ContactProfileWrapper cid={params.cid} />)
 		})
-	},
-	triggersEnter: [reloadCheck],
-  triggersExit: [routeCleanup]
+	}
+});
+
+FlowRouter.route('/contacts', {
+	action(){
+		mount(MainLayout, {
+			content: (<ContactSummary />)
+		})
+	}
 });
 
 FlowRouter.route('/calendar', {
@@ -88,7 +92,7 @@ FlowRouter.route('/attendance',{
 FlowRouter.route('/attendance/event/:eid',{
 	action(params) {
 		mount(MainLayout, {
-			content: (<EventDetail eid={params.eid} />)
+			content: (<EventDetailWrapper eid={params.eid} />)
 		})
 	}
 });
@@ -117,6 +121,22 @@ FlowRouter.route('/events/old',{
 	}
 });
 
+FlowRouter.route('/tickets',{
+	action() {
+		mount(MainLayout, {
+			content: (<TicketSummary />)
+		})
+	}
+});
+
+FlowRouter.route('/tickets/:tid',{
+	action(params) {
+		mount(MainLayout, {
+			content: (<EditTicketWrapper tid={params.tid} />)
+		})
+	}
+});
+
 FlowRouter.route('/churches',{
 	action() {
 		mount(MainLayout, {
@@ -125,7 +145,7 @@ FlowRouter.route('/churches',{
 	}
 });
 
-FlowRouter.route('/Churches/workspace/:cid',{
+FlowRouter.route('/churches/workspace/:cid',{
 	action(params) {
 		mount(MainLayout, {
 			content: (<ChurchesWorkspace cid={params.cid} />)
@@ -162,15 +182,6 @@ FlowRouter.route('/sg/old',{
 		mount(MainLayout, {
 			content: (<SmallGRoupsOld />)
 		})
-	}
-});
-
-FlowRouter.route('/resolutions', {
-	action() {
-		mount(MainLayout, {
-				content: (<ResolutionsWrapper />)
-			}
-		)
 	}
 });
 
@@ -219,3 +230,12 @@ FlowRouter.route('/ethnicity', {
 		)
 	}
 });
+
+FlowRouter.notFound = {
+  action() {
+    mount(ErrorLayout, {
+				content: (<ErrorPage />)
+			}
+		)
+  }
+};

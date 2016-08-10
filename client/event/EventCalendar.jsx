@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
+import {Tracker} from 'meteor/tracker';
 import EventContent from './EventContent.jsx';
 
-export default class EventCalendar extends TrackerReact(React.Component) {
+export default class EventCalendar extends Component {
 
   openEvent(event) {
     event.preventDefault();
@@ -23,7 +23,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       header: {
         left: "prev,next today",
         center: "title",
-        right: "month,basicWeek,basicDay"
+        right:  "month,basicWeek,basicDay"    // maybe these can be controlled by settings later
       },
       eventRender: (event, element) => {
         element.popover({
@@ -55,16 +55,26 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         });
       }
     });
+    this.autorunHandle = Tracker.autorun(() => {
+       var update = Session.get("calendarUpdate");
+       if (update) {
+         $(calendar).fullCalendar('refetchEvents');
+         $(calendar).fullCalendar('rerenderEvents');
+         Session.set("calendarUpdate", null);
+       }
+     });
+
     console.log(calendar.clientWidth);
   }
 
   componentWillUnmount() {
     const { calendar } = this.refs;
     $(calendar).fullCalendar('destroy');
+    this.autorunHandle.stop();
   }
 
   componentDidUpdate() {
-    
+
   }
 
   render() {

@@ -29,11 +29,11 @@ export default class PermissionWindow extends Component
 
     }
 
-    getEvent(){
+    /*getEvent(){
   		//console.log(Events.find({_id: this.props.eid}).fetch());
   		//return Events.find({_id: this.props.eid}).fetch();
   		return Events.findOne(this.props.eid);
-  	}
+  	}*/
 
     renderPermissions(permHolders, type)
     {
@@ -44,7 +44,7 @@ export default class PermissionWindow extends Component
 
     render()
     {
-        var event = this.props.parent.getEvent();
+        var event = this.props.ev; //parent.getEvent();
         var name = event.name;
         var owner = event.username;
 

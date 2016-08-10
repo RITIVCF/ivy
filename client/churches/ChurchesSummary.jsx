@@ -5,7 +5,7 @@ import ChurchWorkspace from './ChurchesWorkspace.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
-Churches = new Mongo.Collection("churches");
+//Churches = new Mongo.Collection("churches");
 
 export default class ChurchesSummary extends TrackerReact(React.Component) {
   constructor() {
@@ -13,7 +13,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Churches: Meteor.subscribe("allChurches")
+        Churches: Meteor.subscribe("allChurches"),
+        options: Meteor.subscribe("allOptions")
       }
     };
   }
@@ -28,7 +29,7 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
     console.log(this);
     //creates a new event and opens event details in event workspace
     console.log("This button creates a new church");
-    Meteor.call('addBlankChurch', function(error, result){
+    /*Meteor.call('addBlankChurch', function(error, result){
       if(error){
         console.log(error.reason);
         return;
@@ -42,7 +43,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
       //this.props.parent.state.eventId = result;
       //setID(result);
     });
-
+    */
+    Meteor.call('addBlankChurch');
   }
 
 
@@ -51,12 +53,16 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
     return Churches.find({active: true}).fetch();
   }
 
+  oldchurches(){
+    return Churches.find({active: false}).fetch();
+  }
+
 
 	render() {
-    document.title="Ivy - Church Summary Page";
+    document.title="Ivy - Churches Dashboard";
 		return (
       <div>
-      <h1>Church Summary Page</h1>
+      <h1>Churches Dashboard</h1>
       <div className="sidebar">
         <ul>
           <li><button onClick={this.createNew.bind(this)}>New</button></li>
@@ -70,8 +76,14 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
               return <ChurchSingle key={church._id} church={church} parent={this} />
           })}
         </div>
+        <div className="oldinactive">
+          <h1>Old/Inactive Churches</h1>
+            {this.oldchurches().map( (church)=>{
+                return <ChurchSingle key={church._id} church={church} parent={this} />
+            })}
+        </div>
       </div>
-      <a href="/churches/old"><button>View old/inactive churches</button></a>
+      {/*<a href="/churches/old"><button>View old/inactive churches</button></a>  */}
     </div>
   )
 	}
