@@ -8,7 +8,7 @@ import SelectContactForm from './SelectContactForm.jsx';
 export default class ContactWrapper extends TrackerReact(React.Component){
   render() {
     return (
-      <div>
+      <div className="container">
         <SelectContactForm />
       </div>
     )

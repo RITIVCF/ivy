@@ -64,7 +64,8 @@ export default class EventDescription extends Component {
         <textarea ref="description"
           value={this.state.description}
           onChange={this.handleDescriptionChange.bind(this)}
-          disabled={this.state.descriptionlock} />
+          disabled={this.state.descriptionlock||!this.props.perm}
+          />
       </div>
     )
   }

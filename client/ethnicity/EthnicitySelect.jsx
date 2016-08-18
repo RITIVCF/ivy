@@ -33,7 +33,7 @@ export default class EthnicitySelect extends TrackerReact(React.Component) {
       return (<div></div>);
     }
     return (
-      <select className="ethnicities" ref="ethn" value={this.props.selected} onChange={this.update.bind(this)}>
+      <select className="ethnicities" ref="ethn" value={this.props.selected} onChange={this.update.bind(this)} disabled={this.props.disabled}>
         <option value={""}></option>
           {this.getEthnicities().map( (ethnicity)=>{
               return <SelectOption key={ethnicity} value={ethnicity} displayvalue={ethnicity} />

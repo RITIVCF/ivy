@@ -10,9 +10,10 @@ import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 import ErrorPage from './layouts/ErrorPage.jsx';
 import DashboardWrapper from './Dashboard.jsx';
 import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
+import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
-import EventSummary from './event/EventSummary.jsx';
+import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
@@ -29,7 +30,11 @@ import EventDetailWrapper from './attendance/EventDetailWrapper.jsx';
 import TicketSummary from './tickets/TicketSummary.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
 import ContactSummary from './contact/ContactSummary.jsx';
-import GroupsSummary from './groups/GroupsSummary.jsx';
+import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
+import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
+import AdminDashboard from './admin/AdminDashboard.jsx';
+import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
+import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
 
 
 FlowRouter.route('/',{
@@ -40,24 +45,55 @@ FlowRouter.route('/',{
 	}
 });
 
-FlowRouter.route('/groups', {
+// FlowRouter.route('/groups', {
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<ContactGroupsWrapper />)
+// 		})
+// 	}
+// });
+
+FlowRouter.route('/admin', {
 	action() {
 		mount(MainLayout, {
-			content: (<GroupsSummary />)
+			content: (<AdminDashboard />)
 		})
 	}
 });
 
+FlowRouter.route('/admin/groups', {
+	action() {
+		mount(MainLayout, {
+			content: (<AdminGroupsWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/admin/pages', {
+	action() {
+		mount(MainLayout, {
+			content: <PagePermissionsWrapper />
+		})
+	}
+});
+
+FlowRouter.route('/admin/settings', {
+	action() {
+		mount(MainLayout, {
+			content: <SiteSettingsWrapper />
+		})
+	}
+});
 
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
-			content: (<ContactProfileWrapper />)
+			content: (<UserProfileWrapper />)
 		})
 	}
 });
 
-FlowRouter.route('/profile/:cid',{
+FlowRouter.route('/contacts/:cid',{
 	action(params) {
 		mount(MainLayout, {
 			content: (<ContactProfileWrapper cid={params.cid} />)
@@ -100,7 +136,7 @@ FlowRouter.route('/attendance/event/:eid',{
 FlowRouter.route('/events',{
 	action() {
 		mount(MainLayout, {
-			content: (<EventSummary />)
+			content: (<EventsWrapper />)
 		})
 	}
 });

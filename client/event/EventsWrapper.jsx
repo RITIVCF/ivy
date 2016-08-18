@@ -12,18 +12,21 @@ export default class EventsWrapper extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Events: Meteor.subscribe("allEvents")
-      },
-			eventId: ""
-    };
+       Events: Meteor.subscribe("summaryEvents"),
+				ownerEvents: Meteor.subscribe("ownerEvents")
+      }};
   }
 
+	componentWillUnmount() {
+    this.state.subscription.Events.stop();
+		this.state.subscription.ownerEvents.stop();
+  }
+
+
 	render() {
-		if(this.state.eventId){
+		if(!checkPermission("events")){
+			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+		}
 			return <EventSummary parent={this} />
-		}
-		else{
-			return <EventWorkspace id={this.state.eventId} parent={this} />
-		}
 	}
 }

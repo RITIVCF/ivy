@@ -65,6 +65,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	getEvent(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
+
 		return Events.findOne(this.props.eid);
 	}
 
@@ -74,47 +75,74 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	if(!ev){
 		return (<div>Loading...</div>);
 	}
+	var perm = false;// ev.perm[""]
+	for(i=0; i < ev.permUser.length; i++){
+		if(ev.permUser[i].id == Meteor.userId()){
+			perm = ev.permUser[i].edit;
+			break;
+		}
+	}
+	for(i=0; i < ev.permGroup.length; i++){
+		if(ev.permGroup[i].id == Meteor.userId()){
+			perm = ev.permGroup[i].edit||perm;
+			break;
+		}
+	}
+	if(ev.owner==Meteor.userId()){
+		perm = true;
+	}
+
 		return (
 
-		<div>
-			<JobsWindow ref="jobOverlay" eid={ev._id} />
-			<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />
+		<div classNme="container-fluid">
+			{perm?<JobsWindow ref="jobOverlay" eid={ev._id} />:""}
+			{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:""}
 			{/*}<ReoccuringEventWindow ref="reoccuringOverlay" ev={ev} /> */}
 			{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} ev={ev} />:""}
 			<article id="main">
-        <header className="special container">
-          <h2>Event Workspace</h2>
-        </header>
-			<div className="sidebar">
-				{Meteor.userId()==ev.owner ? <input type="button" onClick={this.viewPermissions.bind(this)} value="Permissions" />:""}
-				<button onClick={this.viewJobs.bind(this)}>Schedule Request</button>
-				<h4>Scheduled Positions</h4>
-				{this.state.subscription.contacts.ready() ? ev.jobs.map( (job)=>{
-					return <JobSingle key={job.uid+job.job} job={job} parent={this} ev={ev} />
-				}):""}
+
+			<div className="row">
+				<div className="col-sm-3 col-lg-2">
+					<nav className="navbar navbar-default navbar-fixed-side">
+						{Meteor.userId()==ev.owner ? <input type="button" onClick={this.viewPermissions.bind(this)} value="Permissions" />:""}
+						{perm?<button onClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
+						<h4>Scheduled Positions</h4>
+						{this.state.subscription.contacts.ready() ? ev.jobs.map( (job)=>{
+							return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
+						}):""}
+					</nav>
+				</div>
+				<div className="col-sm-9 col-lg-10">
+					<header className="special container">
+	          <h2>Event Workspace</h2>
+	        </header>
+					<div className="secondary sidebar">
+						{/*}<input type="checkbox" ref="reoc" onClick={this.openReoccuring.bind(this)} checked={ev.reocurring} />*/}
+						{perm?<ButtonPublish published={ev.published} eid={this.props.eid} />:<p>Published: {ev.published?"Published":"Not Published"}</p>}
+						{/*}<ButtonDelete eid={this.props.eid} parent={this} />*/}
+
+						{perm?<button onClick={this.openDelete.bind(this)}>Delete</button>:""}
+						<EventDateControls ev={ev} perm={perm} />
+
+						<EventLocation ev={ev} perm={perm} />
+						<EventEVR ev={ev} perm={perm} />
+						<EventReserved ev={ev} perm={perm} />
+
+						<label>Tags</label>
+						<EventTags ev={ev} subscription={this.state.subscription.options} perm={perm} />
+
+					</div>
+					<div className="panel panel-default">
+						<div className="panel-heading">
+						<EventName ev={ev} perm={perm} />
+						<EventDescription ev={ev} perm={perm} />
+						<EventWorkpad ev={ev} perm={perm} />
+						</div>
+					</div>
+					<RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
+				</div>
 			</div>
-			<div className="secondary sidebar">
-				{/*}<input type="checkbox" ref="reoc" onClick={this.openReoccuring.bind(this)} checked={ev.reocurring} />*/}
-				<ButtonPublish published={ev.published} eid={this.props.eid} />
-				{/*}<ButtonDelete eid={this.props.eid} parent={this} />*/}
 
-				<button onClick={this.openDelete.bind(this)}>Delete</button>
-				<EventDateControls ev={ev} />
-
-				<EventLocation ev={ev} />
-				<EventEVR ev={ev} />
-				<EventReserved ev={ev} />
-
-				<label>Tags</label>
-				<EventTags ev={ev} subscription={this.state.subscription.options} />
-
-			</div>
-			<div className="Workspace">
-					<EventName ev={ev} />
-					<EventDescription ev={ev} />
-					<EventWorkpad ev={ev} />
-			</div>
-				<RequestWrapper eid={this.props.eid} parent={this} />
 			</article>
 		</div>
 		)

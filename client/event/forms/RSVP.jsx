@@ -88,6 +88,7 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
             <label>Name</label>
             <SelectContact parent={this}
               unset={this.unset.bind(this)}
+              initialValue={""}
               updateContact={this.update.bind(this)} ref="user"  />
             <br />
             <label>Email</label>

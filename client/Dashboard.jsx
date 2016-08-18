@@ -3,8 +3,21 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import { HTTP } from 'meteor/http';
 //import websocket from 'websocket';
 
+Meteor.subscribe("allGroups");
 Meteor.subscribe("allCounters");
 Meteor.subscribe("allOptions");
+Meteor.subscribe("allPagePermissions");
+
+checkPermission = function(id){
+	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+	console.log("GGroups:");
+	console.log(ids);
+	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
+}
 
 export default class DashboardWrapper extends TrackerReact(React.Component) {
 	constructor(){

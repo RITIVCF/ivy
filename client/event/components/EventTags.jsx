@@ -45,6 +45,7 @@ export default class EventTags extends Component {
           ref={tag}
           readOnly={true}
           name={tag}
+          disabled={!this.props.perm}
           onClick={this.updateTags.bind(this)}
           checked={(tags.indexOf(tag) != -1) ? "checked": ""}
         /></label></li>

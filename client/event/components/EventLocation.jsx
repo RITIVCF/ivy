@@ -59,7 +59,7 @@ export default class EventLocation extends Component {
 				<input type="text"
           ref="location"
           value={this.state.location}
-          disabled={this.state.locationlock}
+          disabled={this.state.locationlock||!this.props.perm}
           onChange={this.handleLocationChange.bind(this)} />
       </div>
     )

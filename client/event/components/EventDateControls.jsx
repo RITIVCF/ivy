@@ -104,13 +104,19 @@ export default class EventDateControls extends TrackerReact(React.Component) {
     return (
       <div>
       <label>Start</label>
-      <DateTimePicker ref="start" value={this.props.ev.start} onChange={this.updateStartDate.bind(this)} />
+      <DateTimePicker ref="start"
+        value={this.props.ev.start}
+        disabled={!this.props.perm}
+        onChange={this.updateStartDate.bind(this)} />
       {/*
       <input type="date" ref="startdate" name="startdate" value={startdate} onBlur={this.updateStartDate.bind(this)} onChange={this.handleStartDateChange} />
       <input type="time" ref="starttime" name="startdate" value={starttime} onBlur={this.updateStartDate.bind(this)} onChange={this.handleStartTimeChange}/>
       */}
       <label>End</label>
-      <DateTimePicker ref="end" value={this.props.ev.end} onChange={this.updateEndDate.bind(this)} />
+      <DateTimePicker ref="end"
+        value={this.props.ev.end}
+        disabled={!this.props.perm}
+        onChange={this.updateEndDate.bind(this)} />
       {/*
       <input type="date" ref="enddate" name="enddate" value={enddate} onBlur={this.updateEndDate.bind(this)} onChange={this.handleEndDateChange}/>
       <input type="time" ref="endtime" name="endtime" value={endtime} onBlur={this.updateEndDate.bind(this)} onChange={this.handleEndTimeChange}/>

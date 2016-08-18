@@ -52,6 +52,9 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
 	render() {
     document.title= "Ivy - Attendance Dashboard";
+    if(!checkPermission("attendance")){
+			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+		}
 		return (
       <div>
       <div className="summary">

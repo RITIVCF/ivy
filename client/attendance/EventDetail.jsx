@@ -69,6 +69,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	}
 
 	render() {
+
 	let ev = this.props.ev;
 	console.log(ev);
 	//this.state.ev= ev;
@@ -79,11 +80,13 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	document.title = (!ev) ? "Ivy - Event Detail - ": "Ivy - Event Detail - " + ev.name;
 		return (
 
-		<div>
-			<div className="sidebar">
-				<p>Event Name: {!ev ? "":ev.name}</p>
+		<div className="panel panel-default">
+			<div className="panel-heading">
+				<h3 class="panel-title">{!ev ? "":ev.name}</h3>
+			</div>
+			<div className="panel-body">
 				<p>Event Description: {!ev ? "": ev.description}</p>
-				<p>Attendees:</p>
+				<h3>Attendees</h3>
 				<label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
 					<option value={"All"}>All</option>
 					<option value={"Yes"}>Yes</option>
@@ -94,14 +97,16 @@ export default class EventDetail extends TrackerReact(React.Component) {
 					<option value={"First Time"}>First Time</option>
 				{/*}	<option value={"Status"}>Status</option> */}
 				</select></label>
-				<table>
+			</div>
+				<table className="table table-hover">
 					<thead>
 						<tr>
 							<th>Name</th>
 							<th>Email</th>
 							<th>Phone</th>
 							<th>First Time?</th>
-							<th>Ticket</th>
+							{checkPermission("tickets") ?
+							<th>Ticket</th>:"" }
 						</tr>
 					</thead>
 					<tbody>
@@ -110,7 +115,6 @@ export default class EventDetail extends TrackerReact(React.Component) {
 						})}
 					</tbody>
 				</table>
-			</div>
 		</div>
 		)
 	}

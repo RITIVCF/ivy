@@ -80,7 +80,6 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
 		return (
 		<div>
-      <h1>Event Calendar</h1>
 			<div className="calendar">
         <EventCalendar events={wrappedFetch} ref="calendar"/>
       </div>

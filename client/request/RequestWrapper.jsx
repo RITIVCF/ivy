@@ -31,15 +31,15 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-		<div>
-			{!(this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()) ? "":
+		<div className="panel panel-default">
+			{!(this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()&&this.props.perm) ? "":
 			<NewTicketWindow ref="newticketoverlay" parent={this} eid={this.props.eid} />}
-			<div>Requests
-				<button
+			<div className="panel-heading">Requests
+				{this.props.perm?<button
 					onClick={this.openOverlay.bind(this)}
 					disabled={!this.props.parent.state.subscription.users.ready()}
-					>New Request</button></div>
-						<table className="requests">
+					>New Request</button>:<div></div>}</div>
+				<table className="table table-striped table-responsive">
 							<thead>
 								<tr>
 								<th>Last Update</th>
@@ -51,7 +51,7 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 							</thead>
 							<tbody>
 								{(this.props.parent.state.subscription.tickets.ready()&&this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()) ? this.requests().map( (ticket)=>{
-                    return <RequestSingle key={ticket._id} request={ticket} />
+                    return <RequestSingle key={ticket._id} perm={this.props.perm} request={ticket} />
                 }):""}
 							</tbody>
             </table>

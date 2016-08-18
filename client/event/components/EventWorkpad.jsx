@@ -69,7 +69,7 @@ export default class EventWorkpad extends Component {
 
           onChange={this.handleWorkpadChange.bind(this)}
           value={this.state.workpad}
-          disabled={this.state.workpadlock} />
+          disabled={this.state.workpadlock||!this.props.perm} />
       </div>
     )
   }

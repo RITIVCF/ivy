@@ -4,6 +4,22 @@ Meteor.publish("allEvents", function(){
   return Events.find();
 });
 
+Meteor.publish("summaryEvents", function(){
+  var grps = Groups.find({users: this.userId}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+	console.log("GGroups:");
+	console.log(ids);
+	return Events.find({$or: [{owner: this.userId}, {"permUser.id": this.userId}, {"permGroup.id": {$in: ids}}]});
+  //return Events.find({$or: [{}]});
+});
+
+Meteor.publish("ownerEvents", function(){
+  return Events.find({owner: this.userId});
+});
+
 Contacts.allow({update: function(){return true;}});
 
 Meteor.publish("thisEvent", function(evid){
@@ -27,6 +43,11 @@ Meteor.publish("publishedEvents", function(){
 });
 
 Meteor.publish("pastEvents", function(lim){
+  if(lim == 0){
+    return Events.find({published: true, start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d} },{
+      sort: {start:-1} // Sorts descending chronologically by start
+    });
+  }
   return Events.find({published: true, start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d} },{
     sort: {start:-1}, // Sorts descending chronologically by start
     limit: lim    // limits the number of events to publish until told to publish more
@@ -37,8 +58,20 @@ Meteor.publish("oneEvent", function(eid){
   return Events.findOne(eid);
 });
 
+Meteor.publish("allPagePermissions", function(){
+  return PagePermissions.find();
+});
+
 Meteor.publish("allGroups", function(){
   return Groups.find();
+});
+
+Meteor.publish("contactGroups", function(){
+  return Groups.find({admingroup: false});
+});
+
+Meteor.publish("adminGroups", function(){
+  return Groups.find({admingroup: true});
 });
 
 Meteor.publish("SGs", function(){

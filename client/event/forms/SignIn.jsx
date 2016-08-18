@@ -131,6 +131,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
             <SelectContact
               parent={this}
               unset={this.unset.bind(this)}
+              initialValue={""}
               updateContact={this.update.bind(this)}
               ref="user"  />
             <br />

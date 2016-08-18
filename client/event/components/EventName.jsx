@@ -60,7 +60,7 @@ export default class EventName extends Component {
         <input type="text"
           ref="name"
           value={this.state.name}
-          disabled={this.state.namelock}
+          disabled={this.state.namelock||!this.props.perm}
           onChange={this.handleNameChange.bind(this)} />
       </div>
     )

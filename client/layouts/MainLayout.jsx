@@ -7,46 +7,79 @@ import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
 // <img src="images/userpics/account.png" class="img-thumbnail" />
 // Print user's Name here
 
-export const MainLayout = ({content}) => (
+export var MainLayout = ({content}) => (   // export const MainLayout
 	<div className="wrapper">
 				<nav className="navbar navbar-default" >
-					<div className="navbar-header">
-                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                    <span className="icon-bar"></span>
-                </button>
-                <a className="navbar-brand" href="/">Ivy: IVCF Webman</a>
-            </div>
-						<ul className="nav navbar-nav" id="main-menu">
-                <li>
-									<a href="/events">Event Dashboard</a>
-								</li>
-								<li>
-									<a href="/calendar">Event Calendar</a>
-								</li>
-								<li>
-									<a href="/churches">Churches Dashboard</a>
-								</li>
-								<li>
-									<a href="/tickets">Ticket Dashboard</a>
-								</li>
-								<li>
-									<a href="/contacts">Contact Dashboard</a>
-								</li>
-								{/*<li>
-									<a href="/sg">Small Groups Dashboard</a>
-								</li>*/}
-								<li>
-									<a href="/attendance">Attendance</a>
-								</li>
-								<li>
-									<a href="/profile">User Profile</a>
-								</li>
-						</ul>
-					<div className="header-right">
-						<AccountsUIWrapper />
+					<div className="container-fluid">
+						<div className="navbar-header">
+	                <button type="button" className="navbar-toggle collapsed"
+										data-toggle="collapse" aria-expanded="false"
+										data-target="#bs-example-navbar-collapse-1">
+	                    <span className="sr-only">Toggle navigation</span>
+	                    <span className="icon-bar"></span>
+	                    <span className="icon-bar"></span>
+	                    <span className="icon-bar"></span>
+	                </button>
+	                <a className="navbar-brand" href="/">Ivy</a>
+	            </div>
+							<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+								<ul className="nav navbar-nav">
+									<li className="dropdown">
+          					<a href="#" className="dropdown-toggle"
+											data-toggle="dropdown" role="button"
+											aria-haspopup="true" aria-expanded="false">
+											Events
+											<span className="caret"></span>
+										</a>
+										<ul className="dropdown-menu">
+											{checkPermission("events")?
+												<li>
+													<a href="/events">Event Dashboard</a>
+												</li>:""}
+												<li role="separator" className="divider"></li>
+												<li>
+													<a href="/calendar">Event Calendar</a>
+												</li>
+										</ul>
+									</li>
+
+										{checkPermission("churches")?
+											<li>
+												<a href="/churches">Churches Dashboard</a>
+											</li>:""}
+										{checkPermission("tickets")?
+											<li>
+												<a href="/tickets">Ticket Dashboard</a>
+											</li>:""}
+										{/*}<li>
+											<a href="/groups">Group Admin</a>
+										</li>*/}
+										{checkPermission("admin")?
+											<li>
+												<a href="/admin">Admin Dashboard</a>
+											</li>:""}
+										{checkPermission("contacts")?
+											<li>
+												<a href="/contacts">Contact Dashboard</a>
+											</li>:""}
+										{/*<li>
+											<a href="/sg">Small Groups Dashboard</a>
+										</li>*/}
+										{checkPermission("attendance")?
+											<li>
+												<a href="/attendance">Attendance Dashboard</a>
+											</li>:""}
+
+										<li>
+											<a href="/profile">User Profile</a>
+										</li>
+								</ul>
+								<div className="nav navbar-nav navbar-left">
+									<button className="btn btn-default"><AccountsUIWrapper /></button>
+								</div>
+							</div>
+
+
 					</div>
 				</nav>
 

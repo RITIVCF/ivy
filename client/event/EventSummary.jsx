@@ -2,7 +2,6 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
 import JobSingleSummary from './jobs/JobSingleSummary.jsx';
-import EventWorkspace from './EventWorkspace.jsx';
 import NewEventWindow from './NewEventWindow.jsx';
 
 // Instead of event "types" it needs to be event "tags"
@@ -12,16 +11,8 @@ export default class EventSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-        Events: Meteor.subscribe("allEvents")
-      }
-    };
   }
 
-  componentWillUnmount() {
-    this.state.subscription.Events.stop();
-  }
   /*
   newEvent(event){
 		event.preventDefault();
@@ -53,8 +44,8 @@ export default class EventSummary extends TrackerReact(React.Component) {
 
     //this.props.parent.state.eventId = result;
     //setID(result);
-  });  
-  }
+  });
+}
 
 
   events(){
@@ -65,13 +56,17 @@ export default class EventSummary extends TrackerReact(React.Component) {
 
   myunpublished(){
     // pulls users's editable current and future events
-    return Events.find({$and: [{owner: Meteor.userId()},
-      {$or: [{end: {$gt: new Date()}}, {published:false}]}]}, {$sort:{start:-1}}).fetch();
+    return Events.find(
+      {$or: [{end: {$gt: new Date()}}, {published:false}]}, {$sort:{start:-1}}).fetch();
   }
 
   myscheduled(){
     // pulls events on which a user is scheduled
     return Events.find( {jobs:{$elemMatch:{uid: Meteor.userId(),status:{$ne:"Declined"}}}} ).fetch();
+  }
+
+  viewOld(){
+    FlowRouter.go("/events/old");
   }
 
 
@@ -80,34 +75,50 @@ export default class EventSummary extends TrackerReact(React.Component) {
 		return (
       <div>
         <NewEventWindow ref="neweventoverlay" parent={this} />
-        <h1>Event Dashboard</h1>
-        <div className="sidebar">
-          <ul>
-            <li><button className="button alert" onClick={this.createNew.bind(this)}>New</button></li>
-          </ul>
+        <div className="row">
+          <div className="col-sm-3 col-lg-2">
+            <nav className="navbar navbar-default navbar-fixed-side">
+              <div className="col-sm-12">
+                <button className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button><br/>
+                <button className="btn btn-primary" onClick={this.viewOld.bind(this)}>View old events</button>
+              </div>
+            </nav>
+          </div>
+          <div className="col-sm-9 col-lg-10">
+            <h1>Event Dashboard</h1>
+            <div className="panel panel-default">
+              <div className="panel-body">
+            <div className="row">
+              <div className="col-md-12">
+              <h1>My Schedule</h1>
+              <div className="row">
+                <div className="col-md-6">
+                  {this.myscheduled().map( (ivevent)=>{
+                      return <JobSingleSummary key={ivevent._id} ev={ivevent} parent={this}/>
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+            {/*
+            <div className="upcoming">
+              <h1>Published Future Events</h1>
+              {this.events().map( (ivevent)=>{
+                  return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this}/>
+              })}
+            </div> */}
+            <div className="row">
+              <div className="col-md-12">
+              <h1>View/Edit My Events</h1>  {/*?Set the events that are published a different color?*/}
+              {this.myunpublished().map( (ivevent)=>{
+                  return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this} />
+              })}
+              </div>
+            </div>
+            </div>
+            </div>
+          </div>
         </div>
-      <div className="summary">
-
-        <div className="myschedule">
-          <h1>My Schedule</h1>
-          {this.myscheduled().map( (ivevent)=>{
-              return <JobSingleSummary key={ivevent._id} ev={ivevent} parent={this}/>
-          })}
-        </div>
-        <div className="upcoming">
-          <h1>Published Future Events</h1>
-          {this.events().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this}/>
-          })}
-        </div>
-        <div className="myunpublished">
-          <h1>View/Edit My Events</h1>  {/*?Set the events that are published a different color?*/}
-          {this.myunpublished().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id}  ivevent={ivevent} parent={this} />
-          })}
-        </div>
-      </div>
-      <a href="/events/old"><button className="button new">View old events</button></a>
     </div>
   )
 	}

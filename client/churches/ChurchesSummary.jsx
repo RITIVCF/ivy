@@ -60,29 +60,39 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
 	render() {
     document.title="Ivy - Churches Dashboard";
+    if(!checkPermission("churches")){
+			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+		}
 		return (
       <div>
-      <h1>Churches Dashboard</h1>
-      <div className="sidebar">
-        <ul>
-          <li><button onClick={this.createNew.bind(this)}>New</button></li>
-        </ul>
-
-      </div>
-      <div className="summary">
-        <div className="churches">
-          <h1>Active Churches</h1>
-          {this.churches().map( (church)=>{
-              return <ChurchSingle key={church._id} church={church} parent={this} />
-          })}
+        <div className="row">
+          <div className="col-sm-3 col-lg-2">
+            <nav className="navbar navbar-default navbar-fixed-side">
+              <div className="col-sm-12">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                  <div class="btn-group" role="group">
+                    <button type="button" className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div className="col-sm-9 col-lg-10">
+            <h1>Churches Dashboard</h1>
+            <div className="panel panel-default">
+              <div className="panel-body">
+                <h2>Active Churches</h2>
+                {this.churches().map( (church)=>{
+                    return <ChurchSingle key={church._id} church={church} parent={this} />
+                })}
+                <h2>Old/Inactive Churches</h2>
+                  {this.oldchurches().map( (church)=>{
+                      return <ChurchSingle key={church._id} church={church} parent={this} />
+                  })}
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="oldinactive">
-          <h1>Old/Inactive Churches</h1>
-            {this.oldchurches().map( (church)=>{
-                return <ChurchSingle key={church._id} church={church} parent={this} />
-            })}
-        </div>
-      </div>
       {/*<a href="/churches/old"><button>View old/inactive churches</button></a>  */}
     </div>
   )
