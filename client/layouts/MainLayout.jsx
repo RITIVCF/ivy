@@ -1,5 +1,6 @@
 import React from 'react';
 import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
+import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 
 
 
@@ -73,10 +74,11 @@ export var MainLayout = ({content}) => (   // export const MainLayout
 										<li>
 											<a href="/profile">User Profile</a>
 										</li>
+
+										<li>
+												<SignInButtonWrapper />
+										</li>
 								</ul>
-								<div className="nav navbar-nav navbar-left">
-									<button className="btn btn-default navbar-btn"><AccountsUIWrapper /></button>
-								</div>
 							</div>
 
 
