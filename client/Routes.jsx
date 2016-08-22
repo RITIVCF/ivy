@@ -11,6 +11,8 @@ import ErrorPage from './layouts/ErrorPage.jsx';
 import DashboardWrapper from './Dashboard.jsx';
 import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
+import LoginWrapper from './user/LoginWrapper.jsx';
+import SignUpWrapper from './user/SignUpWrapper.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
 import EventsWrapper from './event/EventsWrapper.jsx';
@@ -264,6 +266,22 @@ FlowRouter.route('/ethnicity', {
 				content: (<EthnicityWrapper />)
 			}
 		)
+	}
+});
+
+FlowRouter.route('/login', {
+	action() {
+		mount(MainLayout, {
+			content: (<LoginWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/signup', {
+	action() {
+		mount(MainLayout, {
+			content: (<SignUpWrapper />)
+		})
 	}
 });
 
