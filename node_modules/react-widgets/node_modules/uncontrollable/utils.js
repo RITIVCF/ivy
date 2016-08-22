@@ -26,14 +26,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function customPropType(handler, propType, name) {
 
-  return function (props, propName) {
+  return function (props, propName, wrappedName) {
 
     if (props[propName] !== undefined) {
       if (!props[handler]) {
         return new Error('You have provided a `' + propName + '` prop to ' + '`' + name + '` without an `' + handler + '` handler. This will render a read-only field. ' + 'If the field should be mutable use `' + defaultKey(propName) + '`. Otherwise, set `' + handler + '`');
       }
 
-      return propType && propType(props, propName, name);
+      for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+        args[_key - 3] = arguments[_key];
+      }
+
+      return propType && propType.apply(undefined, [props, propName, name].concat(args));
     }
   };
 }
@@ -86,8 +90,8 @@ function defaultKey(key) {
 
 function chain(thisArg, a, b) {
   return function chainedFunction() {
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
+    for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
     }
 
     a && a.call.apply(a, [thisArg].concat(args));

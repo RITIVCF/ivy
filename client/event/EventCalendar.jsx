@@ -79,7 +79,7 @@ export default class EventCalendar extends Component {
 
   render() {
     return (
-      <div class="calendar-container">
+      <div className="calendar-container">
         <div className="row">
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">

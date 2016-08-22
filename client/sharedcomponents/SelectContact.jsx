@@ -143,7 +143,7 @@ shouldComponentUpdate(nextProps, nextState){
 
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Enter name...',
+      placeholder: 'Name',
       value,
       onChange: this.onChange
     };

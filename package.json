@@ -5,9 +5,12 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
+    "hammerjs": "^2.0.8",
+    "jquery": "^3.1.0",
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.14.1",
-    "react": "^15.0.1",
+    "react": "^15.3.1",
     "react-addons-pure-render-mixin": "^15.0.1",
     "react-autosuggest": "^3.8.0",
     "react-dom": "^15.0.1",

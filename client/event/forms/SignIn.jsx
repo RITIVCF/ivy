@@ -139,31 +139,26 @@ export default class SignInWrapper extends TrackerReact(React.Component){
         <div className="panel panel-default">
           <h1>Welcome to {event.name}!</h1>
           <input type="hidden" ref="evname" value={event.name} />
-          <h2>Help text here...</h2>
+          <h2>Please sign in</h2>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <div className="form-group">
-            <label>Name</label>
               <SelectContact
                 parent={this}
                 unset={this.unset.bind(this)}
                 onBlur={this.setNew.bind(this)}
                 initialValue={""}
                 updateContact={this.update.bind(this)}
-                ref="user"  />
-              <br />
-              <label>Email</label>
-              <input ref="email" className="form-control" type="text" required />
-              <br />
-              <label>Phone</label>
-              <input ref="phone" type="text" className={this.state.new?"form-control hidden":"form-control"} />
-              <br />
-              <label>Subscribe to newsletter</label>
-              <input type="checkbox" ref="newsletter" className={this.state.new?"form-control hidden":"form-control"} />
-              <br/>
-              <label>Major: </label>
-              <input ref="major" type="text" className={this.state.new?"form-control hidden":"form-control"} />
-              <br />
-              <input type="submit" name="submit" className="form-control" />
+                placeholder="Name"
+                id="first_name"
+                type="text"
+                ref="user"
+                className="validate" />
+              <input ref="email" placeholder="Email" id="email" type="email" required />
+              <input ref="phone" placeholder="Phone number (optional)" type="tel" className={this.state.new?"hidden":""} />
+              <input ref="major" placeholder="Major" type="text" className={this.state.new?"hidden":""} />
+              <input type="checkbox" ref="newsletter" id="news" name="news" className={this.state.new?"hidden":""} value="Yes" />          
+              <label htmlFor="news">Please sign me up for the newsletter</label>
+              <input type="submit" name="submit" value="Sign In" className="form-control" />
             </div>
           </form>
         </div>
