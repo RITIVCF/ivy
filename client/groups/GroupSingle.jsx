@@ -21,15 +21,15 @@ export default class GroupsSingle extends Component {
 
   render() {
     return (
-      <div className="panel default">
+      <div className="panel panel-default">
         {this.state.editting ?
         <div  >
           <button onClick={this.close.bind(this)}>Close</button>
         <GroupWorkspace group={this.props.group} />
         </div>
       :
-      <div onClick={this.edit.bind(this)}>
-        <div>{this.props.group.name}</div>
+      <div className="panel-heading" onClick={this.edit.bind(this)}>
+        {this.props.group.name}
       </div>}
       </div>
 

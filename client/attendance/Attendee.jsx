@@ -20,6 +20,19 @@ export default class Attendee extends TrackerReact(React.Component) {
     FlowRouter.go("/contacts/"+this.props.contact._id);
   }
 
+  ticketComplete(){
+    // return true: compelete  - color green
+    //        false: not complete - color red
+    var ticket = Tickets.findOne(this.props.contact.ticket)
+    if(ticket.status == "Closed"){
+      return "success";
+    }
+    if(ticket.status == "Pending"||ticket.status=="In Progress"){
+      return "warning";
+    }
+    return "danger";
+  }
+
   viewTicket(){
     console.log("viewTIcket");
     this.state.ran = true;
@@ -34,7 +47,7 @@ export default class Attendee extends TrackerReact(React.Component) {
     //let contact = this.props.contact;
 
     return (
-      <tr onClick={this.go.bind(this)}>
+      <tr onClick={this.go.bind(this)} className={""+this.ticketComplete.bind(this)}>
         <td>{this.props.contact.name}</td>
         <td>{this.props.contact.email}</td>
         <td>{this.props.contact.phone}</td>

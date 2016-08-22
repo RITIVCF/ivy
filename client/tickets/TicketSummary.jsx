@@ -79,9 +79,14 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
         <div className="row">
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">
-              {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-              <button className="button alert" onClick={this.newTicket.bind(this)}>New</button>
-                : <button className="button alert" >New</button>}
+              <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                <div class="btn-group" role="group">
+                  {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
+                  <button className="btn btn-alert navbar-btn" onClick={this.newTicket.bind(this)}>New</button>
+                    : <button className="btn btn-alert navbar-btn" >New</button>}
+                </div>
+              </div>
+
             </nav>
           </div>
           <div className="col-sm-9 col-lg-10">

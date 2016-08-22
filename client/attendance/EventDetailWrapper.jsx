@@ -13,6 +13,7 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
     this.state = {
       subscription:{
         Events: Meteor.subscribe("pastEvents", 0),
+				Tickets: Meteor.subscribe("allTicketStatus"),
 				Contacts: Meteor.subscribe("allContacts")
       }
     };
@@ -20,6 +21,7 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 
   componentWillUnmount() {
     this.state.subscription.Events.stop();
+		this.state.subscription.Tickets.stop();
 		this.state.subscription.Contacts.stop();
   }
 

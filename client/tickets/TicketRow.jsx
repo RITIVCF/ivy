@@ -18,7 +18,7 @@ export default class TicketRow extends Component {
       return {name: ""};
     }
     if(this.props.tkt.type == "Contact"){
-      return Contacts.findOne(this.props.tkt.customer).name;
+      return {name: ""};//Contacts.findOne(this.props.tkt.customer).name;
     }
     return Contacts.findOne({_id:
         Meteor.users.findOne({_id:this.props.tkt.customer}).contact

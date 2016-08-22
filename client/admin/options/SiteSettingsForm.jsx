@@ -15,11 +15,20 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-		<div>
-			<h1>Site Settings Dashboard</h1>
-			{this.getOptions().map( (option) => {
-				return <Option option={option} />
-			})}
+		<div className="container-fluid">
+			<div className="row">
+				<div className="col-sm-3 col-lg-2">
+					<nav className="navbar navbar-default navbar-fixed-side">
+
+					</nav>
+				</div>
+				<div className="col-sm-9 col-lg-10">
+					<h1>Site Settings Dashboard</h1>
+					{this.getOptions().map( (option) => {
+						return <Option option={option} />
+					})}
+				</div>
+			</div>
 		</div>
 		)
 	}

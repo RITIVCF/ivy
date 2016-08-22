@@ -16,6 +16,7 @@ export default class ButtonPublish extends Component {
       {this.props.published ?
         <button
           onClick={this.togglePublishEvent.bind(this)}
+          className="btn btn-danger navbar-btn"
           ref="togglePublish"
           value={true} >
           Unpublish
@@ -23,6 +24,7 @@ export default class ButtonPublish extends Component {
         :
         <button
           ref="togglePublish"
+          className="btn btn-primary navbar-btn"
           onClick={this.togglePublishEvent.bind(this)}
           value={false} >
           Publish

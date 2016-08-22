@@ -75,6 +75,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	if(!ev){
 		return (<div>Loading...</div>);
 	}
+	document.title = "Ivy - "+ ev.name;
 	var perm = false;// ev.perm[""]
 	for(i=0; i < ev.permUser.length; i++){
 		if(ev.permUser[i].id == Meteor.userId()){
@@ -99,51 +100,71 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 			{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:""}
 			{/*}<ReoccuringEventWindow ref="reoccuringOverlay" ev={ev} /> */}
 			{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} ev={ev} />:""}
-			<article id="main">
 
 			<div className="row">
 				<div className="col-sm-3 col-lg-2">
 					<nav className="navbar navbar-default navbar-fixed-side">
-						{Meteor.userId()==ev.owner ? <input type="button" onClick={this.viewPermissions.bind(this)} value="Permissions" />:""}
-						{perm?<button onClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
+						<div className="col-sm-12">
+						{perm?<button className="btn btn-default navbar-btn"
+							nClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
 						<h4>Scheduled Positions</h4>
 						{this.state.subscription.contacts.ready() ? ev.jobs.map( (job)=>{
 							return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
 						}):""}
+
+							{Meteor.userId()==ev.owner ? <input type="button"
+								className="btn btn-default navbar-btn"
+								onClick={this.viewPermissions.bind(this)} value="Permissions" />:""}
+
+						</div>
 					</nav>
 				</div>
-				<div className="col-sm-9 col-lg-10">
-					<header className="special container">
+				<div className="col-sm-3 col-lg-2">
+					<nav className="navbar navbar-default navbar-fixed-side">
+						<div className="col-sm-12">
+							{/*}<input type="checkbox" ref="reoc" onClick={this.openReoccuring.bind(this)} checked={ev.reocurring} />*/}
+							{perm?<ButtonPublish published={ev.published} eid={this.props.eid} />:<p>Published: {ev.published?"Published":"Not Published"}</p>}
+							{/*}<ButtonDelete eid={this.props.eid} parent={this} />*/}
+
+							{perm?<button className="btn btn-danger navbar-btn" onClick={this.openDelete.bind(this)}>Delete</button>:""}
+							<EventDateControls ev={ev} perm={perm} />
+
+							<EventLocation ev={ev} perm={perm} />
+							<EventEVR ev={ev} perm={perm} />
+							<EventReserved ev={ev} perm={perm} />
+
+							<label>Tags</label>
+							<EventTags ev={ev} subscription={this.state.subscription.options} perm={perm} />
+						</div>
+					</nav>
+				</div>
+				<div className="col-sm-6 col-lg-8">
+				{/*	<header className="special container">
 	          <h2>Event Workspace</h2>
-	        </header>
-					<div className="secondary sidebar">
-						{/*}<input type="checkbox" ref="reoc" onClick={this.openReoccuring.bind(this)} checked={ev.reocurring} />*/}
-						{perm?<ButtonPublish published={ev.published} eid={this.props.eid} />:<p>Published: {ev.published?"Published":"Not Published"}</p>}
-						{/*}<ButtonDelete eid={this.props.eid} parent={this} />*/}
-
-						{perm?<button onClick={this.openDelete.bind(this)}>Delete</button>:""}
-						<EventDateControls ev={ev} perm={perm} />
-
-						<EventLocation ev={ev} perm={perm} />
-						<EventEVR ev={ev} perm={perm} />
-						<EventReserved ev={ev} perm={perm} />
-
-						<label>Tags</label>
-						<EventTags ev={ev} subscription={this.state.subscription.options} perm={perm} />
-
+	        </header>*/}
+					<div className="row" style={{height: '5px'}}>
 					</div>
+
 					<div className="panel panel-default">
 						<div className="panel-heading">
 						<EventName ev={ev} perm={perm} />
 						<EventDescription ev={ev} perm={perm} />
-						<EventWorkpad ev={ev} perm={perm} />
+
 						</div>
 					</div>
-					<RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
+					<div className="panel panel-default">
+						<div className="panel-body">
+							<EventWorkpad ev={ev} perm={perm} />
+						</div>
+					</div>
+					<nav class="navbar navbar-default navbar-fixed-bottom">
+					  <div class="container-fluid">
+					    <RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
+					  </div>
+					</nav>
 				</div>
 			</div>
 
-			</article>
 		</div>
 		)
 	}
