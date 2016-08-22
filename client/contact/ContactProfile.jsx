@@ -5,6 +5,8 @@ import AddressForm from './AddressForm.jsx';
 import ContactName from './components/ContactName.jsx';
 import ContactEmail from './components/ContactEmail.jsx';
 import ContactPhone from './components/ContactPhone.jsx';
+import ContactMajor from './components/ContactMajor.jsx';
+import ContactBio from './components/ContactBio.jsx';
 import ContactNewsletter from './components/ContactNewsletter.jsx';
 import CampusAffiliations from './components/CampusAffiliations.jsx';
 import CommunityLife from './components/CommunityLife.jsx';
@@ -76,6 +78,13 @@ export default class ContactProfile extends TrackerReact(React.Component){
     this.refs.becmemwin.openOverlay();
   }
 
+  remove(){
+    if(confirm("Only remove a contact if it is a mistake creation.")){
+      Meteor.call("removeContact", this.props.cid);
+      //console.log("confirmed");
+    }
+  }
+
 
 
 
@@ -118,37 +127,39 @@ export default class ContactProfile extends TrackerReact(React.Component){
             {this.props.parent.state.subscription.contact.ready()&&contact ?
             (typeof this.props.cid === 'undefined') ? <h1>My Profile</h1> : <h1>{contact.name+"'s"} Profile</h1> : <h1>Contact Profile</h1> }
             <div className="row">
-              <div className="col-md-6">
-                <div className="panel panel-default">
-                  <div className="panel-heading">
-                    <h2>Contact Info</h2>
-                  </div>
-                  <div className="panel-body">
-                    {this.props.parent.state.subscription.contact.ready()&&contact ?
-                      <div><ContactName contact={contact} disabled={disable} />
-                    <ContactEmail contact={contact} disabled={disable} />
-                    <ContactPhone contact={contact} disabled={disable} />
-                    <ContactNewsletter contact={contact} disabled={disable} /></div>:""}
-                  </div>
-                </div>
-              </div>
-              {this.props.parent.state.subscription.contact.ready()&&contact ?
-                contact.member&&viewmember ?
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="panel panel-default">
                   <div className="panel-heading">
                     <h2>General Info</h2>
                   </div>
                   <div className="panel-body">
-                    <h3>Campus Affiliations</h3>
-                    <CampusAffiliations contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                    <div className="row">
+                      <div className="col-md-6">
+                        {this.props.parent.state.subscription.contact.ready()&&contact ?
+                          <div><ContactName contact={contact} disabled={disable} />
+                        <ContactEmail contact={contact} disabled={disable} />
+                        <ContactPhone contact={contact} disabled={disable} />
+                        <ContactNewsletter contact={contact} disabled={disable} />
+                        <ContactBio contact={contact} disabled={disable} />
+                        <ContactMajor contact={contact} disabled={disable} /></div>:""}
 
-                    <h3>Community Life</h3>
-                    <CommunityLife contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                          
+                          {checkPermission("admin")?<button onClick={this.remove.bind(this)}>Remove Contact</button>:""}
+                      </div>
+                      {this.props.parent.state.subscription.contact.ready()&&contact ?
+                        contact.member&&viewmember ?
+                      <div className="col-md-6">
+                        <h3>Campus Affiliations</h3>
+                        <CampusAffiliations contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                        <h3>Community Life</h3>
+                        <CommunityLife contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                      </div>
+                    :"":""}
+                    </div>
                   </div>
                 </div>
               </div>
-            :"":""}
+
             </div>
             {this.props.parent.state.subscription.contact.ready()&&contact ?
               contact.member&&viewmember ?
@@ -167,9 +178,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
               <div className="col-md-6">
                 <div className="panel panel-default">
                   <div className="panel-heading">
-                    <h2>University Status</h2>
+                    <h2>University Info</h2>
                   </div>
                   <div className="panel-body">
+                    <ContactMajor contact={contact} disabled={disable} />
                     <ContactGradTerm contact={contact} disabled={disable}  parent={this} subscription={this.props.subscriptions.options} />
                     <ContactCurrYear contact={contact} disabled={disable} />
                   </div>

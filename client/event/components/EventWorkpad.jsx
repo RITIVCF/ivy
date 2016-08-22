@@ -64,7 +64,7 @@ export default class EventWorkpad extends Component {
     */
     return(
       <div>
-        <label>Workspace</label>
+        <label>Workspace</label><br/>
         <textarea ref="workpad"
 
           onChange={this.handleWorkpadChange.bind(this)}

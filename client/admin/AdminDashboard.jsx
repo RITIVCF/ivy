@@ -25,45 +25,55 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 			<div>Sorry you don't have permission to view this page. Please see the leadership team to get acces.</div>
 		}
 		return (
-		<div>
-			<h1>Admin Dashboard</h1>
+		<div className="container-fluid">
 			<div className="row">
-				<div className="col-md-6">
-					<div className="panel panel-default">
-						<div className="panel-heading">
-							<h2>Permission Groups</h2>
+				<div className="col-sm-3 col-lg-2">
+					<nav className="navbar navbar-default navbar-fixed-side">
+
+					</nav>
+				</div>
+				<div className="col-sm-9 col-lg-10">
+					<h1>Admin Dashboard</h1>
+					<div className="row">
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
+									<h2>Permission Groups</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToGroups.bind(this)}>View</button>
+								</div>
+							</div>
 						</div>
-						<div className="panel-body">
-							<button className="btn btn-default"
-								onClick={this.goToGroups.bind(this)}>View</button>
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
+									<h2>Area Permissions</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToPermissions.bind(this)}>View</button>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className="col-md-6">
-					<div className="panel panel-default">
-						<div className="panel-heading">
-							<h2>Area Permissions</h2>
-						</div>
-						<div className="panel-body">
-							<button className="btn btn-default"
-								onClick={this.goToPermissions.bind(this)}>View</button>
+					<div className="row">
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
+									<h2>Site Settings</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToSettings.bind(this)}>View</button>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className="row">
-				<div className="col-md-6">
-					<div className="panel panel-default">
-						<div className="panel-heading">
-							<h2>Site Settings</h2>
-						</div>
-						<div className="panel-body">
-							<button className="btn btn-default"
-								onClick={this.goToSettings.bind(this)}>View</button>
-						</div>
-					</div>
-				</div>
-			</div>
+
 		</div>
 		)
 	}

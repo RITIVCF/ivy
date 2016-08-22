@@ -92,7 +92,7 @@ Meteor.publish("contact", function(cid){
   //console.log(cid);
   if(!cid){
     //console.log("Finding one");
-    cid = Meteor.users.find({_id:this.userId}).fetch()[0].contact; //Meteor.user().contact;
+    cid = Meteor.users.findOne(this.userId).contact; //Meteor.user().contact;
   }
 
   const selector = {
@@ -111,6 +111,8 @@ Meteor.publish("contact", function(cid){
     communitylife: 1,
     intl: 1,
     ethn: 1,
+    major: 1,
+    bio: 1,
     ethnicity: 1,
     gradterm: 1,
     curryear: 1,
@@ -262,6 +264,10 @@ Meteor.publish("allTickets", function(){
 
 Meteor.publish("eventTickets", function(evid){
   return Tickets.find({eid: evid,type:"Event Request"});
+});
+
+Meteor.publish("allTicketStatus", function(){
+  return Tickets.find({},{fields:{status: 1}});
 });
 
 Meteor.publish("thisTicket", function(tid){

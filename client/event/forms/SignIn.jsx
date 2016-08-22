@@ -11,7 +11,8 @@ export default class SignInWrapper extends TrackerReact(React.Component){
         Event: Meteor.subscribe("Event", props.eid),
         Contacts: Meteor.subscribe("allContacts")
       },
-      contact: false
+      contact: false,
+      new: false
     };
   }
 
@@ -32,6 +33,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
         this.refs.user.state.value,
         this.refs.email.value,
         this.refs.phone.value,
+        this.refs.major.value,
         function(error, cid){
           Meteor.call("addAttendanceTicket",
             "New Contact: "+ name,
@@ -66,8 +68,11 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     this.refs.email.value="";
     this.refs.phone.value="";
     this.refs.newsletter.checked=false;
+    this.refs.major.value="";
+    this.state.new=false;
     this.refs.user.state.value='';
     this.refs.user.forceUpdate();
+    this.refs.user.focus();
   }
 
   getEvent(){
@@ -80,9 +85,10 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
   update(contt){
     this.state.contact = contt;
+    this.state.new = false;
     this.refs.email.value = this.state.contact.email;
-    this.refs.phone.value = this.state.contact.phone;
-    this.refs.newsletter.checked = this.state.contact.newsletter;
+    //this.refs.phone.value = this.state.contact.phone;
+    //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});
     //console.log(this);
   }
@@ -91,12 +97,20 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     console.log(this.state);
   }
 
+  setNew(){
+    if(!this.state.contact){
+      this.state.new = true;
+    }
+  }
+
   unset(){
     console.log(this);
     this.state.contact = false;
     this.refs.email.value="";
     this.refs.phone.value="";
     this.refs.newsletter.checked=false;
+    this.refs.major.value="";
+    this.state.new=false;
     //this.clearFields.bind(this);
   }
 
@@ -121,30 +135,36 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
 
     return (
-      <div id="card" className="card">
-        <div className="front">
+      <div className="container-fluid">
+        <div className="panel panel-default">
           <h1>Welcome to {event.name}!</h1>
           <input type="hidden" ref="evname" value={event.name} />
           <h2>Help text here...</h2>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
+            <div className="form-group">
             <label>Name</label>
-            <SelectContact
-              parent={this}
-              unset={this.unset.bind(this)}
-              initialValue={""}
-              updateContact={this.update.bind(this)}
-              ref="user"  />
-            <br />
-            <label>Email</label>
-            <input ref="email" type="text" />
-            <br />
-            <label>Phone</label>
-            <input ref="phone" type="text" />
-            <br />
-            <label>Subscribe to newsletter</label>
-            <input type="checkbox" ref="newsletter" />
-            <br/>
-            <input type="submit" name="submit" />
+              <SelectContact
+                parent={this}
+                unset={this.unset.bind(this)}
+                onBlur={this.setNew.bind(this)}
+                initialValue={""}
+                updateContact={this.update.bind(this)}
+                ref="user"  />
+              <br />
+              <label>Email</label>
+              <input ref="email" className="form-control" type="text" required />
+              <br />
+              <label>Phone</label>
+              <input ref="phone" type="text" className={this.state.new?"form-control hidden":"form-control"} />
+              <br />
+              <label>Subscribe to newsletter</label>
+              <input type="checkbox" ref="newsletter" className={this.state.new?"form-control hidden":"form-control"} />
+              <br/>
+              <label>Major: </label>
+              <input ref="major" type="text" className={this.state.new?"form-control hidden":"form-control"} />
+              <br />
+              <input type="submit" name="submit" className="form-control" />
+            </div>
           </form>
         </div>
       </div>

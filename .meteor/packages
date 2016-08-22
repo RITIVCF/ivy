@@ -20,7 +20,7 @@ ecmascript@0.5.7              # Enable ECMAScript2015+ syntax in app code
 #autopublish      #For prototyping only. will remove later when doing server writes
 accounts-ui
 accounts-password
-accounts-google
+#accounts-google
 jsx
 react-meteor-data
 react-runtime@=0.14.3

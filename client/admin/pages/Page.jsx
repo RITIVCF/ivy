@@ -23,31 +23,39 @@ export default class Page extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-		<div>
-			<h1>{this.props.page.pagename}</h1>
-			<p>Add Groups to this page:</p>
-			<SelectGroup
-				parent={this}
-				id={this.props.page.pagename}
-				unset={this.unset.bind(this)}
-				updateContact={this.addGroup.bind(this)}
-				initialValue={""}
-				ref={"group"}
-				/>
-			<table>
-				<thead>
-					<tr>
-						<th>Remove</th>
-						<th>Group Name</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.getGroups().map( (group)=>{
-						return <Group group={group} page={this.props.page} />
-					})}
-				</tbody>
-			</table>
-		</div>
+			<div className="row">
+				<div className="col-md-8">
+					<div className="panel panel-default">
+						<div className="panel-heading">
+							<h1>{this.props.page.pagename}</h1>
+						</div>
+						<div className="panel-body">
+							<p>Add Groups to this page:</p>
+							<SelectGroup
+								parent={this}
+								id={this.props.page.pagename}
+								unset={this.unset.bind(this)}
+								updateContact={this.addGroup.bind(this)}
+								initialValue={""}
+								ref={"group"}
+								/>
+						</div>
+						<table className="table table-striped">
+							<thead>
+								<tr>
+									<th>Remove</th>
+									<th>Group Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								{this.getGroups().map( (group)=>{
+									return <Group group={group} page={this.props.page} />
+								})}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 		)
 	}
 }

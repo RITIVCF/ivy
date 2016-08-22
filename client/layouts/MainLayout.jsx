@@ -10,7 +10,7 @@ import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 
 export var MainLayout = ({content}) => (   // export const MainLayout
 	<div className="wrapper">
-				<nav className="navbar navbar-default" >
+				<nav className="navbar navbar-default navbar-fixed-top" >
 					<div className="container-fluid">
 						<div className="navbar-header">
 	                <button type="button" className="navbar-toggle collapsed"
@@ -86,7 +86,7 @@ export var MainLayout = ({content}) => (   // export const MainLayout
 				</nav>
 
 
-        <main>
+        <main style={{paddingTop: '50px'}}>
 		    	{content}
         </main>
 				<footer>
