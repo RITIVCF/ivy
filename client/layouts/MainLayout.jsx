@@ -79,9 +79,6 @@ export var MainLayout = ({content}) => (   // export const MainLayout
 												<SignInButtonWrapper />
 										</li>
 								</ul>
-								<div className="nav navbar-nav navbar-left">
-									<button className="btn btn-default"><AccountsUIWrapper /></button>
-								</div>
 							</div>
 
 
