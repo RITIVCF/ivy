@@ -12,9 +12,9 @@ export default class EventSingle extends Component {
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
 
     return (
-      <div className="panel panel-default" onClick={this.go.bind(this)}>
+      <div className={this.props.ivevent.published?"panel panel-success":"panel panel-danger"} >
       {/*}  {this.props.ivevent.owner == Meteor.userId() ? */}
-          <div className="panel-header">
+          <div className="panel-heading" onClick={this.go.bind(this)}>
             {this.props.ivevent.name}
           </div>
           <div className="panel-body">

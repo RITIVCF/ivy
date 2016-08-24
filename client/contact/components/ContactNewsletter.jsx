@@ -19,11 +19,13 @@ export default class ContactNewsletter extends Component {
   	}*/
 
     return(
-      <div>
-        <label>I would like to receive the RIT IVCF Newsletter: </label>
+      <div className="form-group">
+        <label htmlFor="news">I would like to receive the RIT IVCF Newsletter: </label>
           <input type="checkbox"
             readOnly={true}
             ref="newsletter"
+            id="news"
+            name="news"
             disabled={this.props.disabled}
             onClick={this.updateNewsletter.bind(this)}
             checked={contact.newsletter}

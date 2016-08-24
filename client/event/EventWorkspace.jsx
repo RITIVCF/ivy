@@ -125,6 +125,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 							{/*}<input type="checkbox" ref="reoc" onClick={this.openReoccuring.bind(this)} checked={ev.reocurring} />*/}
 							{perm?<ButtonPublish published={ev.published} eid={this.props.eid} />:<p>Published: {ev.published?"Published":"Not Published"}</p>}
 							{/*}<ButtonDelete eid={this.props.eid} parent={this} />*/}
+							<a href={"/forms/signin/"+this.props.eid} ><button className="btn btn-info">Form</button></a>
 
 							{perm?<button className="btn btn-danger navbar-btn" onClick={this.openDelete.bind(this)}>Delete</button>:""}
 							<EventDateControls ev={ev} perm={perm} />

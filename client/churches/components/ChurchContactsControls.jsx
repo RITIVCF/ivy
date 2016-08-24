@@ -65,6 +65,7 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
         <SelectContact
           parent={this}
           unset={this.unset.bind(this)}
+          initialValue={""}
           updateContact={this.addContact.bind(this)}
           ref="contact"  />
         <ul>

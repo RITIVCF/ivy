@@ -20,18 +20,7 @@ export default class Attendee extends TrackerReact(React.Component) {
     FlowRouter.go("/contacts/"+this.props.contact._id);
   }
 
-  ticketComplete(){
-    // return true: compelete  - color green
-    //        false: not complete - color red
-    var ticket = Tickets.findOne(this.props.contact.ticket)
-    if(ticket.status == "Closed"){
-      return "success";
-    }
-    if(ticket.status == "Pending"||ticket.status=="In Progress"){
-      return "warning";
-    }
-    return "danger";
-  }
+
 
   viewTicket(){
     console.log("viewTIcket");
@@ -44,10 +33,24 @@ export default class Attendee extends TrackerReact(React.Component) {
     // This area needs styled, so however we need to do it to style
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
     //let contact = this.getContact();
-    //let contact = this.props.contact;
+    //let contact = this.props.contact;  +this.ticketComplete.bind(this)
+    var ticket = Tickets.findOne(this.props.contact.ticket)
 
+    var status = "";
+    if(ticket){
+      console.log(ticket.status);
+      if(ticket.status == "Closed"){
+        status = "success";
+      }
+      else if(ticket.status == "Pending"||ticket.status=="In Progress"){
+        status = "warning";
+      }
+      else {
+        status = "danger";
+      }
+    }
     return (
-      <tr onClick={this.go.bind(this)} className={""+this.ticketComplete.bind(this)}>
+      <tr onClick={this.go.bind(this)} className={status}>
         <td>{this.props.contact.name}</td>
         <td>{this.props.contact.email}</td>
         <td>{this.props.contact.phone}</td>

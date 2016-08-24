@@ -14,8 +14,7 @@ checkPermission = function(id){
 	grps.forEach(function(group){
 		ids.push(group._id);
 	});
-	console.log("GGroups:");
-	console.log(ids);
+
 	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
 }
 

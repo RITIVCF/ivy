@@ -50,7 +50,7 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
 		var ev;
-		if(this.state.subscription.Events.ready()&&this.state.subscription.Contacts.ready()){
+		if(this.state.subscription.Events.ready()&&this.state.subscription.Contacts.ready()&&this.state.subscription.Tickets.ready()){
 			ev = this.getEvent();
 		}
 	console.log(ev);

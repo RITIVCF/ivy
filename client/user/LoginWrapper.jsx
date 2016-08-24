@@ -4,22 +4,31 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class LoginWrapper extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
+    console.log(props.route);
 
-    this.state = {};
   }
 
   go(){
-    FlowRouter.go("/");
+    if(this.props.route){
+      FlowRouter.go(this.props.route);
+    }
+    else{
+      FlowRouter.go("/");  
+    }
   }
 
-
+  createAccount(){
+    FlowRouter.go("/signup");
+  }
 
   submit(event){
     event.preventDefault();
     var userVar = event.target.username.value;
     var passwordVar = event.target.loginPassword.value;
-    Meteor.loginWithPassword(userVar, passwordVar);
-    this.go();
+    var thiz = this;
+    Meteor.loginWithPassword(userVar, passwordVar, function(){
+      thiz.go();
+    });
   }
 
 
@@ -39,6 +48,9 @@ export default class LoginWrapper extends TrackerReact(React.Component){
             <br />
             <input type="submit" value="Login" />
           </form>
+          <br />
+          <br />
+          <button onClick={this.createAccount.bind(this)} >Create An Account</button>
         </div>
       </div>
     )

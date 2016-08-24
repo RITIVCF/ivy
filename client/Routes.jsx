@@ -13,11 +13,13 @@ import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
+import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
 import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
+import EventCalendarSub from './event/EventCalendarSub.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
 import SigninWrapper from './event/forms/SignIn.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
@@ -38,6 +40,18 @@ import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
 
+
+
+function signInForceCheck(context) {
+  // context is the output of `FlowRouter.current()`
+	if(context.path.substring(0,6)!="/login"&&context.path!="/signup"){
+		if(!Meteor.userId()){
+			FlowRouter.go("/login?r="+context.path);
+		}
+	}
+}
+
+FlowRouter.triggers.enter([signInForceCheck]);
 
 FlowRouter.route('/',{
 	action() {
@@ -114,7 +128,7 @@ FlowRouter.route('/contacts', {
 FlowRouter.route('/calendar', {
 	action() {
 		mount(MainLayout, {
-			content: (<EventCalendarWrapper />)
+			content: (<EventCalendarSub />)
 		})
 	}
 });
@@ -270,17 +284,25 @@ FlowRouter.route('/ethnicity', {
 });
 
 FlowRouter.route('/login', {
-	action() {
-		mount(MainLayout, {
-			content: (<LoginWrapper />)
+	action(params, queryParams) {
+		mount(FormLayout,  {
+			content: (<LoginWrapper route={queryParams.r} />)
 		})
 	}
 });
 
 FlowRouter.route('/signup', {
 	action() {
-		mount(MainLayout, {
+		mount(FormLayout, {
 			content: (<SignUpWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/changepassword', {
+	action() {
+		mount(MainLayout, {
+			content: (<ChangePassword />)
 		})
 	}
 });

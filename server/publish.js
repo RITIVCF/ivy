@@ -112,6 +112,7 @@ Meteor.publish("contact", function(cid){
     intl: 1,
     ethn: 1,
     major: 1,
+    ticket: 1,
     bio: 1,
     ethnicity: 1,
     gradterm: 1,
@@ -156,6 +157,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     gender: 1,
     affiliations: 1,
     communitylife: 1,
+    ticket: 1,
     intl: 1,
     ethn: 1,
     ethnicity: 1,
@@ -179,6 +181,7 @@ Meteor.publish("allContacts", function(filtr, srt){
       affiliations: 1,
       communitylife: 1,
       intl: 1,
+      ticket:1,
       ethn: 1,
       ethnicity: 1,
       gradterm: 1,
@@ -255,7 +258,7 @@ Meteor.publish("allActiveTickets", function(){
       {status: {$ne: "Canceled"}}
     ]
     }
-  return Tickets.find(selector);
+  return Tickets.find(selector,{sort:{ticketnum: 1}});
 });
 
 Meteor.publish("allTickets", function(){

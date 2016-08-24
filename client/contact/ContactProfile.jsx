@@ -143,8 +143,8 @@ export default class ContactProfile extends TrackerReact(React.Component){
                         <ContactBio contact={contact} disabled={disable} />
                         <ContactMajor contact={contact} disabled={disable} /></div>:""}
 
-                          
-                          {checkPermission("admin")?<button onClick={this.remove.bind(this)}>Remove Contact</button>:""}
+
+                          {checkPermission("removecontact")?<button onClick={this.remove.bind(this)}>Remove Contact</button>:""}
                       </div>
                       {this.props.parent.state.subscription.contact.ready()&&contact ?
                         contact.member&&viewmember ?

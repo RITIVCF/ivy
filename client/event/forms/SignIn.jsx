@@ -140,6 +140,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
           <h1>Welcome to {event.name}!</h1>
           <input type="hidden" ref="evname" value={event.name} />
           <h2>Please sign in</h2>
+          <p>Click on your name in the dropdown or continue to create a new contact.</p>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <div className="form-group">
               <SelectContact
@@ -148,7 +149,6 @@ export default class SignInWrapper extends TrackerReact(React.Component){
                 onBlur={this.setNew.bind(this)}
                 initialValue={""}
                 updateContact={this.update.bind(this)}
-                placeholder="Name"
                 id="first_name"
                 type="text"
                 ref="user"
@@ -156,7 +156,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
               <input ref="email" placeholder="Email" id="email" type="email" required />
               <input ref="phone" placeholder="Phone number (optional)" type="tel" className={this.state.new?"hidden":""} />
               <input ref="major" placeholder="Major" type="text" className={this.state.new?"hidden":""} />
-              <input type="checkbox" ref="newsletter" id="news" name="news" className={this.state.new?"hidden":""} value="Yes" />          
+              <input type="checkbox" ref="newsletter" id="news" name="news" className={this.state.new?"hidden":""} value="Yes" />
               <label htmlFor="news">Please sign me up for the newsletter</label>
               <input type="submit" name="submit" value="Sign In" className="form-control" />
             </div>

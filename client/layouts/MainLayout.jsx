@@ -1,5 +1,4 @@
 import React from 'react';
-import AccountsUIWrapper from '../AccountsUIWrapper.jsx';
 import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 
 
@@ -71,12 +70,28 @@ export var MainLayout = ({content}) => (   // export const MainLayout
 												<a href="/attendance">Attendance Dashboard</a>
 											</li>:""}
 
-										<li>
-											<a href="/profile">User Profile</a>
-										</li>
 
-										<li>
-												<SignInButtonWrapper />
+
+
+										<li className="dropdown">
+	          					<a href="#" className="dropdown-toggle"
+												data-toggle="dropdown" role="button"
+												aria-haspopup="true" aria-expanded="false">
+													{Meteor.user()?Meteor.user().username:"User"}
+												<span className="caret"></span>
+											</a>
+											<ul className="dropdown-menu">
+													<li>
+														<a href="/profile">My Profile</a>
+													</li>
+													<li role="separator" className="divider"></li>
+													<li>
+														<a href="/changepassword">Change Password</a>
+													</li>
+													<li>
+														<SignInButtonWrapper />
+													</li>
+											</ul>
 										</li>
 								</ul>
 							</div>

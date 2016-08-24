@@ -2,23 +2,15 @@ import {Meteor} from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 
 
-export default () => {
+//export default () => {
 
   Accounts.onCreateUser(function(options, user) {
-    let contact = this.getContact(redundantEmail);
-
-    if(!contact ){
-      var id = Meteor.call("newContact",
-        "",
-        emailVar,
-        "",);
-
-        user.contact = contact;
-        return user;
-    }
-
-    user.contact = contact
+    //let contact = this.getContact(redundantEmail)
+    console.log(options);
+    console.log(user);
+    //user.email = options.contact.email;
+    user.contact = options.contactid;
     return user;
   });
 
-}
+//}
