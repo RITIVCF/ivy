@@ -158,7 +158,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
               <input ref="major" placeholder="Major" type="text" className={this.state.new?"hidden":""} />
               <input type="checkbox" ref="newsletter" id="news" name="news" className={this.state.new?"hidden":""} value="Yes" />
               <label htmlFor="news">Please sign me up for the newsletter</label>
-              <input type="submit" name="submit" value="Sign In" className="form-control" />
+              <input type="submit" name="submit" value="Sign In" className="form-control button" />
             </div>
           </form>
         </div>
