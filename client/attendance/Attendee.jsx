@@ -56,7 +56,7 @@ export default class Attendee extends TrackerReact(React.Component) {
         <td>{this.props.contact.phone}</td>
         <td>{this.props.contact.firsttime ? "Yes":"No"}</td>
         {checkPermission("tickets") ?
-        <td>{this.props.contact.firsttime ? <button className="btn btn-primary" onClick={this.viewTicket.bind(this)}>View Ticket</button>:""}</td>:""}
+        <td>{this.props.contact.firsttime||(status!="success") ? <button className="btn btn-primary" onClick={this.viewTicket.bind(this)}>View Ticket</button>:""}</td>:""}
       </tr>
     )
   }

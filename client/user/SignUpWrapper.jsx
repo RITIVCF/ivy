@@ -143,8 +143,8 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
             initialValue={""}
             updateContact={this.setContact.bind(this)}
             ref="contact"  />
+          <p>If your name does not show up, go <a href="/newcontact">here</a> to create a new contact card.</p>
       </div>
-
     </div>
   )
   }

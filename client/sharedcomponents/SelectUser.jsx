@@ -137,7 +137,7 @@ shouldComponentUpdate(nextProps, nextState){
                     suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={true}
+                     focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
@@ -150,7 +150,7 @@ shouldComponentUpdate(nextProps, nextState){
         <Autosuggest suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={true}
+                     focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}

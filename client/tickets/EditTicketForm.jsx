@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectContact from '../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../sharedcomponents/SelectUser.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
@@ -111,11 +111,10 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
                     <p>Ticket #: {this.props.ticket.ticketnum}</p>
                       {this.props.ticket.type == "Contact" ? <div></div> :
-                      <label>User: <SelectContact parent={this}
+                      <label>User: <SelectUser parent={this}
                         id={"customer"}
                         unset={this.unset.bind(this)}
                         updateContact={this.updateCust.bind(this)}
-                        users={true}
                         initialValue={this.getUser(this.props.ticket.customer)}
                         ref="cust"  /> </label>}
                         <br />
@@ -141,12 +140,11 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                         {/*Group select will go here*/}
                         <br />
                         <label>Assigned User:
-                        <SelectContact parent={this}
+                        <SelectUser parent={this}
                           id={"assigneduser"}
                           unset={this.unset.bind(this)}
                           initialValue={this.getUser(this.props.ticket.assigneduser)}
                           updateContact={this.updateAssignedU.bind(this)}
-                          users={true}
                           ref="assigneduser"  />
                       </label><button onClick={this.assignToMe.bind(this)}>Assign to Me</button>
                         <br />

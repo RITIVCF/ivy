@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
-import SelectContactForm from './SelectContactForm.jsx';
+//import SelectContactForm from './SelectContactForm.jsx';
 
 //Contacts = new Mongo.Collection('contacts');
 

@@ -4,38 +4,23 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 
-function getList(users){
-    if(users){
-      var users = Meteor.users.find().fetch();
-      users.forEach(function(user){
-        console.log(user.contact);
-        user.name = Contacts.findOne(user.contact).name;
+function getList(){
 
-      });
-      console.log(users);
-      return users;
-    }
-    else{
       return Contacts.find().fetch();
-    }
+
 
 }
 
-function getSuggestions(value, users) {
+function getSuggestions(value) {
   //users: true, find Users
   //       fasle, use contacts
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
-  if(users){
-    return inputLength === 0 ? [] : getList(users).filter(user =>
-      user.name.toLowerCase().slice(0, inputLength) === inputValue
-    );
-  }
-  else{
-    return inputLength === 0 ? [] : getList(users).filter(contact =>
+
+    return inputLength === 0 ? [] : getList().filter(contact =>
       contact.name.toLowerCase().slice(0, inputLength) === inputValue
     );
-  }
+
 
 }
 
@@ -45,7 +30,7 @@ function getSuggestionValue(suggestion) { // when suggestion selected, this func
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.name}</span>
+    <span>{suggestion.name} {suggestion.email}</span>
   );
 }
 
@@ -61,18 +46,11 @@ export default class SelectContact extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
 
-    if(props.users){
       this.state = {
         value: '',
-        suggestions: getSuggestions('',true)
+        suggestions: getSuggestions('')
       };
-    }
-    else{
-      this.state = {
-        value: '',
-        suggestions: getSuggestions('', false)
-      };
-    }
+
 
     console.log(this.state.value);
     console.log(props.initialValue);
@@ -130,12 +108,9 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onSuggestionsUpdateRequested({ value }) {
-    var users = true;
-    if(!this.props.users){
-      users = false;
-    }
+
     this.setState({
-      suggestions: getSuggestions(value, users)
+      suggestions: getSuggestions(value)
     });
   }
 
@@ -153,7 +128,7 @@ shouldComponentUpdate(nextProps, nextState){
                     suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={true}
+
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
@@ -166,7 +141,7 @@ shouldComponentUpdate(nextProps, nextState){
         <Autosuggest suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={true}
+
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}

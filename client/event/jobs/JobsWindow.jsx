@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import SelectContact from '../../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 
 // Permission component - represents a single todo item
 export default class JobsWindow extends Component
@@ -78,10 +78,10 @@ export default class JobsWindow extends Component
               <div id="deleteEventOverlay" className={this.state.overlayState} onClick={this.closeOverlay.bind(this)}></div>
               <div id="deleteEventPopup" className={this.state.overlayState}>
                 <label>User:
-                <SelectContact parent={this}
+                <SelectUser parent={this}
                   unset={this.unset.bind(this)}
                   updateContact={this.updateSelectedUser.bind(this)}
-                  users={true}
+                  initialValue={""}
                   ref="user"
                   />
                 </label>

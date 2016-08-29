@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class EventSingle extends Component {
+export default class JobSingleSummary extends Component {
   constructor(props){
     super(props);
     this.state={

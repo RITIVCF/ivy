@@ -13,6 +13,7 @@ import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
+import NewContactWrapper from './contact/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspace from './event/EventWorkspace.jsx';
@@ -21,7 +22,7 @@ import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
 import EventCalendarSub from './event/EventCalendarSub.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
-import SigninWrapper from './event/forms/SignIn.jsx';
+import SigninWrapper from './event/forms/SignInWrapper.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
 import ChurchesSummary from './churches/ChurchesSummary.jsx';
 import ChurchesWorkspace from './churches/ChurchesWorkspace.jsx';
@@ -44,7 +45,7 @@ import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
 
 function signInForceCheck(context) {
   // context is the output of `FlowRouter.current()`
-	if(context.path.substring(0,6)!="/login"&&context.path!="/signup"){
+	if(context.path.substring(0,6)!="/login"&&context.path!="/signup"&&context.path!="/newcontact"){
 		if(!Meteor.userId()){
 			FlowRouter.go("/login?r="+context.path);
 		}
@@ -121,6 +122,22 @@ FlowRouter.route('/contacts', {
 	action(){
 		mount(MainLayout, {
 			content: (<ContactSummary />)
+		})
+	}
+});
+
+FlowRouter.route('/forms/contacts/new', {
+	action(){
+		mount(FormLayout, {
+			content: (<NewContactWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/newcontact', {
+	action(){
+		mount(FormLayout, {
+			content: (<NewContactWrapper route={"/signup"} />)
 		})
 	}
 });

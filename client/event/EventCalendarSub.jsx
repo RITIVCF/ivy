@@ -51,7 +51,7 @@ export default class EventCalendarSub extends TrackerReact(React.Component) {
                         <div className="panel-heading">{event.name}</div>
                         <div className="panel-body">
                           {event.description}<br/>
-                        {moment(event.start.toISOString()).format("ddd DD MMM HH:mmA")}<br/>
+                        {moment(event.start.toISOString()).format("ddd DD MMM hh:mmA")}<br/>
                         <a href={"/forms/signin/"+event._id}><button className="btn btn-primary">Form</button></a>
                         </div>
                       </div>)

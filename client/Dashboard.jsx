@@ -29,6 +29,10 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		}
 	}
 
+	getEvents(){
+		return Events.find({signupreq: true}).fetch();
+	}
+
 	handleData(data){
 		this.setState({output: "Received message: "+ data});
 	}
@@ -45,10 +49,45 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		// 	ws.connect(result.data.url);
 		//  });
 		return (
-		<div>
-			<h1>My Dashboard</h1>
-			<h2>Welcome to Ivy</h2>
+		<div className="row">
+			<div className="col-sm-3 col-lg-2">
+				<nav className="navbar navbar-default navbar-fixed-side">
 
+				</nav>
+			</div>
+			<div className="col-sm-9 col-lg-10">
+				<h1>My Dashboard</h1>
+				<h2>Welcome to Ivy</h2>
+				<div className="row">
+					<div className="col-sm-6">
+						<div className="panel panel-primary">
+							<div className="panel-heading">
+							</div>
+							<div className="panel-body">
+								This system is not compatible with Safari. If you are using Safari, please use a different browser.
+								<br /><br />Thank you. -Ivy Web Development Team
+							</div>
+						</div>
+					</div>
+					<div className="col-sm-6">
+						<div className="panel panel-default">
+							<div className="panel-heading">
+								Upcoming Event Service Requests
+							</div>
+							<div className="panel-body">
+								<div className="list-group">
+									{this.getEvents().map((event)=>{
+										return <a href={"/events/signups/"+event._id} className="list-group-item">
+											<h4 className="list-group-item-heading">{event.name}</h4>
+											<p className="list-group-item-text">{event.reqmessage}</p>
+										</a>
+									})}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		)
 	}

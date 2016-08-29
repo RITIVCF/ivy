@@ -106,7 +106,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 					<nav className="navbar navbar-default navbar-fixed-side">
 						<div className="col-sm-12">
 						{perm?<button className="btn btn-default navbar-btn"
-							nClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
+							onClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
 						<h4>Scheduled Positions</h4>
 						{this.state.subscription.contacts.ready() ? ev.jobs.map( (job)=>{
 							return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
@@ -158,7 +158,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 							<EventWorkpad ev={ev} perm={perm} />
 						</div>
 					</div>
-					<nav class="navbar navbar-default navbar-fixed-bottom">
+					<nav class="navbar navbar-default navbar-bottom">
 					  <div class="container-fluid">
 					    <RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
 					  </div>

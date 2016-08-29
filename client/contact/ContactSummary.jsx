@@ -1,8 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ContactSingle from './ContactSingle.jsx';
-import NewContactWindow from './NewContactWindow.jsx';
-
+//import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
   constructor() {
@@ -21,7 +20,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
   newContact(event){
 		event.preventDefault();
-  	this.refs.newcontactoverlay.openOverlay();
+  	//this.refs.newcontactoverlay.openOverlay();
+    FlowRouter.go("/forms/contacts/new");
   }
 
   changeFilter(){
@@ -53,13 +53,16 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 	render() {
     document.title="Ivy - Contact Dashboard";
     var status;
+    var perm = checkPermission("ticket");
 		return (
       <div>
-        <NewContactWindow ref="newcontactoverlay" parent={this} />
         <div className="row">
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">
-
+              <div className="col-sm-12">
+                <button className="btn btn-primary"
+                  onClick={this.newContact.bind(this)}>New</button>
+              </div>
             </nav>
           </div>
           <div className="col-sm-9 col-lg-10">
@@ -86,6 +89,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                     <th>Phone</th>
                     <th>Newsletter</th>
                     <th>Funnel Status</th>
+                    {perm?<th>Ticket</th>:""}
                   </tr>
                 </thead>
                 <tbody>
@@ -103,7 +107,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                         }
                       }
                     }
-                    return <ContactSingle key={contact._id} contact={contact} parent={this}/>
+                    return <ContactSingle key={contact._id} contact={contact} perm={perm} parent={this}/>
                   })}
                 </tbody>
               </table>
