@@ -1,1 +1,9 @@
-node_modules/
+<<<<<<< HEAD
+__pycache__
+settings.json
+.meteor/dev_bundle/*
+*.pyc
+db.sqlite3
+=======
+
+>>>>>>> 37ca0350b158f8262c9223b983ffdbd7dbf037f7
