@@ -13,6 +13,7 @@ import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
+import ForgotPassword from './user/ForgotPassword.jsx';
 import NewContactWrapper from './contact/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
@@ -45,7 +46,11 @@ import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
 
 function signInForceCheck(context) {
   // context is the output of `FlowRouter.current()`
-	if(context.path.substring(0,6)!="/login"&&context.path!="/signup"&&context.path!="/newcontact"){
+	if(context.path.substring(0,6)!="/login"
+		&&context.path!="/signup"
+		&&context.path!="/newcontact"
+		&&context.path!="/forgotpassword"
+	){
 		if(!Meteor.userId()){
 			FlowRouter.go("/login?r="+context.path);
 		}
@@ -320,6 +325,14 @@ FlowRouter.route('/changepassword', {
 	action() {
 		mount(MainLayout, {
 			content: (<ChangePassword />)
+		})
+	}
+});
+
+FlowRouter.route('/forgotpassword', {
+	action() {
+		mount(FormLayout, {
+			content: (<ForgotPassword />)
 		})
 	}
 });

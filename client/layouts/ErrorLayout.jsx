@@ -19,7 +19,7 @@ export const ErrorLayout = ({content}) => (
             </div>
 
 					<div className="header-right">
-						<AccountsUIWrapper />
+
 					</div>
 				</nav>
 
