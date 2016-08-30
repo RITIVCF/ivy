@@ -24,7 +24,7 @@ export default class FeedbackForm extends TrackerReact(React.Component) {
 			else {
 				thiz.setState({success: true});
 				thiz.refs.feedback.value="";
-				thiz.refs.type.value="";
+				thiz.refs.type.value="Issue";
 			}
 		});
 

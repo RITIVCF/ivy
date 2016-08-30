@@ -28,8 +28,23 @@ export default class FeedbackSingle extends TrackerReact(React.Component) {
   }
 
 	render() {
+    var status = "panel panel-info";
+    if(this.props.feedback.type=="Issue"){
+      status="panel panel-danger";
+    }
+    else if(this.props.feedback.type=="Comment"){
+      status="panel panel-warning";
+    }
+    else if(this.props.feedback.type=="Suggestion"){
+      status="panel panel-success";
+    }
+
+
 		return (
-      <div className="panel panel-info">
+      <div className={status}>
+        <div className="panel-heading">
+          {this.props.feedback.type}
+        </div>
         <div className="panel-body">
           <p>User: {this.getUser()}</p>
           <p>{this.props.feedback.text}</p>
