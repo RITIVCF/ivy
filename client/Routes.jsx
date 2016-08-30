@@ -41,6 +41,7 @@ import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
+import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 
 
 
@@ -333,6 +334,14 @@ FlowRouter.route('/forgotpassword', {
 	action() {
 		mount(FormLayout, {
 			content: (<ForgotPassword />)
+		})
+	}
+});
+
+FlowRouter.route('/feedback',{
+	action() {
+		mount(MainLayout, {
+			content: (<FeedbackWrapper />)
 		})
 	}
 });

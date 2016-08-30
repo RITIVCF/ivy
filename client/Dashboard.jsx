@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import { HTTP } from 'meteor/http';
+import FeedbackForm from './feedback/FeedbackForm.jsx';
 //import websocket from 'websocket';
 
 Meteor.subscribe("allGroups");
@@ -65,7 +66,7 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 							</div>
 							<div className="panel-body">
 								This system is not compatible with Safari. If you are using Safari, please use a different browser.
-								<br /><br />Thank you. -Ivy Web Development Team
+								<br /><br />Thank you. -RIT IVCF Web Development Team
 							</div>
 						</div>
 					</div>
@@ -85,6 +86,11 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-sm-6">
+						<FeedbackForm />
 					</div>
 				</div>
 			</div>

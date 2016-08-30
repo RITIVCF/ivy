@@ -19,6 +19,10 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 		FlowRouter.go("/admin/settings");
 	}
 
+	goToFeedback(){
+		FlowRouter.go("/feedback");
+	}
+
 	render() {
 		document.title="Ivy - Admin Dashboard";
 		if(!checkPermission("admin")){
@@ -70,6 +74,18 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
+						{checkPermission("feedback")?
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
+									<h2>Feedback Management</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToFeedback.bind(this)}>View</button>
+								</div>
+							</div>
+						</div>:""}
 					</div>
 				</div>
 			</div>

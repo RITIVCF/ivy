@@ -281,6 +281,14 @@ Meteor.publish("allOptions", function(){
   return Options.find();
 });
 
+Meteor.publish("allFeedback", function(){
+  return Feedback.find();
+});
+
+Meteor.publish("uncompletedFeedback", function(){
+  return Feedback.find({completed: false});
+});
+
 Meteor.publish("allCounters", function(){
   return Counters.find();
 });
