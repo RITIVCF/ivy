@@ -69,8 +69,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">
               <div className="col-sm-12">
-                <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div class="btn-group" role="group">
+                <div className="btn-group btn-group-justified" role="group" aria-label="...">
+                  <div className="btn-group" role="group">
                     <button type="button" className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button>
                   </div>
                 </div>

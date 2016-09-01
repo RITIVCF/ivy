@@ -134,7 +134,7 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 							<EventEVR ev={ev} perm={perm} />
 							<EventReserved ev={ev} perm={perm} />
 
-							<label>Tags</label>
+							<h3>Tags</h3>
 							<EventTags ev={ev} subscription={this.state.subscription.options} perm={perm} />
 						</div>
 					</nav>

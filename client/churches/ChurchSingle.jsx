@@ -37,14 +37,16 @@ export default class ChurchSingle extends Component {
 
     return (
       <div className="panel panel-default">
+        <div className="panel-heading" onClick={this.edit.bind(this)}>
+          {this.props.church.name}
+        </div>
         {this.state.editting ?
         <div  >
           <button onClick={this.close.bind(this)}>Close</button>
         <ChurchWorkspace ch={this.props.church} />
         </div>
       :
-      <div className="panel-body" onClick={this.edit.bind(this)}>
-        {this.props.church.name}<br/>
+      <div className="panel-body">
         {this.props.church.url}
       </div>}
       </div>

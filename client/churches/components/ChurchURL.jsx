@@ -16,9 +16,14 @@ export default class ChurchURL extends Component {
 
   render(){
     return(
-      <div>
-        <label>url</label>
-        <input type="text" ref="url" value={this.props.ch.url} onBlur={this.updateURL.bind(this)} onChange={this.handleURLChange} />
+      <div className="form-group">
+        <label>URL</label>
+        <input type="text"
+          ref="url"
+          className="form-control"
+          value={this.props.ch.url}
+          onBlur={this.updateURL.bind(this)}
+          onChange={this.handleURLChange} />
       </div>
     )
   }

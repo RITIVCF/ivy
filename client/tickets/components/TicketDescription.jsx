@@ -45,10 +45,11 @@ export default class TicketDescription extends Component {
 
   render(){
     return(
-      <div>
+      <div className="form-group">
         <label>Description</label><br/>
         <textarea ref="description"
           value={this.state.description}
+          className="form-control"
           disabled={this.state.descriptionlock}
           onChange={this.handleDescriptionChange.bind(this)} />
       </div>

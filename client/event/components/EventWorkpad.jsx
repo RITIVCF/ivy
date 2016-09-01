@@ -63,10 +63,11 @@ export default class EventWorkpad extends Component {
   	var workpad = ev.workpad;
     */
     return(
-      <div>
+      <div className="form-group">
         <label>Workspace</label><br/>
         <textarea ref="workpad"
-
+          className="form-control"
+          rows="12"
           onChange={this.handleWorkpadChange.bind(this)}
           value={this.state.workpad}
           disabled={this.state.workpadlock||!this.props.perm} />

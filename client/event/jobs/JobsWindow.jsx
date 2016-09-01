@@ -85,10 +85,13 @@ export default class JobsWindow extends Component
                   ref="user"
                   />
                 </label>
-                <label>Job Name:
-                <input type="text" ref="job" /></label>
-                <button onClick={this.sendClose.bind(this)}>Send</button>
-                <button onClick={this.closeOverlay.bind(this)}>Cancel</button>
+                <div className="form-group">
+                  <label>Job Name:
+                  <input type="text" ref="job" className="form-control" /></label>
+                </div>
+
+                <button className="btn btn-info" onClick={this.sendClose.bind(this)}>Send</button>
+                <button className="btn btn-info" onClick={this.closeOverlay.bind(this)}>Cancel</button>
 
               </div>
             </div>

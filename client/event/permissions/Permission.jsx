@@ -92,6 +92,7 @@ export default class Permission extends Component
             <tr id={'"permission_' + permHolderId + '"'}>
 
                 {/*}<div className="permHolder">*/}
+                  <td><span aria-hidden="true" onClick={this.deleteFunc.bind(this)}  className="glyphicon glyphicon-trash"  ></span></td>
                   <td>
                     {text}
                   </td>
@@ -133,11 +134,11 @@ export default class Permission extends Component
                       style={{width: "initial", height: "initial"}} />
                     {/*}</div>*/}
                     </td>
-                    <td>
-                {/*}<div className="deleteButtonWrapper">
-                    {/*<span className="glyphicon glyphicon-trash" aria-hidden="true" id={'delete_' + permHolderId + '_' + type} onClick={this.deleteFunc.bind(this)}></span>*/}
-                    <button type="button" class="close" aria-label="Close" onClick={this.deleteFunc.bind(this)}><span aria-hidden="true">&times;</span></button>
-                    </td>
+                    {/*<td>
+                }<div className="deleteButtonWrapper">
+                    {/*<span className="glyphicon glyphicon-trash" aria-hidden="true" id={'delete_' + permHolderId + '_' + type} onClick={this.deleteFunc.bind(this)}></span>
+                    <button type="button" className="close" aria-label="Close" onClick={this.deleteFunc.bind(this)}><span aria-hidden="true">&times;</span></button>
+                    </td>*/}
                 {/*}</div>*/}
             </tr>
         );

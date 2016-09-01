@@ -34,13 +34,12 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 		<div className="panel panel-default">
 			{!(this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()&&this.props.perm) ? "":
 			<NewTicketWindow ref="newticketoverlay" parent={this} eid={this.props.eid} />}
-			<div className="panel-heading">Requests
-				{this.props.perm?<button
-					onClick={this.openOverlay.bind(this)}
-					className="btn btn-primary navbar-btn"
-					style={{align: 'right'}}
-					disabled={!this.props.parent.state.subscription.users.ready()}
-					>New Request</button>:<div></div>}</div>
+			<div className="panel-heading"><h3>{this.props.perm?<button
+				onClick={this.openOverlay.bind(this)}
+				className="btn btn-primary pull-right btn-lg"
+				disabled={!this.props.parent.state.subscription.users.ready()}
+				>New Request</button>:<div></div>}Requests</h3>
+				</div>
 				<table className="table table-striped table-responsive">
 							<thead>
 								<tr>

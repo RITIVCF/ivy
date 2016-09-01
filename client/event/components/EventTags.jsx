@@ -37,7 +37,7 @@ export default class EventTags extends Component {
   	}
   	var tags = ev.tags;
     return(
-      <div>
+      <div className="form-group">
     {/*this.props.subscription.ready() ? */ this.getTags().map( (tag)=>{
       return <li key={tag}><label>{tag}
         <input

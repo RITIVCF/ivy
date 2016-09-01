@@ -110,51 +110,59 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     <p>Date created: {new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
                     <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
                     <p>Ticket #: {this.props.ticket.ticketnum}</p>
-                      {this.props.ticket.type == "Contact" ? <div></div> :
-                      <label>User: <SelectUser parent={this}
+                      {this.props.ticket.type == "Contact" ? <div></div> :<div>
+                      <label>User: </label><SelectUser parent={this}
                         id={"customer"}
                         unset={this.unset.bind(this)}
                         updateContact={this.updateCust.bind(this)}
                         initialValue={this.getUser(this.props.ticket.customer)}
-                        ref="cust"  /> </label>}
-                        <br />
+                        ref="cust"  /></div>}
+
                         <TicketSubject parent={this} ticket={this.props.ticket} />
                         <TicketDescription parent={this} ticket={this.props.ticket} />
-                        <br />
-                        <label>Type:
-                          <select ref="type" value={this.props.ticket.type} onChange={this.updateType.bind(this)}>
+                        <div className="form-group">
+                        <label>Type:</label>
+                          <select ref="type" className="form-control"
+                            value={this.props.ticket.type}
+                            onChange={this.updateType.bind(this)}>
                             {this.getTypes().map( (type) =>{
                               return <option key={type} value={type} >{type}</option>
                             })}
                           </select>
-                        </label><br />
-                        {this.props.ticket.type == "Event Request" ?
-                        <label>Request Type:
-                          <select ref="reqtype" value={this.props.ticket.ereqtype} onChange={this.updateReqType.bind(this)}>
+                        </div>
+                        {this.props.ticket.type == "Event Request" ? <div className="form-group">
+                        <label>Request Type:</label>
+                          <select ref="reqtype"
+                            className="form-control"
+                            value={this.props.ticket.ereqtype}
+                            onChange={this.updateReqType.bind(this)}>
                             <option value={""}></option>
                             {this.getReqTypes().map( (type) =>{
                               return <option key={type} value={type} >{type}</option>
                             })}
                           </select>
-                        </label> :"" }
+                        </div>
+                         :"" }
                         {/*Group select will go here*/}
-                        <br />
-                        <label>Assigned User:
-                        <SelectUser parent={this}
-                          id={"assigneduser"}
-                          unset={this.unset.bind(this)}
-                          initialValue={this.getUser(this.props.ticket.assigneduser)}
-                          updateContact={this.updateAssignedU.bind(this)}
-                          ref="assigneduser"  />
-                      </label><button onClick={this.assignToMe.bind(this)}>Assign to Me</button>
-                        <br />
-                        <label>Status:
-                          <select ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
-                            {this.getStatuses().map( (type) =>{
-                              return <option key={type} value={type} >{type}</option>
-                            })}
-                          </select>
-                        </label>
+                        <div className="form-group">
+                          <label>Assigned User:</label>
+                          <SelectUser parent={this}
+                            id={"assigneduser"}
+                            unset={this.unset.bind(this)}
+                            initialValue={this.getUser(this.props.ticket.assigneduser)}
+                            updateContact={this.updateAssignedU.bind(this)}
+                            ref="assigneduser" className="form-control" aria-describedby="assignme"/>
+                          <button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>
+                        </div>
+                        <div className="from-group">
+                          <label>Status:</label>
+                            <select className="form-control"
+                              ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
+                              {this.getStatuses().map( (type) =>{
+                                return <option key={type} value={type} >{type}</option>
+                              })}
+                            </select>
+                        </div>
                   </div>
                   <div className="col-sm-6">
                     <p>Last updated: {new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
@@ -174,8 +182,10 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                         })}
                       </tbody>
                     </table>
-                    <textarea ref="notebox" /><br/>
-                    <button onClick={this.addNote.bind(this)} >Add Note</button>
+                    <div className="form-group">
+                      <textarea ref="notebox" className="form-control" rows="3" />
+                    </div>
+                    <button className="form-control" onClick={this.addNote.bind(this)} >Add Note</button>
                   </div>
                 </div>
               </div>

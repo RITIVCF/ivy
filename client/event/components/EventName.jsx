@@ -55,9 +55,10 @@ export default class EventName extends Component {
 
   render(){
     return(
-      <div>
+      <div className="form-group">
         <label>Name</label>
         <input type="text"
+          className="form-control"
           ref="name"
           value={this.state.name}
           disabled={this.state.namelock||!this.props.perm}

@@ -16,7 +16,7 @@ export default class ButtonDelete extends Component {
 
   render(){
     return (
-      <button onClick={this.deleteChurch.bind(this)}>Delete</button>
+      <button className="btn btn-danger" onClick={this.deleteChurch.bind(this)}>Delete</button>
     )
   }
 }

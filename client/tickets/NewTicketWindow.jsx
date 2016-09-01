@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import SelectContact from '../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../sharedcomponents/SelectUser.jsx';
 import SelectOption from '../sharedcomponents/SelectOption.jsx';
 
 
@@ -125,41 +125,58 @@ export default class NewTicketWindow extends Component
               <div id="overlay" className={this.state.overlayState} onClick={this.closeOverlay.bind(this)}>
               </div>
               <div id="newEventPopup" className={this.state.overlayState}>
-                <label>Subject<br/><input type="text" ref="subj" placeholder="Subject" required/></label>
-                <br/>
-                <label>Description<br/><textarea ref="desc" placeholder="Description" width={"100%"}/></label>
-                <br/>
+                <div className="row">
+                  <div className="col-sm-6">
+                    <div className="form-group">
+                      <label>Subject</label>
+                      <input type="text" ref="subj" className="form-control" placeholder="Subject" required/>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-sm-12">
+                    <div className="form-group">
+                      <label>Description</label>
+                      <textarea ref="desc"
+                        placeholder="Description"
+                        className="form-control"
+                        rows="4" />
+                    </div>
+                  </div>
+                </div>
+
                 {!this.props.eid ?
                   <label>Assigned User<br/>
-                  <SelectContact parent={this}
+                  <SelectUser parent={this}
                     unset={this.unset.bind(this)}
                     updateContact={this.updateAssignedU.bind(this)}
-                    users={true}
+                    intitialValue={""}
                     ref="assigneduser"  />
                   </label>
                 : ""}
-                <br />
+
                 {!this.props.eid ? <label>Regarding<br/>
-                  <SelectContact parent={this}
+                  <SelectUser parent={this}
                     unset={this.unset.bind(this)}
                     updateContact={this.updateRegardU.bind(this)}
-                    users={true}
+                    intitialValue={""}
                     ref="cust"  />
                 </label>
               :""}
-                <br />
                 {!this.props.eid ? <div></div>:<div>
-                <p>If this is a request, select the type below. Otherwise, you can leave it blank.</p>
-                <select ref="type">
-                  <option value=""></option>
-                    {this.getRequestTypes().map( (type)=>{
-                        return <SelectOption key={type} value={type} displayvalue={type}  />
-                    })}
-                </select>
+                <label>Type of Request</label>
+                <div className="form-group">
+                  <select ref="type" className="form-control" >
+                    <option value=""></option>
+                      {this.getRequestTypes().map( (type)=>{
+                          return <SelectOption key={type} value={type} displayvalue={type}  />
+                      })}
+                  </select>
+                </div>
               </div>}
                 <div id="btnsCreateCancel">
-                  <button onClick={this.createClose.bind(this)}>Create</button>
-                  <button onClick={this.closeOverlay.bind(this)}>Cancel</button>
+                  <button className="btn btn-default" onClick={this.createClose.bind(this)}>Create</button>
+                  <button className="btn btn-default" onClick={this.closeOverlay.bind(this)}>Cancel</button>
                 </div>
               </div>
             </div>

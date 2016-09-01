@@ -237,10 +237,11 @@ export default class PermissionWindow extends Component
                         <table className="table table-striped table-responsive">
                           <thead>
                             <tr>
+                              <th>Remove</th>
                               <th>Group/User Name</th>
                               <th>Edit</th>
                               <th>View Only</th>
-                              <th>Delete</th>
+                              {/*}<th>Delete</th>*/}
                             </tr>
                           </thead>
                           <tbody>
@@ -283,7 +284,7 @@ export default class PermissionWindow extends Component
                     </div>
                     <div id="closeWrapper">
                     {/*  <button onClick={this.printState.bind(this)}>Test State</button>*/}
-                        <button type="button" id="closeWindow" onClick={this.toggleOverlay.bind(this)}>Close</button>
+                        <button type="button" id="closeWindow" className="btn btn-info" onClick={this.toggleOverlay.bind(this)}>Close</button>
                     </div>
                 </div>
             </div>

@@ -17,14 +17,14 @@ export default class EventEVR extends Component {
 
     return(
       <div>
-        <label>EVR Complete: </label>
+        <label>EVR Complete:
           <input type="checkbox"
             readOnly={true}
             ref="evr"
             disabled={!this.props.perm}
             onClick={this.updateEventEVR.bind(this)}
             checked={this.props.ev.evr}
-          />
+          /></label>
       </div>
     )
   }

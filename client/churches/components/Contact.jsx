@@ -9,13 +9,12 @@ export default class Contact extends Component {
 
   render(){
     return(
-      <li>
-        <button onClick={this.remove.bind(this)}>X</button>
-        <div>{this.props.contact.name}</div>
-        <div>{this.props.contact.email}</div>
-        <div>{this.props.contact.phone}</div>
-        <br />
-      </li>
+      <tr>
+        <td><button onClick={this.remove.bind(this)}>X</button></td>
+        <td>{this.props.contact.name}</td>
+        <td>{this.props.contact.email}</td>
+        <td>{this.props.contact.phone}</td>
+      </tr>
     )
   }
 }

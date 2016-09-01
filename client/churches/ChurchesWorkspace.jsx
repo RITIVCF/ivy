@@ -43,15 +43,11 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 		return (
 		<div>
 
-			<article id="main">
-        <header className="special container">
-          {/*<h2>Churches Workspace</h2> */}
-					<h2>{ch.name}</h2>
-        </header>
-
-			<div className="sidebar">
-				<ButtonActive ch={ch} />
-				<ButtonDelete ch={ch} />
+			<div class="btn-toolbar" role="toolbar" aria-label="...">
+				<div className="btn-group" role="group" aria-label="...">
+					<ButtonActive ch={ch} />
+					<ButtonDelete ch={ch} />
+				</div>
 			</div>
 
 
@@ -61,8 +57,6 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 				<ChurchTimes ch={ch} />
 				<ChurchContactsControls ch={ch} />
 			</div>
-
-			</article>
 		</div>
 		)
 	}

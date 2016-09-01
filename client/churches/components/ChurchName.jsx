@@ -18,9 +18,14 @@ export default class ChurchName extends Component {
 
   render(){
     return(
-      <div>
+      <div className="form-group">
         <label>Name</label>
-        <input type="text" ref="name" value={this.props.ch.name} onBlur={this.updateName.bind(this)} onChange={this.handleNameChange} />
+        <input type="text"
+          className="form-control"
+          ref="name"
+          value={this.props.ch.name}
+          onBlur={this.updateName.bind(this)}
+          onChange={this.handleNameChange} />
       </div>
     )
   }

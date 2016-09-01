@@ -45,10 +45,11 @@ export default class TicketSubject extends Component {
 
   render(){
     return(
-      <div>
+      <div className="form-group">
         <label>Subject</label>
         <input type="text"
           ref="subject"
+          className="form-control"
           value={this.state.subject}
           disabled={this.state.subjectlock}
           onChange={this.handleSubjectChange.bind(this)} />

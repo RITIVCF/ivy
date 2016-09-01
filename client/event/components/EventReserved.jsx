@@ -17,14 +17,14 @@ export default class EventReserved extends Component {
 
     return(
       <div>
-        <label>Location Reserved: </label>
+        <label>Location Reserved:
           <input type="checkbox"
             readOnly={true}
             ref="reserved"
             disabled={!this.props.perm}
             onClick={this.updateEventReserved.bind(this)}
             checked={this.props.ev.reserved}
-          />
+          /></label>
       </div>
     )
   }
