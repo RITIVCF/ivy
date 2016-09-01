@@ -5,7 +5,6 @@ import { Accounts } from 'meteor/accounts-base';
 // For environment variable when testing locally
 
 
-
   Accounts.onCreateUser(function(options, user) {
     //let contact = this.getContact(redundantEmail)
     console.log(options);
