@@ -32,10 +32,11 @@ export default class ContactEmail extends Component {
     */
 
     return(
-      <div>
+      <div className="form-group" >
         <label>Email</label>
           <input type="text"
             ref="email"
+            className="form-control"
             disabled={this.props.disabled}
             onBlur={this.updateEmail.bind(this)}
             onChange={this.handleEmailChange}

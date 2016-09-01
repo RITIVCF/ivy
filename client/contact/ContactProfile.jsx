@@ -140,11 +140,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
                         <ContactEmail contact={contact} disabled={disable} />
                         <ContactPhone contact={contact} disabled={disable} />
                         <ContactNewsletter contact={contact} disabled={disable} />
-                        <ContactBio contact={contact} disabled={disable} />
-                        <ContactMajor contact={contact} disabled={disable} /></div>:""}
-
-
-                          {checkPermission("removecontact")?<button onClick={this.remove.bind(this)}>Remove Contact</button>:""}
+                        </div>:""}
                       </div>
                       {this.props.parent.state.subscription.contact.ready()&&contact ?
                         contact.member&&viewmember ?
@@ -156,6 +152,19 @@ export default class ContactProfile extends TrackerReact(React.Component){
                       </div>
                     :"":""}
                     </div>
+                    {this.props.parent.state.subscription.contact.ready()&&contact ?
+                    <div className="row">
+                      <div className={contact.member?"col-md-12":"col-md-6"}>
+                        <ContactBio contact={contact} disabled={disable} />
+                      </div>
+                    </div>:""}
+                    {this.props.parent.state.subscription.contact.ready()&&contact ?
+                    <div className="row">
+                      <div className="col-md-6">
+                        <ContactMajor contact={contact} disabled={disable} />
+                      </div>
+                    </div>:""}
+                    {checkPermission("removecontact")?<button onClick={this.remove.bind(this)}>Remove Contact</button>:""}
                   </div>
                 </div>
               </div>
@@ -170,6 +179,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
                     <h2>Personal Info</h2>
                   </div>
                   <div className="panel-body">
+                    <h4>Ethnicity:</h4>
                     <ContactIntl contact={contact} disabled={disable} subscription={this.props.subscriptions.options} />
                     <ContactGender contact={contact} disabled={disable} />
                   </div>

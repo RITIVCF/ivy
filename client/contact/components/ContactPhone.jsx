@@ -23,10 +23,11 @@ export default class ContactPhone extends Component {
   	}*/
 
     return(
-      <div>
+      <div className="form-group" >
         <label>Phone</label>
           <input type="text"
             ref="phone"
+            className="form-control"
             disabled={this.props.disabled}
             onBlur={this.updatePhone.bind(this)}
             onChange={this.handlePhoneChange}

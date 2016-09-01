@@ -31,12 +31,12 @@ export default class ContactIntlEthnicity extends TrackerReact(React.Component) 
   	}
 
     return(
-      <div>
-        <h4>Ethnicity:</h4>
+      <div className="form-group">
       <label>International Student:
         <input
           type="checkbox"
           ref="intl"
+          className="form-control"
           readOnly={true}
           disabled={this.props.disabled}
           onClick={this.update.bind(this)}

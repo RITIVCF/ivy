@@ -31,10 +31,12 @@ export default class ContactBio extends Component {
   	}
     */
     return(
-      <div>
+      <div className="form-group">
         <label>Bio</label>
           <textarea
             ref="bio"
+            className="form-control"
+            rows="4"
             disabled={this.props.disabled}
             onBlur={this.updateBio.bind(this)}
             onChange={this.handleBioChange}

@@ -24,6 +24,7 @@ export default class ContactNewsletter extends Component {
           <input type="checkbox"
             readOnly={true}
             ref="newsletter"
+            className="form-control"
             id="news"
             name="news"
             disabled={this.props.disabled}

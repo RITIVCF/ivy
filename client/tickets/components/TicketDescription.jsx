@@ -50,6 +50,7 @@ export default class TicketDescription extends Component {
         <textarea ref="description"
           value={this.state.description}
           className="form-control"
+          rows="5"
           disabled={this.state.descriptionlock}
           onChange={this.handleDescriptionChange.bind(this)} />
       </div>

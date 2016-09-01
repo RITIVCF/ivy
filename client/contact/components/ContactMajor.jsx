@@ -31,10 +31,11 @@ export default class ContactMajor extends Component {
   	}
     */
     return(
-      <div>
-        <h4>Major:</h4>
+      <div className="form-group">
+        <label>Major</label>
           <input type="text"
             ref="major"
+            className="form-control"
             disabled={this.props.disabled}
             onBlur={this.updateMajor.bind(this)}
             onChange={this.handleMajorChange}

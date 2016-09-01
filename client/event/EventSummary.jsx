@@ -79,8 +79,20 @@ export default class EventSummary extends TrackerReact(React.Component) {
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">
               <div className="col-sm-12">
-                <button className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button><br/>
-                <button className="btn btn-primary" onClick={this.viewOld.bind(this)}>View old events</button>
+                <div className="btn-group btn-group-justified" role="group" aria-label="...">
+                  <div className="btn-group" role="group">
+                    <button className="btn btn-primary"
+                      onClick={this.createNew.bind(this)}>New</button>
+                  </div>
+                </div>
+                <div className="btn-group btn-group-justified" role="group" aria-label="...">
+                  <div className="btn-group" role="group">
+                    <button className="btn btn-primary"
+                      onClick={this.viewOld.bind(this)}>View old events</button>
+                  </div>
+                </div>
+
+
               </div>
             </nav>
           </div>

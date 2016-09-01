@@ -31,10 +31,11 @@ export default class ContactName extends Component {
   	}
     */
     return(
-      <div>
+      <div className="form-group" >
         <label>Name</label>
           <input type="text"
             ref="name"
+            className="form-control"
             disabled={this.props.disabled}
             onBlur={this.updateName.bind(this)}
             onChange={this.handleNameChange}

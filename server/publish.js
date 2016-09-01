@@ -10,8 +10,8 @@ Meteor.publish("summaryEvents", function(){
 	grps.forEach(function(group){
 		ids.push(group._id);
 	});
-	console.log("GGroups:");
-	console.log(ids);
+	//console.log("GGroups:");
+	//console.log(ids);
 	return Events.find({$or: [{owner: this.userId}, {"permUser.id": this.userId}, {"permGroup.id": {$in: ids}}]});
   //return Events.find({$or: [{}]});
 });
