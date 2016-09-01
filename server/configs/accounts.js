@@ -4,6 +4,11 @@ import { Accounts } from 'meteor/accounts-base';
 
 // For environment variable when testing locally
 
+if(Meteor.settings.MAIL_URL){
+    process.env.MAIL_URL = Meteor.settings.MAIL_URL;
+}
+
+
   Accounts.onCreateUser(function(options, user) {
     //let contact = this.getContact(redundantEmail)
     console.log(options);
