@@ -76,7 +76,7 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 				<div className="col-sm-9 col-lg-10">
 					<div className="panel panel-default">
 						<div className="panel-heading">
-							<h2 class="panel-title">Event Detail</h2>
+							<h2 className="panel-title">Event Detail</h2>
 						</div>
 						<div className="panel-body">
 							<EventDetail ev={ev} />

@@ -82,10 +82,14 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 		<div className="panel panel-default">
 			<div className="panel-heading">
-				<h3 class="panel-title">{!ev ? "":ev.name}</h3>
+				<h3 className="panel-title">{!ev ? "":ev.name}</h3>
 			</div>
 			<div className="panel-body">
 				<p>Event Description: {!ev ? "": ev.description}</p>
+				<p>Event Start: {!!ev ? moment(ev.start.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
+				<p>Event End: {!!ev ? moment(ev.end.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
+				{!!ev?<a href={"/forms/signin/"+ev._id} ><button className="btn btn-info">Form</button></a>:
+					<button disabled="true" className="btn btn-info">Loading...</button>}
 				<h3>Attendees</h3>
 				<label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
 					<option value={"All"}>All</option>
