@@ -8,12 +8,15 @@ export default class SignIn extends TrackerReact(React.Component){
 
     this.state = {
       contact: false,
-      new: true
+      new: true,
+      submitted: false
     };
   }
 
   submit(event){
     event.preventDefault();
+    var thiz = this;
+    console.log(this.state);
     var eid = this.props.ev._id;
     var contact = this.state.contact;
     var evname = this.props.ev.name;
@@ -42,6 +45,7 @@ export default class SignIn extends TrackerReact(React.Component){
               eid, cid,
               true,
               tktId);
+              thiz.timer();
             });
             if(newsletter){
               Meteor.call("updateNewsletter", cid, true);
@@ -54,24 +58,35 @@ export default class SignIn extends TrackerReact(React.Component){
       this.props.ev._id,this.state.contact._id,
       false,
       "");
+      thiz.timer();
       // if(this.refs.newsletter){
       //   Meteor.call("updateNewsletter", this.state.contact._id, true);
       // }
     }
     //this.props.parent.setState({id: this.props.parent.state.id + 1});
-    this.forceUpdate();
-    this.refs.email.value="";
-    if(this.state.new){
-      this.refs.phone.value="";
-      this.refs.newsletter.checked=false;
-      this.refs.major.value="";
-    }
+  //   this.forceUpdate();
+  //   this.refs.email.value="";
+  //   if(this.state.new){
+  //     this.refs.phone.value="";
+  //     this.refs.newsletter.checked=false;
+  //     this.refs.major.value="";
+  //   }
+  //
+  //   //this.state.new=false;
+  //   this.setState({new: true});
+  //   this.refs.user.state.value='';
+  //   this.refs.user.forceUpdate();
+  // //  this.refs.user.focus();
+  }
 
-    //this.state.new=false;
-    this.setState({new: true});
-    this.refs.user.state.value='';
-    this.refs.user.forceUpdate();
-  //  this.refs.user.focus();
+  timer(){
+    this.setState({submitted: true});
+    var thiz = this;
+    setTimeout(function(){
+      thiz.setState({submitted: false});
+      thiz.setState({contact: false});
+      thiz.setState({new: true});
+    }, 3000);
   }
 
 
@@ -82,12 +97,13 @@ export default class SignIn extends TrackerReact(React.Component){
   update(contt){
     console.log("Suggestion Selected. Print autosuggest return object.");
     console.log(contt);
-    this.state.contact = contt;
+    //this.state.contact = contt;
+    this.setState({contact: contt});
     //this.state.new = false;
     this.setState({new: false});
     console.log("print state");
     console.log(this.state);
-    this.refs.email.value = this.state.contact.email;
+    this.refs.email.value = contt.email;
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});
@@ -119,35 +135,44 @@ export default class SignIn extends TrackerReact(React.Component){
 
   render() {
 
-    return (
-      <div className="container-fluid">
-        <div className="panel panel-default">
-          <h1>Welcome to {this.props.ev.name}!</h1>
-          <h2>Please sign in</h2>
-          <form className="publicForm" onSubmit={this.submit.bind(this)}>
-            <div className="form-group">
-              <SelectContact
-                parent={this}
-                unset={this.unset.bind(this)}
-                onBlur={this.setNew.bind(this)}
-                initialValue={""}
-                updateContact={this.update.bind(this)}
-                id="first_name"
-                type="text"
-                ref="user"
-                className="validate" />
-              <input ref="email" placeholder="Email" id="email" type="email" required />
-              {this.state.new?<div>
-                <input ref="phone" placeholder="Phone number (optional)" type="tel" />
-                <input ref="major" placeholder="Major" type="text" />
-                <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
-                <label htmlFor="news">Please sign me up for the newsletter</label>
-                </div>:""}
-              <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
-            </div>
-          </form>
+      return (
+        <div className="container-fluid">
+          {!this.state.submitted?
+          <div className="panel panel-default">
+            <h1>Welcome to {this.props.ev.name}!</h1>
+            <h2>Please sign in</h2>
+            <form className="publicForm" onSubmit={this.submit.bind(this)}>
+              <div className="form-group">
+                <SelectContact
+                  parent={this}
+                  unset={this.unset.bind(this)}
+                  onBlur={this.setNew.bind(this)}
+                  initialValue={""}
+                  updateContact={this.update.bind(this)}
+                  id="first_name"
+                  type="text"
+                  ref="user"
+                  className="validate" />
+                <input ref="email" placeholder="Email" id="email" type="email" required />
+                {this.state.new?<div>
+                  <input ref="phone" placeholder="Phone number (optional)" type="tel" />
+                  <input ref="major" placeholder="Major" type="text" />
+                  <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
+                  <label htmlFor="news">Please sign me up for the newsletter</label>
+                  </div>:""}
+                <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
+              </div>
+            </form>
+          </div>
+          :
+          <div className="panel panel-default">
+            <img src={"/images/InterVarsity-RIT-logo.png"} />
+            <br />
+            <p style={{textAlign: "center"}}>Welcome to {this.props.ev.name}!</p>
+            <p style={{textAlign: "center"}}>We're glad you're here!</p>
+          </div>}
         </div>
-      </div>
-    )
+      )
+
   }
 }
