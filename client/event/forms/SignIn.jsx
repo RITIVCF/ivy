@@ -178,11 +178,11 @@ export default class SignIn extends TrackerReact(React.Component){
                 {this.state.new?<div>
                   <input ref="phone" placeholder="Phone number (optional)" type="tel" />
                   <input ref="major" placeholder="Major (optional)" type="text" />
+                  <HowHearSelect ref="howhear" />
                   <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
                   <label htmlFor="news">Please sign me up for the newsletter</label>
                   <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
                   <label htmlFor="more">I would like to learn more about IV</label>
-                  <HowHearSelect ref="howhear" />
                   </div>:""}
                 <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
               </div>
