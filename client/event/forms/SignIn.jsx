@@ -148,27 +148,9 @@ export default class SignIn extends TrackerReact(React.Component){
     //this.clearFields.bind(this);
   }
 
-  checkOther(){
-    if(this.refs.howhear.value=="Other"){
-      this.setState({other: true});
-    }
-    else{
-      this.setState({other: false});
-    }
-  }
-
-  getOptions(){
-    return Options.findOne("howhear").vals;
-  }
-
   changeName(event){
     event.preventDefault();
     this.setState({name: event.target.value});
-  }
-
-  printState(){
-    console.log(this.state);
-    console.log(this.refs.howhear);
   }
 
   render() {
@@ -205,7 +187,6 @@ export default class SignIn extends TrackerReact(React.Component){
                 <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
               </div>
             </form>
-            <button onClick={this.printState.bind(this)}>Show State</button>
           </div>
           :
           <div className="panel panel-default">
