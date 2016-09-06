@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SelectContact from '../../sharedcomponents/SelectContact.jsx';
+import HowHearSelect from './HowHearSelect.jsx';
 
 export default class SignIn extends TrackerReact(React.Component){
   constructor(props) {
@@ -23,13 +24,23 @@ export default class SignIn extends TrackerReact(React.Component){
     var name = this.refs.user.state.value;
     if(this.state.new){
         var newsletter = this.refs.newsletter.checked;
+        var more = this.refs.learnmore.checked;
+        if(this.refs.howhear.state.other){
+          var howhear = this.refs.howhear.refs.other.value;
+        }
+        else{
+          var howhear = this.refs.howhear.refs.howhear.value;
+        }
     }
+
     if( !contact ){
+
       var id = Meteor.call("newContact",
         this.refs.user.state.value,
         this.refs.email.value,
         this.refs.phone.value,
         this.refs.major.value,
+        howhear,
         function(error, cid){
           Meteor.call("addAttendanceTicket",
             "New Contact: "+ name,
@@ -44,6 +55,8 @@ export default class SignIn extends TrackerReact(React.Component){
               Meteor.call("createAttendanceRecord",
               eid, cid,
               true,
+              more,
+              howhear,
               tktId);
               thiz.timer();
             });
@@ -57,6 +70,8 @@ export default class SignIn extends TrackerReact(React.Component){
       Meteor.call("createAttendanceRecord",
       this.props.ev._id,this.state.contact._id,
       false,
+      "",
+      "",
       "");
       thiz.timer();
       // if(this.refs.newsletter){
@@ -133,6 +148,29 @@ export default class SignIn extends TrackerReact(React.Component){
     //this.clearFields.bind(this);
   }
 
+  checkOther(){
+    if(this.refs.howhear.value=="Other"){
+      this.setState({other: true});
+    }
+    else{
+      this.setState({other: false});
+    }
+  }
+
+  getOptions(){
+    return Options.findOne("howhear").vals;
+  }
+
+  changeName(event){
+    event.preventDefault();
+    this.setState({name: event.target.value});
+  }
+
+  printState(){
+    console.log(this.state);
+    console.log(this.refs.howhear);
+  }
+
   render() {
 
       return (
@@ -148,6 +186,7 @@ export default class SignIn extends TrackerReact(React.Component){
                   unset={this.unset.bind(this)}
                   onBlur={this.setNew.bind(this)}
                   initialValue={""}
+                  onChange={this.changeName.bind(this)}
                   updateContact={this.update.bind(this)}
                   id="first_name"
                   type="text"
@@ -156,13 +195,17 @@ export default class SignIn extends TrackerReact(React.Component){
                 <input ref="email" placeholder="Email" id="email" type="email" required />
                 {this.state.new?<div>
                   <input ref="phone" placeholder="Phone number (optional)" type="tel" />
-                  <input ref="major" placeholder="Major" type="text" />
+                  <input ref="major" placeholder="Major (optional)" type="text" />
                   <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
                   <label htmlFor="news">Please sign me up for the newsletter</label>
+                  <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
+                  <label htmlFor="more">I would like to learn more about IV</label>
+                  <HowHearSelect ref="howhear" />
                   </div>:""}
                 <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
               </div>
             </form>
+            <button onClick={this.printState.bind(this)}>Show State</button>
           </div>
           :
           <div className="panel panel-default">

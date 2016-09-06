@@ -109,6 +109,8 @@ export default class EventDetail extends TrackerReact(React.Component) {
 							<th>Email</th>
 							<th>Phone</th>
 							<th>First Time?</th>
+							<th>Learn More?</th>
+							<th>How hear about us?</th>
 							{checkPermission("tickets") ?
 							<th>Ticket</th>:"" }
 						</tr>
