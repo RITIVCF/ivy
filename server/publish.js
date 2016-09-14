@@ -163,7 +163,8 @@ Meteor.publish("allContacts", function(filtr, srt){
     ethnicity: 1,
     gradterm: 1,
     curryear: 1,
-    member: 1
+    member: 1,
+    user: 1
   },
   sort: {name: 1}
 };

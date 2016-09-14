@@ -13,6 +13,7 @@ import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
+import SelectContactWrapper from './user/SelectContactWrapper.jsx';
 import ForgotPassword from './user/ForgotPassword.jsx';
 import NewContactWrapper from './contact/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
@@ -48,7 +49,7 @@ import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 function signInForceCheck(context) {
   // context is the output of `FlowRouter.current()`
 	if(context.path.substring(0,6)!="/login"
-		&&context.path!="/signup"
+		&&context.path.substring(0,7)!="/signup"
 		&&context.path!="/newcontact"
 		&&context.path!="/forgotpassword"
 	){
@@ -317,7 +318,15 @@ FlowRouter.route('/login', {
 FlowRouter.route('/signup', {
 	action() {
 		mount(FormLayout, {
-			content: (<SignUpWrapper />)
+			content: (<SelectContactWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/signup/:t', {
+	action(params) {
+		mount(FormLayout, {
+			content: (<SignUpWrapper token={params.t}/>)
 		})
 	}
 });

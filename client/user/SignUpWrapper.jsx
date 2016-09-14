@@ -7,29 +7,21 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
     super(props);
 
     this.state = {
-      subscription:{
-        Contacts: Meteor.subscribe("allContacts")
-      },
-      contact: "",
-      passwordcheck: false
+      passwordcheck: false,
+      submitted: false
     };
   }
 
   componentWillUnmount(){
-    this.state.subscription.Contacts.stop();
+    //this.state.subscription.Contacts.stop();
   }
 
   go(){
     FlowRouter.go("/");
   }
 
-  getContact(email){
-    return Contacts.findOne(email);
-  }
-
-  setContact(contt){
-    //this.state.contact = contact;
-    this.setState({contact: contt});
+  getContact(){
+    return Contacts.findOne(this.props.cid);
   }
 
   unset(){
@@ -68,41 +60,49 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
     //   "");
     var thiz = this;
 
-    Accounts.createUser({
-      username: userVar,
-      password: passwordVar,
-      email: this.state.contact.email,
-      contactid: this.state.contact._id
+    Accounts.resetPassword(this.props.token, passwordVar, function(error){
+      if(error){
+        window.alert("error");
+      }
+      Meteor.call("setUserUsername", userVar);
+      FlowRouter.go("/");
     });
+    // Accounts.createUser({
+    //   username: userVar,
+    //   password: passwordVar,
+    //   email: this.getContact().email,
+    //   contactid: this.props.cid
+    // });
 
-    thiz.go();
+    //this.setState({submitted: true});
 
 
     return;
   }
 
+  setUsername(event){
+    event.preventDefault();
+    console.log(Meteor.userId());
+    Meteor.call("setUserUsername", this.refs.username.value);
+    FlowRouter.go("/");
+  }
+
 
   render() {
-    console.log("state.contact");
-    console.log(this.state.contact);
-    if(this.state.contact){
+    document.title="Ivy - Set Password";
     return (
       <div id="card" className="panel panel-info">
-        <div className="panel-heading">Ivy Sign-In</div>
+        <div className="panel-heading">Ivy Set Password</div>
         <div className="panel-body">
-          <p>Hi {this.state.contact.name}. Please fill out the below fields.</p>
+          <p>Please set a password.</p>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <label>Username</label> <br />
             <input type="text"
               name="username"
+              ref="username"
               required
               />
             <br />
-            <br />
-            {/*}<label>E-Mail</label> <br />
-            <input type="text" name="email"/>
-            <br />
-            <br />*/}
             <label>Password</label> <br />
             <input type="password"
               name="loginPassword"
@@ -110,7 +110,6 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
               onChange={this.checkPasswords.bind(this)}
               required
               />
-            <br />
             <br />
             <label>Password</label> <br />
             <input type="password"
@@ -120,32 +119,12 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
               required
               />
             <br />
-            <br />
             <p>Passwords Match: {this.state.passwordcheck?"Yes":"No"}</p>
             <br />
-            <br />
-            <input type="submit" value="Sign Up!" />
+            <input type="submit" name="submit" value="Sign Up!" />
           </form>
         </div>
       </div>
     )
-  }
-  return(
-    <div className="panel panel-info">
-      <div className="panel-heading">
-        Select Contact
-      </div>
-      <div className="panel-body">
-        <p>Please select yourself from the list:</p>
-          <SelectContact
-            parent={this}
-            unset={this.unset.bind(this)}
-            initialValue={""}
-            updateContact={this.setContact.bind(this)}
-            ref="contact"  />
-          <p>If your name does not show up, go <a href="/newcontact">here</a> to create a new contact card.</p>
-      </div>
-    </div>
-  )
   }
 }

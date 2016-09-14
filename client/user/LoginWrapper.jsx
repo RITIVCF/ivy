@@ -49,6 +49,7 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 
 
   render() {
+    document.title="Ivy - Login";
     return (
       <div id="card" className="card">
         <div className="front">
