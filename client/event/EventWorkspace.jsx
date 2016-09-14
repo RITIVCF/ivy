@@ -18,6 +18,15 @@ import EventReserved from './components/EventReserved.jsx';
 
 //Options = new Mongo.Collection("options");
 
+getUserGroupPermission = function(){
+	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+	return ids;
+}
+
 export default class EventWorkspace extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
@@ -29,7 +38,8 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 				users: Meteor.subscribe("allUsers"),
 				contacts: Meteor.subscribe("allContacts"),
 			//	options: Meteor.subscribe("allOptions")
-      }
+		},
+		groups: getUserGroupPermission()
     };
   }
 
@@ -69,6 +79,12 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 		return Events.findOne(this.props.eid);
 	}
 
+	checkGroup(id){
+		console.log(this.state.groups);
+		console.log(this.state.groups.indexOf(id));
+		return this.state.groups.indexOf(id)>-1;
+	}
+
 	render() {
 	let ev = this.getEvent();
 
@@ -77,25 +93,34 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	}
 	document.title = "Ivy - "+ ev.name;
 	var perm = false;// ev.perm[""]
+	var view = false;
 	for(i=0; i < ev.permUser.length; i++){
 		if(ev.permUser[i].id == Meteor.userId()){
+			view = true;
 			perm = ev.permUser[i].edit;
 			break;
 		}
 	}
+	console.log(ev.permGroup);
 	for(i=0; i < ev.permGroup.length; i++){
-		if(ev.permGroup[i].id == Meteor.userId()){
+		if(this.checkGroup(ev.permGroup[i].id)){
+			console.log("true");
+			view = true;
 			perm = ev.permGroup[i].edit||perm;
 			break;
 		}
 	}
 	if(ev.owner==Meteor.userId()){
+		view = true;
 		perm = true;
+	}
+	if(!view){
+		return(<p>You do not have permission to view this event's workspace.</p>)
 	}
 
 		return (
 
-		<div classNme="container-fluid">
+		<div className="container-fluid">
 			{perm?<JobsWindow ref="jobOverlay" eid={ev._id} />:""}
 			{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:""}
 			{/*}<ReoccuringEventWindow ref="reoccuringOverlay" ev={ev} /> */}
