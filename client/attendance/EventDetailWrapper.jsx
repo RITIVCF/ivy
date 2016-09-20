@@ -54,10 +54,10 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 			ev = this.getEvent();
 		}
 	console.log(ev);
-	/*
+
 	if(!ev){
 		return (<div>Loading...</div>);
-	}*/
+	}
 	document.title = (!ev) ? "Ivy - Event Detail - ": "Ivy - Event Detail - " + ev.name;
 		return (
 

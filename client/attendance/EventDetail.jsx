@@ -52,6 +52,17 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		return this.props.ev.attendees;
 	}
 
+	getCountNew(){
+		var count = 0;
+		for(i=0;i<this.props.ev.attendees.length;i++){
+			console.log(this.props.ev.attendees[i]);
+			if(this.props.ev.attendees[i].firsttime){
+				count += 1;
+			}
+		}
+		return count;
+	}
+
 	changeFilter(){
 		//this.state.filter = this.refs.filter.value;
 		this.setState({filter: this.refs.filter.value});
@@ -101,6 +112,8 @@ export default class EventDetail extends TrackerReact(React.Component) {
 					<option value={"First Time"}>First Time</option>
 				{/*}	<option value={"Status"}>Status</option> */}
 				</select></label>
+			<p>Total: {ev.attendees.length} attendees</p>
+			<p>New: {this.getCountNew()} attendees</p>
 			</div>
 				<table className="table table-hover">
 					<thead>
