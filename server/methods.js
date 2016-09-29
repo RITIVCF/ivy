@@ -29,6 +29,35 @@ Meteor.methods({
   },
   setUserUsername(username){
     Accounts.setUsername(Meteor.userId(), username);
+  },
+  mergeAndDeleteContact(did,mid,options){
+    var dc = Contacts.findOne(did);
+    var mc = Contacts.findOne(mid);
+
+    if(options.name){
+      Contacts.update({_id:mc._id},{$set: {name: dc.name}});
+    }
+    if(options.email){
+      Contacts.update({_id:mc._id},{$set: {email: dc.email}});
+    }
+    if(options.phone){
+      Contacts.update({_id:mc._id},{$set: {phone: dc.phone}});
+    }
+    if(options.major){
+      Contacts.update({_id:mc._id},{$set: {major: dc.major}});
+    }
+    if(options.bio){
+      Contacts.update({_id:mc._id},{$set: {bio: dc.bio}});
+    }
+    if(options.news){
+      Contacts.update({_id:mc._id},{$set: {newsletter: dc.newsletter}});
+    }
+
+    Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}});
+    Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}});
+    Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}});
+    Tickets.remove({_id: dc.ticket});
+    Contacts.remove({_id: did});
   }
 
 })

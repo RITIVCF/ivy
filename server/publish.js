@@ -198,6 +198,27 @@ Meteor.publish("allContacts", function(filtr, srt){
   return Contacts.find(selector, options);
 });
 
+Meteor.publish("duplicateContacts", function(){
+  var result = Contacts.aggregate(     {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+    {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
+    //console.log(result);
+  var ids =[];
+    for(var i=0;i<result.length;i++){
+      for(var y=0;y<result[i].ids.length;y++){
+        ids.push(result[i].ids[y]);
+      }
+    }
+    //console.log(ids);
+    result = Contacts.aggregate(     {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+      {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
+      for(var i=0;i<result.length;i++){
+        for(var y=0;y<result[i].ids.length;y++){
+          ids.push(result[i].ids[y]);
+        }
+      }
+    return Contacts.find({_id: {$in: ids}});
+});
+
 Meteor.publish("thisContact", function(){
   var user = {contact:""};
   if(this.userId) {

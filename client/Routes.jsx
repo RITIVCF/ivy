@@ -43,6 +43,7 @@ import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
+import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 
 
 
@@ -105,6 +106,14 @@ FlowRouter.route('/admin/settings', {
 	action() {
 		mount(MainLayout, {
 			content: <SiteSettingsWrapper />
+		})
+	}
+});
+
+FlowRouter.route('/admin/duplicatecontacts', {
+	action() {
+		mount(MainLayout, {
+			content: <DuplicateContactWrapper />
 		})
 	}
 });

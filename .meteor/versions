@@ -51,6 +51,8 @@ localstorage@1.0.11
 logging@1.1.14
 meteor@1.2.16
 meteor-base@1.0.4
+meteorhacks:aggregate@1.3.0
+meteorhacks:collection-utils@1.2.0
 meteortoys:allthings@3.0.0
 meteortoys:authenticate@3.0.0
 meteortoys:autopub@3.0.0
@@ -76,6 +78,7 @@ modules-runtime@0.7.5
 momentjs:moment@2.12.0
 mongo@1.1.10
 mongo-id@1.0.5
+mongo-livedata@1.0.12
 msavin:jetsetter@2.0.0
 msavin:mongol@2.0.1
 nemo64:bootstrap@3.3.5_3
