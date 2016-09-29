@@ -16,8 +16,8 @@ export default class EventSingle extends Component {
         <div className="panel panel-default" onClick={this.go.bind(this)}>
           <div className="panel-body">
             <h3>{this.props.ivevent.name}</h3>
-            {this.props.ivevent.start instanceof Date ? <div>{this.props.ivevent.start.toDateString()}<br/></div>: ""}
-            {this.props.ivevent.start instanceof Date ? this.props.ivevent.start.toLocaleTimeString(): ""}
+            {this.props.ivevent.start instanceof Date ? <div>{new moment(this.props.ivevent.start.toISOString()).format("ddd Do MMM YY")}<br/></div>: ""}
+            {this.props.ivevent.start instanceof Date ? new moment(this.props.ivevent.start.toISOString()).format("h:mmA"): ""}
           </div>
         </div>
       </div>
