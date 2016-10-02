@@ -18,14 +18,12 @@ export default class JobSingle extends Component {
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
 
     return (
-      <form onSubmit={this.delete.bind(this)} className="navbar-form">
         <div className="form-group">
-          {this.props.perm?<button className="form-control">X</button>:""}
+          {this.props.perm?<button onClick={this.delete.bind(this)} className="form-control">X</button>:""}
         <div>{this.props.job.status}</div>
         <div>{this.getUser().name}</div>
         <div>{this.props.job.job}</div>
       </div>
-    </form>
 
     )
   }
