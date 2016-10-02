@@ -43,6 +43,53 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
 	}
 
+  export(){
+    // var data = [["name1", "city1", "some other info"], ["name2", "city2", "more info"]];
+    // var csvContent = "data:text/csv;charset=utf-8,";
+    // data.forEach(function(infoArray, index){
+    //
+    //    dataString = infoArray.join(",");
+    //    csvContent += index < data.length ? dataString+ "\n" : dataString;
+    //
+    // });
+    // var encodedUri = encodeURI(csvContent);
+    // var link = document.createElement("a");
+    // link.setAttribute("href", encodedUri);
+    // link.setAttribute("download", "my_data.csv");
+    // document.body.appendChild(link); // Required for FF
+    //
+    // link.click(); // This will download the data file named "my_data.csv".
+    var csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Name, Email, Phone, Newsletter, How Hear, Status\n";
+     this.contacts().forEach(function(contact){
+       console.log(contact);
+       var dataString = "";
+       dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
+       dataString += contact.newsletter ? "Yes":"No";
+       dataString += ",";
+       dataString += contact.howhear ? contact.howhear:"";
+       dataString += ",";
+       dataString += contact.member ? "Member":"Contact";
+       dataString += "\n";
+       csvContent += dataString;
+     });
+     console.log(csvContent);
+     var encodedUri = encodeURI(csvContent);
+     console.log("encoded");
+     var link = document.createElement("a");
+     console.log("document created");
+     console.log(link);
+     link.setAttribute("href", encodedUri);
+     console.log("href set");
+     link.setAttribute("download", "All Contacts.csv");
+     console.log("filename set");
+     document.body.appendChild(link); // Required for FF
+     console.log("appended");
+
+     link.click(); // This will download the data file named "my_data.csv".
+     console.log("clicked");
+  }
+
 
   contacts(){
     return Contacts.find().fetch();
@@ -84,6 +131,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
           					<option value={"Status"}>Status</option>
           				{/*}	<option value={"Status"}>Status</option> */}
           				</select></label>
+                <div className="form-group">
+                  <a href="#"  onClick={this.export.bind(this)} ><button className="btn btn-primary">Export to Excel (CSV)</button></a>
+                </div>
               </div>
               <table className="table table-hover table-responsive">
                 <thead>
