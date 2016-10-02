@@ -16,6 +16,37 @@ export default class EventDetail extends TrackerReact(React.Component) {
     };
   }
 
+	export(){
+		var csvContent = "data:text/csv;charset=utf-8,";
+		csvContent += "Event Name:,"+this.props.ev.name+"\n";
+		csvContent += "Name, Email, Phone, First Time?, Learn More?, How did you hear about us?, Newsletter, Status\n";
+		 this.getAttendees().forEach(function(contact){
+			 console.log(contact);
+			 var dataString = "";
+			 dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
+			 dataString += contact.firsttime ? "Yes":"No";
+			 dataString += ",";
+			 dataString += contact.more ? "Yes":"No";
+			 dataString += ",";
+			 dataString += contact.howhear ? contact.howhear:"";
+			 dataString += ",";
+			 dataString += contact.newsletter ? "Yes":"No";
+			 dataString += ",";
+			 dataString += contact.member ? "Member":"Contact";
+			 dataString += "\n";
+			 csvContent += dataString;
+		 });
+		 var encodedUri = encodeURI(csvContent);
+		 var link = document.createElement("a");
+		 link.setAttribute("href", encodedUri);
+		 link.setAttribute("download", this.props.ev.name + " Attendance.csv");
+		 document.body.appendChild(link); // Required for FF
+
+		 link.click(); // This will download the data file named "my_data.csv".
+	}
+
+
+
 	getAttendees(){
 		//var attendees = this.state.ev.attendees.filter(attendee =>
 			//attendee[this.state.filter])
@@ -101,7 +132,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 				<p>Event End: {!!ev ? moment(ev.end.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
 				{!!ev?<a href={"/forms/signin/"+ev._id} ><button className="btn btn-info">Form</button></a>:
 					<button disabled="true" className="btn btn-info">Loading...</button>}
-				<h3>Attendees</h3>
+				<h3>Attendees <button onClick={this.export.bind(this)} className="btn btn-primary">Export to Excel (CSV)</button></h3>
 				<label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
 					<option value={"All"}>All</option>
 					<option value={"Yes"}>Yes</option>

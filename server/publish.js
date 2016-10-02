@@ -159,6 +159,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     communitylife: 1,
     ticket: 1,
     intl: 1,
+    howhear: 1,
     ethn: 1,
     ethnicity: 1,
     gradterm: 1,
