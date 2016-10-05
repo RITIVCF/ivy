@@ -69,7 +69,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
        dataString += ",";
        dataString += contact.howhear ? contact.howhear:"";
        dataString += ",";
-       dataString += contact.member ? "Member":"Contact";
+       //dataString += contact.member ? "Member":"Contact";
+       dataString += contact.status
        dataString += "\n";
        csvContent += dataString;
      });
@@ -121,18 +122,27 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
             <div className="panel panel-default">
               <div className="panel-body">
-                <label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-        					<option value={"All"}>All</option>
-        					<option value={"Contact"}>Contact</option>
-        					<option value={"Member"}>Member</option>
-        				</select></label>
-                <label>Sort: <select ref="sort" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-          					<option value={"Name"}>Name</option>
-          					<option value={"Status"}>Status</option>
-          				{/*}	<option value={"Status"}>Status</option> */}
+                <div className="col-md-4">
+                  <label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
+          					<option value={"All"}>All</option>
+                      <option value="Crowd">Crowd</option>
+                      <option value="Visitor">Visitor</option>
+                      <option value="Member">Member</option>
+                      <option value="Server">Server</option>
+                      <option value="Leader">Leader</option>
+                      <option value="Multiplier">Multiplier</option>
           				</select></label>
-                <div className="form-group">
-                  <a href="#"  onClick={this.export.bind(this)} ><button className="btn btn-primary">Export to Excel (CSV)</button></a>
+                  <label>Sort: <select ref="sort" onChange={this.changeSort.bind(this)} value={this.state.sort}>
+            					<option value={"Name"}>Name</option>
+            					<option value={"Status"}>Status</option>
+            				{/*}	<option value={"Status"}>Status</option> */}
+            				</select></label>
+                  <div className="form-group">
+                    <a href="#"  onClick={this.export.bind(this)} ><button className="btn btn-primary">Export to Excel (CSV)</button></a>
+                  </div>
+                </div>
+                <div className="col-md-8">
+                  <p>Count: {this.contacts().length}</p>
                 </div>
               </div>
               <table className="table table-hover table-responsive">

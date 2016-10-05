@@ -134,7 +134,7 @@ Meteor.publish("allContacts", function(filtr, srt){
   }*/
 
   var selector = {};
-
+/*
   if(filtr == "Contact"){
     selector = {
       member: {$ne: true}
@@ -144,7 +144,11 @@ Meteor.publish("allContacts", function(filtr, srt){
     selector = {
       member: true
     };
-  }
+  }*/
+  if(filtr != "All")
+  selector = {
+      status: filtr
+  };
 
   var options = {
     fields: {
@@ -165,6 +169,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     gradterm: 1,
     curryear: 1,
     member: 1,
+    status: 1,
     user: 1
   },
   sort: {name: 1}
