@@ -10,7 +10,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         Contacts: Meteor.subscribe("allContacts", "All", "Name")
-      }
+      },
+      filter: "All"
     };
   }
 
@@ -27,12 +28,13 @@ export default class ContactSummary extends TrackerReact(React.Component) {
   changeFilter(){
 		//this.state.filter = this.refs.filter.value;
 		//this.setState({filter: this.refs.filter.value});
-    console.log("filter change");
-    console.log(this.refs.filter.value);
-    console.log(this.refs.sort.value);
-    this.state.subscription.Contacts.stop();
-    this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
+    // console.log("filter change");
+    // console.log(this.refs.filter.value);
+    // console.log(this.refs.sort.value);
+    // this.state.subscription.Contacts.stop();
+    // this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
     //this.setState({subscription: {Contacts: Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value)}});
+    this.setState({filter: this.refs.filter.value});
 	}
 
   changeSort(){
@@ -93,7 +95,10 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
   contacts(){
-    return Contacts.find().fetch();
+    if(this.state.filter == "All"){
+      return Contacts.find().fetch();
+    }
+    return Contacts.find({status: this.state.filter}).fetch();
 
   }
 
