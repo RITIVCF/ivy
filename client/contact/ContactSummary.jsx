@@ -148,6 +148,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                 </div>
                 <div className="col-md-8">
                   <p>Count: {this.contacts().length}</p>
+                  <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>
                 </div>
               </div>
               <table className="table table-hover table-responsive">
