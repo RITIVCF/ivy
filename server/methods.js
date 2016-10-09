@@ -27,6 +27,37 @@ Meteor.methods({
       + "- Ivy"
     });
   },
+  groupAssignedEmail(gid, tid){
+    var ticket = Tickets.findOne(tid);
+    var group = Groups.findOne(gid);
+    var users = Meteor.users.find({_id: {$in: group.users}}).fetch();
+    var emails = [];
+    users.forEach(function(user){
+      emails.push(user.email);
+    });
+    Email.send({
+      to: emails,
+      from: "Ivy Information System",
+      subject: "New Ticket Assigned to Your Group: "+group.name,
+      html: "<p>A new ticket has been assigned to your group: "+group.name+"</p><p>Subject: "+ticket.subject+"</p>"
+      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id+
+      + "'><button>View Ticket</button></a>"
+    });
+  },
+  userAssignedEmail(uid, tid){
+    var ticket = Tickets.findOne(tid);
+    var contact = Contacts.findOne(Meteor.users.findOne(uid));
+    Email.send({
+      to: contact.email,
+      from: "Ivy Information System",
+      subject: "New Ticket Assigned to You: <Ticket Subject>",  // Insert Ticket Subject in subject line
+      html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
+      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id+
+      + "'><button>View Ticket</button></a>"
+      // insert html for ticket info here
+      + "- Ivy"
+    });
+  },
   setUserUsername(username){
     Accounts.setUsername(Meteor.userId(), username);
   },

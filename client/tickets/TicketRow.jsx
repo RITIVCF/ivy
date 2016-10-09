@@ -13,6 +13,10 @@ export default class TicketRow extends Component {
       );
   }
 
+  getGroup(){
+    return Groups.findOne(this.props.tkt.assignedgroup);
+  }
+
   getCust(){
     if(this.props.tkt.customer==""){
       return {name: ""};
@@ -39,7 +43,7 @@ export default class TicketRow extends Component {
         <td>{this.props.tkt.type}</td>
         <td>{this.props.tkt.ereqtype}</td>
         <td>{this.getUser().name}</td>
-        <td></td>
+        <td>{this.props.tkt.assignedgroup?this.getGroup().name:""}</td>
         <td>{this.props.tkt.status}</td>
         <td>{new moment(this.props.tkt.lastUpdated).format("MM/DD/YY hh:mmA")}</td>
       </tr>

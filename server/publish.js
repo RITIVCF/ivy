@@ -145,10 +145,10 @@ Meteor.publish("allContacts", function(filtr, srt){
       member: true
     };
   }*/
-  if(filtr != "All")
-  selector = {
-      status: filtr
-  };
+  // if(filtr != "All")
+  // selector = {
+  //     status: filtr
+  // };
 
   var options = {
     fields: {

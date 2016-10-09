@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SelectUser from '../sharedcomponents/SelectUser.jsx';
+import SelectGroup from '../sharedcomponents/SelectGroup.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
@@ -28,6 +29,13 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     return Contacts.findOne(Meteor.users.findOne(id).contact).name;
   }
 
+  getGroup(id){
+    if(!id){
+      return '';
+    }
+    return Groups.findOne(this.props.ticket.assignedgroup).name;
+  }
+
   getEventName(){
     return Events.findOne(this.props.ticket.eid).name;
   }
@@ -52,6 +60,20 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     if(Meteor.userId()!=this.props.ticket.assigneduser){
       Meteor.call("updateTicketAssignedUser", this.props.ticket._id, Meteor.userId());
     }
+  }
+
+  updateAssignedG(group){
+    //this.state.assigned = user;
+    console.log(group);
+    Meteor.call("updateTicketAssignedGroup", this.props.ticket._id, group._id);
+  }
+
+  assignToMyGroup(){
+
+    //Finish this function. For now, disable "Assign to My Group" control
+    // if(Meteor.userId()!=this.props.ticket.assigneduser){
+    //   Meteor.call("updateTicketAssignedUser", this.props.ticket._id, Meteor.userId());
+    // }
   }
 
 
@@ -143,7 +165,19 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                           </select>
                         </div>
                          :"" }
-                        {/*Group select will go here*/}
+                         <div className="form-group">
+                           <label>Assigned Group:</label>
+                             <SelectGroup
+                       				parent={this}
+                       				id={"assignedgroup"}
+                              className="form-control"
+                       				unset={this.unset.bind(this)}
+                       				updateContact={this.updateAssignedG.bind(this)}
+                       				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
+                       				ref={"assignedgroup"}
+                       				/>
+                            {/*<button className="btn btn-info" onClick={this.assignToMyGroup.bind(this)}>Assign to My Group</button>*/}
+                         </div>
                         <div className="form-group">
                           <label>Assigned User:</label>
                           <SelectUser parent={this}

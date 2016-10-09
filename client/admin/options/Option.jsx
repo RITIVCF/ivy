@@ -13,7 +13,7 @@ export default class Option extends TrackerReact(React.Component) {
 	render() {
 		return (
 		<div>
-			<h1>{this.props.option.name}</h1>
+			<h1>{this.props.option._id}</h1>
 			{!this.props.option.vals ? <p>Value: {this.props.option.val}</p>:
 				this.props.option.vals.map((value)=>{
 					return <div>{value}</div>

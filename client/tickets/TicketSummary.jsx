@@ -58,7 +58,14 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       return Tickets.find({assigneduser:Meteor.userId()});
     }
     if(filter=="assignedgroup"){
-        return Tickets.find().fetch();  // for now return all
+      var grps = Groups.find({users: Meteor.userId()}).fetch();
+      var ids = [];
+      grps.forEach(function(group){
+        ids.push(group._id);
+      });
+      //console.log("GGroups:");
+      //console.log(ids);
+      return Tickets.find({"assignedgroup": {$in: ids}});
     }
     return Tickets.find().fetch();
   }
@@ -98,7 +105,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
               <div className="panel-body">
                 <select ref="filter" value={this.state.filter} onChange={this.filterChange.bind(this)}>
                   <option value={"assigneduser"}>My Active Tickets</option>
-                {/*}  <option value={"assignedgroup"}>My Group's Active Tickets</option> */}
+                  <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
                   <option value={""}>All Active Tickets</option>
                 </select>
               </div>
