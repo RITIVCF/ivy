@@ -65,9 +65,9 @@ export default class NewTicketWindow extends Component
         this.refs.subj.value,
         this.refs.desc.value,
         "",
-        this.state.assigned._id,
-        this.state.regarding._id,
-        this.refs.type.value
+        this.state.assigned._id?this.state.assigned._id:"",
+        this.state.regarding._id?this.state.regarding._id:"",
+        "" //this.refs.type.value
         );
       }
       else {
@@ -87,7 +87,7 @@ export default class NewTicketWindow extends Component
       this.refs.assigneduser.forceUpdate();
       this.refs.cust.state.value="";
       this.refs.cust.forceUpdate();
-      this.refs.type.value="";
+    //  this.refs.type.value="";
     //this.clearAll();
     }
 

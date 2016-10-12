@@ -46,14 +46,14 @@ Meteor.methods({
   },
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
-    var contact = Contacts.findOne(Meteor.users.findOne(uid));
+    var contact = Contacts.findOne(Meteor.users.findOne(uid).contact);
     Email.send({
       to: contact.email,
       from: "Ivy Information System",
-      subject: "New Ticket Assigned to You: <Ticket Subject>",  // Insert Ticket Subject in subject line
+      subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
       html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
-      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id+
-      + "'><button>View Ticket</button></a>"
+      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id
+      + "'><button>View Ticket</button></a><br/><br/>"
       // insert html for ticket info here
       + "- Ivy"
     });
