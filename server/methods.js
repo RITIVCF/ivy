@@ -31,16 +31,22 @@ Meteor.methods({
     var ticket = Tickets.findOne(tid);
     var group = Groups.findOne(gid);
     var users = Meteor.users.find({_id: {$in: group.users}}).fetch();
+    console.log("users");
+    console.log(users);
     var emails = [];
     users.forEach(function(user){
-      emails.push(user.email);
+      var contact = Contacts.findOne(user.contact);
+      console.log("pushing: "+contact.email);
+      emails.push(contact.email);
     });
+    console.log("emails:");
+    console.log(emails);
     Email.send({
       to: emails,
       from: "Ivy Information System",
       subject: "New Ticket Assigned to Your Group: "+group.name,
       html: "<p>A new ticket has been assigned to your group: "+group.name+"</p><p>Subject: "+ticket.subject+"</p>"
-      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id+
+      + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id
       + "'><button>View Ticket</button></a>"
     });
   },
