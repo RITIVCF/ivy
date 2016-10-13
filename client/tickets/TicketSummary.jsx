@@ -38,6 +38,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   filterChange(event){
     event.preventDefault();
     this.setState({filter: this.refs.filter.value});
+    Session.set("ticketfilter",this.refs.filter.value);
   }
 
   editTicket(tid){
@@ -45,7 +46,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     //this.state.ticketId = tid;
   	this.refs.editticketoverlay.openOverlay(tid);
   }
-
 
 
 
@@ -103,7 +103,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
             <div className="panel panel-default">
 
               <div className="panel-body">
-                <select ref="filter" value={this.state.filter} onChange={this.filterChange.bind(this)}>
+                <select ref="filter" value={Session.get("ticketfilter")} onChange={this.filterChange.bind(this)}>
                   <option value={"assigneduser"}>My Active Tickets</option>
                   <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
                   <option value={""}>All Active Tickets</option>
@@ -125,7 +125,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
               </thead>
               {!(this.state.subscription.Tickets.ready()&&this.state.subscription.contacts.ready()&&this.state.subscription.users.ready()) ? <tbody></tbody>:
               <tbody>
-                {this.tickets(this.state.filter).map( (ticket)=>{
+                {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
                     return <TicketRow key={ticket._id} tkt={ticket} parent={this} />
                 })}
               </tbody>}
