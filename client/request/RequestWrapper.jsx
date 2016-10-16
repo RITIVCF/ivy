@@ -40,7 +40,7 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 				disabled={!this.props.parent.state.subscription.users.ready()}
 				>New Request</button>:<div></div>}Requests</h3>
 				</div>
-				<table className="table table-striped table-responsive">
+				<table className={checkPermission("tickets")?"table table-striped table-hover table-responsive":"table table-striped table-responsive"}>
 							<thead>
 								<tr>
 								<th>Last Update</th>

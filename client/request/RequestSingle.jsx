@@ -11,9 +11,15 @@ export default class RequestSingle extends Component {
       );
   }
 
+  go(){
+    if(checkPermission("tickets")){
+        FlowRouter.go("/tickets/"+this.props.request._id);
+    }
+  }
+
   render() {
     return (
-      <tr>
+      <tr onClick={this.go.bind(this)}>
         <td>{new moment(this.props.request.lastUpdated).format("MM/DD/YY hh:mmA")}</td>
         <td>{this.props.request.status}</td>
         <td>{this.props.request.subject}</td>
