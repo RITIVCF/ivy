@@ -60,6 +60,10 @@ function signInForceCheck(context) {
 	}
 }
 
+function subscribeContactSelf(){
+	Meteor.subscribe("contact");
+}
+
 FlowRouter.triggers.enter([signInForceCheck]);
 
 FlowRouter.route('/',{
@@ -321,7 +325,8 @@ FlowRouter.route('/login', {
 		mount(FormLayout,  {
 			content: (<LoginWrapper route={queryParams.r} />)
 		})
-	}
+	},
+	triggersExit: [subscribeContactSelf]
 });
 
 FlowRouter.route('/signup', {
@@ -337,7 +342,8 @@ FlowRouter.route('/signup/:t', {
 		mount(FormLayout, {
 			content: (<SignUpWrapper token={params.t}/>)
 		})
-	}
+	},
+	triggersExit: [subscribeContactSelf]
 });
 
 FlowRouter.route('/changepassword', {

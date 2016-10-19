@@ -16,7 +16,8 @@ export default class Navbar extends TrackerReact(React.Component) {
 
 	getContact(){
 		console.log(Meteor.user());
-		return Contacts.findOne(Meteor.user().contact).name;
+
+		return Contacts.findOne(Meteor.user().contact)?Contacts.findOne(Meteor.user().contact).name:"";
 
 	}
 
