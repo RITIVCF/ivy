@@ -5,6 +5,9 @@ import { Accounts } from 'meteor/accounts-base';
 //   FlowRouter.go("/login");
 // }
 
+Meteor.subscribe("contact");
+Meteor.subscribe("userSelf");
+
 Accounts.onEnrollmentLink(function(token,done){
   //Accounts.resetPassword()
   FlowRouter.go("/signup/"+token);

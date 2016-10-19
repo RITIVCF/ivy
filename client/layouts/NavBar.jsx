@@ -9,12 +9,13 @@ export default class Navbar extends TrackerReact(React.Component) {
 
 		this.state = {
 			subscription: {
-				thiscontact: Meteor.subscribe("contact")
+
 			}
 		}
 	}
 
 	getContact(){
+		console.log(Meteor.user());
 		return Contacts.findOne(Meteor.user().contact).name;
 
 	}
@@ -89,7 +90,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 										<a href="#" className="dropdown-toggle"
 											data-toggle="dropdown" role="button"
 											aria-haspopup="true" aria-expanded="false">
-												{this.state.subscription.thiscontact.ready()&&Meteor.userId()?this.getContact():"User"}
+												{Meteor.user()?Meteor.user().contact?this.getContact():"User":""}
 											<span className="caret"></span>
 										</a>
 										<ul className="dropdown-menu">
