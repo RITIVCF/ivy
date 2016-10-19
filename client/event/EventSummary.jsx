@@ -62,7 +62,7 @@ export default class EventSummary extends TrackerReact(React.Component) {
 
   myscheduled(){
     // pulls events on which a user is scheduled
-    return Events.find( {jobs:{$elemMatch:{uid: Meteor.userId(),status:{$ne:"Declined"}}}} ).fetch();
+    return Events.find( {$and: [{start: {$gt: moment()._d}},{jobs:{$elemMatch:{uid: Meteor.userId(),status:{$ne:"Declined"}}}}]} ).fetch();
   }
 
   viewOld(){
