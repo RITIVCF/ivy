@@ -4,7 +4,20 @@ import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 
 
 export default class Navbar extends TrackerReact(React.Component) {
+	constructor(){
+		super();
 
+		this.state = {
+			subscription: {
+				thiscontact: Meteor.subscribe("contact")
+			}
+		}
+	}
+
+	getContact(){
+		return Contacts.findOne(Meteor.user().contact).name;
+
+	}
 
 	render(){
 		return(
@@ -76,7 +89,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 										<a href="#" className="dropdown-toggle"
 											data-toggle="dropdown" role="button"
 											aria-haspopup="true" aria-expanded="false">
-												{Meteor.user()?Meteor.user().username:"User"}
+												{this.state.subscription.thiscontact.ready()&&Meteor.userId()?this.getContact():"User"}
 											<span className="caret"></span>
 										</a>
 										<ul className="dropdown-menu">
