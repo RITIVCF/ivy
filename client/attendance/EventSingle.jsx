@@ -12,7 +12,7 @@ export default class EventSingle extends Component {
 
     return (
       <div className="row">
-        <div className={this.props.sidebar ? "col-md-12":"col-md-8"}>
+        <div className={this.props.sidebar ? "col-md-12":"col-md-12"}>
         <div className="panel panel-default" onClick={this.go.bind(this)}>
           <div className="panel-body">
             <h3>{this.props.ivevent.name}</h3>

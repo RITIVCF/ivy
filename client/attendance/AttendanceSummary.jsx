@@ -56,17 +56,24 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
 		return (
-      <div>
-      <div className="summary">
-          <h1>Attendance Dashboard</h1>
-          {this.state.subscription.Events.ready() ? this.events().map( (ivevent)=>{
-              return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
-          }):""}
-          {Events.find().fetch().length >= this.state.num ?
-          <button onClick={this.loadMore.bind(this)}>Load More</button>
-          :<div></div>}
-      </div>
-    </div>
+      <div className="container-fluid">
+				<div className="row">
+					<div className="col-sm-3 col-lg-2">
+						<nav className="navbar navbar-default navbar-fixed-side">
+
+						</nav>
+					</div>
+					<div className="col-sm-9 col-lg-10">
+            <h1>Attendance Dashboard</h1>
+            {this.state.subscription.Events.ready() ? this.events().map( (ivevent)=>{
+                return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
+            }):""}
+            {Events.find().fetch().length >= this.state.num ?
+            <button onClick={this.loadMore.bind(this)}>Load More</button>
+            :<div></div>}
+					</div>
+				</div>
+			</div>
   )
 	}
 }

@@ -11,6 +11,10 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 		FlowRouter.go("/admin/groups");
 	}
 
+	goToUsers(){
+		FlowRouter.go("/admin/users");
+	}
+
 	goToPermissions(){
 		FlowRouter.go("/admin/pages");
 	}
@@ -46,6 +50,17 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 						<div className="col-md-6">
 							<div className="panel panel-default">
 								<div className="panel-heading">
+									<h2>User Management</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToUsers.bind(this)}>View</button>
+								</div>
+							</div>
+						</div>
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
 									<h2>Permission Groups</h2>
 								</div>
 								<div className="panel-body">
@@ -54,6 +69,8 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className="row">
 						<div className="col-md-6">
 							<div className="panel panel-default">
 								<div className="panel-heading">
@@ -65,8 +82,6 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className="row">
 						<div className="col-md-6">
 							<div className="panel panel-default">
 								<div className="panel-heading">
@@ -78,6 +93,8 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
+					</div>
+					<div className="row">
 						<div className="col-md-6">
 							<div className="panel panel-default">
 								<div className="panel-heading">
@@ -89,25 +106,22 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 								</div>
 							</div>
 						</div>
-					</div>
 					{checkPermission("feedback")?
-						<div className="row">
-							<div className="col-md-6">
-								<div className="panel panel-default">
-									<div className="panel-heading">
-										<h2>Feedback Management</h2>
-									</div>
-									<div className="panel-body">
-										<button className="btn btn-default"
-											onClick={this.goToFeedback.bind(this)}>View</button>
-									</div>
+						<div className="col-md-6">
+							<div className="panel panel-default">
+								<div className="panel-heading">
+									<h2>Feedback Management</h2>
+								</div>
+								<div className="panel-body">
+									<button className="btn btn-default"
+										onClick={this.goToFeedback.bind(this)}>View</button>
 								</div>
 							</div>
 						</div>
 					:""}
+					</div>
 				</div>
 			</div>
-
 		</div>
 		)
 	}

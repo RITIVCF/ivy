@@ -204,6 +204,15 @@ Meteor.publish("allContacts", function(filtr, srt){
   return Contacts.find(selector, options);
 });
 
+Meteor.publish("userContacts", function(){
+  var users = Meteor.users.find({},{contact: 1}).fetch();
+  var cids = []
+  users.forEach(function(user){
+    cids.push(user.contact);
+  });
+  return Contacts.find({_id: {$in: cids}});
+});
+
 Meteor.publish("duplicateContacts", function(){
   var result = Contacts.aggregate(     {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
     {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );

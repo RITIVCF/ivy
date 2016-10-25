@@ -15,7 +15,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 	}
 
 	getContact(){
-		console.log(Meteor.user());
+		//console.log(Meteor.user());
 
 		return Contacts.findOne(Meteor.user().contact)?Contacts.findOne(Meteor.user().contact).name:"";
 
@@ -69,9 +69,40 @@ export default class Navbar extends TrackerReact(React.Component) {
 										<a href="/groups">Group Admin</a>
 									</li>*/}
 									{checkPermission("admin")?
-										<li>
-											<a href="/admin">Admin Dashboard</a>
-										</li>:""}
+										<li className="dropdown">
+											<a href="#" className="dropdown-toggle"
+												data-toggle="dropdown" role="button"
+												aria-haspopup="true" aria-expanded="false">
+												Admin
+												<span className="caret"></span>
+											</a>
+											<ul className="dropdown-menu">
+													<li>
+														<a href="/admin">Dashboard</a>
+													</li>
+													<li role="separator" className="divider"></li>
+													<li>
+														<a href="/admin/users">User Management</a>
+													</li>
+													<li>
+														<a href="/admin/groups">Groups Management</a>
+													</li>
+													<li>
+														<a href="/admin/pages">Page Permissions</a>
+													</li>
+													<li>
+														<a href="/admin/settings">Site Settings</a>
+													</li>
+													<li>
+														<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
+													</li>
+													{checkPermission("feedback")?
+														<li>
+															<a href="/feedback">Feedback</a>
+														</li>:""}
+											</ul>
+										</li>
+										:""}
 									{checkPermission("contacts")?
 										<li>
 											<a href="/contacts">Contact Dashboard</a>

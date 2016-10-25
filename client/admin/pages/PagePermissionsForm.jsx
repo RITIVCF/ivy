@@ -22,7 +22,7 @@ export default class PagePermissionsForm extends TrackerReact(React.Component) {
 					</nav>
 				</div>
 				<div className="col-sm-9 col-lg-10">
-					<h1>Page Permissions Dashboard</h1>
+					<h1>Page Permissions</h1>
 					{this.getPages().map( (page) => {
 						return <Page page={page} />
 					})}

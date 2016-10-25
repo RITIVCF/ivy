@@ -42,6 +42,7 @@ import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
+import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 
@@ -110,6 +111,14 @@ FlowRouter.route('/admin/settings', {
 	action() {
 		mount(MainLayout, {
 			content: <SiteSettingsWrapper />
+		})
+	}
+});
+
+FlowRouter.route('/admin/users', {
+	action() {
+		mount(MainLayout, {
+			content: <UserManagementWrapper />
 		})
 	}
 });
