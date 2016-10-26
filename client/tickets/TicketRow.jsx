@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 //    tkt:  ticket
 export default class TicketRow extends Component {
   getUser(){
-    console.log(this);
+    //console.log(this);
     if(this.props.tkt.assigneduser==""){
       return {name:""};
     }

@@ -28,9 +28,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
   changeFilter(){
 		//this.state.filter = this.refs.filter.value;
 		//this.setState({filter: this.refs.filter.value});
-    // console.log("filter change");
-    // console.log(this.refs.filter.value);
-    // console.log(this.refs.sort.value);
+    // //console.log("filter change");
+    // //console.log(this.refs.filter.value);
+    // //console.log(this.refs.sort.value);
     // this.state.subscription.Contacts.stop();
     // this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
     //this.setState({subscription: {Contacts: Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value)}});
@@ -40,7 +40,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
   changeSort(){
 		//this.state.sort = this.refs.sort.value;
 		//this.setState({sort: this.refs.sort.value});
-    console.log("sort change");
+    //console.log("sort change");
     this.state.subscription.Contacts.stop();
     this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
 	}
@@ -64,7 +64,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     var csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Name, Email, Phone, Newsletter, How Hear, Status\n";
      this.contacts().forEach(function(contact){
-       console.log(contact);
+       //console.log(contact);
        var dataString = "";
        dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
        dataString += contact.newsletter ? "Yes":"No";
@@ -76,21 +76,21 @@ export default class ContactSummary extends TrackerReact(React.Component) {
        dataString += "\n";
        csvContent += dataString;
      });
-     console.log(csvContent);
+     //console.log(csvContent);
      var encodedUri = encodeURI(csvContent);
-     console.log("encoded");
+     //console.log("encoded");
      var link = document.createElement("a");
-     console.log("document created");
-     console.log(link);
+     //console.log("document created");
+     //console.log(link);
      link.setAttribute("href", encodedUri);
-     console.log("href set");
+     //console.log("href set");
      link.setAttribute("download", "All Contacts.csv");
-     console.log("filename set");
+     //console.log("filename set");
      document.body.appendChild(link); // Required for FF
-     console.log("appended");
+     //console.log("appended");
 
      link.click(); // This will download the data file named "my_data.csv".
-     console.log("clicked");
+     //console.log("clicked");
   }
 
 
@@ -164,14 +164,14 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                 </thead>
                 <tbody>
                   {this.contacts().map( (contact, i) => {
-                    console.log(i);
+                    //console.log(i);
                     if(this.refs.sort){
                       if(this.refs.sort.value == "Status"){
                         if(contact.member != status){
-                          console.log("Does not equal.");
-                          console.log(status);
+                          //console.log("Does not equal.");
+                          //console.log(status);
                           status = contact.member;
-                          console.log(status);
+                          //console.log(status);
                           i--;
                           return <tr key={status}><td colspan={5}>{status ? "Members":""}</td></tr>
                         }

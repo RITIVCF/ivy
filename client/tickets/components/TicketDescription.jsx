@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 
 var updDesc = _.throttle(
   function(tid, value){
-    console.log(value);
+    //console.log(value);
     //Meteor.call("updateTicketDescription", tid, value);
     Meteor.call("TicketDescriptionLock", tid, true);
   },500);
 
 var setDescFalse = _.debounce(function(thiz, tid, value){
-  console.log(thiz.state.editting);
+  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("updateTicketDescription", tid, value);
   Meteor.call("TicketDescriptionLock", tid, false);

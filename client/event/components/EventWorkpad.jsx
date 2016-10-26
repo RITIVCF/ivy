@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 
 var updWorkpad = _.throttle(
   function(eid, value)
-  {console.log(value);Meteor.call("updateEventWorkpad", eid, value);
+  {//console.log(value);
+    Meteor.call("updateEventWorkpad", eid, value);
     Meteor.call("EventWorkpadLock", eid, true);
   },500);
 
 var setWorkPadFalse = _.debounce(function(thiz, eid){
-  console.log(thiz.state.editting);
+  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventWorkpadLock", eid, false);
 }, 1000);
@@ -32,7 +33,7 @@ export default class EventWorkpad extends Component {
     this.setState({workpad:event.target.value});
     this.setState({editting: true});
     updWorkpad(this.props.ev._id, event.target.value);
-    //console.log(this);
+    ////console.log(this);
     setWorkPadFalse(this, this.props.ev._id);
 
   }
@@ -48,7 +49,7 @@ export default class EventWorkpad extends Component {
   }
 
   getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
+		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}

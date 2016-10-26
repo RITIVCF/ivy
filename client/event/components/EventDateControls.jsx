@@ -20,10 +20,10 @@ export default class EventDateControls extends TrackerReact(React.Component) {
   }
 
   updateStartDate(event){
-		//console.log(event);
+		////console.log(event);
 		//Meteor.call("updateEventStart", this.props.ev._id, new Date(this.refs.startdate.value+"T"+this.refs.starttime.value));
-    console.log(this);
-    console.log(this.refs.end.props.value);
+    //console.log(this);
+    //console.log(this.refs.end.props.value);
     Meteor.call("updateEventStart", this.props.ev._id, event);
     var difference = new moment(this.props.ev.end) - new moment(this.props.ev.start);
     Meteor.call("updateEventEnd", this.props.ev._id, new moment(event).add(moment.duration(difference))._d);
@@ -83,7 +83,7 @@ export default class EventDateControls extends TrackerReact(React.Component) {
   }
 
   getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
+		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}

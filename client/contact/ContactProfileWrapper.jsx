@@ -28,9 +28,9 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 
 					user: Meteor.subscribe("userSelf", {
 						onReady: function(){
-							console.log("Inside Callback");
-							console.log(this);
-							console.log(thiz);
+							//console.log("Inside Callback");
+							//console.log(this);
+							//console.log(thiz);
 							thiz.setState({
 								contact: Meteor.subscribe("contact", Meteor.user().contact)
 							});
@@ -55,12 +55,12 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 
 
 	componentWillUnmount() {
-		console.log(this.state);
+		//console.log(this.state);
 		this.state.subscription.Ethnicities.stop();
 		this.state.subscription.user.stop();
     this.state.subscription.contact.stop();
 		this.state.subscription.options.stop();
-		console.log("Wrapper unmounted");
+		//console.log("Wrapper unmounted");
   }
 
 
@@ -73,14 +73,14 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 		// 		contact: Meteor.subscribe("contact", FlowRouter.getParam('cid'))
 		// 	}
 		// };});
-		console.log("Wrapper Mounted");
+		//console.log("Wrapper Mounted");
 	}
 
 	render() {
 		/*
-		console.log(!this.state.contact);
-		console.log(this.state.contact);
-		console.log(this.state);
+		//console.log(!this.state.contact);
+		//console.log(this.state.contact);
+		//console.log(this.state);
 		if(!this.state.contact){
       return(<div></div>)
     }

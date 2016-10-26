@@ -3,8 +3,8 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 var grpUpdateName = _.debounce(
 	function(thiz, value){
-	console.log(thiz);
-	console.log(value);
+	//console.log(thiz);
+	//console.log(value);
 	Meteor.call("updateGroupName", thiz.props.group._id, value);
 }, 1000);
 

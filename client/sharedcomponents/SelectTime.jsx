@@ -141,7 +141,7 @@ export default class SelectTime extends TrackerReact(React.Component) {
 
   onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method }){
     /*
-    console.log(suggestion);
+    //console.log(suggestion);
     suggestion.component = this;
     this.props.updateTime(suggestion);
     */
@@ -149,7 +149,7 @@ export default class SelectTime extends TrackerReact(React.Component) {
 
 
   onChange(event, { newValue, method }) {
-    console.log(method);
+    //console.log(method);
     /*if(method != 'tab'){
       this.props.unset();
     }*/

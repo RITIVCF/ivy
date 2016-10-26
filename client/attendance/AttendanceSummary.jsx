@@ -12,7 +12,7 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
     this.state = {
       num: 10
     };
-    console.log(this.state.num);
+    //console.log(this.state.num);
     this.state = {
       subscription:{
         Events: Meteor.subscribe("pastEvents", this.state.num)
@@ -36,8 +36,8 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
   loadMore(){
     event.preventDefault();
-    console.log("loading more");
-    console.log(this.state.num);
+    //console.log("loading more");
+    //console.log(this.state.num);
     var incnum = this.state.num;
     this.state.num = this.state.num + 10;
     this.state.subscription.Events = Meteor.subscribe("pastEvents", this.state.num);
@@ -70,6 +70,7 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
             }):""}
             {Events.find().fetch().length >= this.state.num ?
             <button onClick={this.loadMore.bind(this)}>Load More</button>
+
             :<div></div>}
 					</div>
 				</div>

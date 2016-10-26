@@ -12,8 +12,8 @@ export default class FeedbackForm extends TrackerReact(React.Component) {
 
 	submit(event){
 		event.preventDefault();
-		console.log(this);
-		console.log(event);
+		//console.log(this);
+		//console.log(event);
 		this.setState({error: false});
 		this.setState({success: false});
 		var thiz = this;

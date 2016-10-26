@@ -15,8 +15,8 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
   addMember(event){
     event.preventDefault();
-    console.log(event.target.value);
-    console.log(this);
+    //console.log(event.target.value);
+    //console.log(this);
     var cid = Meteor.user().contact;
 
     Meteor.call("updateGender", cid, this.refs.gender.value);
@@ -31,7 +31,7 @@ export default class MemberForm extends TrackerReact(React.Component) {
     Meteor.call("updateGradTerm", cid, this.refs.gradterm.value);
     Meteor.call("updateCurrYear", cid, this.refs.year.value);
 
-    //console.log(this.refs.affiliations);
+    ////console.log(this.refs.affiliations);
 
 
     for (var property in this.refs) {   // iterate over properties
@@ -55,7 +55,7 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
     check(event){
       event.preventDefault();
-      console.log(this);
+      //console.log(this);
     }
 
     ethnicities() {

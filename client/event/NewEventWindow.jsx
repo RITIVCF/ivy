@@ -34,10 +34,10 @@ export default class NewEventWindow extends Component
       var component = this;
       Meteor.call("addBlankEvent", function(error, result){
         if(error){
-          console.log(error.reason);
+          //console.log(error.reason);
           return;
         }
-        console.log("Event ID:" + result);
+        //console.log("Event ID:" + result);
         component.setState({"id":result});
       });
       this.setState({overlayState:""});
@@ -49,7 +49,7 @@ export default class NewEventWindow extends Component
     }
 
     /*getEvent(){
-  		//console.log(Events.find({_id: this.props.eid}).fetch());
+  		////console.log(Events.find({_id: this.props.eid}).fetch());
   		//return Events.find({_id: this.props.eid}).fetch();
   		return Events.findOne(this.props.eid);
   	}*/

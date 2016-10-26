@@ -25,10 +25,10 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
   createNew(event){
     event.preventDefault();
-    console.log(event);
-    console.log(this);
+    //console.log(event);
+    //console.log(this);
     //creates a new event and opens event details in event workspace
-    console.log("This button creates a new church");
+    //console.log("This button creates a new church");
     /*Meteor.call('addBlankChurch', function(error, result){
       if(error){
         console.log(error.reason);

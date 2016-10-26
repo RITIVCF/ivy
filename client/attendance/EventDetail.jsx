@@ -21,7 +21,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		csvContent += "Event Name:,"+this.props.ev.name+"\n";
 		csvContent += "Name, Email, Phone, First Time?, Learn More?, How did you hear about us?, Newsletter, Status\n";
 		 this.getAttendees().forEach(function(contact){
-			 console.log(contact);
+			 //console.log(contact);
 			 var dataString = "";
 			 dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
 			 dataString += contact.firsttime ? "Yes":"No";
@@ -72,7 +72,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 					});
 		}
 
-		console.log(this.props.ev.attendees);
+		//console.log(this.props.ev.attendees);
 
 		if(this.state.filter=="Yes"){
 			return this.props.ev.attendees.filter(attendee => attendee.firsttime == true);
@@ -86,7 +86,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	getCountNew(){
 		var count = 0;
 		for(i=0;i<this.props.ev.attendees.length;i++){
-			console.log(this.props.ev.attendees[i]);
+			//console.log(this.props.ev.attendees[i]);
 			if(this.props.ev.attendees[i].firsttime){
 				count += 1;
 			}
@@ -113,7 +113,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	render() {
 
 	let ev = this.props.ev;
-	console.log(ev);
+	//console.log(ev);
 	//this.state.ev= ev;
 	/*
 	if(!ev){

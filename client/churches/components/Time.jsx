@@ -14,7 +14,7 @@ export default class Time extends Component {
 
   edit(event){
     event.preventDefault();
-    console.log("Begin edit.");
+    //console.log("Begin edit.");
     this.setState({
       editting: true
     });
@@ -27,7 +27,7 @@ export default class Time extends Component {
      this.props.time.time,
      this.refs.day.value,
      this.refs.time.state.value);
-    console.log(this.refs.time.state.value);
+    //console.log(this.refs.time.state.value);
     this.setState({
       editting: false
     });

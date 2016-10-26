@@ -29,15 +29,15 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
   }
 
   checkPasswords(){
-    console.log(this.refs.loginPassword.value);
-    console.log(this.refs.loginPasswordCheck.value);
+    //console.log(this.refs.loginPassword.value);
+    //console.log(this.refs.loginPasswordCheck.value);
     if(this.refs.loginPassword.value==this.refs.loginPasswordCheck.value){
-      console.log("Password Check: true");
+      //console.log("Password Check: true");
       this.setState({passwordcheck: true});
       return true;
     }
     else{
-      console.log("Password Check: false");
+      //console.log("Password Check: false");
       this.setState({passwordcheck: false});
       return false;
     }
@@ -82,7 +82,7 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
 
   setUsername(event){
     event.preventDefault();
-    console.log(Meteor.userId());
+    //console.log(Meteor.userId());
     Meteor.call("setUserUsername", this.refs.username.value);
     FlowRouter.go("/");
   }

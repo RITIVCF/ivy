@@ -21,19 +21,19 @@ export default class EventSummary extends TrackerReact(React.Component) {
   */
   createNew(event){
     event.preventDefault();
-    console.log(event);
-    console.log(this);
+    //console.log(event);
+    //console.log(this);
     var component = this;
     //creates a new event and opens event details in event workspace
-    console.log("This button creates a new event");
+    //console.log("This button creates a new event");
     Meteor.call('addBlankEvent', function(error, result){
       if(error){
-        console.log(error.reason);
+        //console.log(error.reason);
         return;
       }
-      console.log("Event ID: " + result);
-      console.log(this);
-      console.log(component);
+      //console.log("Event ID: " + result);
+      //console.log(this);
+      //console.log(component);
       //location.assign("/events/workspace/"+result);
       FlowRouter.go("/events/workspace/"+result);
     //this.Session.set("eventId",result);

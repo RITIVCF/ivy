@@ -52,28 +52,28 @@ export default class SelectGroup extends TrackerReact(React.Component) {
       };
 
 
-    console.log(this.state.value);
-    console.log(props.initialValue);
-    console.log(props.id);
+    //console.log(this.state.value);
+    //console.log(props.initialValue);
+    //console.log(props.id);
     if(props.initialValue){
       //this.setState({value:this.props.initialValue});
       this.state.value = props.initialValue;
       //this.state.initialValue = props.initialValue;
     }
-    console.log(this.state.value);
+    //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
 shouldComponentUpdate(nextProps, nextState){
-  //console.log("this state: "+ this.state.value);
-  //console.log("next state: "+ nextState.value)
+  ////console.log("this state: "+ this.state.value);
+  ////console.log("next state: "+ nextState.value)
   if(this.state.value=nextState.value){
-    console.log(this.props.initialValue);
+    //console.log(this.props.initialValue);
     //if(!(this.state.initialValue == this.props.initialValue)){
       this.state.value=nextProps.initialValue;
-      //console.log("Component updated");
+      ////console.log("Component updated");
     //}
   }
   return true;
@@ -81,7 +81,7 @@ shouldComponentUpdate(nextProps, nextState){
 
   onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method }){
     // I need to do something with suggestion. This holds the contact info.
-    console.log(suggestion);
+    //console.log(suggestion);
     //this.setState({value:suggestion.name});
     suggestion.component = this;
     this.props.updateContact(suggestion);
@@ -89,13 +89,13 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onChange(event, { newValue, method }) {
-    console.log(method);
+    //console.log(method);
     if(method != 'tab'){
       this.props.unset();
     }
     const value = event.target.value;
-    console.log("value");
-    console.log(value);
+    //console.log("value");
+    //console.log(value);
     if(typeof newValue !== 'undefined') {
         this.setState({
             value: newValue

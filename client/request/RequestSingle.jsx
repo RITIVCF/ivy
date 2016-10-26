@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 export default class RequestSingle extends Component {
   getUser(){
-    console.log(this);
+    //console.log(this);
     if(this.props.request.assigneduser==""){
       return {name:"-"};
     }

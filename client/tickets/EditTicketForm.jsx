@@ -23,9 +23,9 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     if(id=="Ivy System"){
       return "Ivy System";
     }
-    console.log(id);
-    console.log(Meteor.users.findOne(id).contact);
-    console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
+    //console.log(id);
+    //console.log(Meteor.users.findOne(id).contact);
+    //console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
     return Contacts.findOne(Meteor.users.findOne(id).contact).name;
   }
 
@@ -52,7 +52,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   updateAssignedU(user){
     //this.state.assigned = user;
-    console.log(user);
+    //console.log(user);
     Meteor.call("updateTicketAssignedUser", this.props.ticket._id, user._id);
   }
 
@@ -64,7 +64,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   updateAssignedG(group){
     //this.state.assigned = user;
-    console.log(group);
+    //console.log(group);
     Meteor.call("updateTicketAssignedGroup", this.props.ticket._id, group._id);
   }
 
@@ -108,7 +108,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   }
 
   updateCust(user){
-    console.log(user);
+    //console.log(user);
     Meteor.call("updateTicketCustomer", this.props.ticket._id, user._id);
   }
   unset(){

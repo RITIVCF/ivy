@@ -5,9 +5,9 @@ export default class Permission extends Component
 {
 
   changePerm(event){
-    console.log(event);
-    console.log(event.target);
-    console.log(this.refs[this.props.perm.id+"_edit"].value);
+    //console.log(event);
+    //console.log(event.target);
+    //console.log(this.refs[this.props.perm.id+"_edit"].value);
 
     if(event.target.value == "edit"){
       if(this.props.type=="users"){

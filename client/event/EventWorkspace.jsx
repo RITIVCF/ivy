@@ -73,15 +73,15 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 
 
 	getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
+		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
 
 		return Events.findOne(this.props.eid);
 	}
 
 	checkGroup(id){
-		console.log(this.state.groups);
-		console.log(this.state.groups.indexOf(id));
+		//console.log(this.state.groups);
+		//console.log(this.state.groups.indexOf(id));
 		return this.state.groups.indexOf(id)>-1;
 	}
 
@@ -101,10 +101,10 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 			break;
 		}
 	}
-	console.log(ev.permGroup);
+	//console.log(ev.permGroup);
 	for(i=0; i < ev.permGroup.length; i++){
 		if(this.checkGroup(ev.permGroup[i].id)){
-			console.log("true");
+			//console.log("true");
 			view = true;
 			perm = ev.permGroup[i].edit||perm;
 			break;

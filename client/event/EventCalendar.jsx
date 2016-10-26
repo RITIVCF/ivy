@@ -64,7 +64,7 @@ export default class EventCalendar extends Component {
        }
      });
 
-    console.log(calendar.clientWidth);
+    //console.log(calendar.clientWidth);
   }
 
   componentWillUnmount() {

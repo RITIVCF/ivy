@@ -64,12 +64,12 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 
 
 	componentWillUnmount() {
-		console.log(this.state);
+		//console.log(this.state);
 		this.state.subscription.Ethnicities.stop();
 		this.state.subscription.user.stop();
     this.state.subscription.contact.stop();
 		this.state.subscription.options.stop();
-		console.log("Wrapper unmounted");
+		//console.log("Wrapper unmounted");
   }
 
 
@@ -82,7 +82,7 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 		// 		contact: Meteor.subscribe("contact", FlowRouter.getParam('cid'))
 		// 	}
 		// };});
-		console.log("Wrapper Mounted");
+		//console.log("Wrapper Mounted");
 	}
 
 	render() {

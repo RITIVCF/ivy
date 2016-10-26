@@ -36,7 +36,7 @@ export default class NewEventWindow extends Component
 
     closeOverlay(){
       this.setState({overlayState:"hidden"});
-      console.log(this.state.id);
+      //console.log(this.state.id);
     }
 
     delete(){
@@ -45,7 +45,7 @@ export default class NewEventWindow extends Component
     }
 
     /*getEvent(){
-  		//console.log(Events.find({_id: this.props.eid}).fetch());
+  		////console.log(Events.find({_id: this.props.eid}).fetch());
   		//return Events.find({_id: this.props.eid}).fetch();
   		return Events.findOne(this.props.eid);
   	}*/

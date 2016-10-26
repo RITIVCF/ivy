@@ -11,7 +11,7 @@ export default class NewContactForm extends Component {
 
   submit(event){
     event.preventDefault();
-    console.log(this);
+    //console.log(this);
     var newsletter = this.refs.newsletter.checked;
     var thiz = this;
     Meteor.call("newContact",

@@ -24,7 +24,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
                  {end: {$gt: end}}
                ]}
          ]}, function() {
-           console.log("Subscription update");
+           //console.log("Subscription update");
            Session.set("calendarUpdate", true);
          });
      });

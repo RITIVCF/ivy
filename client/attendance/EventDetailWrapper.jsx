@@ -53,7 +53,7 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 		if(this.state.subscription.Events.ready()&&this.state.subscription.Contacts.ready()&&this.state.subscription.Tickets.ready()){
 			ev = this.getEvent();
 		}
-	console.log(ev);
+	//console.log(ev);
 
 	if(!ev){
 		return (<div>Loading...</div>);

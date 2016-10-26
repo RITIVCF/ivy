@@ -17,7 +17,7 @@ export default class SignIn extends TrackerReact(React.Component){
   submit(event){
     event.preventDefault();
     var thiz = this;
-    console.log(this.state);
+    //console.log(this.state);
     var eid = this.props.ev._id;
     var contact = this.state.contact;
     var evname = this.props.ev.name;
@@ -49,7 +49,7 @@ export default class SignIn extends TrackerReact(React.Component){
             eid,
             function(errr, tktId){
               if(errr){
-                console.log(errr.reason);
+                //console.log(errr.reason);
                 return;
               }
               Meteor.call("createAttendanceRecord",
@@ -110,23 +110,23 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   update(contt){
-    console.log("Suggestion Selected. Print autosuggest return object.");
-    console.log(contt);
+    //console.log("Suggestion Selected. Print autosuggest return object.");
+    //console.log(contt);
     //this.state.contact = contt;
     this.setState({contact: contt});
     //this.state.new = false;
     this.setState({new: false});
-    console.log("print state");
-    console.log(this.state);
+    //console.log("print state");
+    //console.log(this.state);
     this.refs.email.value = contt.email;
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});
-    //console.log(this);
+    ////console.log(this);
   }
 
   log(){
-    console.log(this.state);
+    //console.log(this.state);
   }
 
   setNew(){
@@ -136,7 +136,7 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   unset(){
-    console.log(this);
+    //console.log(this);
     //this.state.contact = false;
     this.setState({new: true});
     this.setState({contact: false});

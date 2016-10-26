@@ -2,12 +2,13 @@ import React, {Component} from 'react';
 
 var updDescription = _.throttle(
   function(eid, value)
-  {console.log(value);Meteor.call("updateEventDescription", eid, value);
+  {//console.log(value);
+    Meteor.call("updateEventDescription", eid, value);
     Meteor.call("EventDescriptionLock", eid, true);
   },500);
 
 var setDescFalse = _.debounce(function(thiz, eid){
-  console.log(thiz.state.editting);
+  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventDescriptionLock", eid, false);
 }, 1000);
@@ -44,7 +45,7 @@ export default class EventDescription extends Component {
   }
 
   getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
+		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}

@@ -33,7 +33,7 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
     if(!this.state.contact){
       return;
     }
-    console.log(this.state.contact);
+    //console.log(this.state.contact);
     Meteor.call("createNewUser", this.state.contact.email, this.state.contact._id);
     this.setState({submitted: true});
 

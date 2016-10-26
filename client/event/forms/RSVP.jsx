@@ -56,7 +56,7 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
     this.state.contact = contt;
     this.refs.email.value = this.state.contact.email;
     this.refs.phone.value = this.state.contact.phone;
-    console.log(this);
+    //console.log(this);
   }
 
   unset(){

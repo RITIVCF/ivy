@@ -77,10 +77,12 @@ export default class Navbar extends TrackerReact(React.Component) {
 												<span className="caret"></span>
 											</a>
 											<ul className="dropdown-menu">
+												{/*
 													<li>
 														<a href="/admin">Dashboard</a>
 													</li>
 													<li role="separator" className="divider"></li>
+													*/}
 													<li>
 														<a href="/admin/users">User Management</a>
 													</li>

@@ -46,18 +46,18 @@ export default class ContactProfile extends TrackerReact(React.Component){
 
 
   contactDetails() {
-    console.log("cid:");
-    console.log(this.props.cid);
+    ////console.log("cid:");
+    ////console.log(this.props.cid);
     if(typeof this.props.cid === 'undefined'){
-        console.log("Undefined so get from Meteor.user()");
-        console.log(Meteor.user());
-        console.log("All contacts");
-        console.log(Contacts.find().fetch());
-        console.log("user().contact:");
-        console.log(Meteor.user().contact);
+        //console.log("Undefined so get from Meteor.user()");
+        //console.log(Meteor.user());
+        //console.log("All contacts");
+        //console.log(Contacts.find().fetch());
+        //console.log("user().contact:");
+        //console.log(Meteor.user().contact);
         return Contacts.findOne(Meteor.user().contact); //s.find({_id : Meteor.userId()}).fetch();
     }
-    console.log("not undefined so get contact:");
+    //console.log("not undefined so get contact:");
     return Contacts.findOne(this.props.cid);
 	}
 
@@ -81,7 +81,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
   remove(){
     if(confirm("Only remove a contact if it is a mistake creation.")){
       Meteor.call("removeContact", this.props.cid);
-      //console.log("confirmed");
+      ////console.log("confirmed");
     }
   }
 
@@ -92,8 +92,8 @@ export default class ContactProfile extends TrackerReact(React.Component){
     var contact;
     var disable = true;
     var viewmember = false;
-    //console.log(this.state.subscription.user.ready());
-    console.log("contact:");
+    ////console.log(this.state.subscription.user.ready());
+    //console.log("contact:");
     if(this.props.parent.state.subscription.contact.ready()){
       contact = this.contactDetails();
       if(Meteor.user().contact == contact._id||checkPermission("contactdetails")){
@@ -104,7 +104,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
       }
     }
     //let contact = this.contactDetails();
-    //console.log(contact);
+    ////console.log(contact);
     if(this.props.parent.state.subscription.contact.ready()&&contact){
         document.title = (this.props.cid==='undefined') ? "Ivy - My Profile" : "Ivy - "+contact.name+"'s Profile";
     }

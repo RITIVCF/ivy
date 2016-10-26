@@ -16,14 +16,14 @@ export default class Attendee extends TrackerReact(React.Component) {
     if(this.state.ran){
       return;
     }
-    console.log("go");
+    //console.log("go");
     FlowRouter.go("/contacts/"+this.props.contact._id);
   }
 
 
 
   viewTicket(){
-    console.log("viewTIcket");
+    //console.log("viewTIcket");
     this.state.ran = true;
     FlowRouter.go("/tickets/"+this.props.contact.ticket);
   }
@@ -38,7 +38,7 @@ export default class Attendee extends TrackerReact(React.Component) {
 
     var status = "";
     if(ticket){
-      console.log(ticket.status);
+      //console.log(ticket.status);
       if(ticket.status == "Closed"){
         status = "success";
       }

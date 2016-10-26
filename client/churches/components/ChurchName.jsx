@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 export default class ChurchName extends Component {
   updateName(event){
 		event.preventDefault();
-		console.log("Name: "+this.refs.name);
+		//console.log("Name: "+this.refs.name);
 		Meteor.call("updateChurchName", this.props.ch._id, this.refs.name.value);
 		//this.state.value = this.refs.name;
 	}

@@ -179,7 +179,7 @@ export default class PermissionWindow extends Component
     }
 
     printState(){
-      console.log(this.state);
+      //console.log(this.state);
     }
 
     render()
@@ -189,10 +189,10 @@ export default class PermissionWindow extends Component
       }
         var event = this.props.ev; //parent.getEvent();
         var owner = Meteor.users.findOne(event.owner);//event.username;
-        console.log("Event Owner: "+ event.owner);
-        console.log("Event Owner: "+ owner.contact);
+        //console.log("Event Owner: "+ event.owner);
+        //console.log("Event Owner: "+ owner.contact);
         var name = Contacts.findOne(owner.contact).name;
-        console.log(name);
+        //console.log(name);
         var permUsers = event.permUser;
         var permGroups = event.permGroup;
 

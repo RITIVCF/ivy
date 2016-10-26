@@ -15,7 +15,7 @@ export default class Address extends Component {
     if(this.props.disabled){
       return;
     }
-    console.log("Begin edit.");
+    //console.log("Begin edit.");
     this.setState({
       editting: true
     });

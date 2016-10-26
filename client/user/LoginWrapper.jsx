@@ -4,7 +4,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class LoginWrapper extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
-    console.log(props.route);
+    //console.log(props.route);
     this.state = {
       forgot: false
     }
@@ -34,14 +34,14 @@ export default class LoginWrapper extends TrackerReact(React.Component){
     var passwordVar = event.target.loginPassword.value;
     var thiz = this;
     Meteor.loginWithPassword(userVar, passwordVar, function(error){
-      console.log("Callback returned.");
+      //console.log("Callback returned.");
       if(error){
-        console.log("Error true.");
+        //console.log("Error true.");
         thiz.setState({forgot: true});
         thiz.refs.password.value = "";
       }
       else{
-        console.log("error not true");
+        //console.log("error not true");
         thiz.go();
       }
     });

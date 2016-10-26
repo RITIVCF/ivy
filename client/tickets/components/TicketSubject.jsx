@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 
 var updSub = _.throttle(
   function(tid, value){
-    console.log(value);
+    //console.log(value);
     //Meteor.call("updateTicketSubject", tid, value);
     Meteor.call("TicketSubjectLock", tid, true);
   },500);
 
 var setSubFalse = _.debounce(function(thiz, tid, value){
-  console.log(thiz.state.editting);
+  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("updateTicketSubject", tid, value);
   Meteor.call("TicketSubjectLock", tid, false);

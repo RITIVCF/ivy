@@ -59,7 +59,7 @@ export default class NewTicketWindow extends Component
 
     createClose(){
       this.setState({overlayState:"hidden"});
-      console.log(this);
+      //console.log(this);
       if(!this.state.eid){
         Meteor.call("addTicket",
         this.refs.subj.value,

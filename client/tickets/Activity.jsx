@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 //    tkt:  ticket
 export default class Activity extends Component {
   getUser(){
-    console.log(this);
+    //console.log(this);
     if(this.props.activity.user==""){
       return {name:""};
     }
