@@ -60,7 +60,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 						</nav>
 					</div>
 					<div className="col-sm-9 col-lg-10">
-            {FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:""}
+            {this.state.subscription.Events.ready()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""}
             {this.state.subscription.Events.ready()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
 					</div>
 				</div>
