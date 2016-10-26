@@ -40,8 +40,6 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    
-    console.log("ready");
     return(
       <div>
         {this.events().map( (ivevent)=>{

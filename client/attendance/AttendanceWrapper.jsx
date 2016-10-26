@@ -11,12 +11,9 @@ import EventDetail from './EventDetail.jsx';
 export default class AttendanceWrapper extends TrackerReact(React.Component) {
   constructor() {
     super();
-    console.log("Attendance Summary initiating.");
     this.state = {
       num: 10
     };
-    console.log("state num:");
-    console.log(this.state.num);
     this.state = {
       subscription:{
         Events: Meteor.subscribe("pastEvents", this.state.num),
@@ -25,12 +22,9 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
       },
       num:10
     };
-    console.log("Summary State");
-    console.log(this.state);
   }
 
   componentWillUnmount() {
-    console.log("unmounting");
     this.state.subscription.Events.stop();
     this.state.subscription.Tickets.stop();
 		this.state.subscription.Contacts.stop();
