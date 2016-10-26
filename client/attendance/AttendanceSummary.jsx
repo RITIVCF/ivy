@@ -9,21 +9,10 @@ import EventSingle from './EventSingle.jsx';
 export default class AttendanceSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
-    this.state = {
-      num: 10
-    };
-    //console.log(this.state.num);
-    this.state = {
-      subscription:{
-        Events: Meteor.subscribe("pastEvents", this.state.num)
-      },
-      num:10
-    };
+
   }
 
-  componentWillUnmount() {
-    this.state.subscription.Events.stop();
-  }
+
 
   // componentDidMount(){
   //   console.log("logging state");
@@ -51,30 +40,18 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title= "Ivy - Attendance Dashboard";
-    if(!checkPermission("attendance")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-		}
-		return (
-      <div className="container-fluid">
-				<div className="row">
-					<div className="col-sm-3 col-lg-2">
-						<nav className="navbar navbar-default navbar-fixed-side">
+    
+    console.log("ready");
+    return(
+      <div>
+        {this.events().map( (ivevent)=>{
+            return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
+        })}
+        {/*Events.find().fetch().length >= this.state.num ?
+        <button onClick={this.loadMore.bind(this)}>Load More</button>
 
-						</nav>
-					</div>
-					<div className="col-sm-9 col-lg-10">
-            <h1>Attendance Dashboard</h1>
-            {this.state.subscription.Events.ready() ? this.events().map( (ivevent)=>{
-                return <EventSingle key={ivevent._id} ivevent={ivevent} parent={this}/>
-            }):""}
-            {Events.find().fetch().length >= this.state.num ?
-            <button onClick={this.loadMore.bind(this)}>Load More</button>
-
-            :<div></div>}
-					</div>
-				</div>
-			</div>
-  )
+        :<div></div>*/}
+      </div>
+        )
 	}
 }

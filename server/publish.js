@@ -43,6 +43,7 @@ Meteor.publish("publishedEvents", function(){
 });
 
 Meteor.publish("pastEvents", function(lim){
+  console.log(lim);
   if(lim == 0){
     return Events.find({published: true, start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d} },{
       sort: {start:-1} // Sorts descending chronologically by start
