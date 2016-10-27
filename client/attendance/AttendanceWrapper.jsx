@@ -30,6 +30,10 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 		this.state.subscription.Contacts.stop();
   }
 
+  subsReady(){
+    return (this.state.subscription.Events.ready()&&this.state.subscription.Tickets.ready()&&this.state.subscription.Contacts.ready())?true:false
+  }
+
   getEvent(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
@@ -48,20 +52,21 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 	render() {
     //document.title= "Ivy - Attendance Dashboard";
     if(!checkPermission("attendance")){
+      console.log("false");
 			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
-
+    console.log("true");
 		return (
       <div className="container-fluid">
 				<div className="row">
 					<div className="col-sm-3 col-lg-2">
 						<nav className="navbar navbar-default navbar-fixed-side">
-              {this.state.subscription.Events.ready()?FlowRouter.current().path=="/attendance"?<div></div>:<AttendanceSummary />:<div></div>}
+              {this.subsReady()?FlowRouter.current().path=="/attendance"?<div></div>:<AttendanceSummary />:<div></div>}
 						</nav>
 					</div>
 					<div className="col-sm-9 col-lg-10">
-            {this.state.subscription.Events.ready()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""}
-            {this.state.subscription.Events.ready()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
+            {this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""}
+            {this.subsReady()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
 					</div>
 				</div>
 			</div>

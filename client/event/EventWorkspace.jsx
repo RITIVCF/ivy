@@ -86,6 +86,9 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	}
 
 	render() {
+		if(!checkPermission('events')){
+			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+		}
 	let ev = this.getEvent();
 
 	if(!ev){

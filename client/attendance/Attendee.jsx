@@ -13,6 +13,9 @@ export default class Attendee extends TrackerReact(React.Component) {
   }*/
 
   go(){
+    if(!checkPermission("contacts")){
+      return;
+    }
     if(this.state.ran){
       return;
     }

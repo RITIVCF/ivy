@@ -314,6 +314,11 @@ Meteor.publish("thisTicket", function(tid){
   return Tickets.find({_id: tid});
 });
 
+Meteor.publish("ticket", function(cid){
+  var contact = Contacts.findOne(cid);
+  return Tickets.find({_id: contact.ticket});
+});
+
 Meteor.publish("allOptions", function(){
   return Options.find();
 });

@@ -43,8 +43,8 @@ export default class CampusAffiliations extends TrackerReact(React.Component){
       return (<div></div>)
     }
   	var tags = this.props.contact.affiliations;
-    console.log(this.props.subscription);
-    console.log(this.props.subscription.ready());
+    //console.log(this.props.subscription);
+    //console.log(this.props.subscription.ready());
     return(
       <div>
     {this.props.subscription.ready() ? this.getAffiliations().map( (tag)=>{

@@ -85,6 +85,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
     }
   }
 
+  getTicket(){
+    return Tickets.findOne(this.contactDetails().ticket);
+  }
 
 
 
@@ -120,7 +123,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
         <div className="row">
   				<div className="col-sm-3 col-lg-2">
   					<nav className="navbar navbar-default navbar-fixed-side">
-
+              {checkPermission("tickets")&&this.props.parent.state.subscription.contact.ready()&&contact.ticket&&(contact._id!=Meteor.user().contact)?
+                <div><p>Ticket #: {this.getTicket().ticketnum}</p><a href={"/tickets/"+contact.ticket}><button className="btn btn-primary">Go to Ticket</button></a></div>
+                :""}
   					</nav>
   				</div>
           <div className="col-sm-9 col-lg-10">

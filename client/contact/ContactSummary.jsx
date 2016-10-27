@@ -104,6 +104,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
 	render() {
+    if(!checkPermission("contacts")){
+      return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+    }
     document.title="Ivy - Contact Dashboard";
     var status;
     var perm = checkPermission("ticket");

@@ -15,6 +15,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 				Ethnicities: Meteor.subscribe("allEthnicities"),
 				user: Meteor.subscribe("userSelf"),
 				contact: Meteor.subscribe("contact", FlowRouter.getParam('cid')),
+				ticket: Meteor.subscribe("ticket", FlowRouter.getParam('cid')),
 				options: Meteor.subscribe("allOptions")
 			}
 		};});
@@ -60,6 +61,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 		this.state.subscription.user.stop();
     this.state.subscription.contact.stop();
 		this.state.subscription.options.stop();
+		this.state.subscription.ticket.stop();
 		//console.log("Wrapper unmounted");
   }
 
@@ -90,6 +92,9 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 		/*if(!this.state.subscription.contact.ready()){
 			return(<div></div>)
 		}*/
+		if(!checkPermission("contacts")){
+			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+		}
 
 		return (
 		<div>
