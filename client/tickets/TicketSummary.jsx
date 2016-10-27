@@ -20,6 +20,10 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       filter: "assigneduser",
       ticketId: false
     };
+
+    if(!Session.get("ticketfilter")){
+      Session.set("ticketfilter", "assigneduser");
+    }
   }
 
   componentWillUnmount() {
@@ -37,7 +41,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
   filterChange(event){
     event.preventDefault();
-    this.setState({filter: this.refs.filter.value});
+    //this.setState({filter: this.refs.filter.value});
     Session.set("ticketfilter",this.refs.filter.value);
   }
 
