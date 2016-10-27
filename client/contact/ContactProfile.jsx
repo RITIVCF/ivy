@@ -86,7 +86,13 @@ export default class ContactProfile extends TrackerReact(React.Component){
   }
 
   getTicket(){
-    return Tickets.findOne(this.contactDetails().ticket);
+    var ticket = Tickets.findOne(this.contactDetails().ticket);
+    if(ticket){
+      return ticket;
+    }
+    else {
+      return {ticketnum: ''}
+    }
   }
 
 
