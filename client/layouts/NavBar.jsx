@@ -57,10 +57,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 									</ul>
 								</li>
 
-									{checkPermission("churches")?
-										<li>
-											<a href="/churches">Churches Dashboard</a>
-										</li>:""}
+
 									{checkPermission("tickets")?
 										<li>
 											<a href="/tickets">Ticket Dashboard</a>
@@ -68,6 +65,22 @@ export default class Navbar extends TrackerReact(React.Component) {
 									{/*}<li>
 										<a href="/groups">Group Admin</a>
 									</li>*/}
+
+									{checkPermission("contacts")?
+										<li>
+											<a href="/contacts">Contact Dashboard</a>
+										</li>:""}
+									{/*<li>
+										<a href="/sg">Small Groups Dashboard</a>
+									</li>*/}
+									{checkPermission("attendance")?
+										<li>
+											<a href="/attendance">Attendance Dashboard</a>
+										</li>:""}
+									{checkPermission("churches")?
+										<li>
+											<a href="/churches">Churches Dashboard</a>
+										</li>:""}
 									{checkPermission("admin")?
 										<li className="dropdown">
 											<a href="#" className="dropdown-toggle"
@@ -105,18 +118,6 @@ export default class Navbar extends TrackerReact(React.Component) {
 											</ul>
 										</li>
 										:""}
-									{checkPermission("contacts")?
-										<li>
-											<a href="/contacts">Contact Dashboard</a>
-										</li>:""}
-									{/*<li>
-										<a href="/sg">Small Groups Dashboard</a>
-									</li>*/}
-									{checkPermission("attendance")?
-										<li>
-											<a href="/attendance">Attendance Dashboard</a>
-										</li>:""}
-
 
 
 
