@@ -1,5 +1,5 @@
 import React from 'react';
-
+import NavBar from './NavBar.jsx';
 
 
 
@@ -9,22 +9,10 @@ import React from 'react';
 
 export const ErrorLayout = ({content}) => (
 	<div className="wrapper">
-				<nav className="navbar navbar-default" >
-					<div className="navbar-header">
-                <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target=".sidebar-collapse">
-                    <span className="sr-only">Toggle navigation</span>
-                    <span className="icon-bar"></span>
-                </button>
-                <a className="navbar-brand" href="/">Ivy: IVCF Webman</a>
-            </div>
-
-					<div className="header-right">
-
-					</div>
-				</nav>
+				<NavBar />
 
 
-        <main>
+        <main style={{paddingTop: '50px'}}>
 		    	{content}
         </main>
 				<footer>

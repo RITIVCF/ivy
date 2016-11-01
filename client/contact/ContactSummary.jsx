@@ -96,9 +96,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
   contacts(){
     if(this.state.filter == "All"){
-      return Contacts.find().fetch();
+      return Contacts.find({},{sort: {name: 1}}).fetch();
     }
-    return Contacts.find({status: this.state.filter}).fetch();
+    return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
 
   }
 
