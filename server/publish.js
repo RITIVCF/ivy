@@ -21,6 +21,8 @@ Meteor.publish("ownerEvents", function(){
 });
 
 Contacts.allow({update: function(){return true;}});
+Counters.allow({update: function(){return true;}});
+Tickets.allow({update: function(){return true;}});
 
 Meteor.publish("thisEvent", function(evid){
   return Events.find({_id: evid});
@@ -342,6 +344,7 @@ Meteor.publish("publicOptions", function(){
     {_id: "gradterms"},
     {_id: "campusaffiliations"},
     {_id: "communitylife"},
-    {_id: "ethnicities"}
+    {_id: "ethnicities"},
+    {_id: "ticketcontact"}
   ]});
 });
