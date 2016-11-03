@@ -68,6 +68,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 						<div className="panel-heading">
 							<h1>Manage Duplicate Contacts</h1>
 						</div>
+						{this.getContacts().length>1?
 						<div className="panel-body">
 							<div className="row">
 								<div className="col-md-12">
@@ -109,6 +110,12 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 								</div>
 							</div>
 						</div>
+						:
+						<div className="panel-body">
+							<div className="row">
+								<div className="col-md-12">Congrats! There are no duplicate contacts we can detect automatically.</div>
+							</div>
+						</div>}
 					</div>
 				</div>
 			</div>
