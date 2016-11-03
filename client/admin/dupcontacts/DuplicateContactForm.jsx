@@ -13,7 +13,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 	}
 
 	getContacts(){
-		return Contacts.find({},{sort:{name:1, email:1}}).fetch();
+		return Contacts.find({_id: {$ne: Meteor.user().contact}},{sort:{name:1, email:1}}).fetch();
 		//return PagePermissions.find().fetch();
 	}
 
