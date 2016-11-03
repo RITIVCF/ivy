@@ -56,17 +56,9 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 
 	render() {
 		return (
-		<div className="container-fluid">
-			<div className="row">
-				<div className="col-sm-3 col-lg-2">
-					<nav className="navbar navbar-default navbar-fixed-side">
 
-					</nav>
-				</div>
-				<div className="col-sm-9 col-lg-10">
 					<div className="panel panel-default">
 						<div className="panel-heading">
-							<h1>Manage Duplicate Contacts</h1>
 						</div>
 						{this.getContacts().length>1?
 						<div className="panel-body">
@@ -117,9 +109,6 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 							</div>
 						</div>}
 					</div>
-				</div>
-			</div>
-		</div>
 		)
 	}
 }

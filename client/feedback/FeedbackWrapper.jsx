@@ -30,9 +30,10 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
   				</nav>
   			</div>
   			<div className="col-sm-9 col-lg-10">
+          <h1>All Feedback</h1>
           <div className="panel panel-primary">
             <div className="panel-heading">
-              <h1>All Feedback</h1>
+
             </div>
             <div className="panel-body">
               {checkPermission("feedback")?<div>
