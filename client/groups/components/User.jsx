@@ -14,10 +14,18 @@ export default class Contact extends Component {
   render(){
     contact = this.getContact();
     return(
-      <tr>
-        <td><button onClick={this.remove.bind(this)}>X</button></td>
+      <tr id="hover-me">
         <td>{contact.name}</td>
-        <td>{contact.email}</td>
+        <td>
+          {contact.email}
+          <button
+            style={{float: "right"}}
+            className="btn btn-danger" 
+            id="hover-content"
+            onClick={this.remove.bind(this)}>
+              Remove
+          </button>
+        </td>
       </tr>
     )
   }

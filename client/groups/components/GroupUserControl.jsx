@@ -40,7 +40,6 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 			<table className="table table-striped">
 				<thead>
 					<tr>
-						<th>Remove</th>
 						<th>Name</th>
 						<th>Email</th>
 					</tr>

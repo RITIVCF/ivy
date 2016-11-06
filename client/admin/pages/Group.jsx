@@ -9,12 +9,17 @@ export default class Group extends Component {
 
   render() {
     return (
-      <tr>
-        <td>
-        {this.props.group.name=="Administrator" ?
-          "" :<button onClick={this.delete.bind(this)}>X</button>}
-          </td>
-        <td>{this.props.group.name}</td>
+      <tr id="hover-me">
+        <td>{this.props.group.name}
+          {this.props.group.name=="Administrator" ?
+            ""
+            :<button
+              style={{float: "right"}}
+              id="hover-content"
+              className="btn btn-danger"
+              onClick={this.delete.bind(this)}>Remove</button>
+          }
+        </td>
       </tr>
     )
   }

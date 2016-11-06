@@ -1,4 +1,9 @@
+import { Accounts } from 'meteor/accounts-base';
+
 Meteor.methods({
+  passReset(uid){
+      Accounts.sendResetPasswordEmail(uid);
+  },
   sendEventServiceRequest(uid,eid,pos){
     var contact = Contacts.findOne(Meteor.users.findOne(uid));
     var event = Events.findOne(eid);

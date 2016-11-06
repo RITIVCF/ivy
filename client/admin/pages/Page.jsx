@@ -43,7 +43,6 @@ export default class Page extends TrackerReact(React.Component) {
 						<table className="table table-striped">
 							<thead>
 								<tr>
-									<th>Remove</th>
 									<th>Group Name</th>
 								</tr>
 							</thead>
