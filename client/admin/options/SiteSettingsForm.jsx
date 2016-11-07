@@ -29,6 +29,13 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 		Meteor.call("setEventRequestGroupDefault", group._id);
 	}
 
+	changeCalendarView(event){
+		event.preventDefault();
+		console.log(event.target.value);
+		console.log(this.refs.defaultView.value);
+		Meteor.call("setDefaultCalendarView", this.refs.defaultView.value);
+	}
+
 	unset(){
 
 	}
@@ -70,7 +77,18 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 										 updateContact={this.updateEventRequestGroup.bind(this)}
 										 initialValue={this.getEventRequestGroupDefault()}
 										 ref={"eventrequesttype"}
-										 />
+										 /><br/>
+									 <label>Default Event Calendar View</label>
+	 									<select
+											value={Options.findOne("calendarview").val}
+											onChange={this.changeCalendarView.bind(this)}
+											className="form-control"
+											ref="defaultView"
+											>
+											<option value={"agendaWeek"}>Week Agenda</option>
+											<option value={"month"}>Month</option>
+											<option value={"agendaDay"}>Day Agenda</option>
+										</select>
 								</div>
 							</div>
 						</div>
@@ -81,7 +99,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 						</div>
 						<div className="panel-body">
 							{this.getOptions().map( (option) => {
-								return <Option option={option} />
+								return <Option key={option._id} option={option} />
 							})}
 						</div>
 					</div>

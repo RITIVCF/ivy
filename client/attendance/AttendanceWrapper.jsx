@@ -16,7 +16,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
     };
     this.state = {
       subscription:{
-        Events: Meteor.subscribe("pastEvents", this.state.num),
+        Events: Meteor.subscribe("publishedEvents"),
         Tickets: Meteor.subscribe("allTicketStatus"),
 				Contacts: Meteor.subscribe("allContacts")
       },
@@ -37,6 +37,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
   getEvent(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
+    console.log(this.state.subscription.Events.ready());
 		var ev = Events.findOne(this.props.eid);
 		var attendees = [];
 		var contact;

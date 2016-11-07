@@ -174,7 +174,7 @@ FlowRouter.route('/newcontact', {
 FlowRouter.route('/calendar', {
 	action() {
 		mount(MainLayout, {
-			content: (<EventCalendarSub />)
+			content: (<EventCalendarWrapper />)
 		})
 	}
 });

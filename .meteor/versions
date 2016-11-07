@@ -79,6 +79,7 @@ momentjs:moment@2.12.0
 mongo@1.1.10
 mongo-id@1.0.5
 mongo-livedata@1.0.12
+mrt:jquery-ui@1.9.2
 msavin:jetsetter@2.0.0
 msavin:mongol@2.0.1
 nemo64:bootstrap@3.3.5_3
@@ -102,7 +103,8 @@ reload@1.1.10
 retry@1.0.8
 reywood:bootstrap3-sass@3.3.5_2
 routepolicy@1.0.11
-rzymek:fullcalendar@2.7.2
+rzymek:fullcalendar@2.2.6
+rzymek:moment@2.8.3_10
 service-configuration@1.0.10
 session@1.1.6
 sha@1.0.8

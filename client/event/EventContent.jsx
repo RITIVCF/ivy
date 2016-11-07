@@ -48,35 +48,29 @@ export default class EventContent extends TrackerReact(React.Component) {
     }
 
     return (
-      <table>
-        <tbody>
-          <tr>
-            <td>Name:</td>
-            <td>{this.props.event.name}</td>
-          </tr>
-          <tr>
-            <td>Description:</td>
-            <td>{this.props.event.description}</td>
-          </tr>
-          <tr>
-            <td>Date:</td>
-            <td>{dateString}</td>
-          </tr>
-          <tr>
-            <td>Time:</td>
-            <td>{timeString}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="panel panel-default">
+        <div className="panel-heading">
+          {this.props.event.name}
+        </div>
+        <div className="panel-body">
+          <p>{this.props.event.description}</p>
+          <p>Date: {dateString}</p>
+          <p>Time: {timeString}</p>
+          <button onClick={this.go.bind(this)} className="btn btn-primary">Form</button>
+        </div>
+      </div>
     );
+  }
+
+  go(){
+    FlowRouter.go("/forms/signin/" + this.props.event._id);
   }
 
   render() {
     return (
       <div>
         {this.renderContent()}
-        <a href={"/forms/signin/" + this.props.event._id}><button>Form</button></a>
-        <a href={"/forms/rsvp/"+ this.props.event._id}><button>RSVP</button></a>
+        {/*}<a href={"/forms/rsvp/"+ this.props.event._id}><button>RSVP</button></a>*/}
       </div>
     )
   }

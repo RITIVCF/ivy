@@ -1,12 +1,31 @@
-import React, {Component} from 'react';
+import React from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
-import {Tracker} from 'meteor/tracker';
 import EventContent from './EventContent.jsx';
+//import {Tracker} from 'meteor/tracker';
 
-export default class EventCalendar extends Component {
+//    Order:
+//        - will mount
+//        - render
+//        - did mount
+//
 
-  openEvent(event) {
-    event.preventDefault();
+export default class EventCalendar extends TrackerReact(React.Component) {
+  constructor(){
+    super();
+    if(!Session.get("calendarview")){
+      Session.set("calendarview",Options.findOne("calendarview").val);
+    }
+    if(!Session.get("calendardate")){
+      Session.set("calendardate", moment()._d);
+    }
+    this.state = {
+       mounted: false
+    }
+  }
+
+  componentWillMount(){
+
   }
 
   renderPopoverContent(event) {
@@ -15,15 +34,25 @@ export default class EventCalendar extends Component {
     return div;
   }
 
-
-  componentDidMount() {
-    const { calendar } = this.refs;
+  componentDidMount(){
     $(calendar).fullCalendar({
-      events: this.props.events,
+      events: [],
       header: {
         left: "prev,next today",
         center: "title",
-        right:  "month,basicWeek,basicDay"    // maybe these can be controlled by settings later
+        right:  "month,agendaWeek,agendaDay,listWeek"    // maybe these can be controlled by settings later
+      },
+      defaultView: Session.get("calendarview"),
+      firstDay: 1,
+      height: 620,
+      scrollTime: "12:00:00",
+      viewRender: (view, element) => {
+        Session.set("calendarview", view.name);
+        Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
+      },
+      defaultDate: Session.get("calendardate"),
+      eventClick: (calEvent, jsevent, view) => {
+        FlowRouter.go("/attendance/event/"+calEvent._id);
       },
       eventRender: (event, element) => {
         element.popover({
@@ -55,45 +84,33 @@ export default class EventCalendar extends Component {
         });
       }
     });
-    this.autorunHandle = Tracker.autorun(() => {
-       var update = Session.get("calendarUpdate");
-       if (update) {
-         $(calendar).fullCalendar('refetchEvents');
-         $(calendar).fullCalendar('rerenderEvents');
-         Session.set("calendarUpdate", null);
-       }
-     });
-
-    //console.log(calendar.clientWidth);
+    this.setState({mounted: true});
   }
 
-  componentWillUnmount() {
-    const { calendar } = this.refs;
-    $(calendar).fullCalendar('destroy');
-    this.autorunHandle.stop();
+  getEvents(){
+    //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
+    var events = Events.find().fetch();
+    events.forEach((event)=>{
+      event.title=event.name;
+    })
+    return events;
   }
 
-  componentDidUpdate() {
+  refresh(){
+    $(calendar).fullCalendar( 'removeEvents');
+    $(calendar).fullCalendar( 'addEventSource', {events: this.getEvents()});
+    $(calendar).fullCalendar( 'rerenderEvents');
 
   }
 
   render() {
-    return (
-      <div className="calendar-container">
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
+    if(this.state.mounted){ // This reactively
+      this.refresh();
+    }
 
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div ref="calendar" id="calendar"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+    return (
+      <div>
+        <div ref="calendar" id="calendar"></div>
       </div>
     );
   }

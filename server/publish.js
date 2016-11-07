@@ -32,7 +32,9 @@ Meteor.publish("Event", function(eid){
   const options = {
     fields: {
       _id: 1,
-      name: 1
+      name: 1,
+      start: 1,
+      end: 1
     }
   }
   return Events.find({_id:eid},options);
@@ -42,6 +44,11 @@ Meteor.publish("Event", function(eid){
 
 Meteor.publish("publishedEvents", function(){
   return Events.find({published: true});
+  //console.log(Events.find({published: true}));
+  // var events = Events.aggregate([{ "$project" : { title:"$name", start: 1, end: 1 }}, {"$match": {published: true}}]);
+  // console.log(events);
+  // //console.log(events.fetch());
+  // return events;
 });
 
 Meteor.publish("pastEvents", function(lim){
