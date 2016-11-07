@@ -61,12 +61,12 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 		return (
       <div className="container-fluid">
 				<div className="row">
-					<div className="col-sm-3 col-lg-2">
+					<div className="col-sm-4 col-lg-3">
 						<nav className="navbar navbar-default navbar-fixed-side">
               {this.subsReady()?FlowRouter.current().path=="/attendance"?<div></div>:<AttendanceSummary date={this.getEvent().start} />:<div></div>}
 						</nav>
 					</div>
-					<div className="col-sm-9 col-lg-10">
+					<div className="col-sm-8 col-lg-9">
             {this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""}
             {this.subsReady()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
 					</div>

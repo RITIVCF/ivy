@@ -40,9 +40,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       header: {
         left: "prev,next today",
         center: "title",
-        right:  "month,agendaWeek,agendaDay,listWeek"    // maybe these can be controlled by settings later
+        right:  !this.props.sidebar?"month,agendaWeek,agendaDay":"month,basicWeek,basicDay"
       },
-      defaultView: Session.get("calendarview"),
+      defaultView: this.props.sidebar?(Session.get("calendarview")=="agendaWeek")?
+        "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")
+        :(Session.get("calendarview")=="basicWeek"||Session.get("calendarview")=="basicDay")?"agendaWeek":Session.get("calendarview"),
       firstDay: 1,
       height: this.props.height,
       scrollTime: "12:00:00",
@@ -59,6 +61,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         $(calendar).fullCalendar( 'changeView', "basicDay" );
       },
       eventRender: (event, element) => {
+          if(!this.props.sidebar){
         element.popover({
           placement: "auto left",
           container: calendar,
@@ -86,6 +89,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
             }
           }, 500);
         });
+      }
       }
     });
     this.setState({mounted: true});

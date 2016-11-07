@@ -45,7 +45,7 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
 	render() {
     if(Options.findOne("calendarview")){
-      return <EventCalendar ref="calendar" height={"auto"} date={this.props.date} />
+      return <EventCalendar ref="calendar" height={"auto"} sidebar={true} date={this.props.date} />
     }
     return(
       <div>

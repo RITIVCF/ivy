@@ -3,6 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
 import JobSingleSummary from './jobs/JobSingleSummary.jsx';
 import NewEventWindow from './NewEventWindow.jsx';
+import EventCalendar from './EventCalendar.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -91,6 +92,8 @@ export default class EventSummary extends TrackerReact(React.Component) {
                       onClick={this.viewOld.bind(this)}>View old events</button>
                   </div>
                 </div>
+                <br/>
+                <EventCalendar ref="calendar" height={"auto"} sidebar={true} />
 
 
               </div>
