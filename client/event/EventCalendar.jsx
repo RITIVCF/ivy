@@ -44,15 +44,19 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       },
       defaultView: Session.get("calendarview"),
       firstDay: 1,
-      height: 620,
+      height: this.props.height,
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
         Session.set("calendarview", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
       },
-      defaultDate: Session.get("calendardate"),
+      defaultDate: this.props.date?this.props.date:Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
         FlowRouter.go("/attendance/event/"+calEvent._id);
+      },
+      dayClick: function(date, jsEvent, view) {
+        $(calendar).fullCalendar( 'gotoDate', date );
+        $(calendar).fullCalendar( 'changeView', "basicDay" );
       },
       eventRender: (event, element) => {
         element.popover({

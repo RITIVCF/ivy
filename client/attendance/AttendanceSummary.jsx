@@ -2,6 +2,7 @@ import React from 'react';
 import { Tracker } from 'meteor/tracker';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventSingle from './EventSingle.jsx';
+import EventCalendar from '../event/EventCalendar.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -34,12 +35,18 @@ export default class AttendanceSummary extends TrackerReact(React.Component) {
 
   events(){
     // pulls past, published events
-    return Events.find().fetch();
+    return Events.find(
+      {start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d}},
+      {sort: {start:-1}}
+    ).fetch();
   }
 
 
 
 	render() {
+    if(Options.findOne("calendarview")){
+      return <EventCalendar ref="calendar" height={"auto"} date={this.props.date} />
+    }
     return(
       <div>
         {this.events().map( (ivevent)=>{

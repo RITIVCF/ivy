@@ -35,7 +35,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
         </div>
         <div id="maincontentdiv" className="col-sm-9 col-lg-10">
           <h1>Event Calendar</h1>
-          {Options.findOne("calendarview")?<EventCalendar ref="calendar" height={$('#maincontentdiv').height()} />:<div></div>}
+          {Options.findOne("calendarview")?<EventCalendar ref="calendar" height={650} />:<div></div>}
         </div>
       </div>
 		)

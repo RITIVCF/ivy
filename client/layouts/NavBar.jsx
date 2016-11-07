@@ -73,10 +73,10 @@ export default class Navbar extends TrackerReact(React.Component) {
 									{/*<li>
 										<a href="/sg">Small Groups Dashboard</a>
 									</li>*/}
-									{checkPermission("attendance")?
+									{/*checkPermission("attendance")?
 										<li>
 											<a href="/attendance">Attendance Dashboard</a>
-										</li>:""}
+										</li>:""*/}
 									{checkPermission("churches")?
 										<li>
 											<a href="/churches">Churches Dashboard</a>
