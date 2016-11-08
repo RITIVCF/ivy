@@ -15,6 +15,11 @@ export default class PagePermissionsWrapper extends TrackerReact(React.Component
 
 	}
 
+	componentWillUnmount() {
+		this.state.subscription.Users.stop();
+		this.state.subscription.Contacts.stop();
+	}
+
 	createNew(){
 		FlowRouter.go("/signup");
 	}

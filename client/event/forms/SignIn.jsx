@@ -156,7 +156,7 @@ export default class SignIn extends TrackerReact(React.Component){
   render() {
 
       return (
-        <div className="container-fluid">
+        <div className="container-fluid" id="signinformcontainer">
           {!this.state.submitted?
           <div className="panel panel-default">
             <h1>Welcome to {this.props.ev.name}!</h1>
