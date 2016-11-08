@@ -115,14 +115,12 @@ export default class ContactSummary extends TrackerReact(React.Component) {
         <div className="row">
           <div className="col-sm-3 col-lg-2">
             <nav className="navbar navbar-default navbar-fixed-side">
-              <div className="col-sm-12">
                 <div className="btn-group btn-group-justified" role="group" aria-label="...">
                   <div className="btn-group" role="group">
                     <button className="btn btn-primary"
                       onClick={this.newContact.bind(this)}>New</button>
                   </div>
                 </div>
-              </div>
             </nav>
           </div>
           <div className="col-sm-9 col-lg-10">

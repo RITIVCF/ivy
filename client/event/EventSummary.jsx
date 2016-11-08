@@ -77,9 +77,8 @@ export default class EventSummary extends TrackerReact(React.Component) {
       <div>
         <NewEventWindow ref="neweventoverlay" parent={this} />
         <div className="row">
-          <div className="col-sm-3 col-lg-2">
+          <div className="col-lg-3">
             <nav className="navbar navbar-default navbar-fixed-side">
-              <div className="col-sm-12">
                 <div className="btn-group btn-group-justified" role="group" aria-label="...">
                   <div className="btn-group" role="group">
                     <button className="btn btn-primary"
@@ -96,10 +95,9 @@ export default class EventSummary extends TrackerReact(React.Component) {
                 <EventCalendar ref="calendar" height={"auto"} sidebar={true} />
 
 
-              </div>
             </nav>
           </div>
-          <div className="col-sm-9 col-lg-10">
+          <div className="col-lg-9">
             <h1>Event Dashboard</h1>
             <div className="panel panel-default">
               <div className="panel-body">
