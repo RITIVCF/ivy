@@ -1,4 +1,4 @@
-
+FunnelHistory = new Mongo.Collection("funnelhistory");
 
 Meteor.publish("allEvents", function(){
   return Events.find();
