@@ -104,10 +104,14 @@ Meteor.methods({
   currentFunnel(){
     var result = Contacts.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
     var rst = {};
+    var max = 0;//var cnts = [];
     result.forEach((result)=>{
       rst[result._id] = result.count;
+      if(result.count > max){
+        max = result.count;
+      }
     });
-    //console.log(rst);
+    rst.max = max;//= Math.max(cnts);
     return rst;
   },
   funnelTime(){
@@ -121,6 +125,7 @@ Meteor.methods({
       multiplier: [],
       timestamp: []
     };
+    var totals = [];
     result.forEach((date)=>{
       rst.timestamp.push(new moment(date.timestamp).format("MM/DD/YY"));
       rst.crowd.push(date.Crowd?date.Crowd:0);
@@ -129,7 +134,15 @@ Meteor.methods({
       rst.server.push(date.Server?date.Server:0);
       rst.leader.push(date.Leader?date.Leader:0);
       rst.multiplier.push(date.Multiplier?date.Multiplier:0);
+      totals.push(
+        (date.Crowd?date.Crowd:0)+
+        (date.Visitor?date.Visitor:0)+
+        (date.Member?date.Member:0)+
+        (date.Server?date.Server:0)+
+        (date.Leader?date.Leader:0)+
+        (date.Multiplier?date.Multiplier:0));
     });
+    rst.max = Math.max(totals);
     return rst;
   }
 

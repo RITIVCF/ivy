@@ -48,6 +48,7 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	            yAxes: [{
 									stacked: true,
 	                ticks: {
+											max: ((result.max + 2))<50?(result.max+2):(result.max+5),
 	                    beginAtZero:true
 	                }
 	            }]

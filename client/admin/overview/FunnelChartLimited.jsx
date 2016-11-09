@@ -2,7 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Chart from 'chart.js'
 
-export default class FunnelChart extends TrackerReact(React.Component) {
+export default class FunnelChartLimited extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
@@ -12,13 +12,13 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	componentDidMount(){
 		console.log("did mount");
 		Meteor.call("currentFunnel", function(error, result){
-			snapshotChart = new Chart($(funnelchart), {
+			snapshotChart2 = new Chart($(funnelchart2), {
 				type: "bar",
 				data: {
-					labels: ["Crowd", "Visitor", "Member", "Server", "Leader", "Multiplier"],
+					labels: ["Visitor", "Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
 						label: "Counts",
-						data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
+						data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
 	    	options: {
@@ -37,11 +37,11 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 	refresh(){
 		Meteor.call("currentFunnel", function(error, result){
-			snapshotChart.data.datasets[0]= {
+			snapshotChart2.data.datasets[0]= {
 				label: "Counts",
-				data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
+				data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 			};
-			snapshotChart.update();
+			snapshotChart2.update();
 		});
 	}
 
@@ -50,11 +50,11 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					Funnel Status - Current
+					Funnel Status - Current - Membership
 				</div>
 				<div className="panel-body">
 					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
-					<canvas id="funnelchart" width="400" height="400"></canvas>
+					<canvas id="funnelchart2" width="400" height="400"></canvas>
 				</div>
 			</div>
 		)
