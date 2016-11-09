@@ -1,5 +1,3 @@
-FunnelHistory = new Mongo.Collection("funnelhistory");
-
 Meteor.publish("allEvents", function(){
   return Events.find();
 });
@@ -355,3 +353,7 @@ Meteor.publish("publicOptions", function(){
     {_id: "ticketcontact"}
   ]});
 });
+
+Meteor.publish("funnelHistory", function(){
+  return  FunnelHistory.find();
+})

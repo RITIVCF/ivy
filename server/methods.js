@@ -100,6 +100,37 @@ Meteor.methods({
     Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}});
     Tickets.remove({_id: dc.ticket});
     Contacts.remove({_id: did});
+  },
+  currentFunnel(){
+    var result = Contacts.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
+    var rst = {};
+    result.forEach((result)=>{
+      rst[result._id] = result.count;
+    });
+    //console.log(rst);
+    return rst;
+  },
+  funnelTime(){
+    var result = FunnelHistory.find().fetch();
+    var rst = {
+      crowd: [],
+      visitor: [],
+      member: [],
+      server: [],
+      leader: [],
+      multiplier: [],
+      timestamp: []
+    };
+    result.forEach((date)=>{
+      rst.timestamp.push(new moment(date.timestamp).format("MM/DD/YY"));
+      rst.crowd.push(date.Crowd?date.Crowd:0);
+      rst.visitor.push(date.Visitor?date.Visitor:0);
+      rst.member.push(date.Member?date.Member:0);
+      rst.server.push(date.Server?date.Server:0);
+      rst.leader.push(date.Leader?date.Leader:0);
+      rst.multiplier.push(date.Multiplier?date.Multiplier:0);
+    });
+    return rst;
   }
 
 })
