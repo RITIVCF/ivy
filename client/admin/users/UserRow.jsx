@@ -41,6 +41,12 @@ export default class UserRow extends TrackerReact(React.Component) {
     FlowRouter.go("/contacts/"+this.state.user.contact);
   }
 
+	openUser(){
+		this.state.ran=true;
+			FlowRouter.go("/admin/users/"+this.props.uid);
+		
+	}
+
 	render() {
 		var user = this.getUser(this.props.uid);
 		return (
@@ -53,6 +59,13 @@ export default class UserRow extends TrackerReact(React.Component) {
 						id="hover-content"
 						style={{float: "right"}} >
 							Reset Password
+					</button>
+					<button
+						className="btn btn-success"
+						onClick={this.openUser.bind(this)}
+						id="hover-content"
+						style={{float: "right"}} >
+							Open User
 					</button>
 				</td>
 			</tr>

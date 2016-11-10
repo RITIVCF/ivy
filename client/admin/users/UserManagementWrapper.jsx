@@ -1,8 +1,9 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import UserManagementForm from './UserManagementForm.jsx';
+import UserPage from './UserPage.jsx';
 
-export default class PagePermissionsWrapper extends TrackerReact(React.Component) {
+export default class UserManagementWrapper extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 		this.state = {
@@ -33,18 +34,20 @@ export default class PagePermissionsWrapper extends TrackerReact(React.Component
 				<div className="row">
 					<div className="col-sm-3 col-lg-2">
 						<nav className="navbar navbar-default navbar-fixed-side">
+							{!this.props.uid?
 							<div className="btn-group btn-group-justified" role="group" aria-label="...">
 								<div className="btn-group" role="group">
 									<button className="btn btn-primary"
 										onClick={this.createNew.bind(this)}>New</button>
 								</div>
-							</div>
+							</div>:<div></div>
+							}
 						</nav>
 					</div>
 					<div className="col-sm-9 col-lg-10">
-						{(this.state.subscription.Users.ready()&&this.state.subscription.Contacts.ready())?
+						{!this.props.uid?(this.state.subscription.Users.ready()&&this.state.subscription.Contacts.ready())?
 							<UserManagementForm />
-						:""}
+						:"":<UserPage uid={this.props.uid} />}
 					</div>
 				</div>
 			</div>
