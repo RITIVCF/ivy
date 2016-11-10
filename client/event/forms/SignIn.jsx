@@ -158,7 +158,7 @@ export default class SignIn extends TrackerReact(React.Component){
       return (
         <div className="container-fluid" id="signinformcontainer">
           {!this.state.submitted?
-          <div className="panel panel-default">
+          <div className="panel panel-default" id="cardwait">
             <h1>Welcome to {this.props.ev.name}!</h1>
             <h2>Please sign in</h2>
             <form className="publicForm" onSubmit={this.submit.bind(this)}>
@@ -189,8 +189,8 @@ export default class SignIn extends TrackerReact(React.Component){
             </form>
           </div>
           :
-          <div className="panel panel-default">
-            <img src={"/images/InterVarsity-RIT-logo.png"} />
+          <div className="panel panel-default" id="cardsubmit">
+            <img className="logo" src={"/images/InterVarsity-RIT-logo.png"} />
             <br />
             <p style={{textAlign: "center"}}>Welcome to {this.props.ev.name}!</p>
             <p style={{textAlign: "center"}}>We're glad you're here!</p>

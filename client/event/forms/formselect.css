@@ -31,3 +31,8 @@
     .select-search-box__option--hover, .select-search-box__option:hover {
 
     }
+
+    IMG.logo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto }
