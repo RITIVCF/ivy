@@ -105,13 +105,20 @@ Meteor.methods({
     var result = Contacts.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
     var rst = {};
     var max = 0;//var cnts = [];
+    var max2 = 0;
     result.forEach((result)=>{
       rst[result._id] = result.count;
       if(result.count > max){
         max = result.count;
       }
+      if(result._id!="Crowd"){
+        if(result.count > max2){
+          max2 = result.count;
+        }
+      }
     });
     rst.max = max;//= Math.max(cnts);
+    rst.max2 = max2;
     return rst;
   },
   funnelTime(){

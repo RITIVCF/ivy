@@ -124,6 +124,14 @@ FlowRouter.route('/admin/users', {
 	}
 });
 
+FlowRouter.route('/admin/users/:uid', {
+	action(params) {
+		mount(MainLayout, {
+			content: <UserManagementWrapper uid={params.uid} />
+		})
+	}
+});
+
 FlowRouter.route('/admin/duplicatecontacts', {
 	action() {
 		mount(MainLayout, {
