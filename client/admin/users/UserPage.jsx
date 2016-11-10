@@ -46,6 +46,7 @@ export default class UserPage extends TrackerReact(React.Component) {
 								<select
 									className="form-control"
 									multiple
+									size="10"
 									ref="groups" >
 									{this.getAllGroups().map((group)=>{
 										return <option key={group._id} value={group._id}>{group.name}</option>
@@ -65,6 +66,7 @@ export default class UserPage extends TrackerReact(React.Component) {
 								<select
 									multiple
 									className="form-control"
+									size="10"
 									ref="usergroups" >
 									{this.getUserGroups().map((group)=>{
 										return <option key={group._id} value={group._id}>{group.name}</option>

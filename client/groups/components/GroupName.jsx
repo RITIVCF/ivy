@@ -38,7 +38,9 @@ export default class GroupName extends TrackerReact(React.Component) {
 
 	toggleName(event){
 		event.preventDefault()
-		this.setState({edittingName: !this.state.edittingName});
+		if(!this.props.group._id=="admin"){
+				this.setState({edittingName: !this.state.edittingName});
+		}
 	}
 
 	render() {
