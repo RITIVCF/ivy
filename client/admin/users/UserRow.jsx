@@ -21,8 +21,8 @@ export default class UserRow extends TrackerReact(React.Component) {
 
 	resetPass(){
 		var thiz = this;
+		this.state.ran=true;
 		if(window.confirm("Are you sure?")){
-			this.state.ran=true;
 			Meteor.call("passReset", this.props.uid, function(error,result){
 				if(error){
 					console.log(error);
@@ -36,6 +36,7 @@ export default class UserRow extends TrackerReact(React.Component) {
 
 	go(){
 		if(this.state.ran){
+			this.state.ran=false;
 			return;
 		}
     FlowRouter.go("/contacts/"+this.state.user.contact);
@@ -44,7 +45,7 @@ export default class UserRow extends TrackerReact(React.Component) {
 	openUser(){
 		this.state.ran=true;
 			FlowRouter.go("/admin/users/"+this.props.uid);
-		
+
 	}
 
 	render() {
