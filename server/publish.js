@@ -322,6 +322,9 @@ Meteor.publish("thisTicket", function(tid){
 });
 
 Meteor.publish("ticket", function(cid){
+  if(!cid){
+    return;
+  }
   var contact = Contacts.findOne(cid);
   return Tickets.find({_id: contact.ticket});
 });

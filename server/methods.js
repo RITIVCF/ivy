@@ -121,8 +121,16 @@ Meteor.methods({
     rst.max2 = max2;
     return rst;
   },
-  funnelTime(){
-    var result = FunnelHistory.find().fetch();
+  funnelTime(numdays){
+    if(numdays!="0"){
+        console.log("Numdays: "+numdays);
+        console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
+        var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+1, "days")._d}}).fetch();
+    }
+    else{
+        var result = FunnelHistory.find().fetch();
+    }
+
     var rst = {
       crowd: [],
       visitor: [],
@@ -149,7 +157,14 @@ Meteor.methods({
         (date.Leader?date.Leader:0)+
         (date.Multiplier?date.Multiplier:0));
     });
-    rst.max = Math.max(totals);
+    rst.max = Math.max.apply(null,totals);
+    rst.min = Math.min.apply(null,totals);
+
+    rst.max = ((rst.max-rst.min)>20)?(rst.max+5):(rst.max+2);
+    rst.min = ((rst.max-rst.min)>20)?(rst.min-5):(rst.min-2);
+    console.log(rst);
+    console.log(totals);
+    console.log(rst.max);
     return rst;
   }
 
