@@ -43,7 +43,6 @@ jsx@0.2.4
 kadira:flow-router@2.12.1
 kadira:react-layout@1.5.3
 launch-screen@1.0.12
-less@2.6.5
 livedata@1.0.18
 localstorage@1.0.11
 logging@1.1.14
@@ -80,8 +79,6 @@ mongo-livedata@1.0.12
 mrt:jquery-ui@1.9.2
 msavin:jetsetter@2.0.0
 msavin:mongol@2.0.1
-nemo64:bootstrap@3.3.5_3
-nemo64:bootstrap-data@3.3.5
 npm-bcrypt@0.8.7
 npm-mongo@1.5.45
 observe-sequence@1.0.12
@@ -100,7 +97,6 @@ reactive-dict@1.1.8
 reactive-var@1.0.10
 reload@1.1.10
 retry@1.0.8
-reywood:bootstrap3-sass@3.3.5_2
 routepolicy@1.0.11
 rzymek:fullcalendar@2.2.6
 rzymek:moment@2.8.3_10

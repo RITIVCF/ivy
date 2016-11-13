@@ -28,10 +28,7 @@ react-template-helper@=0.2.4
 kadira:flow-router
 kadira:react-layout
 fourseven:scss
-reywood:bootstrap3-sass
 fortawesome:fontawesome
-less
-nemo64:bootstrap
 meteortoys:allthings
 meteorhacks:aggregate
 momentjs:moment@=2.12.0
