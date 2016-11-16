@@ -16,6 +16,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 				user: Meteor.subscribe("userSelf"),
 				contact: Meteor.subscribe("contact", FlowRouter.getParam('cid')),
 				ticket: Meteor.subscribe("ticket", FlowRouter.getParam('cid')),
+				events: Meteor.subscribe("contactEvents", FlowRouter.getParam('cid')),
 				options: Meteor.subscribe("allOptions")
 			}
 		};});

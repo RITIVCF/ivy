@@ -65,6 +65,10 @@ Meteor.publish("oneEvent", function(eid){
   return Events.findOne(eid);
 });
 
+Meteor.publish("contactEvents", function(cid){
+  return Events.find({"attendees._id": cid},{fields:{name: 1, start:1, end:1}});
+});
+
 Meteor.publish("allPagePermissions", function(){
   return PagePermissions.find();
 });

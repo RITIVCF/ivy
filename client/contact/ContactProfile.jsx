@@ -15,6 +15,7 @@ import ContactGender from './components/ContactGender.jsx';
 import ContactGradTerm from './components/ContactGradTerm.jsx';
 import ContactCurrYear from './components/ContactCurrYear.jsx';
 import BecomeMemberWindow from '../member/BecomeMemberWindow.jsx';
+import Event from './Event.jsx';
 
 
 export default class ContactProfile extends TrackerReact(React.Component){
@@ -77,6 +78,11 @@ export default class ContactProfile extends TrackerReact(React.Component){
   openMemberOverlay(){
     this.refs.becmemwin.openOverlay();
   }
+
+  getEvents(){
+    return Events.find({},{sort:{start:-1}}).fetch();
+  }
+
 
   remove(){
     if(confirm("Only remove a contact if it is a mistake creation.")){
@@ -230,7 +236,20 @@ export default class ContactProfile extends TrackerReact(React.Component){
                   </div>
                 </div>
               </div>
+              <div className="col-md-6">
+                <div className="panel panel-default">
+                  <div className="panel-heading">
+                    <h2>Events</h2>
+                  </div>
+                  <div className="panel-body">
+                    {this.getEvents().map((event)=>{
+                        return <Event key={event._id} event={event} />
+                      })}
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </div>
