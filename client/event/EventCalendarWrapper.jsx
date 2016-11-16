@@ -28,14 +28,12 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     document.title="Ivy - Event Calendar";
 		return (
       <div className="row">
-        <div className="col-sm-3 col-lg-2">
-          <nav className="navbar navbar-default navbar-fixed-side">
-
-          </nav>
-        </div>
-        <div id="maincontentdiv" className="col-sm-9 col-lg-10">
-          <h1>Event Calendar</h1>
-          {Options.findOne("calendarview")?<EventCalendar ref="calendar" height={650} />:<div></div>}
+        <div id="maincontentdiv" className="col s12">
+          <div className="card">
+            <div className="card-content">
+              {Options.findOne("calendarview")?<EventCalendar ref="calendar" height={650} />:<div></div>}
+            </div>
+          </div>
         </div>
       </div>
 		)

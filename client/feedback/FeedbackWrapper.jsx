@@ -24,27 +24,22 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
     document.title="Ivy - Feedback";
 		return (
       <div className="row">
-  			<div className="col-sm-3 col-lg-2">
-  				<nav className="navbar navbar-default navbar-fixed-side">
-
-  				</nav>
-  			</div>
-  			<div className="col-sm-9 col-lg-10">
-          <h1>All Feedback</h1>
-          <div className="panel panel-primary">
-            <div className="panel-heading">
-
-            </div>
-            <div className="panel-body">
-              {checkPermission("feedback")?<div>
-                {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
-                  <FeedbackSummary />:""
-                }
-              </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
-
+  			<div className="col s12">
+          <div className="card">
+            <div className="card-content">
+              <span className="card-title">Feedback Summary</span>
+                {checkPermission("feedback")?<div>
+                  {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
+                    <FeedbackSummary />:""
+                  }
+                </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
             </div>
           </div>
         </div>
+
+
+
+
       </div>
     )
 	}

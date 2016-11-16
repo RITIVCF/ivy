@@ -43,7 +43,7 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 		return (
 		<div>
 
-			<div class="btn-toolbar" role="toolbar" aria-label="...">
+			<div className="btn-toolbar" role="toolbar" aria-label="...">
 				<div className="btn-group" role="group" aria-label="...">
 					<ButtonActive ch={ch} />
 					<ButtonDelete ch={ch} />

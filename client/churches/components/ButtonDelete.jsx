@@ -6,6 +6,7 @@ export default class ButtonDelete extends Component {
     var result = window.confirm("Are you sure you want to delete church? *This action cannot be undone.*");
     if(result == true){
       //console.log("you clicked 'yes'.");
+      $("#"+this.props.ch._id).modal('close');
       Meteor.call('deleteChurch',this.props.ch._id);
       //location.assign("/churches");
     }

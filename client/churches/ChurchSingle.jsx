@@ -5,19 +5,26 @@ import ChurchWorkspace from './ChurchesWorkspace.jsx';
 export default class ChurchSingle extends Component {
   constructor() {
     super();
-    this.state = {
-      editting: false
-    };
+    // this.state = {
+    //   editting: false
+    // };
+  }
+
+  componentDidMount(){
+    $('.modal').modal();
   }
 
   edit(event){
     event.preventDefault();
-    this.setState({editting: true});
+    //this.setState({editting: true});
+    $('.modal').modal();
+    $("#"+this.props.church._id).modal('open');
   }
 
   close(event){
     event.preventDefault();
-    this.setState({editting: false});
+    //this.setState({editting: false});
+    $("#"+this.props.church._id).modal('close');
   }
 
   render() {
@@ -36,21 +43,21 @@ export default class ChurchSingle extends Component {
     {/*onMouseLeave={this.close.bind(this)} */
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading" onClick={this.edit.bind(this)}>
-          {this.props.church.name}
+      <div>
+        <div className="card" onClick={this.edit.bind(this)}>
+          <div className="card-content">
+            <span className="card-title">{this.props.church.name}</span>
+          </div>
         </div>
-        {this.state.editting ?
-        <div  >
-          <button onClick={this.close.bind(this)}>Close</button>
-        <ChurchWorkspace ch={this.props.church} />
+        <div id={this.props.church._id} className="modal">
+          <div className="modal-content">
+            <ChurchWorkspace ch={this.props.church} />
+          </div>
+          <div className="modal-footer">
+              <button onClick={this.close.bind(this)}>Close</button>
+          </div>
         </div>
-      :
-      <div className="panel-body">
-        {this.props.church.url}
-      </div>}
       </div>
-
     )
   }
 }

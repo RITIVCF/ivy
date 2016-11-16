@@ -9,31 +9,33 @@ export default class GroupsSingle extends Component {
     };
   }
 
+  componentDidMount(){
+    $('.modal').modal();
+    $('select').material_select();
+  }
+
   edit(event){
     event.preventDefault();
-    this.setState({editting: true});
+    //this.setState({editting: true});
+    console.log("Editting");
+    var id = "#"+this.props.group._id;
+    console.log(id);
+    $("#"+this.props.group._id).modal('open');
   }
 
   close(event){
     event.preventDefault();
-    this.setState({editting: false});
+    console.log("Closing");
+    $("#"+this.props.group._id).modal('close');
   }
 
   render() {
     return (
-      <div className="panel panel-default">
-        {this.state.editting ?
-        <div className="panel-body">
-
-          <button className="btn btn-primary" onClick={this.close.bind(this)}>Close</button>
-        <GroupWorkspace group={this.props.group} />
-        </div>
-      :
-      <div className="panel-heading" onClick={this.edit.bind(this)}>
-        {this.props.group.name}
-      </div>}
-      </div>
-
-    )
+      <li>
+        <div className="collapsible-header">{this.props.group.name}</div>
+        <div className="collapsible-body"><GroupWorkspace group={this.props.group} /></div>
+      </li>
+      
+          )
   }
 }

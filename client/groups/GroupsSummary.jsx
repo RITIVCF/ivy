@@ -14,8 +14,8 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 
   }
 
-  componentWillUnmount() {
-
+  componentDidMount() {
+    $('.collapsible').collapsible();
   }
 
   createNew(event){
@@ -36,22 +36,32 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-      <div className="container-fluid">
+      <div className="container">
   			<div className="row">
-  				<div className="col-sm-3 col-lg-2">
-  					<nav className="navbar navbar-default navbar-fixed-side">
-              <form className="navbar-form" onSubmit={this.createNew.bind(this)}>
-                <div className="form-group">
-                  <input type="text" ref="name" className="form-control" placeholder="New Group Name..." />
+  				<div className="col s12">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Active Groups</span>
+                <div className="row">
+                  <div className="col s12">
+                    <p>Enter a new group name and press enter, or select a group from below to edit.</p>
+                  </div>
                 </div>
-              </form>
-  					</nav>
-  				</div>
-  				<div className="col-sm-9 col-lg-10">
-            <h1>Active Groups</h1>
-            {this.groups().map( (group)=>{
-                return <GroupSingle key={group._id} group={group} parent={this} />
-            })}
+                <form onSubmit={this.createNew.bind(this)}>
+                  <div className="row">
+                    <div className="input-field col s12 m8 l6">
+                      <input type="text" ref="name"  placeholder="New Group Name..." />
+                      <label>New Group</label>
+                    </div>
+                  </div>
+                </form>
+                <ul className="collapsible" data-collapsible="accordion">
+                  {this.props.sub.Contacts.ready()?this.groups().map( (group)=>{
+                      return <GroupSingle key={group._id} group={group} sub={this.props.sub} parent={this} />
+                  }):<div></div>}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

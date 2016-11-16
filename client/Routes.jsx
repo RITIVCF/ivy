@@ -188,7 +188,7 @@ FlowRouter.route('/newcontact', {
 	}
 });
 
-FlowRouter.route('/calendar', {
+FlowRouter.route('/events', {
 	action() {
 		mount(MainLayout, {
 			content: (<EventCalendarWrapper />)
@@ -212,13 +212,6 @@ FlowRouter.route('/attendance/event/:eid',{
 	}
 });
 
-FlowRouter.route('/events',{
-	action() {
-		mount(MainLayout, {
-			content: (<EventsWrapper />)
-		})
-	}
-});
 
 FlowRouter.route('/events/workspace/:eid',{
 	action(params) {

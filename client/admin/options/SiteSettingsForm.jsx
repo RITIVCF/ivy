@@ -9,6 +9,10 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 
 	}
 
+	componentDidMount(){
+		$('select').material_select();
+	}
+
 	getOptions(){
 		return Options.find({_id:{$ne:"ticketstatuses"}}).fetch();
 	}

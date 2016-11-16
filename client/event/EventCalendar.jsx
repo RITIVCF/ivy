@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
 import EventContent from './EventContent.jsx';
+//import EventModal from './components.jsx';
 //import {Tracker} from 'meteor/tracker';
 
 //    Order:
@@ -30,7 +31,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   renderPopoverContent(event) {
     div = $("<div></div>")[0];
-    ReactDOM.render((<EventContent event={event}/>), div);
+    ReactDOM.render((<div id={event._id} className="modal">
+        <div className="modal-content">
+          <h4>Modal Header</h4>
+          <p>A bunch of text</p>
+        </div>
+        <div className="modal-footer">
+          <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>), div);
     return div;
   }
 
@@ -54,45 +63,62 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       },
       defaultDate: this.props.date?this.props.date:Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
-        FlowRouter.go("/attendance/event/"+calEvent._id);
+        //FlowRouter.go("/attendance/event/"+calEvent._id);
+        $('.modal').modal();
+        //console.log(calEvent._id);
+        $('#'+calEvent._id).modal('open');
       },
       dayClick: function(date, jsEvent, view) {
-        $(calendar).fullCalendar( 'gotoDate', date );
-        $(calendar).fullCalendar( 'changeView', "basicDay" );
+        //$(calendar).fullCalendar( 'gotoDate', date );
+        //$(calendar).fullCalendar( 'changeView', "basicDay" );
+      },
+      eventAfterAllRender(view){
+        $('.modal').modal();
       },
       eventRender: (event, element) => {
-          if(!this.props.sidebar){
-        element.popover({
-          placement: "auto left",
-          container: calendar,
-          trigger: "manual",
-          animation: false,
-          template: '<div class="popover" role="tooltip">' +
-          '<div class="arrow"></div>' +
-          '<div class="popover-content"></div>' +
-          '</div>',
-          html: true,
-          content: this.renderPopoverContent(event)
-        }).on("mouseenter", () => {
-          clearTimeout(element.timeout);
-          $(element).popover("show");
-          $(calendar).children(".popover").on("mouseleave", (event) => {
-            element.timeout = setTimeout(() => {
-              $(event.currentTarget).popover('hide');
-            }, 250);
-          });
-        }).on("mouseleave", () => {
-          clearTimeout(element.timeout);
-          element.timeout = setTimeout(() => {
-            if (!$(".popover:hover").length) {
-              $(element).popover("hide");
-            }
-          }, 500);
-        });
-      }
+
+           //if(!this.props.sidebar){
+           //element[0].class += " tooltipped";
+           //element[0].innerHtml+=this.renderPopoverContent(event);
+           //element[0].class
+           //console.log(element);
+           //console.log(element[0]);
+           //element.setAttribute("data-position","bottom");
+           //element.setAttribute("data-delay", "50");
+           //element.setAttribute("data-tooltip", this.renderPopoverContent(event));
+        // element.popover({
+        //   placement: "auto left",
+        //   container: calendar,
+        //   trigger: "manual",
+        //   animation: false,
+        //   template: '<div class="popover" role="tooltip">' +
+        //   '<div class="arrow"></div>' +
+        //   '<div class="popover-content"></div>' +
+        //   '</div>',
+        //   html: true,
+        //   content: this.renderPopoverContent(event)
+        // }).on("mouseenter", () => {
+        //   clearTimeout(element.timeout);
+        //   $(element).popover("show");
+        //   $(calendar).children(".popover").on("mouseleave", (event) => {
+        //     element.timeout = setTimeout(() => {
+        //       $(event.currentTarget).popover('hide');
+        //     }, 250);
+        //   });
+        // }).on("mouseleave", () => {
+        //   clearTimeout(element.timeout);
+        //   element.timeout = setTimeout(() => {
+        //     if (!$(".popover:hover").length) {
+        //       $(element).popover("hide");
+        //     }
+        //   }, 500);
+        //});
+    //  }
       }
     });
     this.setState({mounted: true});
+    $('.modal').modal();
+    $('.tooltipped').tooltip({delay: 50});
   }
 
   getEvents(){
@@ -108,7 +134,14 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $(calendar).fullCalendar( 'removeEvents');
     $(calendar).fullCalendar( 'addEventSource', {events: this.getEvents()});
     $(calendar).fullCalendar( 'rerenderEvents');
+    $('.modal').modal();
 
+  }
+
+  test(){
+    $('.modal').modal();
+    console.log($('#XynJraXPfs46EXMGP'));
+    $('#XynJraXPfs46EXMGP').modal('open');
   }
 
   render() {
@@ -116,9 +149,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       this.refresh();
     }
 
+
+
     return (
       <div>
         <div ref="calendar" id="calendar"></div>
+        {this.getEvents().map((event)=>{
+          return <EventContent key={event._id} event={event} />
+        })}
+
       </div>
     );
   }

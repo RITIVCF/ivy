@@ -32,7 +32,7 @@ export default class AdminGroupsWrapper extends TrackerReact(React.Component) {
     document.title = "Ivy - Groups Dashboard";
 		return (
       <div>
-        <GroupsSummary admin={true} parent={this} />
+        <GroupsSummary admin={true} parent={this} sub={this.state.subscription} />
       </div>
     )
 	}

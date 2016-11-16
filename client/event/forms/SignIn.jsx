@@ -156,45 +156,51 @@ export default class SignIn extends TrackerReact(React.Component){
   render() {
 
       return (
-        <div className="container-fluid" id="signinformcontainer">
-          {!this.state.submitted?
-          <div className="panel panel-default" id="cardwait">
-            <h1>Welcome to {this.props.ev.name}!</h1>
-            <h2>Please sign in</h2>
-            <form className="publicForm" onSubmit={this.submit.bind(this)}>
-              <div className="form-group">
-                <SelectContact
-                  parent={this}
-                  unset={this.unset.bind(this)}
-                  onBlur={this.setNew.bind(this)}
-                  initialValue={""}
-                  onChange={this.changeName.bind(this)}
-                  updateContact={this.update.bind(this)}
-                  id="first_name"
-                  type="text"
-                  ref="user"
-                  className="validate" />
-                <input ref="email" placeholder="Email" id="email" type="email" required />
-                {this.state.new?<div>
-                  <input ref="phone" placeholder="Phone number (optional)" type="tel" />
-                  <input ref="major" placeholder="Major (optional)" type="text" />
-                  <HowHearSelect ref="howhear" />
-                  <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
-                  <label htmlFor="news">Please sign me up for the newsletter</label>
-                  <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
-                  <label htmlFor="more">I would like to learn more about IV</label>
-                  </div>:""}
-                <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
+        <div className="valign" id="signinformcontainer">
+          <div className="col s4">
+            {!this.state.submitted?
+            <div className="card-panel hoverable" id="cardwait">
+              <div className="card-content">
+                <h1>Welcome to {this.props.ev.name}!</h1>
+                <h2>Please sign in</h2>
+                <form className="publicForm" onSubmit={this.submit.bind(this)}>
+                  <div className="form-group">
+                    <SelectContact
+                      parent={this}
+                      unset={this.unset.bind(this)}
+                      onBlur={this.setNew.bind(this)}
+                      initialValue={""}
+                      onChange={this.changeName.bind(this)}
+                      updateContact={this.update.bind(this)}
+                      id="first_name"
+                      type="text"
+                      ref="user"
+                      className="validate" />
+                    <input ref="email" placeholder="Email" id="email" type="email" required />
+                    {this.state.new?<div>
+                      <input ref="phone" placeholder="Phone number (optional)" type="tel" />
+                      <input ref="major" placeholder="Major (optional)" type="text" />
+                      <HowHearSelect ref="howhear" />
+                      <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
+                      <label htmlFor="news">Please sign me up for the newsletter</label>
+                      <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
+                      <label htmlFor="more">I would like to learn more about IV</label>
+                      </div>:""}
+                    <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
+                  </div>
+                </form>
               </div>
-            </form>
+            </div>
+            :
+            <div className="card" id="cardsubmit">
+              <div className="card-content">
+                <img className="logo" src={"/images/InterVarsity-RIT-logo.png"} />
+                <br />
+                <p style={{textAlign: "center"}}>Welcome to {this.props.ev.name}!</p>
+                <p style={{textAlign: "center"}}>We're glad you're here!</p>
+              </div>
+            </div>}
           </div>
-          :
-          <div className="panel panel-default" id="cardsubmit">
-            <img className="logo" src={"/images/InterVarsity-RIT-logo.png"} />
-            <br />
-            <p style={{textAlign: "center"}}>Welcome to {this.props.ev.name}!</p>
-            <p style={{textAlign: "center"}}>We're glad you're here!</p>
-          </div>}
         </div>
       )
 

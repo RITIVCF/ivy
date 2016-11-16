@@ -111,81 +111,22 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     var status;
     var perm = checkPermission("ticket");
 		return (
-      <div>
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    <button className="btn btn-primary"
-                      onClick={this.newContact.bind(this)}>New</button>
-                  </div>
-                </div>
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h2>All Contacts</h2>
 
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-4">
-                  <label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-          					<option value={"All"}>All</option>
-                      <option value="Crowd">Crowd</option>
-                      <option value="Visitor">Visitor</option>
-                      <option value="Member">Member</option>
-                      <option value="Server">Server</option>
-                      <option value="Leader">Leader</option>
-                      <option value="Multiplier">Multiplier</option>
-          				</select></label>
-                  <label>Sort: <select ref="sort" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-            					<option value={"Name"}>Name</option>
-            					<option value={"Status"}>Status</option>
-            				{/*}	<option value={"Status"}>Status</option> */}
-            				</select></label>
-                  <div className="form-group">
-                    <a href="#"  onClick={this.export.bind(this)} ><button className="btn btn-primary">Export to Excel (CSV)</button></a>
-                  </div>
-                </div>
-                <div className="col-md-8">
-                  <p>Count: {this.contacts().length}</p>
-                  <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>
-                </div>
-              </div>
-              <table className="table table-hover table-responsive">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Newsletter</th>
-                    <th>Funnel Status</th>
-                    {perm?<th>Ticket</th>:""}
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.contacts().map( (contact, i) => {
-                    //console.log(i);
-                    if(this.refs.sort){
-                      if(this.refs.sort.value == "Status"){
-                        if(contact.member != status){
-                          //console.log("Does not equal.");
-                          //console.log(status);
-                          status = contact.member;
-                          //console.log(status);
-                          i--;
-                          return <tr key={status}><td colspan={5}>{status ? "Members":""}</td></tr>
-                        }
-                      }
-                    }
-                    return <ContactSingle key={contact._id} contact={contact} perm={perm} parent={this}/>
-                  })}
-                </tbody>
-              </table>
-            </div>
+          <div className="container">
+            <h1>All Contacts</h1>
+            <div className="divider"></div>
+                {/*}
+                      <p>Count: {this.contacts().length}</p>
+                      <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
+                      <div className="row">
+                      {this.contacts().map( (contact, i) => {
+                        return <ContactSingle key={contact._id} contact={contact} perm={perm} parent={this}/>
+                      })}
+                      </div>
+
           </div>
-        </div>
-      </div>
+      
+
   )
 	}
 }

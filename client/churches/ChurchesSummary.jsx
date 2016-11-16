@@ -64,35 +64,28 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
 		return (
-      <div>
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    <button type="button" className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button>
-                  </div>
-                </div>
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h1>Churches Dashboard</h1>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <h2>Active Churches</h2>
+
+      <div className="row">
+        <div className="col s12">
+          <div className="card">
+            <div className="card-content">
+              <button className="btn right" onClick={this.createNew.bind(this)}>New</button>
+              <h2>Churches</h2>
+              <div className="divider"></div>
+              <h5>Active Churches</h5>
+              <div className="divider"></div>
                 {this.churches().map( (church)=>{
                     return <ChurchSingle key={church._id} church={church} parent={this} />
                 })}
-                <h2>Old/Inactive Churches</h2>
-                  {this.oldchurches().map( (church)=>{
-                      return <ChurchSingle key={church._id} church={church} parent={this} />
-                  })}
-              </div>
+              <h5>Old/Inactive Churches</h5>
+              <div className="divider"></div>
+                {this.oldchurches().map( (church)=>{
+                    return <ChurchSingle key={church._id} church={church} parent={this} />
+                })}
             </div>
           </div>
         </div>
-      {/*<a href="/churches/old"><button>View old/inactive churches</button></a>  */}
-    </div>
+      </div>
   )
 	}
 }
