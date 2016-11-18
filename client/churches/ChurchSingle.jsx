@@ -43,12 +43,23 @@ export default class ChurchSingle extends Component {
     {/*onMouseLeave={this.close.bind(this)} */
 
     return (
-      <div>
-        <div className="card" onClick={this.edit.bind(this)}>
+      <div className="col s12 m6 l4">
+        <div className={this.props.church.active?"card-panel left hoverable":"card-panel grey left hoverable"}
+          onClick={this.edit.bind(this)}>
+          <div className="card-image">
+            <img
+              src={"/images/defaultChurch.png"} style={{width: "100%"}} />
+          </div>
           <div className="card-content">
             <span className="card-title">{this.props.church.name}</span>
+            {/*}<p className="truncate">{this.props.church.url}</p>*/}
           </div>
         </div>
+
+
+
+
+
         <div id={this.props.church._id} className="modal">
           <div className="modal-content">
             <ChurchWorkspace ch={this.props.church} />

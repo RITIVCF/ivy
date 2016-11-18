@@ -16,6 +16,7 @@
     "react-autosuggest": "^3.8.0",
     "react-dom": "^15.0.1",
     "react-mounter": "^1.2.0",
-    "react-widgets": "^3.4.1"
+    "react-widgets": "^3.4.1",
+    "tinymce": "^4.4.3"
   }
 }

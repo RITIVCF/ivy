@@ -49,10 +49,10 @@ export default class Navbar extends TrackerReact(React.Component) {
 							<li>
 								<a href="/events">Events</a>
 							</li>:""}
-						{checkPermission("tickets")?
+						{/*checkPermission("tickets")?
 							<li>
 								<a href="/tickets">Ticket Dashboard</a>
-							</li>:""}
+							</li>:""*/}
 						{checkPermission("contacts")?
 							<li>
 								<a href="/contacts">Contact Dashboard</a>
@@ -61,6 +61,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 							<li>
 								<a href="/churches">Churches Dashboard</a>
 							</li>:""}
+						{/*
 							<li>
 								<a
 									className="dropdown-button"
@@ -69,14 +70,14 @@ export default class Navbar extends TrackerReact(React.Component) {
 									Dropdown
 									<i className="material-icons right"></i>
 								</a>
-							</li>
+							</li>*/}
 							<li>
 								<a href="/admin/users">User Management</a>
 							</li>
 							<li>
 								<a href="/admin/groups">Groups Management</a>
 							</li>
-							<li>
+						{/*}	<li>
 								<a href="/admin/pages">Page Permissions</a>
 							</li>
 							<li>
@@ -106,7 +107,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 							</li>
 							<li>
 								<a href="/changepassword">Change Password</a>
-							</li>
+							</li>*/}
 							<li>
 								<SignInButtonWrapper />
 							</li>

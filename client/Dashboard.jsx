@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import { HTTP } from 'meteor/http';
 import FeedbackForm from './feedback/FeedbackForm.jsx';
+import TinyMCETest from './tinyMCETest.jsx';
 //import websocket from 'websocket';
 
 Meteor.subscribe("allGroups");
@@ -62,6 +63,12 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		      <div className="col s6">
             	<FeedbackForm />
 					</div>
+					<div className="row">
+						<div className="col s12">
+							<TinyMCETest />
+						</div>
+					</div>
+
 				</div>
 
 

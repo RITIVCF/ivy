@@ -122,7 +122,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
     }
 
     return (
-      <div className="container-fluid">
+      <div className="row">
+        <div className="col s12 m8 l8">
+          <h1>{contact?contact.name:""}</h1>
+        </div>
         {this.props.parent.state.subscription.contact.ready() ? contact ? (!contact.member)
            ? <BecomeMemberWindow ref="becmemwin" subscription={this.props.parent.state.subscription.options}
            />:"":"":""}

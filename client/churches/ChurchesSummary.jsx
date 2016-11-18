@@ -14,6 +14,7 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         Churches: Meteor.subscribe("allChurches"),
+        Contacts: Meteor.subscribe("allContacts","All", "Name"),
         options: Meteor.subscribe("allOptions")
       }
     };
@@ -44,13 +45,14 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
       //setID(result);
     });
     */
-    Meteor.call('addBlankChurch');
+    Meteor.call('addChurch', this.refs.name.value);
+    this.refs.name.value="";
   }
 
 
   churches(){
     // pulls upcoming, published events
-    return Churches.find({active: true}).fetch();
+    return Churches.find({},{sort: {active: -1}}).fetch();
   }
 
   oldchurches(){
@@ -65,25 +67,23 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 		}
 		return (
 
-      <div className="row">
-        <div className="col s12">
-          <div className="card">
-            <div className="card-content">
-              <button className="btn right" onClick={this.createNew.bind(this)}>New</button>
-              <h2>Churches</h2>
-              <div className="divider"></div>
-              <h5>Active Churches</h5>
-              <div className="divider"></div>
-                {this.churches().map( (church)=>{
-                    return <ChurchSingle key={church._id} church={church} parent={this} />
-                })}
-              <h5>Old/Inactive Churches</h5>
-              <div className="divider"></div>
-                {this.oldchurches().map( (church)=>{
-                    return <ChurchSingle key={church._id} church={church} parent={this} />
-                })}
-            </div>
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m8 l8">
+            <h1>Churches</h1>
           </div>
+          <div className="input-field col s12 m4 l4">
+            <form onSubmit={this.createNew.bind(this)}>
+              <input ref="name"  type="text" />
+              <label htmlFor="icon_prefix">New Church Name</label>
+            </form>
+          </div>
+        </div>
+        <div className="divider"></div>
+        <div className="row">
+          {this.churches().map( (church)=>{
+              return <ChurchSingle key={church._id} church={church} parent={this} />
+          })}
         </div>
       </div>
   )

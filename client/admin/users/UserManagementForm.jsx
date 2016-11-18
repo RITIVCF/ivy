@@ -12,46 +12,27 @@ export default class UserManagementForm extends TrackerReact(React.Component) {
 		return Meteor.users.find().fetch();
 	}
 
-	postError(){
-		var d = document.getElementById("alertdiv");
-		d.innerHTML += "<div class='alert alert-danger alert-dismissible fade in' role='alert'>"+
-				"<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-				"	<span aria-hidden='true'>&times;</span></button>"+
-				"<strong>Oops!</strong> Looks like something went wrong. Try again later. If the problem persists,"+
-				"	contact support.</div>";
-	}
-
-	postSuccess(){
-		var d = document.getElementById("alertdiv");
-		d.innerHTML += "<div class='alert alert-success alert-dismissible fade in' role='alert'>"+
-				"<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
-				"	<span aria-hidden='true'>&times;</span></button>"+
-				"<strong>Success!</strong> Password reset sent.</div>";
+	createNew(){
+		FlowRouter.go("/signup");
 	}
 
 	render() {
 		return (
 			<div>
-				<h1>User Management</h1>
-				<div className="panel panel-default">
-					{/*}<div className="panel-body">
-
-					</div>*/}
-					<table className="table table-striped table-hover table-responsive">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Email</th>
-							</tr>
-						</thead>
-						<tbody>
-							{this.getUsers().map((user)=>{
-								return <UserRow key={user._id} uid={user._id} parent={this} />
-							})}
-						</tbody>
-					</table>
+				<div className="row">
+					<div className="col s12 m8 l9">
+						<h1>User Management</h1>
+					</div>
+					<div className="input-field col s12 m4 l3">
+						<button className="waves-effect waves-light btn right"
+							onClick={this.createNew.bind(this)}>New</button>
+					</div>
 				</div>
-				<div id="alertdiv">
+				<div className="divider"></div>
+				<div className="row">
+					{this.getUsers().map((user)=>{
+						return <UserRow key={user._id} uid={user._id} parent={this} />
+					})}
 				</div>
 			</div>
 		)

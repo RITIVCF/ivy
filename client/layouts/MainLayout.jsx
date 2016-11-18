@@ -10,7 +10,8 @@ import NavBar from './NavBar.jsx';
 export var MainLayout = ({content}) => (   // export const MainLayout
 	<div className="wrapper">
 				<NavBar />
-        <main style={{paddingTop: '50px'}}>
+      {/*}  <main style={{paddingTop: '50px'}}> */}
+				<main>
 		    	{content}
         </main>
 				<footer>

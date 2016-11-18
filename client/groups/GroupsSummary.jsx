@@ -37,32 +37,27 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 
 		return (
       <div className="container">
-  			<div className="row">
-  				<div className="col s12">
-            <div className="card">
-              <div className="card-content">
-                <span className="card-title">Active Groups</span>
-                <div className="row">
-                  <div className="col s12">
-                    <p>Enter a new group name and press enter, or select a group from below to edit.</p>
-                  </div>
-                </div>
-                <form onSubmit={this.createNew.bind(this)}>
-                  <div className="row">
-                    <div className="input-field col s12 m8 l6">
-                      <input type="text" ref="name"  placeholder="New Group Name..." />
-                      <label>New Group</label>
-                    </div>
-                  </div>
-                </form>
-                <ul className="collapsible" data-collapsible="accordion">
-                  {this.props.sub.Contacts.ready()?this.groups().map( (group)=>{
-                      return <GroupSingle key={group._id} group={group} sub={this.props.sub} parent={this} />
-                  }):<div></div>}
-                </ul>
-              </div>
-            </div>
+        <div className="row">
+          <div className="col s8">
+            <h1>Active Groups</h1>
           </div>
+          <form onSubmit={this.createNew.bind(this)}>
+            <div className="input-field col s4">
+              <input type="text" ref="name"  />
+              <label>New Group</label>
+            </div>
+          </form>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <p>Enter a new group name and press enter, or select a group from below to edit.</p>
+          </div>
+        </div>
+        <div className="divider"></div>
+        <div className="row">
+          {this.props.sub.Contacts.ready()?this.groups().map( (group)=>{
+              return <GroupSingle key={group._id} group={group} sub={this.props.sub} parent={this} />
+          }):<div></div>}
         </div>
       </div>
     )

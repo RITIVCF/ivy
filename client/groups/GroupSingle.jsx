@@ -17,6 +17,7 @@ export default class GroupsSingle extends Component {
   edit(event){
     event.preventDefault();
     //this.setState({editting: true});
+    $('.modal').modal();
     console.log("Editting");
     var id = "#"+this.props.group._id;
     console.log(id);
@@ -31,11 +32,14 @@ export default class GroupsSingle extends Component {
 
   render() {
     return (
-      <li>
-        <div className="collapsible-header">{this.props.group.name}</div>
-        <div className="collapsible-body"><GroupWorkspace group={this.props.group} /></div>
-      </li>
-      
+      <div className="col s12 m6 l4">
+        <div className="card-panel left hoverable" style={{width: "100%"}} onClick={this.edit.bind(this)}>
+          <div className="card-content">
+            <span className="card-title">{this.props.group.name}</span>
+          </div>
+        </div>
+      </div>
+
           )
   }
 }

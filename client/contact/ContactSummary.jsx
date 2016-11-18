@@ -11,7 +11,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
       subscription: {
         Contacts: Meteor.subscribe("allContacts", "All", "Name")
       },
-      filter: "All"
+      filter: ""
     };
   }
 
@@ -34,7 +34,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     // this.state.subscription.Contacts.stop();
     // this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
     //this.setState({subscription: {Contacts: Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value)}});
-    this.setState({filter: this.refs.filter.value});
+    let text = this.refs.filter.value;
+    text = text.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    this.setState({filter: text});
 	}
 
   changeSort(){
@@ -95,11 +97,16 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
   contacts(){
-    if(this.state.filter == "All"){
+    // if(this.state.filter == "All"){
+    //   return Contacts.find({},{sort: {name: 1}}).fetch();
+    // }
+    // return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
+    if(this.state.filter!=""){
+      return Contacts.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
+    }
+    else{
       return Contacts.find({},{sort: {name: 1}}).fetch();
     }
-    return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
-
   }
 
 
@@ -113,7 +120,15 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 		return (
 
           <div className="container">
-            <h1>All Contacts</h1>
+            <div className="row">
+              <div className="col s12 m7 l7">
+                <h1>All Contacts</h1>
+              </div>
+              <div className="input-field col s12 m5 l5">
+                <input ref="filter" onChange={this.changeFilter.bind(this)} type="text" className="validate" />
+                <label htmlFor="icon_prefix">Search</label>
+              </div>
+            </div>
             <div className="divider"></div>
                 {/*}
                       <p>Count: {this.contacts().length}</p>
@@ -125,7 +140,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       </div>
 
           </div>
-      
+
 
   )
 	}
