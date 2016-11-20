@@ -42,7 +42,7 @@ function shouldRenderSuggestions(value) {
 
 
 
-export default class SelectContact extends TrackerReact(React.Component) {
+export default class SelectContactNoUser extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
 
@@ -106,6 +106,18 @@ shouldComponentUpdate(nextProps, nextState){
     // });
   }
 
+  onSuggestionsFetchRequested({ value }){
+    this.setState({
+      suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested(){
+    // Autosuggest will call this function every time you need to clear suggestions.
+    this.setState({
+      suggestions: []
+    });
+  };
 
   onSuggestionsUpdateRequested({ value }) {
 
@@ -128,7 +140,8 @@ shouldComponentUpdate(nextProps, nextState){
                     suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
@@ -141,7 +154,8 @@ shouldComponentUpdate(nextProps, nextState){
         <Autosuggest suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
