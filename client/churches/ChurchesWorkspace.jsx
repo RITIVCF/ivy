@@ -42,21 +42,26 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 
 		return (
 		<div>
-
-			<div className="btn-toolbar" role="toolbar" aria-label="...">
-				<div className="btn-group" role="group" aria-label="...">
+			<div className="row">
+				<div className="col s12 m6 l6">
 					<ButtonActive ch={ch} />
+				</div>
+				<div className="col s12 m4 l3">
 					<ButtonDelete ch={ch} />
 				</div>
 			</div>
 
 
-			<div className="Workspace">
+			<div className="row">
 				<ChurchName ch={ch} />
-				<ChurchURL ch={ch} />
-				<ChurchTimes ch={ch} />
-				<ChurchContactsControls ch={ch} />
 			</div>
+			<div className="row">
+				<ChurchURL ch={ch} />
+			</div>
+
+
+			<ChurchTimes ch={ch} />
+			<ChurchContactsControls ch={ch} />
 		</div>
 		)
 	}

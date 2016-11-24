@@ -154,7 +154,6 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   render() {
-
       return (
         <div className="valign" id="signinformcontainer">
           <div className="col s4">
@@ -163,7 +162,7 @@ export default class SignIn extends TrackerReact(React.Component){
               <div className="card-content">
                 <h1>Welcome to {this.props.ev.name}!</h1>
                 <h2>Please sign in</h2>
-                <form className="publicForm" onSubmit={this.submit.bind(this)}>
+                <form className="publicForm" onSubmit={this.submit.bind(this)} name="form">
                   <div className="form-group">
                     <SelectContact
                       parent={this}

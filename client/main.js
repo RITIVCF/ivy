@@ -5,6 +5,7 @@ import { Accounts } from 'meteor/accounts-base';
 //   FlowRouter.go("/login");
 // }
 
+Meteor.subscribe("contactNames");
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
 

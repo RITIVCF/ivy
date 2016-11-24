@@ -122,17 +122,18 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	document.title = (!ev) ? "Ivy - Event Detail - ": "Ivy - Event Detail - " + ev.name;
 		return (
 
-		<div className="panel panel-default">
-			<div className="panel-heading">
-				<h3 className="panel-title">{!ev ? "":ev.name}</h3>
+		<div className="card">
+			<div className="card-image">
+				<img src="/images/defaultEventSmall.png" />
+				<span className="card-title">{!ev ? "":ev.name}</span>
 			</div>
-			<div className="panel-body">
+			<div className="card-content">
 				<p>Event Description: {!ev ? "": ev.description}</p>
 				<p>Event Start: {!!ev ? moment(ev.start.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
 				<p>Event End: {!!ev ? moment(ev.end.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
 				{!!ev?<a href={"/forms/signin/"+ev._id} ><button className="btn btn-info">Form</button></a>:
 					<button disabled="true" className="btn btn-info">Loading...</button>}
-				<h3>Attendees <button onClick={this.export.bind(this)} className="btn btn-primary">Export to Excel (CSV)</button></h3>
+				<h3>Attendees</h3> <button onClick={this.export.bind(this)} className="btn">Export to Excel (CSV)</button>
 				<label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
 					<option value={"All"}>All</option>
 					<option value={"Yes"}>Yes</option>

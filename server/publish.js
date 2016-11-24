@@ -3,14 +3,7 @@ Meteor.publish("allEvents", function(){
 });
 
 Meteor.publish("summaryEvents", function(){
-  var grps = Groups.find({users: this.userId}).fetch();
-	var ids = [];
-	grps.forEach(function(group){
-		ids.push(group._id);
-	});
-	//console.log("GGroups:");
-	//console.log(ids);
-	return Events.find({$or: [{owner: this.userId}, {"permUser.id": this.userId}, {"permGroup.id": {$in: ids}}]});
+
   //return Events.find({$or: [{}]});
 });
 
@@ -38,7 +31,40 @@ Meteor.publish("Event", function(eid){
   return Events.find({_id:eid},options);
 });
 
+Meteor.publish("mySchedule", function(){
+  return Events.find({"jobs.uid": this.userId, end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}});
+});
 
+Meteor.publish("UpcomingAndAttendedEvents", function(){
+  return Events.find({$or:[  {"attendees._id":Meteor.users.findOne(this.userId).contact}    , {published: true, start: {$gte: new Date()}}  ]});
+});
+
+Meteor.publish("myEvents", function(){
+  var grps = Groups.find({users: this.userId}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+	return Events.find({$or: [
+    {owner: this.userId},
+    {published: true},
+    {"permUser.id": this.userId},
+    {"permGroup.id": {$in: ids}}
+  ]});
+});
+
+Meteor.publish("otherUnpublishedEvents", function(){
+  // var grps = Groups.find({users: this.userId}).fetch();
+	// var ids = [];
+	// grps.forEach(function(group){
+	// 	ids.push(group._id);
+	// });
+	// //console.log("GGroups:");
+	// //console.log(ids);
+	return Events.find({}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
+});
+
+// all published events, plus my unpublished events
 
 Meteor.publish("publishedEvents", function(){
   return Events.find({published: true});
@@ -81,6 +107,10 @@ Meteor.publish("adminGroups", function(){
   return Groups.find({admingroup: true});
 });
 
+Meteor.publish("MyGroups", function(){
+  return Groups.find({users: this.userId}, {fields:{name:1, users:1}});
+});
+
 Meteor.publish("SGs", function(){
   return Groups.find({sg:true});
 });
@@ -99,7 +129,12 @@ Meteor.publish("contact", function(cid){
   //console.log(cid);
   if(!cid){
     //console.log("Finding one");
-    cid = Meteor.users.findOne(this.userId).contact; //Meteor.user().contact;
+    try{
+      cid = Meteor.users.findOne(this.userId).contact; //Meteor.user().contact;
+    }
+    catch (error){
+      cid = "";
+    }
   }
 
   const selector = {
@@ -211,6 +246,13 @@ Meteor.publish("allContacts", function(filtr, srt){
   return Contacts.find(selector, options);
 });
 
+Meteor.publish("contactNames", function(){
+  return [
+    Contacts.find({}, {fields: {name:1}}),
+    Meteor.users.find({},{fields: {contact: 1}})
+  ];
+});
+
 Meteor.publish("userContacts", function(){
   var users = Meteor.users.find({},{contact: 1}).fetch();
   var cids = []
@@ -311,6 +353,10 @@ Meteor.publish("allTickets", function(){
 
 Meteor.publish("eventTickets", function(evid){
   return Tickets.find({eid: evid,type:"Event Request"});
+});
+
+Meteor.publish("MyTickets", function(){
+  return Tickets.find({assigneduser: this.userId});
 });
 
 Meteor.publish("allTicketStatus", function(){

@@ -68,21 +68,12 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
           initialValue={""}
           updateContact={this.addContact.bind(this)}
           ref="contact"  />
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Remove</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.getContactsInfo().map((contact)=>{
-              return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
-            })}
-          </tbody>
-        </table>
+        <div className="row">
+          {this.getContactsInfo().map((contact)=>{
+            return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
+          })}
+        </div>
+
       </div>
     )
   }

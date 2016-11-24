@@ -73,7 +73,7 @@ export default class SelectUser extends TrackerReact(React.Component) {
     //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
 shouldComponentUpdate(nextProps, nextState){
@@ -117,9 +117,15 @@ shouldComponentUpdate(nextProps, nextState){
   }
 
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsFetchRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
+    });
+  }
+
+  onSuggestionsClearRequested() {
+    this.setState({
+      suggestions: []
     });
   }
 
@@ -135,27 +141,31 @@ shouldComponentUpdate(nextProps, nextState){
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
 

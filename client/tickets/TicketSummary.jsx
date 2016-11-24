@@ -9,38 +9,19 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-        Tickets: Meteor.subscribe("allActiveTickets"),
-        options: Meteor.subscribe("allOptions"),
-        events: Meteor.subscribe("allEvents"),
-        users: Meteor.subscribe("allUsers"),
-        contacts: Meteor.subscribe("allContacts")
-      },
-      filter: "assigneduser",
-      ticketId: false
-    };
-
     if(!Session.get("ticketfilter")){
       Session.set("ticketfilter", "assigneduser");
     }
   }
 
-  componentWillUnmount() {
-    this.state.subscription.Tickets.stop();
-    this.state.subscription.users.stop();
-    this.state.subscription.contacts.stop();
-    this.state.subscription.options.stop();
-    this.state.subscription.events.stop();
-  }
-
   newTicket(event){
 		event.preventDefault();
-  	this.refs.newticketoverlay.openOverlay();
+  	$("#newticketmodal").modal("open");
   }
 
   filterChange(event){
     event.preventDefault();
+    console.log(event.target.value);
     //this.setState({filter: this.refs.filter.value});
     Session.set("ticketfilter",this.refs.filter.value);
   }
@@ -76,66 +57,51 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Ticket Dashboard";
-    if(!checkPermission("tickets")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-		}
-    var ticket = Tickets.findOne(this.state.ticketId);
+    console.log(this.props.sub);
 		return (
-      <div>
-        {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-        <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""}
-          {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-          <EditTicketWindow ref="editticketoverlay" parent={this} ticket={ticket} /> : ""}
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-                    <button className="btn btn-primary" onClick={this.newTicket.bind(this)}>New</button>
-                      : <button className="btn btn-primary" >New</button>}
-                  </div>
-                </div>
+        <div className="card">
+          <div className="card-content">
+            <div className="col s12 m7 l7">
+              <h1>Tickets Dashboard</h1>
+            </div>
+            <div className="input-field col s12 m5 l5">
+              <a onClick={this.newTicket.bind(this)}
+                className="waves-effect waves-light btn">New Ticket</a>
+            </div>
+            <select ref="filter" className="browser-default" value={Session.get("ticketfilter")} onChange={this.filterChange.bind(this)}>
+                <option value={"assigneduser"}>My Active Tickets</option>
+                <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
+                <option value={""}>All Active Tickets</option>
+              </select>
 
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h1>Ticket Dashboard</h1>
-            <div className="panel panel-default">
+            <div className="divider"></div><br/>
+              <table className="bordered striped highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th>Ticket ID</th>
+                    <th>Subject</th>
+                    <th>Customer</th>
+                    <th>Ticket Type</th>
+                    <th>Request Type</th>
+                    <th>Assigned User</th>
+                    <th>Assigned Group</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                  </tr>
+                </thead>
+                {!this.props.sub ? <tbody></tbody>:
+                <tbody>
+                  {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
+                      return <TicketRow key={ticket._id} tkt={ticket} parent={this} />
+                  })}
+                </tbody>}
+              </table>
 
-              <div className="panel-body">
-                <select ref="filter" value={Session.get("ticketfilter")} onChange={this.filterChange.bind(this)}>
-                  <option value={"assigneduser"}>My Active Tickets</option>
-                  <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
-                  <option value={""}>All Active Tickets</option>
-                </select>
-              </div>
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Ticket ID</th>
-                  <th>Subject</th>
-                  <th>Customer</th>
-                  <th>Ticket Type</th>
-                  <th>Request Type</th>
-                  <th>Assigned User</th>
-                  <th>Assigned Group</th>
-                  <th>Status</th>
-                  <th>Last Updated</th>
-                </tr>
-              </thead>
-              {!(this.state.subscription.Tickets.ready()&&this.state.subscription.contacts.ready()&&this.state.subscription.users.ready()) ? <tbody></tbody>:
-              <tbody>
-                {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
-                    return <TicketRow key={ticket._id} tkt={ticket} parent={this} />
-                })}
-              </tbody>}
-            </table>
+            </div>
+            {(this.props.sub) ?
+            <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
+            }
           </div>
-        </div>
-      </div>
-    </div>
   )
 	}
 }

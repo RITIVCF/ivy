@@ -44,7 +44,7 @@ export default class ChurchSingle extends Component {
 
     return (
       <div className="col s12 m6 l4">
-        <div className={this.props.church.active?"card-panel left hoverable":"card-panel grey left hoverable"}
+        <div className={this.props.church.active?"card left hoverable":"card grey left hoverable"}
           onClick={this.edit.bind(this)}>
           <div className="card-image">
             <img
@@ -60,12 +60,13 @@ export default class ChurchSingle extends Component {
 
 
 
-        <div id={this.props.church._id} className="modal">
+        <div id={this.props.church._id} className="modal modal-fixed-footer">
           <div className="modal-content">
             <ChurchWorkspace ch={this.props.church} />
           </div>
           <div className="modal-footer">
-              <button onClick={this.close.bind(this)}>Close</button>
+              <a onClick={this.close.bind(this)}
+                className="modal-action modal-close waves-effect waves-blue btn-flat">Close</a>
           </div>
         </div>
       </div>

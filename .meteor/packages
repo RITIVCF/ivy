@@ -37,6 +37,7 @@ ultimatejs:tracker-react@=1.0.0
 #stolinski:stylus-multi
 #rzymek:fullcalendar@=2.7.2   #Doesn't work
 rzymek:fullcalendar@=2.2.6    #Does work
+rzymek:tinymce-cdn
 alanning:roles
 session
 email

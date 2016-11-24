@@ -61,6 +61,7 @@ export default class EventContent extends TrackerReact(React.Component) {
 
 
     var perms = checkEventPermission(this.props.event);
+    var isformopen = (this.props.event.start<new moment(new Date).add(2,"hours"));
     console.log(perms);
     return (
       <div id={this.props.event._id} className="modal">
@@ -77,10 +78,13 @@ export default class EventContent extends TrackerReact(React.Component) {
             </a>
             :<div></div>
           }
-          {checkPermission('attendance')?
+          {checkPermission('attendance')&&(this.props.event.published)&&isformopen?
           <a href={"/attendance/event/"+this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">View Attendance</a>
           :<div></div>}
-          <a href={"/forms/signin/" + this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">Open Form</a>
+          {(this.props.event.published)&&isformopen?
+            <a href={"/forms/signin/" + this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">Open Form</a>
+            :<div></div>
+          }
         </div>
       </div>
     );

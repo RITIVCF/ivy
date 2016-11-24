@@ -54,7 +54,7 @@ export default class UserRow extends TrackerReact(React.Component) {
 		return (
 
 			<div className="col s12 m6 l4">
-				<div className="card-panel left hoverable">
+				<div className="card left hoverable">
 					<div className="card-image">
 	          <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
 	        </div>

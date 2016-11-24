@@ -2,7 +2,10 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import { HTTP } from 'meteor/http';
 import FeedbackForm from './feedback/FeedbackForm.jsx';
-import TinyMCETest from './tinyMCETest.jsx';
+import MySchedule from './widgets/MySchedule.jsx';
+import MyEvents from './widgets/MyEvents.jsx';
+import MyTickets from './widgets/MyTickets.jsx';
+import MyGroups from './widgets/MyGroups.jsx';
 //import websocket from 'websocket';
 
 Meteor.subscribe("allGroups");
@@ -52,21 +55,20 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		//  });
 		return (
 				<div className="row">
-					<div className="col s6">
+					<div className="col s12 m6">
 						<div className="card">
 	            <div className="card-content">
 	              <p>This system is not compatible with Safari. If you are using Safari, please use a different browser.
 								<br /><br />Thank you. -RIT IVCF Web Development Team</p>
 	            </div>
           	</div>
+						<MySchedule />
+						<MyTickets />
 					</div>
-		      <div className="col s6">
-            	<FeedbackForm />
-					</div>
-					<div className="row">
-						<div className="col s12">
-							<TinyMCETest />
-						</div>
+		      <div className="col s12 m6">
+							<MyEvents />
+							<MyGroups />
+							<FeedbackForm />
 					</div>
 
 				</div>

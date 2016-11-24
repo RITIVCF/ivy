@@ -16,6 +16,10 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     }
   }
 
+  componentDidMount(){
+    $('select').material_select();
+  }
+
   getUser(id){
     if(!id){
       return '';
@@ -38,6 +42,12 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   getEventName(){
     return Events.findOne(this.props.ticket.eid).name;
+  }
+
+  goToEvent(){
+    if(checkPermission('attendance')){
+      FlowRouter.go("/attendance/event/"+this.props.ticket.eid);
+    }
   }
 
   getTypes(){
@@ -118,110 +128,102 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <p>Date created: {new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
-                    <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
-                    <p>Ticket #: {this.props.ticket.ticketnum}</p>
-                      {this.props.ticket.type == "Contact" ? <div></div> :<div>
-                      <label>User: </label><SelectUser parent={this}
-                        id={"customer"}
-                        unset={this.unset.bind(this)}
-                        updateContact={this.updateCust.bind(this)}
-                        initialValue={this.getUser(this.props.ticket.customer)}
-                        ref="cust"  /></div>}
+      <div className="container">
+        <div className="card">
+          <div className="card-content">
+            <div className="row">
+              <div className="col s12 m6">
+                <p>Date created: {new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
+                <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
+                <p>Ticket #: {this.props.ticket.ticketnum}</p>
+                  {this.props.ticket.type == "Contact" ? <div></div> :<div>
+                  <label>User: </label><SelectUser parent={this}
+                    id={"customer"}
+                    unset={this.unset.bind(this)}
+                    updateContact={this.updateCust.bind(this)}
+                    initialValue={this.getUser(this.props.ticket.customer)}
+                    ref="cust"  /></div>}
 
-                        <TicketSubject parent={this} ticket={this.props.ticket} />
-                        <TicketDescription parent={this} ticket={this.props.ticket} />
-                        <div className="form-group">
-                        <label>Type:</label>
-                          <select ref="type" className="form-control"
-                            value={this.props.ticket.type}
-                            onChange={this.updateType.bind(this)}>
-                            {this.getTypes().map( (type) =>{
-                              return <option key={type} value={type} >{type}</option>
-                            })}
-                          </select>
-                        </div>
-                        {this.props.ticket.type == "Event Request" ? <div className="form-group">
-                        <label>Request Type:</label>
-                          <select ref="reqtype"
-                            className="form-control"
-                            value={this.props.ticket.ereqtype}
-                            onChange={this.updateReqType.bind(this)}>
-                            <option value={""}></option>
-                            {this.getReqTypes().map( (type) =>{
-                              return <option key={type} value={type} >{type}</option>
-                            })}
-                          </select>
-                        </div>
-                         :"" }
-                         <div className="form-group">
-                           <label>Assigned Group:</label>
-                             <SelectGroup
-                       				parent={this}
-                       				id={"assignedgroup"}
-                              className="form-control"
-                       				unset={this.unset.bind(this)}
-                       				updateContact={this.updateAssignedG.bind(this)}
-                       				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
-                       				ref={"assignedgroup"}
-                       				/>
-                            {/*<button className="btn btn-info" onClick={this.assignToMyGroup.bind(this)}>Assign to My Group</button>*/}
-                         </div>
-                        <div className="form-group">
-                          <label>Assigned User:</label>
-                          <SelectUser parent={this}
-                            id={"assigneduser"}
-                            unset={this.unset.bind(this)}
-                            initialValue={this.getUser(this.props.ticket.assigneduser)}
-                            updateContact={this.updateAssignedU.bind(this)}
-                            ref="assigneduser" className="form-control" aria-describedby="assignme"/>
-                          <button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>
-                        </div>
-                        <div className="from-group">
-                          <label>Status:</label>
-                            <select className="form-control"
-                              ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
-                              {this.getStatuses().map( (type) =>{
-                                return <option key={type} value={type} >{type}</option>
-                              })}
-                            </select>
-                        </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <p>Last updated: {new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
-                    {this.props.ticket.eid ? <p>Event: {this.getEventName()}</p>:""}
-                    <table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Activity</th>
-                          <th>Description</th>
-                          <th>User</th>
-                          <th>Date/Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.props.ticket.activities.map( (activity) =>{
-                          return <Activity key={activity.createdAt} activity={activity} />
-                        })}
-                      </tbody>
-                    </table>
+                    <TicketSubject parent={this} ticket={this.props.ticket} />
+                    <TicketDescription parent={this} ticket={this.props.ticket} />
                     <div className="form-group">
-                      <textarea ref="notebox" className="form-control" rows="3" />
+                    <label>Type:</label>
+                      <select ref="type" className="form-control"
+                        value={this.props.ticket.type}
+                        onChange={this.updateType.bind(this)}>
+                        {this.getTypes().map( (type) =>{
+                          return <option key={type} value={type} >{type}</option>
+                        })}
+                      </select>
                     </div>
-                    <button className="form-control" onClick={this.addNote.bind(this)} >Add Note</button>
-                  </div>
+                    {this.props.ticket.type == "Event Request" ? <div className="form-group">
+                    <label>Request Type:</label>
+                      <select ref="reqtype"
+                        className="form-control"
+                        value={this.props.ticket.ereqtype}
+                        onChange={this.updateReqType.bind(this)}>
+                        <option value={""}></option>
+                        {this.getReqTypes().map( (type) =>{
+                          return <option key={type} value={type} >{type}</option>
+                        })}
+                      </select>
+                    </div>
+                     :"" }
+                     <div className="form-group">
+                       <label>Assigned Group:</label>
+                         <SelectGroup
+                   				parent={this}
+                   				id={"assignedgroup"}
+                          className="form-control"
+                   				unset={this.unset.bind(this)}
+                   				updateContact={this.updateAssignedG.bind(this)}
+                   				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
+                   				ref={"assignedgroup"}
+                   				/>
+                        {/*<button className="btn btn-info" onClick={this.assignToMyGroup.bind(this)}>Assign to My Group</button>*/}
+                     </div>
+                    <div className="form-group">
+                      <label>Assigned User:</label>
+                      <SelectUser parent={this}
+                        id={"assigneduser"}
+                        unset={this.unset.bind(this)}
+                        initialValue={this.getUser(this.props.ticket.assigneduser)}
+                        updateContact={this.updateAssignedU.bind(this)}
+                        ref="assigneduser" className="form-control" aria-describedby="assignme"/>
+                      <button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>
+                    </div>
+                    <div className="from-group">
+                      <label>Status:</label>
+                        <select className="form-control"
+                          ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
+                          {this.getStatuses().map( (type) =>{
+                            return <option key={type} value={type} >{type}</option>
+                          })}
+                        </select>
+                    </div>
+              </div>
+              <div className="col s12 m6">
+                <p>Last updated: {new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
+                {this.props.ticket.eid ? <p>Event: <span onClick={this.goToEvent.bind(this)}>{this.getEventName()}</span></p>:""}
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Activity</th>
+                      <th>Description</th>
+                      <th>User</th>
+                      <th>Date/Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.props.ticket.activities.map( (activity) =>{
+                      return <Activity key={activity.createdAt} activity={activity} />
+                    })}
+                  </tbody>
+                </table>
+                <div className="form-group">
+                  <textarea ref="notebox" className="form-control" rows="3" />
                 </div>
+                <a className="waves-effect waves-light btn" onClick={this.addNote.bind(this)} >Add Note</a>
               </div>
             </div>
           </div>

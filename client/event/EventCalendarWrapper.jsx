@@ -11,15 +11,15 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     var thiz = this;
     this.state = {
       subscription: {
-        Events: Meteor.subscribe("publishedEvents", {
-          onReady: function () { } //thiz.refs.calendar.refresh(); }
-        })
+        myEvents: Meteor.subscribe("myEvents"),
+        UnpublishedEvents: Meteor.subscribe("otherUnpublishedEvents") 
       }
     };
   }
 
   componentWillUnmount() {
-    this.state.subscription.Events.stop();
+    this.state.subscription.myEvents.stop();
+    this.state.subscription.UnpublishedEvents.stop();
   }
 
 

@@ -29,6 +29,20 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   }
 
+  createNew(go){
+    event.preventDefault();
+    Meteor.call('addEvent', this.refs.newname.value, newevent.start._d, function(error, result){
+      if(error){
+        console.log(error.reason);
+        return;
+      }
+      if(go){
+        FlowRouter.go("/events/workspace/"+result);
+      }
+    });
+    this.refs.newname.value="";
+}
+
   renderPopoverContent(event) {
     div = $("<div></div>")[0];
     ReactDOM.render((<div id={event._id} className="modal">
@@ -64,11 +78,78 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       defaultDate: this.props.date?this.props.date:Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
         //FlowRouter.go("/attendance/event/"+calEvent._id);
+        if(!calEvent.name){
+          return;
+        }
         $('.modal').modal();
         //console.log(calEvent._id);
         $('#'+calEvent._id).modal('open');
       },
+      eventDrop: function(event, delta, revertFunc) {
+        var start = new moment(event.start.toISOString());
+        var end = new moment(event.end.toISOString());
+        Meteor.call("updateEventStart", event._id, start._d, function(error,result){
+          if(error){
+            revertFunc();
+          }
+        });
+        Meteor.call("updateEventEnd", event._id, end._d, function(error,result){
+          if(error){
+            revertFunc();
+          }
+        });
+
+      },
+      eventResize: function(event, delta, revertFunc) {
+        var end = new moment(event.end.toISOString());
+        Meteor.call("updateEventEnd", event._id, end._d, function(error,result){
+          if(error){
+            revertFunc();
+          }
+        });
+
+      },
       dayClick: function(date, jsEvent, view) {
+        var timestamp = new moment(date._d);
+        if(view.name=="month"){
+            date.add(20,"hours");
+        }
+        else{
+          date.add(5, "hours");
+        }
+        newevent = {start: date};
+        $('#neweventmodalstart')[0].innerHTML="Start: "+ date.subtract(5,"hours").format("Do MMM h:mmA"); $('.modal').modal();
+        date.add(5,"hours");
+        console.log($('#neweventmodalstart'));
+        console.log(newevent);
+        $('#neweventmodal').modal('open');
+        $('#newname').focus();
+
+
+        //$(calendar).fullCalendar( 'renderEvent', {title: "", start: date._d, end: end._d});
+
+
+
+        // create new event, open popup for name
+        // console.log(view);
+        // console.log(date);
+        // var component = this;
+        // if(view.name=="month"){
+        //     date.add(20,"hours");
+        // }
+        // else{
+        //   date.add(5, "hours");
+        // }
+        // console.log(date);
+        // console.log(date._d);
+        // Meteor.call('addBlankEvent', date._d, function(error, result){
+        //   if(error){
+        //     console.log(error.reason);
+        //     return;
+        //   }
+        // //FlowRouter.go("/events/workspace/"+result);
+        // });
+
         //$(calendar).fullCalendar( 'gotoDate', date );
         //$(calendar).fullCalendar( 'changeView', "basicDay" );
       },
@@ -121,10 +202,37 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $('.tooltipped').tooltip({delay: 50});
   }
 
-  getEvents(){
+  getPublishedEvents(){
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
-    var events = Events.find().fetch();
+    var events = Events.find({published: true}).fetch();
     events.forEach((event)=>{
+      event.title=event.name;
+    });
+
+    //console.log(Groups.find({users: Meteor.userId()}).fetch());
+    var grps = Groups.find({users: Meteor.userId()}).fetch();
+  	var ids = [];
+  	grps.forEach(function(group){
+  		ids.push(group._id);
+  	});
+  	console.log("GGroups:");
+  	console.log(ids);
+    console.log(Events.find({$or: [
+      {owner: Meteor.userId()},
+      {published: true},
+      {"permUser.id": Meteor.userId()},
+      {"permGroup.id": {$in: ids}}
+    ]}).fetch());
+
+
+
+    return events;
+  }
+  getUnPublishedEvents(){
+    //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
+    var events = Events.find({published: false}).fetch();
+    events.forEach((event)=>{
+      event.editable=(!event.name)?false:true;
       event.title=event.name;
     })
     return events;
@@ -132,7 +240,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   refresh(){
     $(calendar).fullCalendar( 'removeEvents');
-    $(calendar).fullCalendar( 'addEventSource', {events: this.getEvents()});
+    $(calendar).fullCalendar( 'addEventSource',
+      {events: this.getPublishedEvents()
+      }
+    );
+    $(calendar).fullCalendar( 'addEventSource',
+      {events: this.getUnPublishedEvents(),
+        color: "red"
+      }
+    );
     $(calendar).fullCalendar( 'rerenderEvents');
     $('.modal').modal();
 
@@ -144,6 +260,10 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $('#XynJraXPfs46EXMGP').modal('open');
   }
 
+  openHelp(){
+      $("#helpmodal").modal("open");
+  }
+
   render() {
     if(this.state.mounted){ // This reactively
       this.refresh();
@@ -153,11 +273,50 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
     return (
       <div>
+        <a onClick={this.openHelp.bind(this)} className="waves-effect waves-green btn">Help</a>
         <div ref="calendar" id="calendar"></div>
-        {this.getEvents().map((event)=>{
+        {this.getPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}
-
+        {this.getUnPublishedEvents().map((event)=>{
+          return <EventContent key={event._id} event={event} />
+        })}
+        <div id="neweventmodal" className="modal">
+          <div className="modal-content">
+            <div className="input-field col s12">
+              <input ref="newname" id="newname" type="text" />
+              <label htmlFor="icon_prefix">New Event Name</label>
+            </div>
+            <p id="neweventmodalstart"></p>
+          </div>
+          <div className="modal-footer">
+            <a onClick={this.createNew.bind(this,false)}
+              className="modal-action modal-close waves-effect waves-green btn-flat">Create
+            </a>
+            <a onClick={this.createNew.bind(this,true)}
+              className="modal-action modal-close waves-effect waves-green btn-flat">Edit Event
+            </a>
+          </div>
+        </div>
+        <div id="helpmodal" className="modal">
+          <div className="modal-content">
+            <h3>Event Dashboard</h3>
+            <p>This is the full management area for planning events. Blue events are published events. Red events have not been published.
+              If the event is unpublished without a name, that means you do not have the permission to view or edit that event. You can
+              continue to edit events after they have been published if you have permission.
+            </p><br/>
+          <img src="/images/CalendarExample.jpg" width="100%" className="materialboxed" ></img>
+          <h5>Potential Actions:</h5>
+            <p>
+              <b>Event Click:</b> View options and event details.<br/>
+              <b>Drag & Resize:</b> change the date and time by dragging and event or dragging the handle in week view.<br/>
+              <b>Space Click:</b> Click on a day (day and time in week view) to create a new event at that time. "Edit Event" goes directly to the event
+              workspace.</p>
+          </div>
+          <div className="modal-footer">
+            <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+          </div>
+        </div>
       </div>
     );
   }

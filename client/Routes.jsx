@@ -34,7 +34,7 @@ import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
 import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
 import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
 import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
-import TicketSummary from './tickets/TicketSummary.jsx';
+import TicketWrapper from './tickets/TicketWrapper.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
 import ContactSummary from './contact/ContactSummary.jsx';
 import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
@@ -232,7 +232,7 @@ FlowRouter.route('/events/old',{
 FlowRouter.route('/tickets',{
 	action() {
 		mount(MainLayout, {
-			content: (<TicketSummary />)
+			content: (<TicketWrapper />)
 		})
 	}
 });

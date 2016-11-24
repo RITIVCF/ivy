@@ -38,7 +38,7 @@ export default class ContactSingle extends Component {
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
     return (
       <div className="col s12 m6 l4">
-      <div className="card-panel left hoverable" onClick={this.go.bind(this)}>
+      <div className="card left hoverable" onClick={this.go.bind(this)}>
         <div className="card-image">
           <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
         </div>

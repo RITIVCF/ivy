@@ -11,6 +11,10 @@ export default class UserPage extends TrackerReact(React.Component) {
 		return Contacts.findOne(Meteor.users.findOne(this.props.uid).contact);
 	}
 
+	componentDidMount(){
+		$('select').material_select();
+	}
+
 	getAllGroups(){
 		return Groups.find({users: {$ne: this.props.uid}}).fetch();
 	}
@@ -35,25 +39,22 @@ export default class UserPage extends TrackerReact(React.Component) {
 		return (
 			<div>
 				<h1>{user.name}</h1>
-				<div className="panel panel-default">
-					<div className="panel-heading">
-
-					</div>
-					<div className="panel-body">
+				<div className="card-panel">
+					<div className="card-content">
 						<div className="row">
-							<div className="col-md-5">
+							<div className="col s12 m5 l4">
 								<p>Available Groups</p>
 								<select
-									className="form-control"
 									multiple
-									size="10"
+									className="browser-default"
+									rows="10"
 									ref="groups" >
 									{this.getAllGroups().map((group)=>{
 										return <option key={group._id} value={group._id}>{group.name}</option>
 									})}
 								</select>
 							</div>
-							<div className="col-md-2">
+							<div className="col s12 m2 l4">
 								<div className="row">
 									<button onClick={this.add.bind(this)} className="btn">{"=>"}</button>
 								</div>
@@ -61,12 +62,12 @@ export default class UserPage extends TrackerReact(React.Component) {
 									<button onClick={this.remove.bind(this)} className="btn">{"<="}</button>
 								</div>
 							</div>
-							<div className="col-md-5">
+							<div className="col s12 m5 l4">
 								<p>{user.name+"'s"} Groups</p>
 								<select
 									multiple
-									className="form-control"
-									size="10"
+									className="browser-default"
+									rows="10"
 									ref="usergroups" >
 									{this.getUserGroups().map((group)=>{
 										return <option key={group._id} value={group._id}>{group.name}</option>

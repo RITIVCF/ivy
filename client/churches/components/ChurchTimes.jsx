@@ -22,12 +22,13 @@ export default class ChurchTimes extends Component {
     }
     return (
     <div>
-        <button onClick={this.add.bind(this)}>Add New Time</button>
-      <ul>
+        <a className="waves-effect waves-light btn" 
+          onClick={this.add.bind(this)}>Add New Time</a>
+      <div className="row">
         {this.props.ch.times.map( (time)=>{
   				return <Time key={time.day+time.time} ch={this.props.ch} time={time} />
   			})}
-      </ul>
+      </div>
     </div>
   )
   }

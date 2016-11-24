@@ -20,6 +20,10 @@ export default class HowHearSelect extends TrackerReact(React.Component){
     }
   }
 
+  componentDidMount(){
+    $('select').material_select();
+  }
+
   getOptions(){
     return Options.findOne("howhear").vals;
   }

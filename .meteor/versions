@@ -99,6 +99,7 @@ retry@1.0.9
 routepolicy@1.0.12
 rzymek:fullcalendar@2.2.6
 rzymek:moment@2.8.3_10
+rzymek:tinymce-cdn@4.0.0_2
 service-configuration@1.0.11
 session@1.1.7
 sha@1.0.9

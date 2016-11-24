@@ -63,40 +63,43 @@ export default class Time extends Component {
       options.push({name: time, value: time});
     });
     return(
-      <li>
-    {this.state.editting==true ? // No form so no submit on *Enter*
-      <form>
-        {/*}<input type="hidden" ref="id" value={this.props.address._id} />*/}
-        <select ref="day" value={this.props.time.day} onChange={this.handleDayChange}>
-          <option value={"Sunday"}>Sunday</option>
-          <option value={"Monday"}>Monday</option>
-          <option value={"Tuesday"}>Tuesday</option>
-          <option value={"Wednesday"}>Wednesday</option>
-          <option value={"Thursday"}>Thursday</option>
-          <option value={"Friday"}>Friday</option>
-          <option value={"Saturday"}>Saturday</option>
-        </select>
-        {/*}<select ref="time" value={this.props.time.time}  onChange={this.handleDayChange.bind)this}>
-          {Meteor.settings.public.times.map( (time)=>{
-            return <SelectOption key={time} value={time} displayvalue={time} />
-          })}
-        </select>
-        <SelectSearch options={options}
-          value={this.props.time.time}
-          ref="time"
-          placeholder={this.props.time.time} />  */}
-        <SelectTime ref="time"  initialValue={this.props.time.time}
-           />
-        <button onClick={this.closeedit.bind(this)}>Save</button>
-        <button onClick={this.close.bind(this)}>Close</button>
-      </form>
-      :
-      <div onClick={this.edit.bind(this)}>
-        <div>{this.props.time.day}, {this.props.time.time}</div>
+      <div className="col s12 m6 l4">
+        <div className="card-panel left">
+      {this.state.editting==true ? // No form so no submit on *Enter*
+        <form>
+          {/*}<input type="hidden" ref="id" value={this.props.address._id} />*/}
+          <select ref="day" value={this.props.time.day} onChange={this.handleDayChange}>
+            <option value={"Sunday"}>Sunday</option>
+            <option value={"Monday"}>Monday</option>
+            <option value={"Tuesday"}>Tuesday</option>
+            <option value={"Wednesday"}>Wednesday</option>
+            <option value={"Thursday"}>Thursday</option>
+            <option value={"Friday"}>Friday</option>
+            <option value={"Saturday"}>Saturday</option>
+          </select>
+          {/*}<select ref="time" value={this.props.time.time}  onChange={this.handleDayChange.bind)this}>
+            {Meteor.settings.public.times.map( (time)=>{
+              return <SelectOption key={time} value={time} displayvalue={time} />
+            })}
+          </select>
+          <SelectSearch options={options}
+            value={this.props.time.time}
+            ref="time"
+            placeholder={this.props.time.time} />  */}
+          <SelectTime ref="time"  initialValue={this.props.time.time}
+             />
+          <button onClick={this.closeedit.bind(this)}>Save</button>
+          <button onClick={this.close.bind(this)}>Close</button>
+        </form>
+        :
+        <div onClick={this.edit.bind(this)}>
+          <div>{this.props.time.day}, {this.props.time.time}</div>
+        </div>
+      }
+      <a onClick={this.remove.bind(this)}
+         className="waves-effect waves-blue btn">X</a>
       </div>
-    }
-    <button onClick={this.remove.bind(this)}>X</button>
-    </li>
+    </div>
     )
   }
 }

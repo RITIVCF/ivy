@@ -27,7 +27,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 
 	render(){
 		return(
-			<div className="navbar-fixed">
+			<div className="navbar-fixed blue">
 			<nav>
 				<ul id="dropdown1" className="dropdown-content">
 				  <li><a href="#!">one</a></li>
@@ -49,18 +49,18 @@ export default class Navbar extends TrackerReact(React.Component) {
 							<li>
 								<a href="/events">Events</a>
 							</li>:""}
-						{/*checkPermission("tickets")?
+						{checkPermission("tickets")?
 							<li>
 								<a href="/tickets">Ticket Dashboard</a>
-							</li>:""*/}
+							</li>:""}
 						{checkPermission("contacts")?
 							<li>
 								<a href="/contacts">Contact Dashboard</a>
 							</li>:""}
-						{checkPermission("churches")?
+						{/*checkPermission("churches")?
 							<li>
 								<a href="/churches">Churches Dashboard</a>
-							</li>:""}
+							</li>:""*/}
 						{/*
 							<li>
 								<a
@@ -70,7 +70,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 									Dropdown
 									<i className="material-icons right"></i>
 								</a>
-							</li>*/}
+							</li>
 							<li>
 								<a href="/admin/users">User Management</a>
 							</li>
@@ -85,11 +85,12 @@ export default class Navbar extends TrackerReact(React.Component) {
 							</li>
 							<li>
 								<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
-							</li>
+							</li>*/}
 							{checkPermission("feedback")?
 								<li>
 									<a href="/feedback">Feedback</a>
 								</li>:""}
+								{/*
 							<li>
 								<a href="/admin/overview">Chapter Overview</a>
 							</li>

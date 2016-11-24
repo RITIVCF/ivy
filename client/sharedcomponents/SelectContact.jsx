@@ -148,8 +148,8 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
-                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                      onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                       />
 
 
@@ -164,8 +164,8 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
-                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                     onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                       />
       );
     }

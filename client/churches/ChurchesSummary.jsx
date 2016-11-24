@@ -24,6 +24,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
     this.state.subscription.Churches.stop();
   }
 
+
+
   createNew(event){
     event.preventDefault();
     //console.log(event);
@@ -63,11 +65,12 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 	render() {
     document.title="Ivy - Churches Dashboard";
     if(!checkPermission("churches")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+      return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
 		return (
 
       <div className="container">
+        <script src="https://cdn.tinymce.com/4/tinymce.min.js" ></script>
         <div className="row">
           <div className="col s12 m8 l8">
             <h1>Churches</h1>
@@ -85,6 +88,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
               return <ChurchSingle key={church._id} church={church} parent={this} />
           })}
         </div>
+
+
       </div>
   )
 	}
