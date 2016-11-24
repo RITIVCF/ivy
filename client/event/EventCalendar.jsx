@@ -2,6 +2,8 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
 import EventContent from './EventContent.jsx';
+import EventHelp from './EventHelp.jsx';
+import NewEventModal from './NewEventModal.jsx';
 //import EventModal from './components.jsx';
 //import {Tracker} from 'meteor/tracker';
 
@@ -21,7 +23,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       Session.set("calendardate", moment()._d);
     }
     this.state = {
-       mounted: false
+       mounted: false,
+
     }
   }
 
@@ -29,19 +32,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   }
 
-  createNew(go){
-    event.preventDefault();
-    Meteor.call('addEvent', this.refs.newname.value, newevent.start._d, function(error, result){
-      if(error){
-        console.log(error.reason);
-        return;
-      }
-      if(go){
-        FlowRouter.go("/events/workspace/"+result);
-      }
-    });
-    this.refs.newname.value="";
-}
+  
 
   renderPopoverContent(event) {
     div = $("<div></div>")[0];
@@ -264,6 +255,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       $("#helpmodal").modal("open");
   }
 
+
+
   render() {
     if(this.state.mounted){ // This reactively
       this.refresh();
@@ -281,42 +274,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         {this.getUnPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}
-        <div id="neweventmodal" className="modal">
-          <div className="modal-content">
-            <div className="input-field col s12">
-              <input ref="newname" id="newname" type="text" />
-              <label htmlFor="icon_prefix">New Event Name</label>
-            </div>
-            <p id="neweventmodalstart"></p>
-          </div>
-          <div className="modal-footer">
-            <a onClick={this.createNew.bind(this,false)}
-              className="modal-action modal-close waves-effect waves-green btn-flat">Create
-            </a>
-            <a onClick={this.createNew.bind(this,true)}
-              className="modal-action modal-close waves-effect waves-green btn-flat">Edit Event
-            </a>
-          </div>
-        </div>
-        <div id="helpmodal" className="modal">
-          <div className="modal-content">
-            <h3>Event Dashboard</h3>
-            <p>This is the full management area for planning events. Blue events are published events. Red events have not been published.
-              If the event is unpublished without a name, that means you do not have the permission to view or edit that event. You can
-              continue to edit events after they have been published if you have permission.
-            </p><br/>
-          <img src="/images/CalendarExample.jpg" width="100%" className="materialboxed" ></img>
-          <h5>Potential Actions:</h5>
-            <p>
-              <b>Event Click:</b> View options and event details.<br/>
-              <b>Drag & Resize:</b> change the date and time by dragging and event or dragging the handle in week view.<br/>
-              <b>Space Click:</b> Click on a day (day and time in week view) to create a new event at that time. "Edit Event" goes directly to the event
-              workspace.</p>
-          </div>
-          <div className="modal-footer">
-            <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-          </div>
-        </div>
+        <NewEventModal />
+        <EventHelp />
       </div>
     );
   }

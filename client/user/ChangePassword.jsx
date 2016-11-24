@@ -43,6 +43,7 @@ export default class ChangePassword extends TrackerReact(React.Component) {
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Change Password</span>
+                <div className="row">
                 <form className="col s12">
                   <div className="input-field col s12">
                     <input type="password" ref="old" required />
@@ -71,7 +72,8 @@ export default class ChangePassword extends TrackerReact(React.Component) {
                     Change
                   </a>
                 </form>
-
+                
+                </div>
               </div>
             </div>
           </div>

@@ -101,7 +101,7 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 		}*/
 
 		return (
-		<div>
+		<div className="container">
 			<ContactProfile cid={this.props.cid} parent={this} subscriptions={this.state.subscription} />
 		</div>
 		)

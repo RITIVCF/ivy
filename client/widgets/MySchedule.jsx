@@ -32,12 +32,6 @@ export default class MySchedule extends TrackerReact(React.Component) {
 		return Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch();
 	}
 
-	returnNone(){
-		return <li className="collection-item">You have no upcoming scheduled service positions.</li>
-	}
-
-
-
 
 	render() {
 		return (
@@ -47,7 +41,8 @@ export default class MySchedule extends TrackerReact(React.Component) {
 						<ul className="collection">
 							{this.state.subscription.events.ready()?(this.getEvents().length!=0)?this.getEvents().map((event)=>{
 								return <ScheduleItem key={event._id} ev={event} />
-							}):this.returnNone():<div></div>}
+							}):<li className="collection-item">You have no upcoming scheduled service positions.</li>
+							:<div></div>}
 
 					  </ul>
 				</div>

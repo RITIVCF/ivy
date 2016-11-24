@@ -75,7 +75,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 								<div className="col-md-6">
 									<div className="form-group">
 										<label>Choose contact card to delete:</label>
-										<select multiple ref="delete" className="form-control" onChange={this.showContactDelete.bind(this)}>
+										<select multiple ref="delete" className="browser-default" onChange={this.showContactDelete.bind(this)}>
 											{this.getContacts().map((contact)=>{
 												return <Contact key={contact._id} contact={contact} />
 											})}
@@ -86,7 +86,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 								<div className="col-md-6">
 									<div className="form-group">
 										<label>Choose contact card to merge into:</label>
-										<select multiple ref="merge" className="form-control" onChange={this.showContactMerge.bind(this)}>
+										<select multiple ref="merge" className="browser-default" onChange={this.showContactMerge.bind(this)}>
 											{this.getContacts().map((contact)=>{
 												return <Contact key={contact._id} contact={contact} />
 											})}

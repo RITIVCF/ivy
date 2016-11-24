@@ -17,7 +17,7 @@ export default class SignIn extends TrackerReact(React.Component){
   submit(event){
     event.preventDefault();
     var thiz = this;
-    //console.log(this.state);
+    console.log(this.state);
     var eid = this.props.ev._id;
     var contact = this.state.contact;
     var evname = this.props.ev.name;

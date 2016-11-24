@@ -6,11 +6,15 @@ export default class MyGroups extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
-		// this.state = {
-		// 	subscription: {
-		// 		groups: Meteor.subscribe("MyGroups")
-		// 	}
-		// }
+		this.state = {
+			subscription: {
+				names: Meteor.subscribe("contactNames")
+			}
+		}
+	}
+
+	componentWillUnmount(){
+		this.state.subscription.names.stop();
 	}
 
 	getGroups(){
@@ -24,9 +28,9 @@ export default class MyGroups extends TrackerReact(React.Component) {
 				<div className="card-content">
 					<span className="card-title">My Groups</span>
 					<ul className="collection">
-						{this.getGroups().map((group)=>{
+						{this.state.subscription.names.ready()?this.getGroups().map((group)=>{
 							return <GroupItem key={group._id} group={group} />
-						})}
+						}):<li></li>}
 					</ul>
 				</div>
 			</div>

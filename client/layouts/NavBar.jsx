@@ -18,6 +18,11 @@ export default class Navbar extends TrackerReact(React.Component) {
 		$(".dropdown-button").dropdown();
 	}
 
+	componentDidUpdate(){
+		$(".dropdown-button").dropdown();
+		$(".button-collapse").sideNav();
+	}
+
 	getContact(){
 		//console.log(Meteor.user());
 
@@ -28,23 +33,47 @@ export default class Navbar extends TrackerReact(React.Component) {
 	render(){
 		return(
 			<div className="navbar-fixed blue">
+				<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
 			<nav>
-				<ul id="dropdown1" className="dropdown-content">
-				  <li><a href="#!">one</a></li>
-				  <li><a href="#!">two</a></li>
-				  <li className="divider"></li>
-				  <li><a href="#!">three</a></li>
+				<ul id="admindrop" className="dropdown-content">
+					<li>
+						<a href="/admin/users">User Management</a>
+					</li>
+					<li>
+						<a href="/admin/groups">Groups Management</a>
+					</li>
+				{/*}	<li>
+						<a href="/admin/pages">Page Permissions</a>
+					</li> */}
+					<li>
+						<a href="/admin/settings">Site Settings</a>
+					</li>
+					<li>
+						<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
+					</li>
+					{checkPermission("feedback")?
+						<li>
+							<a href="/feedback">Feedback</a>
+						</li>:""}
+					<li>
+						<a href="/admin/overview">Chapter Overview</a>
+					</li>
 				</ul>
-				<ul id="dropdown" className="dropdown-content">
-				  <li><a href="#!">one</a></li>
-				  <li><a href="#!">two</a></li>
-				  <li className="divider"></li>
-				  <li><a href="#!">three</a></li>
+				<ul id="userdrop" className="dropdown-content">
+					<li>
+						<a href="/profile">My Profile</a>
+					</li>
+					<li>
+						<a href="/changepassword">Change Password</a>
+					</li>
+					<li>
+						<SignInButtonWrapper />
+					</li>
 				</ul>
 				<div className="nav-wrapper">
 					<a href="/" className="brand-logo">Ivy</a>
-					<ul id="nav-mobile"
-						className="right hide-on-med-and-down">
+					<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
+					<ul	className="right hide-on-med-and-down">
 						{checkPermission("events")?
 							<li>
 								<a href="/events">Events</a>
@@ -57,61 +86,31 @@ export default class Navbar extends TrackerReact(React.Component) {
 							<li>
 								<a href="/contacts">Contact Dashboard</a>
 							</li>:""}
-						{/*checkPermission("churches")?
+						{checkPermission("churches")?
 							<li>
 								<a href="/churches">Churches Dashboard</a>
-							</li>:""*/}
-						{/*
+							</li>:""}
+
 							<li>
 								<a
 									className="dropdown-button"
 									href="#!"
-									data-activates="dropdown1">
-									Dropdown
-									<i className="material-icons right"></i>
+									data-activates="admindrop">
+									Administration
+									<i className="material-icons right">arrow_drop_down</i>
 								</a>
 							</li>
-							<li>
-								<a href="/admin/users">User Management</a>
-							</li>
-							<li>
-								<a href="/admin/groups">Groups Management</a>
-							</li>
-						{/*}	<li>
-								<a href="/admin/pages">Page Permissions</a>
-							</li>
-							<li>
-								<a href="/admin/settings">Site Settings</a>
-							</li>
-							<li>
-								<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
-							</li>*/}
-							{checkPermission("feedback")?
-								<li>
-									<a href="/feedback">Feedback</a>
-								</li>:""}
-								{/*
-							<li>
-								<a href="/admin/overview">Chapter Overview</a>
-							</li>
+
 							<li>
 								<a
 									className="dropdown-button"
 									href="#!"
-									data-activates="dropdown2">
+									data-activates="userdrop">
 									{Meteor.user()?Meteor.user().contact?this.getContact():"User":""}
-									<i className="material-icons right"></i>
+									<i className="material-icons right">arrow_drop_down</i>
 								</a>
 							</li>
-							<li>
-								<a href="/profile">My Profile</a>
-							</li>
-							<li>
-								<a href="/changepassword">Change Password</a>
-							</li>*/}
-							<li>
-								<SignInButtonWrapper />
-							</li>
+
 					</ul>
 				</div>
 			</nav>

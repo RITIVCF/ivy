@@ -47,7 +47,7 @@ export default class UserPage extends TrackerReact(React.Component) {
 								<select
 									multiple
 									className="browser-default"
-									rows="10"
+									rows={10}
 									ref="groups" >
 									{this.getAllGroups().map((group)=>{
 										return <option key={group._id} value={group._id}>{group.name}</option>
