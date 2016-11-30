@@ -10,8 +10,8 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         ticket: Meteor.subscribe("thisTicket", props.tid),
-        options: Meteor.subscribe("allOptions"),
-        events: Meteor.subscribe("allEvents"),
+    //    options: Meteor.subscribe("allOptions"),
+    //    events: Meteor.subscribe("allEvents"),
         users: Meteor.subscribe("allUsers"),
         contacts: Meteor.subscribe("allContacts")
       }
@@ -22,16 +22,16 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
     this.state.subscription.ticket.stop();
     this.state.subscription.users.stop();
     this.state.subscription.contacts.stop();
-    this.state.subscription.options.stop();
-    this.state.subscription.events.stop();
+    //this.state.subscription.options.stop();
+//    this.state.subscription.events.stop();
   }
 
   checkSubscriptions(){
     if(this.state.subscription.ticket.ready()&&
     this.state.subscription.users.ready()&&
-    this.state.subscription.contacts.ready()&&
-    this.state.subscription.options.ready()&&
-    this.state.subscription.events.ready()){
+    this.state.subscription.contacts.ready()){
+  //  this.state.subscription.options.ready()&&
+    //this.state.subscription.events.ready())
       return true;
     }
     return false;

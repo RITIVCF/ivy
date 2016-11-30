@@ -184,7 +184,7 @@ export default class PermissionWindow extends Component
 
     render()
     {
-      if(!this.props.parent.state.subscription.contacts.ready()){
+      if(!Contacts.findOne(Meteor.userId())){
         return <div></div>
       }
         var event = this.props.ev; //parent.getEvent();

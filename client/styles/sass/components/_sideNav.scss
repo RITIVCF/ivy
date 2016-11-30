@@ -1,16 +1,17 @@
 .side-nav {
   position: fixed;
-  width: 300px;
+  width: 200px;
   left: 0;
   top: 0;
   margin: 0;
+  margin-top: 63px;
   transform: translateX(-100%);
   height: 100%;
   height: calc(100% + 60px);
   height: -moz-calc(100%); //Temporary Firefox Fix
   padding-bottom: 60px;
   background-color: $sidenav-bg-color;
-  z-index: 999;
+  z-index: 0;
   overflow-y: auto;
   will-change: transform;
   backface-visibility: hidden;
@@ -21,6 +22,12 @@
   // Right Align
   &.right-aligned {
     right: 0;
+    height: 100%;
+    background-color: #fcfcfc;
+    margin-top: 63px;
+    width: 300px;
+    z-index: 0;
+    position: fixed;
     transform: translateX(105%);
     left: auto;
     transform: translateX(100%);
@@ -138,6 +145,8 @@
     }
   }
 }
+
+
 
 
 // Touch interaction

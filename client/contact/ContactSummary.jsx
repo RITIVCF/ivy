@@ -1,6 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ContactSingle from './ContactSingle.jsx';
+import ContactPreview from './ContactPreview.jsx';
+import InfoBar from '../InfoBar.jsx';
 //import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
@@ -9,10 +11,13 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
-        Contacts: Meteor.subscribe("allContacts", "All", "Name")
+        Contacts: Meteor.subscribe("allContacts", "All", "Name"),
+        Events: Meteor.subscribe("EventAttendees")
       },
       filter: ""
     };
+
+
   }
 
   componentWillUnmount() {
@@ -109,6 +114,15 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     }
   }
 
+  select(id){
+    this.setState({selected: id});
+  }
+
+  unselect(){
+    //this.setState({selected: ""});
+    Session.set("conselected","");
+  }
+
 
 	render() {
     if(!checkPermission("contacts")){
@@ -118,8 +132,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     var status;
     var perm = checkPermission("ticket");
 		return (
-
-          <div className="container">
+      <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
+          <div className="col s12">
             <div className="row">
               <div className="col s12 m7 l7">
                 <h1>All Contacts</h1>
@@ -134,11 +148,33 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       <p>Count: {this.contacts().length}</p>
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
                       <div className="row">
-                      {this.contacts().map( (contact, i) => {
-                        return <ContactSingle key={contact._id} contact={contact} perm={perm} parent={this}/>
-                      })}
+                      {Session.get("view")=="Tile"?this.contacts().map( (contact, i) => {
+                        return <ContactSingle key={contact._id} row={false} contact={contact}
+                          selected={Session.get("conselected")==contact._id} perm={perm}
+                          select={this.select.bind(this)} parent={this}/>
+                      }):
+                      <table className="bordered highlight" >
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Newsletter</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.contacts().map( (contact)=>{
+                            return <ContactSingle key={contact._id} row={true} contact={contact}
+                              selected={Session.get("conselected")==contact._id} perm={perm}
+                              select={this.select.bind(this)} parent={this}/>
+                          })}
+                        </tbody>
+                      </table>
+                      }
                       </div>
 
+          </div>
+          <InfoBar content={<ContactPreview cid={Session.get("conselected")} />} />
           </div>
 
 

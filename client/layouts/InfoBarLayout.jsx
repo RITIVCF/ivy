@@ -1,18 +1,17 @@
 import React from 'react';
 import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 import NavBar from './NavBar.jsx';
+import InfoBarMain from './InfoBarMain.jsx';
 
 
 // <nav className="navbar navbar-default nabar-cls-top" role="navigation" style={margin-bottom: "0"} >
 // <img src="images/userpics/account.png" class="img-thumbnail" />
 // Print user's Name here
 
-export var MainLayout = ({content}) => (   // export const MainLayout
+export var InfoBarLayout = ({content}) => (   // export const MainLayout
 	<div className="wrapper">
 				<NavBar />
-      	<main style={{paddingLeft: "200px", paddingTop: "10px"}}  >
-					{content}
-				</main>
+      	<InfoBarMain content={content} />
 				<footer>
 				</footer>
 	</div>

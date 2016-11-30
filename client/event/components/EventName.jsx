@@ -19,7 +19,8 @@ export default class EventName extends Component {
     this.state={
       name: props.ev.name,
       namelock: props.ev.namelock,
-      editting: false
+      editting: false,
+      editstate: false
     }
   }
   updateName(event){
@@ -47,6 +48,13 @@ export default class EventName extends Component {
     return true;
   }
 
+  toggle(){
+    if(!this.props.perm){
+      return;
+    }
+    this.setState({editstate: !this.state.editstate});
+  }
+
   getEvent(){
 		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
@@ -55,6 +63,9 @@ export default class EventName extends Component {
 
 
   render(){
+    if(!this.state.editstate){
+      return <span onClick={this.toggle.bind(this)} className="card-title">{this.state.name}</span>
+    }
     return(
       <div className="form-group">
         <label>Name</label>
@@ -62,8 +73,10 @@ export default class EventName extends Component {
           className="form-control"
           ref="name"
           value={this.state.name}
+          onBlur={this.toggle.bind(this)}
           disabled={this.state.namelock||!this.props.perm}
-          onChange={this.handleNameChange.bind(this)} />
+          onChange={this.handleNameChange.bind(this)}
+           />
       </div>
     )
   }

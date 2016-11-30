@@ -10,7 +10,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
       subscription: {
         Tickets: Meteor.subscribe("allActiveTickets"),
         options: Meteor.subscribe("allOptions"),
-        events: Meteor.subscribe("allEvents"),
+      //  events: Meteor.subscribe("allEvents"),
         users: Meteor.subscribe("allUsers"),
         contacts: Meteor.subscribe("allContacts")
       },
@@ -25,15 +25,15 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
     this.state.subscription.users.stop();
     this.state.subscription.contacts.stop();
     this.state.subscription.options.stop();
-    this.state.subscription.events.stop();
+  //  this.state.subscription.events.stop();
   }
 
   checkSubs(){
     return this.state.subscription.Tickets.ready()&&
     this.state.subscription.users.ready()&&
     this.state.subscription.contacts.ready()&&
-    this.state.subscription.options.ready()&&
-    this.state.subscription.events.ready();
+    this.state.subscription.options.ready();
+  //  this.state.subscription.events.ready();
   }
 
 
@@ -46,8 +46,10 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
     var subsready = this.checkSubs();
     console.log(subsready);
 		return (
-      <div className="container">
-        <TicketSummary sub={subsready} />
+      <div className="row">
+        <div className="col s12" style={{height: "100%"}}>
+                  <TicketSummary sub={subsready} />
+        </div>
       </div>
   )
 	}

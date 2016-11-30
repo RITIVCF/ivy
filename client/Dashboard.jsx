@@ -6,22 +6,8 @@ import MySchedule from './widgets/MySchedule.jsx';
 import MyEvents from './widgets/MyEvents.jsx';
 import MyTickets from './widgets/MyTickets.jsx';
 import MyGroups from './widgets/MyGroups.jsx';
+import SafariWarning from './SafariWarning.jsx';
 //import websocket from 'websocket';
-
-Meteor.subscribe("allGroups");
-Meteor.subscribe("allCounters");
-Meteor.subscribe("allOptions");
-Meteor.subscribe("allPagePermissions");
-
-checkPermission = function(id){
-	var grps = Groups.find({users: Meteor.userId()}).fetch();
-	var ids = [];
-	grps.forEach(function(group){
-		ids.push(group._id);
-	});
-
-	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
-}
 
 export default class DashboardWrapper extends TrackerReact(React.Component) {
 	constructor(){
@@ -42,6 +28,11 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		this.setState({output: "Received message: "+ data});
 	}
 
+	safari(){
+		return <p>This system is not compatible with Safari. If you are using Safari, please use a different browser.
+		<br /><br />Thank you. -RIT IVCF Web Development Team</p>
+	}
+
 	render() {
 		document.title="Ivy";
 		// var websocketclient = websocket.client;
@@ -56,12 +47,7 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		return (
 				<div className="row">
 					<div className="col s12 m6">
-						<div className="card">
-	            <div className="card-content">
-	              <p>This system is not compatible with Safari. If you are using Safari, please use a different browser.
-								<br /><br />Thank you. -RIT IVCF Web Development Team</p>
-	            </div>
-          	</div>
+						<SafariWarning />
 						<MySchedule />
 						<MyTickets />
 					</div>

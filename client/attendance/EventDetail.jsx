@@ -147,7 +147,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 			<p>Total: {ev.attendees.length} attendees</p>
 			<p>New: {this.getCountNew()} attendees</p>
 			</div>
-				<table className={checkPermission("contacts")?"table table-hover":"table"}>
+				<table className={checkPermission("contacts")?"highlight":""}>
 					<thead>
 						<tr>
 							<th>Name</th>

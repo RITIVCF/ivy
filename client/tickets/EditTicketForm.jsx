@@ -127,15 +127,34 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
 
 	render() {
+    var activities = this.props.ticket.activities.reverse();
 		return (
-      <div className="container">
+      <div className="row">
+        <div className="col s12">
         <div className="card">
           <div className="card-content">
             <div className="row">
               <div className="col s12 m6">
-                <p>Date created: {new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
-                <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
-                <p>Ticket #: {this.props.ticket.ticketnum}</p>
+                <div className="col s4">
+                  <p>Date created:</p>
+                </div>
+                <div className="col s8">
+                  <p>{new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
+                </div>
+                <div className="col s4">
+                  <p>Submitted by:</p>
+                </div>
+                <div className="col s8">
+                  <p>{this.getUser(this.props.ticket.submittedby)}</p>
+                </div>
+                <div className="col s4">
+                  <p>Ticket #: </p>
+                </div>
+                <div className="col s8">
+                  <p>{this.props.ticket.ticketnum}</p>
+                </div>
+
+
                   {this.props.ticket.type == "Contact" ? <div></div> :<div>
                   <label>User: </label><SelectUser parent={this}
                     id={"customer"}
@@ -148,7 +167,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     <TicketDescription parent={this} ticket={this.props.ticket} />
                     <div className="form-group">
                     <label>Type:</label>
-                      <select ref="type" className="form-control"
+                      <select ref="type" className="browser-default"
                         value={this.props.ticket.type}
                         onChange={this.updateType.bind(this)}>
                         {this.getTypes().map( (type) =>{
@@ -159,7 +178,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     {this.props.ticket.type == "Event Request" ? <div className="form-group">
                     <label>Request Type:</label>
                       <select ref="reqtype"
-                        className="form-control"
+                        className="browser-default"
                         value={this.props.ticket.ereqtype}
                         onChange={this.updateReqType.bind(this)}>
                         <option value={""}></option>
@@ -194,7 +213,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     </div>
                     <div className="from-group">
                       <label>Status:</label>
-                        <select className="form-control"
+                        <select className="browser-default"
                           ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
                           {this.getStatuses().map( (type) =>{
                             return <option key={type} value={type} >{type}</option>
@@ -203,8 +222,24 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     </div>
               </div>
               <div className="col s12 m6">
-                <p>Last updated: {new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
-                {this.props.ticket.eid ? <p>Event: <span onClick={this.goToEvent.bind(this)}>{this.getEventName()}</span></p>:""}
+                <div className="col s4">
+                  <p>Last updated: </p>
+                </div>
+                <div className="col s8">
+                  <p>{new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
+                </div>
+                {
+                  !this.props.ticket.eid?"":
+                  <div className="row">
+                    <div className="col s4">
+                      <p>Event:</p>
+                    </div>
+                    <div className="col s8">
+                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:
+                      <a href={"/attendance/event/"+this.props.ticket.eid}>{this.getEventName()}</a>}
+                    </div>
+                  </div>
+                }
                 <table className="table table-striped">
                   <thead>
                     <tr>
@@ -215,7 +250,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.props.ticket.activities.map( (activity) =>{
+                    {activities.map( (activity) =>{
                       return <Activity key={activity.createdAt} activity={activity} />
                     })}
                   </tbody>
@@ -227,6 +262,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
   )

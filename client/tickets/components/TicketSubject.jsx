@@ -49,7 +49,7 @@ export default class TicketSubject extends Component {
         <label>Subject</label>
         <input type="text"
           ref="subject"
-          className="form-control"
+          className="browser-default"
           value={this.state.subject}
           disabled={this.state.subjectlock}
           onChange={this.handleSubjectChange.bind(this)} />

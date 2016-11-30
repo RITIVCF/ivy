@@ -3,6 +3,14 @@
     display: none;
 }
 
+.addBorderToCard {
+  outline: 3px solid blue;
+}
+
+.sidenav-padding-right {
+  padding-right: 300px;
+}
+
 #overlay
 {
     position: fixed;

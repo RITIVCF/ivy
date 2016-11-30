@@ -34,9 +34,16 @@ export default class TicketRow extends Component {
     //this.props.parent.editTicket(this.props.tkt._id);
   }
 
+  selectThis(event){
+    event.stopPropagation();
+    Session.set("ticselected", this.props.tkt._id);
+    //this.props.select(this.props.tkt._id);
+  }
+
   render() {
     return (
-      <tr onClick={this.go.bind(this)}>
+      <tr className={this.props.selected?"blue white-text":""}
+        onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
         <td>{this.props.tkt.ticketnum}</td>
         <td>{this.props.tkt.subject}</td>
         <td>{this.getCust().name}</td>

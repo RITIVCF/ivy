@@ -3,6 +3,7 @@ import {mount} from 'react-mounter';
 
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
+import {InfoBarLayout} from './layouts/InfoBarLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
@@ -166,7 +167,7 @@ FlowRouter.route('/contacts/:cid',{
 
 FlowRouter.route('/contacts', {
 	action(){
-		mount(MainLayout, {
+		mount(InfoBarLayout, {
 			content: (<ContactSummary />)
 		})
 	}
@@ -190,7 +191,7 @@ FlowRouter.route('/newcontact', {
 
 FlowRouter.route('/events', {
 	action() {
-		mount(MainLayout, {
+		mount(InfoBarLayout, {
 			content: (<EventCalendarWrapper />)
 		})
 	}
@@ -215,7 +216,7 @@ FlowRouter.route('/attendance/event/:eid',{
 
 FlowRouter.route('/events/workspace/:eid',{
 	action(params) {
-		mount(MainLayout, {
+		mount(InfoBarLayout, {
 			content: (<EventWorkspace eid={params.eid} />)
 		})
 	}
@@ -231,7 +232,7 @@ FlowRouter.route('/events/old',{
 
 FlowRouter.route('/tickets',{
 	action() {
-		mount(MainLayout, {
+		mount(InfoBarLayout, {
 			content: (<TicketWrapper />)
 		})
 	}
@@ -247,7 +248,7 @@ FlowRouter.route('/tickets/:tid',{
 
 FlowRouter.route('/churches',{
 	action() {
-		mount(MainLayout, {
+		mount(InfoBarLayout, {
 			content: (<ChurchesSummary />)
 		})
 	}

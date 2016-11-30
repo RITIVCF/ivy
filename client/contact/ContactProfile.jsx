@@ -135,12 +135,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
             </div>
             <div className="card-content">
               <span className="card-title">
-                <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" /> 
+                <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-                {Meteor.user().contact==this.props.cid?this.props.parent.state.subscription.contact.ready()&&contact?(!contact.member) ?
+                {Meteor.user()?Meteor.user().contact==this.props.cid?this.props.parent.state.subscription.contact.ready()&&contact?(!contact.member) ?
               <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
-              :"":"":""}
+              :"":"":"":""}
               {checkPermission("tickets")&&this.props.parent.state.subscription.contact.ready()&&contact.ticket?(this.props.cid==Meteor.user().contact)?
                 <div className="row">
                   <div className="col s12">

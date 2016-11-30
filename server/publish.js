@@ -31,6 +31,10 @@ Meteor.publish("Event", function(eid){
   return Events.find({_id:eid},options);
 });
 
+Meteor.publish("EventAttendees", function(){
+  return Events.find({},{fields: {name:1, attendees: 1, start: 1}});
+});
+
 Meteor.publish("mySchedule", function(){
   return Events.find({"jobs.uid": this.userId, end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}});
 });
@@ -364,7 +368,10 @@ Meteor.publish("allTicketStatus", function(){
 });
 
 Meteor.publish("thisTicket", function(tid){
-  return Tickets.find({_id: tid});
+  var ticket = Tickets.findOne(tid);
+  //console.log(ticket);
+  //console.log(Events.find({_id:ticket.eid}).fetch());
+  return [Tickets.find({_id: tid}),Events.find({_id:ticket.eid})];
 });
 
 Meteor.publish("ticket", function(cid){

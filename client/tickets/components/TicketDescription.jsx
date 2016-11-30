@@ -49,7 +49,7 @@ export default class TicketDescription extends Component {
         <label>Description</label><br/>
         <textarea ref="description"
           value={this.state.description}
-          className="materialize-textarea"
+          className="browser-default"
           rows="5"
           disabled={this.state.descriptionlock}
           onChange={this.handleDescriptionChange.bind(this)} />

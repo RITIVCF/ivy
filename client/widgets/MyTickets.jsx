@@ -22,7 +22,7 @@ export default class MyTickets extends TrackerReact(React.Component) {
 		return (
 			<div className="card">
 				<div className="card-content">
-					<span className="card-title">My Tickets</span>
+					<span className="card-title">My Tickets & Workorders</span>
 						<ul className="collection">
 							{this.state.subscription.tickets.ready()?this.getTickets().length!=0?this.getTickets().map((t)=>{
 								return <TicketItem key={t._id} t={t} />

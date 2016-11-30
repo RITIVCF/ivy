@@ -32,6 +32,7 @@ fastclick@1.0.13
 fortawesome:fontawesome@4.7.0
 fourseven:scss@3.10.1
 geojson-utils@1.0.10
+hb5:meteor-freewall@0.0.2
 hot-code-push@1.0.4
 html-tools@1.0.11
 htmljs@1.0.11

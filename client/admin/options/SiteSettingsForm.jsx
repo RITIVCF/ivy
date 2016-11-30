@@ -46,14 +46,9 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-		<div className="container-fluid">
+		<div className="container">
 			<div className="row">
-				<div className="col-sm-3 col-lg-2">
-					<nav className="navbar navbar-default navbar-fixed-side">
 
-					</nav>
-				</div>
-				<div className="col-sm-9 col-lg-10">
 					<h1>Site Settings Dashboard</h1>
 					<div className="row">
 						<div className="col-md-6">
@@ -109,7 +104,6 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 					</div>
 				</div>
 			</div>
-		</div>
 		)
 	}
 }

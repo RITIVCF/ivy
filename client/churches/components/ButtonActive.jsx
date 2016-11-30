@@ -21,7 +21,7 @@ export default class ButtonActive extends Component {
           ref="togglePublish"
           className="waves-effect waves-light btn"
           value={true} >
-          Make Inactive
+          Retire
         </button>
         :
         <button
@@ -30,7 +30,7 @@ export default class ButtonActive extends Component {
           onClick={this.toggleActiveChurch.bind(this)}
           className="waves-effect waves-light btn"
           value={false} >
-          Make Active
+          Activate
         </button>
       }
     </div>

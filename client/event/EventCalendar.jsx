@@ -4,6 +4,7 @@ import moment from 'moment';
 import EventContent from './EventContent.jsx';
 import EventHelp from './EventHelp.jsx';
 import NewEventModal from './NewEventModal.jsx';
+
 //import EventModal from './components.jsx';
 //import {Tracker} from 'meteor/tracker';
 
@@ -23,8 +24,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       Session.set("calendardate", moment()._d);
     }
     this.state = {
-       mounted: false,
-
+       mounted: false
     }
   }
 
@@ -32,7 +32,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   }
 
-  
+
 
   renderPopoverContent(event) {
     div = $("<div></div>")[0];
@@ -72,9 +72,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         if(!calEvent.name){
           return;
         }
-        $('.modal').modal();
+        Session.set("infobar",true);
+        Session.set("evselected",calEvent._id);
+        //$('.modal').modal();
         //console.log(calEvent._id);
-        $('#'+calEvent._id).modal('open');
+        //$('#'+calEvent._id).modal('open');
       },
       eventDrop: function(event, delta, revertFunc) {
         var start = new moment(event.start.toISOString());
@@ -266,16 +268,24 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
     return (
       <div>
-        <a onClick={this.openHelp.bind(this)} className="waves-effect waves-green btn">Help</a>
-        <div ref="calendar" id="calendar"></div>
-        {this.getPublishedEvents().map((event)=>{
-          return <EventContent key={event._id} event={event} />
-        })}
-        {this.getUnPublishedEvents().map((event)=>{
-          return <EventContent key={event._id} event={event} />
-        })}
-        <NewEventModal />
-        <EventHelp />
+        <div className="row">
+          <div className="col s12">
+            <div ref="calendar" id="calendar"></div>
+            {this.getPublishedEvents().map((event)=>{
+              return <EventContent key={event._id} event={event} />
+            })}
+            {this.getUnPublishedEvents().map((event)=>{
+              return <EventContent key={event._id} event={event} />
+            })}
+            <NewEventModal />
+            <EventHelp />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col s12">
+            <a onClick={this.openHelp.bind(this)} className="waves-effect waves-green btn">Help</a>
+          </div>
+        </div>
       </div>
     );
   }

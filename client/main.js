@@ -8,6 +8,21 @@ import { Accounts } from 'meteor/accounts-base';
 
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
+Meteor.subscribe("allGroups");
+Meteor.subscribe("allCounters");
+Meteor.subscribe("allOptions");
+Meteor.subscribe("allPagePermissions");
+
+checkPermission = function(id){
+	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+
+	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
+}
+
 
 Accounts.onEnrollmentLink(function(token,done){
   //Accounts.resetPassword()

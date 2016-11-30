@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import TinyMCETest from '../../tinyMCETest.jsx';
 
 var updWorkpad = _.throttle(
   function(eid, value)
@@ -65,13 +66,15 @@ export default class EventWorkpad extends Component {
     */
     return(
       <div className="form-group">
-        <label>Workspace</label><br/>
+
+        <label>Workspace</label>
+        <TinyMCETest />{/*}<br/>
         <textarea ref="workpad"
           className="form-control"
           rows="12"
           onChange={this.handleWorkpadChange.bind(this)}
           value={this.state.workpad}
-          disabled={this.state.workpadlock||!this.props.perm} />
+          disabled={this.state.workpadlock||!this.props.perm} />*/}
       </div>
     )
   }

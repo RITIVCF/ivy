@@ -27,6 +27,12 @@ export default class ContactSingle extends Component {
     this.state.opened = false;
   }
 
+  selectThis(event){
+    event.stopPropagation();
+    //this.props.select(this.props.contact._id);
+    Session.set("conselected", this.props.contact._id);
+  }
+
   go(){
     if(this.state.ran||this.state.opened){
       return;
@@ -36,9 +42,21 @@ export default class ContactSingle extends Component {
   render() {
     // This area needs styled, so however we need to do it to style
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
+    if(this.props.row){
+      return (
+        <tr className={this.props.selected?"blue white-text":""}
+          onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
+          <td>{this.props.contact.name}</td>
+          <td>{this.props.contact.email}</td>
+          <td>{this.props.contact.phone}</td>
+          <td>{this.props.contact.newsletter?"Yes":"No"}</td>
+        </tr>
+      )
+    }
     return (
       <div className="col s12 m6 l4">
-      <div className="card left hoverable" onClick={this.go.bind(this)}>
+      <div className={this.props.selected?"card left hoverable addBorderToCard":"card left hoverable"}
+        onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
         <div className="card-image">
           <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
         </div>

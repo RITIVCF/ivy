@@ -37,12 +37,14 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 		let ch = this.props.ch; //this.getChurch();
 
 		if(!ch){
-			return (<div>Loading...</div>);
+			return (
+				<h5>Churches</h5>);
 		}
 
 		return (
 		<div>
 			<div className="row">
+				<h5>{ch.name}</h5>
 				<div className="col s12 m6 l6">
 					<ButtonActive ch={ch} />
 				</div>
