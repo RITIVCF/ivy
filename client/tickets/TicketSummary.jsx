@@ -104,7 +104,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 	render() {
     console.log(this.props.sub);
 		return (
-        <div onClick={this.unselect.bind(this)}>
+        <div onClick={this.unselect.bind(this)} style={{height:"100%"}}>
           <div>
             <div className="row">
                 <a onClick={this.newTicket.bind(this)}

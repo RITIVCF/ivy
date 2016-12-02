@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
+import fullcalendar from 'fullcalendar';
 import EventContent from './EventContent.jsx';
 import EventHelp from './EventHelp.jsx';
 import NewEventModal from './NewEventModal.jsx';
@@ -49,12 +50,12 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
 
   componentDidMount(){
-    $(calendar).fullCalendar({
+    $("#calendar").fullCalendar({
       events: [],
       header: {
         left: "prev,next today",
         center: "title",
-        right:  !this.props.sidebar?"month,agendaWeek,agendaDay":"month,basicWeek,basicDay"
+        right:  !this.props.sidebar?"month,agendaWeek,agendaDay,listWeek":"month,basicWeek,basicDay,listWeek"
       },
       defaultView: this.props.sidebar?(Session.get("calendarview")=="agendaWeek")?
         "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")

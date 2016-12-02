@@ -75,6 +75,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 				<div className="nav-wrapper blue z-depth-2">
 					<a href="/" className="brand-logo">Ivy</a>
 					<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
+					<a >{this.props.header}</a>
 					<ul	className="right hide-on-med-and-down">
 						<li className={Session.get("infobar")?"active":""}>
 							<a 	onClick={this.toggleInfoBar.bind(this)} >{Session.get("infobar")?<i className="material-icons">info</i>:<i className="material-icons">info_outline</i>}</a>
@@ -93,71 +94,62 @@ export default class Navbar extends TrackerReact(React.Component) {
 			</nav>
 			</div>
 			<ul id="slide-out" className="side-nav fixed gray z-depth-1" >
-				<li>
-					<div className="userView" >
-			      <div className="background">
-			        <img src="/images/defaultEvent.png" />
-			      </div>
-			      <a href="#!user"><img className="circle" src="/images/defaultPic.png" /></a>
-			      <a href="#!name"><span className="white-text name">{Meteor.user()?Meteor.user().contact?this.getContact():"Name":""}</span></a>
-			      <a href="#!email"><span className="white-text email">{Meteor.user()?Meteor.user().contact?this.getContactEmail():"Email":""}</span></a>
-			    </div>
-					</li>
-					<li className={FlowRouter.current().path=="/"?"active":""}>
-						<a href="/" >My Dashboard</a>
-					</li>
-							{checkPermission("events")?
-								<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
-									<a className="waves-effect" href="/events">Events</a>
-								</li>:""}
-							{checkPermission("tickets")?
-								<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
-									<a className="waves-effect" href="/tickets">Ticket Dashboard</a>
-								</li>:""}
-							{checkPermission("contacts")?
-								<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
-									<a className="waves-effect" href="/contacts">Contact Dashboard</a>
-								</li>:""}
-							{checkPermission("churches")?
-								<li className={FlowRouter.current().path.substring(0,9)=="/churches"?"active":""}>
-									<a className="waves-effect" href="/churches">Churches Dashboard</a>
-								</li>:""}
 
-								{checkPermission("admin")?
+
+
+
 								<li className="no-padding">
 									<ul className="collapsible collapsible-accordion">
+										<li className={FlowRouter.current().path=="/"?"active":""}>
+											<a href="/" className="waves-effect collapsible-header">My Dashboard</a>
+										</li>
+										{/*checkPermission("events")?*/}
+											<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
+												<a className="waves-effect collapsible-header" href="/events">Events</a>
+											</li>{/*}:""*/}
+										{checkPermission("tickets")?
+											<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
+												<a className="waves-effect collapsible-header" href="/tickets">Ticket Dashboard</a>
+											</li>:""}
+										{checkPermission("contacts")?
+											<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
+												<a className="waves-effect collapsible-header" href="/contacts">Contact Dashboard</a>
+											</li>:""}
+										{checkPermission("churches")?
+											<li className={FlowRouter.current().path.substring(0,9)=="/churches"?"active":""}>
+												<a className="waves-effect collapsible-header" href="/churches">Churches Dashboard</a>
+											</li>:""}
 										<li>
 											<a className="collapsible-header">Administration<i className="material-icons right">arrow_drop_down</i></a>
+											<div className="collapsible-body">
+												<ul>
+													<li className={FlowRouter.current().path.substring(0,12)=="/admin/users"?"active":""}>
+														<a href="/admin/users">User Management</a>
+													</li>
+													<li className={FlowRouter.current().path.substring(0,13)=="/admin/groups"?"active":""}>
+														<a href="/admin/groups">Groups Management</a>
+													</li>
+												{/*}	<li>
+														<a href="/admin/pages">Page Permissions</a>
+													</li> */}
+													<li className={FlowRouter.current().path.substring(0,15)=="/admin/settings"?"active":""}>
+														<a href="/admin/settings">Site Settings</a>
+													</li>
+													<li className={FlowRouter.current().path.substring(0,24)=="/admin/duplicatecontacts"?"active":""}>
+														<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
+													</li>
+													{checkPermission("feedback")?
+														<li className={FlowRouter.current().path.substring(0,9)=="/feedback"?"active":""}>
+															<a href="/feedback">Feedback</a>
+														</li>:""}
+													<li className={FlowRouter.current().path.substring(0,14)=="/admin/overiew"?"active":""}>
+														<a href="/admin/overview">Chapter Overview</a>
+													</li>
+												</ul>
+											</div>
 										</li>
-										<div className="collapsible-body">
-											<ul>
-												<li>
-													<a href="/admin/users">User Management</a>
-												</li>
-												<li>
-													<a href="/admin/groups">Groups Management</a>
-												</li>
-											{/*}	<li>
-													<a href="/admin/pages">Page Permissions</a>
-												</li> */}
-												<li>
-													<a href="/admin/settings">Site Settings</a>
-												</li>
-												<li>
-													<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
-												</li>
-												{checkPermission("feedback")?
-													<li>
-														<a href="/feedback">Feedback</a>
-													</li>:""}
-												<li>
-													<a href="/admin/overview">Chapter Overview</a>
-												</li>
-											</ul>
-										</div>
 									</ul>
-								</li>:""
-							 }
+								</li>
 
 			    </ul>
 			</div>

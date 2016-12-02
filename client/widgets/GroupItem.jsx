@@ -14,6 +14,13 @@ export default class GroupItem extends TrackerReact(React.Component) {
 		}
 	}
 
+	leave(event){
+		event.stopPropagation();
+		if(window.confirm("Are you sure?")){
+			Meteor.call("removeUserFromGroup", this.props.group._id, Meteor.userId());
+		}
+	}
+
 	getMembers(){
 		var ids = this.props.group.users;
 		var memberstring = "";
@@ -28,10 +35,13 @@ export default class GroupItem extends TrackerReact(React.Component) {
 	render() {
 
 
-		return (<li onClick={this.go.bind(this)} className="collection-item">
+		return (<li onClick={this.go.bind(this)} className="collection-item" id="showhim">
       <span className="title">{this.props.group.name}</span>
-      <p>Members:<br/>
+			<a id="showme" className="btn right valign"
+				onClick={this.leave.bind(this)}>Leave</a>
+      <p>Members: <br/>
 				{this.getMembers()}
+
 			</p>
     </li>
 

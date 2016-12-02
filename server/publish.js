@@ -1,3 +1,5 @@
+
+
 Meteor.publish("allEvents", function(){
   return Events.find();
 });
@@ -360,7 +362,14 @@ Meteor.publish("eventTickets", function(evid){
 });
 
 Meteor.publish("MyTickets", function(){
-  return Tickets.find({assigneduser: this.userId});
+  var grps = Groups.find({users: this.userId}).fetch();
+  //console.log(grps);
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+  //console.log(ids);
+  return Tickets.find({$or: [{assigneduser: this.userId}, {assigneduser:"", assignedgroup: {$in: ids}}, {submittedby: this.userId}]});
 });
 
 Meteor.publish("allTicketStatus", function(){

@@ -13,7 +13,7 @@ export default class InfoBarMain extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-			<main className={Session.get("infobar")?"sidenav-padding-right":""} style={{paddingLeft: "200px", paddingTop: "10px"}}>
+			<main className={Session.get("infobar")?"sidenav-padding-right":""} style={{paddingLeft: "200px", paddingTop: "10px",height:"100vh"}}>
 				{this.props.content}
 			</main>
 		)

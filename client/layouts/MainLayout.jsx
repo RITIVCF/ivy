@@ -7,9 +7,9 @@ import NavBar from './NavBar.jsx';
 // <img src="images/userpics/account.png" class="img-thumbnail" />
 // Print user's Name here
 
-export var MainLayout = ({content}) => (   // export const MainLayout
-	<div className="wrapper">
-				<NavBar />
+export var MainLayout = ({header, content}) => (   // export const MainLayout
+	<div>
+				<NavBar header={header} />
       	<main style={{paddingLeft: "200px", paddingTop: "10px"}}  >
 					{content}
 				</main>

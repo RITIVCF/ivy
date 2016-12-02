@@ -16,7 +16,7 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 
   render(){
 
-          return(<a href="#" onClick={this.logout}>Logout</a>)
+          return(<a onClick={this.logout}>Logout</a>)
 
   }
 }

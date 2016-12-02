@@ -4,39 +4,34 @@ export default class ContactSingle extends Component {
   constructor(){
     super();
     this.state = {
-      ran: false,
-      opened: false
+
     };
   }
 
   viewTicket(){
-    this.state.ran = true;
     FlowRouter.go("/tickets/"+this.props.contact.ticket);
   }
 
   changeStatus(){
     Meteor.call("updateStatus", this.props.contact, this.refs.status.value);
-    this.state.opened = false;
   }
 
-  openDropdown(){
-    this.state.opened = true;
-  }
-
-  closeDropdown(){
-    this.state.opened = false;
+  openDropdown(event){
+    event.stopPropagation();
   }
 
   selectThis(event){
     event.stopPropagation();
     //this.props.select(this.props.contact._id);
-    Session.set("conselected", this.props.contact._id);
+    if(Session.get("conselected")==this.props.contact._id){
+      Session.set("conselected","");
+    }
+    else{
+      Session.set("conselected", this.props.contact._id);
+    }
   }
 
   go(){
-    if(this.state.ran||this.state.opened){
-      return;
-    }
     FlowRouter.go("/contacts/"+this.props.contact._id);
   }
   render() {
@@ -50,6 +45,19 @@ export default class ContactSingle extends Component {
           <td>{this.props.contact.email}</td>
           <td>{this.props.contact.phone}</td>
           <td>{this.props.contact.newsletter?"Yes":"No"}</td>
+          <td>{checkPermission("admin") ? <p><select
+              ref="status"
+              className="browser-default"
+              value={this.props.contact.status}
+              onClick={this.openDropdown.bind(this)}
+              onChange={this.changeStatus.bind(this)} >
+            <option value="Crowd">Crowd</option>
+            <option value="Visitor">Visitor</option>
+            <option value="Member">Member</option>
+            <option value="Server">Server</option>
+            <option value="Leader">Leader</option>
+            <option value="Multiplier">Multiplier</option>
+          </select></p> : <p>{this.props.contact.status}</p>}</td>
         </tr>
       )
     }
@@ -63,20 +71,9 @@ export default class ContactSingle extends Component {
         <div className="card-content">
           <span className="card-title">{this.props.contact.name}</span>
         <p className="truncate">{this.props.contact.email}</p>
+        <p>{this.props.contact.status}</p>
         {/*<p>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</p> */}
-        {checkPermission("admin") ? <p><select
-            ref="status"
-            value={this.props.contact.status}
-            onClick={this.openDropdown.bind(this)}
-            onBlur={this.closeDropdown.bind(this)}
-            onChange={this.changeStatus.bind(this)} >
-          <option value="Crowd">Crowd</option>
-          <option value="Visitor">Visitor</option>
-          <option value="Member">Member</option>
-          <option value="Server">Server</option>
-          <option value="Leader">Leader</option>
-          <option value="Multiplier">Multiplier</option>
-        </select></p> : <p>{this.props.contact.status}</p>}
+
         {this.props.perm?<p><button className="btn btn-primary" onClick={this.viewTicket.bind(this)}>View Ticket</button></p>:""}
       </div>
     </div>

@@ -3,6 +3,8 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventCalendar from './EventCalendar.jsx';
 import InfoBar from '../InfoBar.jsx';
 import EventPreview from './EventPreview.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 
 //Events = new Mongo.Collection("events");
 
@@ -33,6 +35,6 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
           <InfoBar content={<EventPreview event={Events.findOne(Session.get("evselected"))} />} />
         </div>
     }
-		return (<div></div>)
+		return (<LoaderCircle />)
 	}
 }

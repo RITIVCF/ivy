@@ -15,3 +15,13 @@ SyncedCron.add({
     FunnelHistory.insert(rst);
   }
 });
+
+function getMyGroupsIDs(){
+  var grps = Groups.find({users: this.userId}).fetch();
+  console.log(grps);
+	var ids = [];
+	grps.forEach(function(group){
+		ids.push(group._id);
+	});
+  return ids;
+}

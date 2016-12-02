@@ -3,6 +3,8 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ContactSingle from './ContactSingle.jsx';
 import ContactPreview from './ContactPreview.jsx';
 import InfoBar from '../InfoBar.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 //import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
@@ -22,6 +24,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
   componentWillUnmount() {
     this.state.subscription.Contacts.stop();
+    this.state.subscription.Events.stop();
   }
 
   newContact(event){
@@ -125,8 +128,11 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
 	render() {
+    if(!this.state.subscription.Contacts.ready()){
+      return (<LoaderCircle />)
+    }
     if(!checkPermission("contacts")){
-      return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+      return <NoPerm />
     }
     document.title="Ivy - Contact Dashboard";
     var status;
@@ -136,7 +142,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
           <div className="col s12">
             <div className="row">
               <div className="col s12 m7 l7">
-                <h1>All Contacts</h1>
+                <h1></h1>
               </div>
               <div className="input-field col s12 m5 l5">
                 <input ref="filter" onChange={this.changeFilter.bind(this)} type="text" className="validate" />
@@ -160,6 +166,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Newsletter</th>
+                            <th>Status</th>
                           </tr>
                         </thead>
                         <tbody>

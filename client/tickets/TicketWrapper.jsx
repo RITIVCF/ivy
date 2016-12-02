@@ -1,6 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import TicketSummary from './TicketSummary.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 
 export default class TicketWrapper extends TrackerReact(React.Component) {
   constructor() {
@@ -39,14 +41,17 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 
 	render() {
     document.title="Ivy - Ticket Dashboard";
+    if(!this.checkSubs()){
+      return <LoaderCircle />
+    }
     if(!checkPermission("tickets")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+			return <NoPerm />
 		}
     //var ticket = Tickets.findOne(this.state.ticketId);
     var subsready = this.checkSubs();
     console.log(subsready);
 		return (
-      <div className="row">
+      <div className="row" style={{height:"100%"}}>
         <div className="col s12" style={{height: "100%"}}>
                   <TicketSummary sub={subsready} />
         </div>

@@ -14,6 +14,10 @@ export default class MySchedule extends TrackerReact(React.Component) {
 
 	}
 
+	componentWillUnmount(){
+		this.state.subscription.events.stop();
+	}
+
 	accept(){
     Meteor.call("acceptJobRequest", this.props.ev._id, this.props.ev.jobs.find(function(job){
       return job.uid == Meteor.userId();

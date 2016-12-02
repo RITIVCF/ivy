@@ -3,6 +3,8 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ChurchSingle from './ChurchSingle.jsx';
 import ChurchWorkspace from './ChurchesWorkspace.jsx';
 import InfoBar from '../InfoBar.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -15,8 +17,7 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         Churches: Meteor.subscribe("allChurches"),
-        Contacts: Meteor.subscribe("allContacts","All", "Name"),
-        options: Meteor.subscribe("allOptions")
+        Contacts: Meteor.subscribe("allContacts","All", "Name")
       }
     };
   }
@@ -69,8 +70,11 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
 	render() {
     document.title="Ivy - Churches Dashboard";
+    if(!(this.state.subscription.Churches.ready()&&this.state.subscription.Contacts.ready())){
+      return <LoaderCircle />
+    }
     if(!checkPermission("churches")){
-      return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+      return <NoPerm />
 		}
 		return (
       <div className="row" onClick={this.unselect.bind(this)}>

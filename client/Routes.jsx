@@ -72,6 +72,7 @@ FlowRouter.triggers.enter([signInForceCheck]);
 FlowRouter.route('/',{
 	action() {
 		mount(MainLayout, {
+			header: "Dashboard",
 			content: (<DashboardWrapper />)
 		})
 	}
@@ -88,6 +89,7 @@ FlowRouter.route('/',{
 FlowRouter.route('/admin', {
 	action() {
 		mount(MainLayout, {
+			header: "Administration",
 			content: (<AdminDashboard />)
 		})
 	}
@@ -96,6 +98,7 @@ FlowRouter.route('/admin', {
 FlowRouter.route('/admin/groups', {
 	action() {
 		mount(MainLayout, {
+			header: "User Groups",
 			content: (<AdminGroupsWrapper />)
 		})
 	}
@@ -104,6 +107,7 @@ FlowRouter.route('/admin/groups', {
 FlowRouter.route('/admin/pages', {
 	action() {
 		mount(MainLayout, {
+			header: "Administration",
 			content: <PagePermissionsWrapper />
 		})
 	}
@@ -112,6 +116,7 @@ FlowRouter.route('/admin/pages', {
 FlowRouter.route('/admin/settings', {
 	action() {
 		mount(MainLayout, {
+			header: "Site Settings",
 			content: <SiteSettingsWrapper />
 		})
 	}
@@ -120,6 +125,7 @@ FlowRouter.route('/admin/settings', {
 FlowRouter.route('/admin/users', {
 	action() {
 		mount(MainLayout, {
+			header: "Users",
 			content: <UserManagementWrapper />
 		})
 	}
@@ -128,6 +134,7 @@ FlowRouter.route('/admin/users', {
 FlowRouter.route('/admin/users/:uid', {
 	action(params) {
 		mount(MainLayout, {
+			header: "Administration",
 			content: <UserManagementWrapper uid={params.uid} />
 		})
 	}
@@ -136,6 +143,7 @@ FlowRouter.route('/admin/users/:uid', {
 FlowRouter.route('/admin/duplicatecontacts', {
 	action() {
 		mount(MainLayout, {
+			header: "Administration",
 			content: <DuplicateContactWrapper />
 		})
 	}
@@ -144,6 +152,7 @@ FlowRouter.route('/admin/duplicatecontacts', {
 FlowRouter.route('/admin/overview', {
 	action() {
 		mount(MainLayout, {
+			header: "Chapter Overview",
 			content: <OverviewWrapper />
 		})
 	}
@@ -152,6 +161,7 @@ FlowRouter.route('/admin/overview', {
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
+			header: "My Account",
 			content: (<UserProfileWrapper />)
 		})
 	}
@@ -160,6 +170,7 @@ FlowRouter.route('/profile',{
 FlowRouter.route('/contacts/:cid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "Contacts",
 			content: (<ContactProfileWrapper cid={params.cid} />)
 		})
 	}
@@ -168,6 +179,7 @@ FlowRouter.route('/contacts/:cid',{
 FlowRouter.route('/contacts', {
 	action(){
 		mount(InfoBarLayout, {
+			header: "Contacts",
 			content: (<ContactSummary />)
 		})
 	}
@@ -192,22 +204,24 @@ FlowRouter.route('/newcontact', {
 FlowRouter.route('/events', {
 	action() {
 		mount(InfoBarLayout, {
+			header: "Events",
 			content: (<EventCalendarWrapper />)
 		})
 	}
 });
 
-FlowRouter.route('/attendance',{
-	action() {
-		mount(MainLayout, {
-			content: (<AttendanceSummary />)
-		})
-	}
-});
+// FlowRouter.route('/attendance',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<AttendanceSummary />)
+// 		})
+// 	}
+// });
 
 FlowRouter.route('/attendance/event/:eid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "Attendance",
 			content: (<EventDetailWrapper eid={params.eid} />)
 		})
 	}
@@ -217,22 +231,24 @@ FlowRouter.route('/attendance/event/:eid',{
 FlowRouter.route('/events/workspace/:eid',{
 	action(params) {
 		mount(InfoBarLayout, {
+			header: "Event Workspace",
 			content: (<EventWorkspace eid={params.eid} />)
 		})
 	}
 });
 
-FlowRouter.route('/events/old',{
-	action() {
-		mount(MainLayout, {
-			content: (<EventOld />)
-		})
-	}
-});
+// FlowRouter.route('/events/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<EventOld />)
+// 		})
+// 	}
+// });
 
 FlowRouter.route('/tickets',{
 	action() {
 		mount(InfoBarLayout, {
+			header: "Tickets",
 			content: (<TicketWrapper />)
 		})
 	}
@@ -241,6 +257,7 @@ FlowRouter.route('/tickets',{
 FlowRouter.route('/tickets/:tid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "Tickets",
 			content: (<EditTicketWrapper tid={params.tid} />)
 		})
 	}
@@ -249,50 +266,51 @@ FlowRouter.route('/tickets/:tid',{
 FlowRouter.route('/churches',{
 	action() {
 		mount(InfoBarLayout, {
+			header: "Churches",
 			content: (<ChurchesSummary />)
 		})
 	}
 });
 
-FlowRouter.route('/churches/workspace/:cid',{
-	action(params) {
-		mount(MainLayout, {
-			content: (<ChurchesWorkspace cid={params.cid} />)
-		})
-	}
-});
+// FlowRouter.route('/churches/workspace/:cid',{
+// 	action(params) {
+// 		mount(MainLayout, {
+// 			content: (<ChurchesWorkspace cid={params.cid} />)
+// 		})
+// 	}
+// });
 
-FlowRouter.route('/churches/old',{
-	action() {
-		mount(MainLayout, {
-			content: (<ChurchesOld />)
-		})
-	}
-});
+// FlowRouter.route('/churches/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<ChurchesOld />)
+// 		})
+// 	}
+// });
 
-FlowRouter.route('/sg',{
-	action() {
-		mount(MainLayout, {
-			content: (<SmallGroupsSummary />)
-		})
-	}
-});
-
-FlowRouter.route('/sg/workspace/:gid',{
-	action(params) {
-		mount(MainLayout, {
-			content: (<SmallGroupsWorkspace gid={params.gid} />)
-		})
-	}
-});
-
-FlowRouter.route('/sg/old',{
-	action() {
-		mount(MainLayout, {
-			content: (<SmallGRoupsOld />)
-		})
-	}
-});
+// FlowRouter.route('/sg',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<SmallGroupsSummary />)
+// 		})
+// 	}
+// });
+//
+// FlowRouter.route('/sg/workspace/:gid',{
+// 	action(params) {
+// 		mount(MainLayout, {
+// 			content: (<SmallGroupsWorkspace gid={params.gid} />)
+// 		})
+// 	}
+// });
+//
+// FlowRouter.route('/sg/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<SmallGRoupsOld />)
+// 		})
+// 	}
+// });
 
 
 FlowRouter.route('/forms/member', {
@@ -331,14 +349,14 @@ FlowRouter.route('/forms/rsvp/:eid', {
 	}
 });
 
-FlowRouter.route('/ethnicity', {
-	action() {
-		mount(MainLayout, {
-				content: (<EthnicityWrapper />)
-			}
-		)
-	}
-});
+// FlowRouter.route('/ethnicity', {
+// 	action() {
+// 		mount(MainLayout, {
+// 				content: (<EthnicityWrapper />)
+// 			}
+// 		)
+// 	}
+// });
 
 FlowRouter.route('/login', {
 	action(params, queryParams) {
@@ -369,6 +387,7 @@ FlowRouter.route('/signup/:t', {
 FlowRouter.route('/changepassword', {
 	action() {
 		mount(MainLayout, {
+			header: "My Account",
 			content: (<ChangePassword />)
 		})
 	}
@@ -385,6 +404,7 @@ FlowRouter.route('/forgotpassword', {
 FlowRouter.route('/feedback',{
 	action() {
 		mount(MainLayout, {
+			header: "Feedback",
 			content: (<FeedbackWrapper />)
 		})
 	}

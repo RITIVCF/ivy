@@ -76,7 +76,6 @@ momentjs:moment@2.12.0
 mongo@1.1.14
 mongo-id@1.0.6
 mongo-livedata@1.0.12
-mrt:jquery-ui@1.9.2
 msavin:jetsetter@2.0.0
 msavin:mongol@2.0.1
 npm-bcrypt@0.9.2
@@ -98,8 +97,6 @@ reactive-var@1.0.11
 reload@1.1.11
 retry@1.0.9
 routepolicy@1.0.12
-rzymek:fullcalendar@2.2.6
-rzymek:moment@2.8.3_10
 rzymek:tinymce-cdn@4.0.0_2
 service-configuration@1.0.11
 session@1.1.7

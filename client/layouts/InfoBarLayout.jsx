@@ -8,9 +8,9 @@ import InfoBarMain from './InfoBarMain.jsx';
 // <img src="images/userpics/account.png" class="img-thumbnail" />
 // Print user's Name here
 
-export var InfoBarLayout = ({content}) => (   // export const MainLayout
+export var InfoBarLayout = ({header,content}) => (   // export const MainLayout
 	<div className="wrapper">
-				<NavBar />
+				<NavBar header={header} />
       	<InfoBarMain content={content} />
 				<footer>
 				</footer>

@@ -14,6 +14,10 @@ export default class MyEvents extends TrackerReact(React.Component) {
 
 	}
 
+	componentWillUnmount(){
+		this.state.subscription.events.stop();
+	}
+
 	getUpcoming(){
 		return Events.find({published: true, start: {$gte: new Date()}}).fetch();
 	}
