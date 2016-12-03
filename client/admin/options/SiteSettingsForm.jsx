@@ -14,7 +14,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 	}
 
 	getOptions(){
-		return Options.find({_id:{$ne:"ticketstatuses"}}).fetch();
+		return Options.find({_id:{$nin:["ticketstatuses","ticketcontact","ticketeventrequest"]}}).fetch();
 	}
 
 	getContactGroupDefault(){
@@ -46,17 +46,14 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-		<div className="container">
-			<div className="row">
-
-					<h1>Site Settings Dashboard</h1>
-					<div className="row">
-						<div className="col-md-6">
-							<div className="panel panel-primary">
-								<div className="panel-heading">
-									<h2>Default Ticket Groups Configuration</h2>
-								</div>
-								<div className="panel-body">
+			<div >
+				<div className="row" >
+					<div className="col s6" >
+						<div className="divider"></div>
+						<div className="card">
+							<div className="card-content">
+								<span className="card-title">Default Ticket Groups Configuration</span>
+									<br/>
 									<label>Default Contact Type Group</label>
 										<SelectGroup
 										 parent={this}
@@ -78,7 +75,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 										 ref={"eventrequesttype"}
 										 /><br/>
 									 <label>Default Event Calendar View</label>
-	 									<select
+										<select
 											value={Options.findOne("calendarview").val}
 											onChange={this.changeCalendarView.bind(this)}
 											className="form-control"
@@ -88,18 +85,15 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 											<option value={"month"}>Month</option>
 											<option value={"agendaDay"}>Day Agenda</option>
 										</select>
-								</div>
 							</div>
 						</div>
 					</div>
-					<div className="panel panel-info">
-						<div className="panel-heading">
+					<div className="row">
+						<div className="col s12">
 							<h2>All Options</h2>
-						</div>
-						<div className="panel-body">
-							{this.getOptions().map( (option) => {
-								return <Option key={option._id} option={option} />
-							})}
+								{this.getOptions().map( (option) => {
+									return <Option key={option._id} option={option} />
+								})}
 						</div>
 					</div>
 				</div>

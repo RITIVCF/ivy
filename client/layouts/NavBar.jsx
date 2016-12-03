@@ -77,6 +77,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 					<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
 					<a >{this.props.header}</a>
 					<ul	className="right hide-on-med-and-down">
+
 						<li className={Session.get("infobar")?"active":""}>
 							<a 	onClick={this.toggleInfoBar.bind(this)} >{Session.get("infobar")?<i className="material-icons">info</i>:<i className="material-icons">info_outline</i>}</a>
 						</li>
