@@ -19,11 +19,13 @@ export default class InfoBar extends TrackerReact(React.Component) {
 			return <div></div>
 		}
 		return (
-			<ul id="infobar" onClick={this.stopit.bind(this)} className="side-nav right-aligned fixed z-depth-3" >
+
+			<div className="info-box" onClick={this.stopit.bind(this)}>
 				<div className="col s12">
 					{this.props.content}
 				</div>
-			</ul>
+			</div>
+			
 
 		)
 	}

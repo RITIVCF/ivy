@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-
+import SubHeader from '../layouts/SubHeader.jsx';
 //import SelectContactForm from './SelectContactForm.jsx';
 
 //Contacts = new Mongo.Collection('contacts');
@@ -8,7 +8,8 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class ContactWrapper extends TrackerReact(React.Component){
   render() {
     return (
-      <div className="container">
+      <div>
+
         <SelectContactForm />
       </div>
     )

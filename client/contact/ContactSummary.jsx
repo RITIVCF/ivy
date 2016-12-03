@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import SubHeader from '../layouts/SubHeader.jsx';
 import ContactSingle from './ContactSingle.jsx';
 import ContactPreview from './ContactPreview.jsx';
 import InfoBar from '../InfoBar.jsx';
@@ -139,7 +140,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     var perm = checkPermission("ticket");
 		return (
       <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
-          <div className="col s12">
+        <SubHeader />
+          <div className="main-box col s12">
             <div className="row">
               <div className="col s12 m7 l7">
                 <h1></h1>
