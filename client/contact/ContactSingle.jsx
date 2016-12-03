@@ -45,7 +45,7 @@ export default class ContactSingle extends Component {
           <td>{this.props.contact.email}</td>
           <td>{this.props.contact.phone}</td>
           <td>{this.props.contact.newsletter?"Yes":"No"}</td>
-          <td>{checkPermission("admin") ? <p><select
+          <td>{checkPermission("admin") ? <select
               ref="status"
               className="browser-default"
               value={this.props.contact.status}
@@ -57,7 +57,7 @@ export default class ContactSingle extends Component {
             <option value="Server">Server</option>
             <option value="Leader">Leader</option>
             <option value="Multiplier">Multiplier</option>
-          </select></p> : <p>{this.props.contact.status}</p>}</td>
+          </select> : <p>{this.props.contact.status}</p>}</td>
         </tr>
       )
     }
