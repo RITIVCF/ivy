@@ -30,7 +30,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     //console.log(id);
     //console.log(Meteor.users.findOne(id).contact);
     //console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
-    return Contacts.findOne(Meteor.users.findOne(id).contact).name;
+    //return Contacts.findOne(Meteor.users.findOne(id).contact).name;
+    return Meteor.users.findOne(id).name;
   }
 
   getGroup(id){

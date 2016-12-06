@@ -131,15 +131,13 @@ export default class EventDetail extends TrackerReact(React.Component) {
 				<p>Event Description: {!ev ? "": ev.description}</p>
 				<p>Event Start: {!!ev ? moment(ev.start.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
 				<p>Event End: {!!ev ? moment(ev.end.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
-				{!!ev?<a href={"/forms/signin/"+ev._id} ><button className="btn btn-info">Form</button></a>:
-					<button disabled="true" className="btn btn-info">Loading...</button>}
-				<h3>Attendees</h3> <button onClick={this.export.bind(this)} className="btn">Export to Excel (CSV)</button>
-				<label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
+				<h3>Attendees</h3> <button onClick={this.export.bind(this)} className="btn"><i className="material-icons">output</i></button><br/>
+				<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
 					<option value={"All"}>All</option>
 					<option value={"Yes"}>Yes</option>
 					<option value={"No"}>No</option>
 				</select></label>
-			<label>Sort: <select ref="sort" onChange={this.changeSort.bind(this)} value={this.state.sort}>
+			<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
 					<option value={"Name"}>Name</option>
 					<option value={"First Time"}>First Time</option>
 				{/*}	<option value={"Status"}>Status</option> */}

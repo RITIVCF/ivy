@@ -42,7 +42,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 		var attendees = [];
 		var contact;
 		ev.attendees.map( (attendee)=>{
-			contact = Contacts.findOne(attendee._id);
+			contact = Meteor.users.findOne(attendee._id);
 			for(var key in contact){
 				attendee[key] = contact[key];
 			}

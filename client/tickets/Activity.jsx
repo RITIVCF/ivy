@@ -8,9 +8,10 @@ export default class Activity extends Component {
     if(this.props.activity.user==""){
       return {name:""};
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.activity.user}).contact}
-      );
+    // return Contacts.findOne({_id:
+    //     Meteor.users.findOne({_id:this.props.activity.user}).contact}
+    //   );
+    return Meteor.users.findOne({_id:this.props.activity.user});
   }
 
   render() {

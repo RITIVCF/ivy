@@ -42,7 +42,7 @@ export default class ContactSingle extends Component {
         <tr className={this.props.selected?"blue white-text":""}
           onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
           <td>{this.props.contact.name}</td>
-          <td>{this.props.contact.email}</td>
+          <td>{this.props.contact.emails[0].address}</td>
           <td>{this.props.contact.phone}</td>
           <td>{this.props.contact.newsletter?"Yes":"No"}</td>
           <td>{checkPermission("admin") ? <select

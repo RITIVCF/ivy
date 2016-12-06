@@ -1,6 +1,11 @@
 import { Accounts } from 'meteor/accounts-base';
 
 Meteor.methods({
+  enrollUser(id){
+    if(!this.isSimulation){
+      Accounts.sendEnrollmentEmail(id);
+    }
+  },
   passReset(uid){
       Accounts.sendResetPasswordEmail(uid);
   },
@@ -166,6 +171,94 @@ Meteor.methods({
     console.log(totals);
     console.log(rst.max);
     return rst;
+  },
+  testCreation(){
+    console.log(Accounts.createUser({email: "testemail@email.com"}));
+  },
+  migrateDatabase(){
+    //var userContacts = Contacts.find({user: true}).fetch();
+    var notUserContacts = Contacts.find({user: {$ne: true}}).fetch();
+
+    // CONTACT ONLY UPDATE SECTION
+    notUserContacts.forEach((contact)=>{
+      console.log("Contact");
+      console.log(contact);
+      var contactid=contact._id;
+      delete contact._id;
+      var uid = Accounts.createUser(contact);
+      Contacts.update({_id: contactid},{$set: {user:true}});
+      Meteor.users.update({_id: uid},{$set: {contact: contactid}});
+      //===========  Event update attendance ids
+    Events.update(
+      {"attendees._id":contactid}, // where cid is an attendee
+      {$set:
+        {"attendees.$._id":uid}   // set attendee id to user id
+      },
+      {multi: true}
+    );
+    //===============
+    Churches.update(
+      {contacts: contactid},
+      {$addToSet: {contacts: uid}},
+      {multi: true}
+    );
+    Churches.update(
+      {contacts: contactid},
+      {$pull: {contacts: contactid}},
+      {multi: true}
+    );
+    //===============
+    });
+    //
+    //     USER UPDATE SECTION
+    var userContacts = Contacts.find({user: true}).fetch();
+    userContacts.forEach((contact)=>{
+      console.log("Contact");
+      console.log(contact);
+      var contactid = contact._id;
+      delete contact._id;
+      Meteor.users.update({contact: contactid}, {$set: contact});
+      console.log("Updated user");
+      console.log(
+        Meteor.users.findOne({contact: contactid})
+        );
+      var user = Meteor.users.findOne({contact: contactid});
+        //===========  Event update attendance ids
+      Events.update(
+        {"attendees._id":contactid}, // where cid is an attendee
+        {$set:
+          {"attendees.$._id": user._id}   // set attendee id to user id
+        },
+        {multi: true}
+      );
+      //===============
+      Churches.update(
+        {contacts: contactid},
+        {$addToSet: {contacts: user._id}},
+        {multi: true}
+      );
+      Churches.update(
+        {contacts: contactid},
+        {$pull: {contacts: contactid}},
+        {multi: true}
+      );
+      //===============
+
+    });
+    Meteor.users.update({},{$set: {preferences: {
+    "theme-color": "Default",
+    "contacts_view":"Tile",
+    "contacts_infobar": true,
+    "tickets_view":"List",
+    "tickets_infobar":true,
+    "events_infobar":true,
+    "churches_view":"Tile",
+    "churches_infobar":true
+      }
+    }}, {multi: true});
+
+
+
   }
 
 })

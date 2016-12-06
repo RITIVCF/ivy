@@ -15,9 +15,6 @@ export default class InfoBar extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		if(!Session.get("infobar")){
-			return <div></div>
-		}
 		return (
 
 			<div className="info-box" onClick={this.stopit.bind(this)}>
@@ -25,7 +22,7 @@ export default class InfoBar extends TrackerReact(React.Component) {
 					{this.props.content}
 				</div>
 			</div>
-			
+
 
 		)
 	}

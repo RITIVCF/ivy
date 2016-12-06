@@ -20,18 +20,11 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 		}
 	}
 
-	getEvents(){
-		return Events.find({signupreq: true}).fetch();
-	}
 
 	handleData(data){
 		this.setState({output: "Received message: "+ data});
 	}
 
-	safari(){
-		return <p>This system is not compatible with Safari. If you are using Safari, please use a different browser.
-		<br /><br />Thank you. -RIT IVCF Web Development Team</p>
-	}
 
 	render() {
 		document.title="Ivy";

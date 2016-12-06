@@ -110,11 +110,17 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     //   return Contacts.find({},{sort: {name: 1}}).fetch();
     // }
     // return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
+    // if(this.state.filter!=""){
+    //   return Contacts.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
+    // }
+    // else{
+    //   return Contacts.find({},{sort: {name: 1}}).fetch();
+    // }
     if(this.state.filter!=""){
-      return Contacts.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
+      return Meteor.users.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
     }
     else{
-      return Contacts.find({},{sort: {name: 1}}).fetch();
+      return Meteor.users.find({},{sort: {name: 1}}).fetch();
     }
   }
 
@@ -125,6 +131,26 @@ export default class ContactSummary extends TrackerReact(React.Component) {
   unselect(){
     //this.setState({selected: ""});
     Session.set("conselected","");
+  }
+
+  toggleView(){
+    Meteor.call("toggleContactsView");
+  }
+
+  toggleInfoBar(){
+    Meteor.call("toggleContactsInfoBar");
+  }
+
+  getSubHeader(){
+    return <div>
+      {Meteor.user().preferences.contacts_view=="Tile"?
+        <li className="active" onClick={this.toggleView.bind(this)} ><a className="waves-effect waves-light">
+          <i className="material-icons black-text">view_module</i></a></li>
+        :<li className="active" onClick={this.toggleView.bind(this)}><a className="waves-effect waves-light">
+        <i  className="material-icons black-text">view_list</i></a></li>}
+      <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
+        <i className="material-icons black-text">{Meteor.user().preferences.contacts_infobar?"info":"info_outline"}</i></a></li>
+    </div>
   }
 
 
@@ -140,7 +166,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     var perm = checkPermission("ticket");
 		return (
       <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
-        <SubHeader />
+        <SubHeader content={this.getSubHeader()} />
           <div className="main-box col s12">
             <div className="row">
               <div className="col s12 m7 l7">
@@ -156,7 +182,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       <p>Count: {this.contacts().length}</p>
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
                       <div className="row">
-                      {Session.get("view")=="Tile"?this.contacts().map( (contact, i) => {
+                      {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
                         return <ContactSingle key={contact._id} row={false} contact={contact}
                           selected={Session.get("conselected")==contact._id} perm={perm}
                           select={this.select.bind(this)} parent={this}/>
@@ -183,7 +209,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       </div>
 
           </div>
+          {Meteor.user().preferences.contacts_infobar?
           <InfoBar content={<ContactPreview cid={Session.get("conselected")} />} />
+          :""}
           </div>
 
 

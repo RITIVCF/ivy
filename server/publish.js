@@ -204,6 +204,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     addresses: 1,
     contact: 1,
     email: 1,
+    emails: 1,
     phone: 1,
     newsletter: 1,
     gender: 1,
@@ -249,7 +250,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     }
   };
   }
-  return Contacts.find(selector, options);
+  return Meteor.users.find(selector, options);
 });
 
 Meteor.publish("contactNames", function(){
@@ -269,7 +270,7 @@ Meteor.publish("userContacts", function(){
 });
 
 Meteor.publish("duplicateContacts", function(){
-  var result = Contacts.aggregate(     {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+  var result = Meteor.users.aggregate(     {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
     {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
     //console.log(result);
   var ids =[];
@@ -279,7 +280,7 @@ Meteor.publish("duplicateContacts", function(){
       }
     }
     //console.log(ids);
-    result = Contacts.aggregate(     {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+    result = Meteor.users.aggregate(     {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
       {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
       for(var i=0;i<result.length;i++){
         for(var y=0;y<result[i].ids.length;y++){
@@ -306,7 +307,8 @@ Meteor.publish("userSelf", function(){
 
   const options = {
     fields: {
-    contact: 1
+    contact: 1,
+    preferences: 1
      }
   };
   return Meteor.users.find(selector, options);
@@ -341,6 +343,9 @@ Meteor.publish("allUsers", function(){
   return Meteor.users.find({}, options);
 });
 
+Meteor.publish("allUsersEverything", function(){
+  return Meteor.users.find();
+});
 
 /* Ticket Functions */
 Meteor.publish("allActiveTickets", function(){
@@ -387,7 +392,7 @@ Meteor.publish("ticket", function(cid){
   if(!cid){
     return;
   }
-  var contact = Contacts.findOne(cid);
+  var contact = Meteor.users.findOne(cid);
   return Tickets.find({_id: contact.ticket});
 });
 

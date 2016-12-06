@@ -5,6 +5,12 @@ import { Accounts } from 'meteor/accounts-base';
 //   FlowRouter.go("/login");
 // }
 
+document.title="Ivy";
+
+
+//For testing
+Meteor.subscribe("allUsers");
+
 
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");

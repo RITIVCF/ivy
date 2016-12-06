@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectContact from '../../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 import HowHearSelect from './HowHearSelect.jsx';
 
 export default class SignIn extends TrackerReact(React.Component){
@@ -8,7 +8,7 @@ export default class SignIn extends TrackerReact(React.Component){
     super(props);
 
     this.state = {
-      contact: false,
+      user: false,
       new: true,
       submitted: false
     };
@@ -19,7 +19,7 @@ export default class SignIn extends TrackerReact(React.Component){
     var thiz = this;
     console.log(this.state);
     var eid = this.props.ev._id;
-    var contact = this.state.contact;
+    var user = this.state.user;
     var evname = this.props.ev.name;
     var name = this.refs.user.state.value;
     if(this.state.new){
@@ -33,19 +33,19 @@ export default class SignIn extends TrackerReact(React.Component){
         }
     }
 
-    if( !contact ){
+    if( !user ){
 
-      var id = Meteor.call("newContact",
+      var id = Meteor.call("createNewUser",
         this.refs.user.state.value,
         this.refs.email.value,
         this.refs.phone.value,
         this.refs.major.value,
         howhear,
-        function(error, cid){
+        function(error, uid){
           Meteor.call("addAttendanceTicket",
             "New Contact: "+ name,
             "New Contact at event: "+ evname,
-            "","", cid,
+            "","", uid,
             eid,
             function(errr, tktId){
               if(errr){
@@ -53,7 +53,7 @@ export default class SignIn extends TrackerReact(React.Component){
                 return;
               }
               Meteor.call("createAttendanceRecord",
-              eid, cid,
+              eid, uid,
               true,
               more,
               howhear,
@@ -61,14 +61,14 @@ export default class SignIn extends TrackerReact(React.Component){
               thiz.timer();
             });
             if(newsletter){
-              Meteor.call("updateNewsletter", cid, true);
+              Meteor.call("updateNewsletter", uid, true);
             }
         });
 
     }
     else{
       Meteor.call("createAttendanceRecord",
-      this.props.ev._id,this.state.contact._id,
+      this.props.ev._id,this.state.user._id,
       false,
       "",
       "",
@@ -99,21 +99,21 @@ export default class SignIn extends TrackerReact(React.Component){
     var thiz = this;
     setTimeout(function(){
       thiz.setState({submitted: false});
-      thiz.setState({contact: false});
+      thiz.setState({user: false});
       thiz.setState({new: true});
     }, 3000);
   }
 
 
-  getContacts(){
-    return Contacts.find().fetch();
+  getusers(){
+    return Meteor.users.find().fetch();
   }
 
   update(contt){
     //console.log("Suggestion Selected. Print autosuggest return object.");
     //console.log(contt);
     //this.state.contact = contt;
-    this.setState({contact: contt});
+    this.setState({user: contt});
     //this.state.new = false;
     this.setState({new: false});
     //console.log("print state");
@@ -130,7 +130,7 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   setNew(){
-    if(!this.state.contact){
+    if(!this.state.user){
       this.state.new = true;
     }
   }
@@ -139,7 +139,7 @@ export default class SignIn extends TrackerReact(React.Component){
     //console.log(this);
     //this.state.contact = false;
     this.setState({new: true});
-    this.setState({contact: false});
+    this.setState({user: false});
     this.refs.email.value="";
     // this.refs.phone.value="";
     // this.refs.newsletter.checked=false;
@@ -164,13 +164,13 @@ export default class SignIn extends TrackerReact(React.Component){
                 <h2>Please sign in</h2>
                 <form className="publicForm" onSubmit={this.submit.bind(this)} name="form">
                   <div className="form-group">
-                    <SelectContact
+                    <SelectUser
                       parent={this}
                       unset={this.unset.bind(this)}
                       onBlur={this.setNew.bind(this)}
                       initialValue={""}
                       onChange={this.changeName.bind(this)}
-                      updateContact={this.update.bind(this)}
+                      updateUser={this.update.bind(this)}
                       id="first_name"
                       type="text"
                       ref="user"

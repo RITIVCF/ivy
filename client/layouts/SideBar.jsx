@@ -52,6 +52,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 						<li className={FlowRouter.current().path.substring(0,9)=="/churches"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/churches">Churches Dashboard</a>
 						</li>:""}
+					{!checkPermission("admin")?"":
 					<li>
 						<a className="collapsible-header">Administration<i className="material-icons right">arrow_drop_down</i></a>
 						<div className="collapsible-body">
@@ -81,6 +82,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 							</ul>
 						</div>
 					</li>
+				}
 				</ul>
 			</li>
 		</ul>

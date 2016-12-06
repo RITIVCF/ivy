@@ -8,9 +8,9 @@ export default class TicketRow extends Component {
     if(this.props.tkt.assigneduser==""){
       return {name:""};
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.tkt.assigneduser}).contact}
-      );
+    //return Contacts.findOne({_id:
+      return  Meteor.users.findOne({_id:this.props.tkt.assigneduser})//.contact}
+    //  );
   }
 
   getGroup(){
@@ -24,9 +24,9 @@ export default class TicketRow extends Component {
     if(this.props.tkt.type == "Contact"){
       return {name: ""};//Contacts.findOne(this.props.tkt.customer).name;
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.tkt.customer}).contact
-      });
+    //return Contacts.findOne({_id:
+      return  Meteor.users.findOne({_id:this.props.tkt.customer})//.contact}
+    //  );
   }
 
   go(){

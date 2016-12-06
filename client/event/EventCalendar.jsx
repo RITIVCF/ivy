@@ -3,7 +3,6 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
 import fullcalendar from 'fullcalendar';
 import EventContent from './EventContent.jsx';
-import EventHelp from './EventHelp.jsx';
 import NewEventModal from './NewEventModal.jsx';
 
 //import EventModal from './components.jsx';
@@ -61,6 +60,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")
         :(Session.get("calendarview")=="basicWeek"||Session.get("calendarview")=="basicDay")?"agendaWeek":Session.get("calendarview"),
       firstDay: 1,
+      theme: false,
       height: this.props.height,
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
@@ -73,7 +73,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         if(!calEvent.name){
           return;
         }
-        Session.set("infobar",true);
+        //Session.set("infobar",true);
+        Meteor.call("openEventInfoBar");
         Session.set("evselected",calEvent._id);
         //$('.modal').modal();
         //console.log(calEvent._id);
@@ -254,9 +255,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $('#XynJraXPfs46EXMGP').modal('open');
   }
 
-  openHelp(){
-      $("#helpmodal").modal("open");
-  }
+
 
 
 
@@ -279,12 +278,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
               return <EventContent key={event._id} event={event} />
             })}
             <NewEventModal />
-            <EventHelp />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col s12">
-            <a onClick={this.openHelp.bind(this)} className="waves-effect waves-green btn">Help</a>
           </div>
         </div>
       </div>

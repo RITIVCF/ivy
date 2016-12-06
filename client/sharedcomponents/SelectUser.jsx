@@ -5,20 +5,24 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-
-      var users = Meteor.users.find().fetch();
-      users.forEach(function(user){
-        //console.log(user.contact);
-        user.name = Contacts.findOne(user.contact).name;
-
-      });
+      if(unCreated){
+        var users = Meteor.users.find({emails: {$elemMatch: {verified: false}}}).fetch();
+      }
+      else{
+        var users = Meteor.users.find().fetch();
+      }
+      // users.forEach(function(user){
+      //   //console.log(user.contact);
+      //   user.name = Contacts.findOne(user.contact).name;
+      //
+      // });
       //console.log(users);
       return users;
 
 
 }
 
-function getSuggestions(value) {
+function getSuggestions(value, unCreated) {
   //users: true, find Users
   //       fasle, use contacts
   const inputValue = value.trim().toLowerCase();
@@ -38,7 +42,7 @@ function getSuggestionValue(suggestion) { // when suggestion selected, this func
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.name}</span>
+    <span>{suggestion.name}<span style={{float: "right"}}>{suggestion.emails[0].address}</span></span>
   );
 }
 
@@ -54,7 +58,7 @@ export default class SelectUser extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
 
-
+    unCreated = props.unCreated;
 
       this.state = {
         value: '',
@@ -94,7 +98,7 @@ shouldComponentUpdate(nextProps, nextState){
     //console.log(suggestion);
     //this.setState({value:suggestion.name});
     suggestion.component = this;
-    this.props.updateContact(suggestion);
+    this.props.updateUser(suggestion);
   }
 
 

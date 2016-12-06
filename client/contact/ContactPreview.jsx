@@ -14,11 +14,11 @@ export default class ContactPreview extends Component {
   }
 
   getContact(){
-    return Contacts.findOne(this.props.cid);
+    return Meteor.users.findOne(this.props.cid);
   }
 
   contactsCount(){
-    return Contacts.find({},{fields: {name: 1}}).fetch().length;
+    return Meteor.users.find({},{fields: {name: 1}}).fetch().length;
   }
 
 
@@ -65,7 +65,7 @@ export default class ContactPreview extends Component {
           <div className="card">
             <div className="card-content">
               <p>Name: <br/>{contact.name}</p><br/>
-              <p>Email: <br/>{contact.email}</p><br/>
+              <p>Email: <br/>{contact.emails[0].address}</p><br/>
               <p>Phone: <br/>{contact.phone?contact.phone:"Not set"}</p><br/>
               <p>Newsletter: <br/>{contact.newsletter?"Yes":"No"}</p><br/>
               <p>Major: <br/>{contact.major?contact.major:"Not set"}</p>
