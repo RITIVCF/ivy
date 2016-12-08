@@ -18,7 +18,7 @@ import ForgotPassword from './user/ForgotPassword.jsx';
 import NewContactWrapper from './contact/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
-import EventWorkspace from './event/EventWorkspace.jsx';
+import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
 import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
@@ -231,7 +231,7 @@ FlowRouter.route('/events/workspace/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Workspace",
-			content: (<EventWorkspace eid={params.eid} />)
+			content: (<EventWorkspaceWrapper eid={params.eid} />)
 		})
 	}
 });

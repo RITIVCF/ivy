@@ -36,9 +36,8 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 			<NewTicketWindow ref="newticketoverlay" parent={this} eid={this.props.eid} />}
 			<div className="panel-heading">{this.props.perm?<button
 				onClick={this.openOverlay.bind(this)}
-				className="btn btn-primary btn-lg"
+				className="btn indigo darken-4"
 				style={{float: "right" }}
-				disabled={!this.props.parent.state.subscription.users.ready()}
 				>New Request</button>:<div></div>}
 				<h3>Requests</h3>
 				</div>

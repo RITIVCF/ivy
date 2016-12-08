@@ -32,6 +32,7 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 							<p>Available Permissions</p>
 							<select
 								multiple
+								className="browser-default"
 								size="10"
 								ref="pages" >
 								{this.getPermissions(false).map((perm)=>{
@@ -50,6 +51,7 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 						<div className="col md5">
 							<p>{this.props.group.name+"'s"} Permissions</p>
 							<select
+								className="browser-default"
 								multiple
 								size="10"
 								ref="grouppages" >

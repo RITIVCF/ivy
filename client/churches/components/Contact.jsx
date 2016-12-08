@@ -13,10 +13,10 @@ export default class Contact extends Component {
         <div className="card-panel left">
           <div className="card-content">
             <span className="card-title">{this.props.contact.name}</span>
-            <p>{this.props.contact.email}</p>
+            <p>{this.props.contact.emails[0].address}</p>
           </div>
           <div className="card-action">
-              <a className="waves-effect waves-light btn red"  
+              <a className="waves-effect waves-light btn red"
                 onClick={this.remove.bind(this)}>Remove</a>
             </div>
         </div>

@@ -77,7 +77,7 @@ export default class MemberForm extends TrackerReact(React.Component) {
     componentDidUpdate(){
       if(!this.state.intl){
         $('select').material_select();
-      }//initialize after select has be rendered 
+      }//initialize after select has be rendered
     }
 
     getGradTerms(){
@@ -106,9 +106,9 @@ export default class MemberForm extends TrackerReact(React.Component) {
               <div className="input-field col s12">
                 <select ref="gradterm" value="">
                   <option value="" disabled>Select graduation term</option>
-                  {this.props.subscription.ready() ? this.getGradTerms().map( (term)=>{
+                  {this.getGradTerms().map( (term)=>{
                       return <SelectOption key={term} value={term} displayvalue={term}  />
-                  }):<option></option>}
+                  })}
                 </select>
                 <label>Expected Graduation Term:*</label>
               </div>
@@ -159,17 +159,17 @@ export default class MemberForm extends TrackerReact(React.Component) {
                 <label>Gender: *</label>
             </div>
             <p>Campus Affiliations:</p>
-              {this.props.subscription.ready() ? this.getAffiliations().map( (tag)=>{
+              {this.getAffiliations().map( (tag)=>{
                 return <p key={tag} ><label htmlFor={tag} >{tag}: </label>
                   <input type="checkbox" ref={"affiliations."+tag} id={tag} name={tag} />
                   </p>
-              }) :<div></div> }
+              })}
             <p>Community Involvement:</p>
-              {this.props.subscription.ready() ? this.getCommunityLife().map( (tag)=>{
+              {this.getCommunityLife().map( (tag)=>{
                 return <p key={tag} ><label htmlFor={tag}>{tag}: </label>
                   <input type="checkbox" ref={"communitylife."+tag} id={tag} name={tag} />
                   </p>
-              }) :<div></div>}
+              })}
 
             </div>
             <div className="modal-footer">

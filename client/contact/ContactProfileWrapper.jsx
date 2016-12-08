@@ -16,7 +16,8 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 				user: Meteor.subscribe("userSelf"),
 				contact: Meteor.subscribe("contact", FlowRouter.getParam('cid')),
 				ticket: Meteor.subscribe("ticket", FlowRouter.getParam('cid')),
-				options: Meteor.subscribe("allOptions")
+				options: Meteor.subscribe("allOptions"),
+				Events: Meteor.subscribe("myAttendedEvents") 
 			}
 		};});
 
@@ -62,6 +63,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
     this.state.subscription.contact.stop();
 		this.state.subscription.options.stop();
 		this.state.subscription.ticket.stop();
+		this.state.subscription.Events.stop();
 		//console.log("Wrapper unmounted");
   }
 

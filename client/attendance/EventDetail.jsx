@@ -16,6 +16,10 @@ export default class EventDetail extends TrackerReact(React.Component) {
     };
   }
 
+	componentDidMount(){
+		$('.tooltipped').tooltip({delay: 50});
+	}
+
 	export(){
 		var csvContent = "data:text/csv;charset=utf-8,";
 		csvContent += "Event Name:,"+this.props.ev.name+"\n";
@@ -128,22 +132,53 @@ export default class EventDetail extends TrackerReact(React.Component) {
 				<span className="card-title">{!ev ? "":ev.name}</span>
 			</div>
 			<div className="card-content">
-				<p>Event Description: {!ev ? "": ev.description}</p>
-				<p>Event Start: {!!ev ? moment(ev.start.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
-				<p>Event End: {!!ev ? moment(ev.end.toISOString()).format("Do MMM YY   h:mmA"):""}</p>
-				<h3>Attendees</h3> <button onClick={this.export.bind(this)} className="btn"><i className="material-icons">output</i></button><br/>
-				<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-					<option value={"All"}>All</option>
-					<option value={"Yes"}>Yes</option>
-					<option value={"No"}>No</option>
-				</select></label>
-			<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-					<option value={"Name"}>Name</option>
-					<option value={"First Time"}>First Time</option>
-				{/*}	<option value={"Status"}>Status</option> */}
-				</select></label>
-			<p>Total: {ev.attendees.length} attendees</p>
-			<p>New: {this.getCountNew()} attendees</p>
+				<p>Event Description: <br/>{!ev ? "": ev.description}</p>
+				<p><b>Event Start:</b> {!!ev ? moment(ev.start.toISOString()).format("DD MMM @ h:mmA"):""}</p>
+				<p><b>Event End:</b> {!!ev ? moment(ev.end.toISOString()).format("DD MMM @ h:mmA"):""}</p>
+				<hr/>
+				<h4>Attendees
+					<a onClick={this.export.bind(this)} className="btn tooltipped right" data-position="bottom"
+						data-delay="50" data-tooltip="Export Attendance">
+						<i className="material-icons">play_for_work</i></a>
+				</h4>
+				<div className="row">
+					<div className="col s12 m5">
+						<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
+								<option value={"All"}>All</option>
+								<option value={"Yes"}>Yes</option>
+								<option value={"No"}>No</option>
+							</select></label>
+						<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
+								<option value={"Name"}>Name</option>
+								<option value={"First Time"}>First Time</option>
+							{/*}	<option value={"Status"}>Status</option> */}
+							</select></label>
+					</div>
+					<div className="col s4 m4">
+
+					</div>
+					<div className="col s8 m3">
+						<table style={{outline: "solid 2px"}}>
+							<thead>
+								<tr>
+									<th colspan="2">Attendees</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Total:</td>
+									<td>{ev.attendees.length}</td>
+								</tr>
+								<tr>
+									<td>New:</td>
+									<td>{this.getCountNew()}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
 			</div>
 				<table className={checkPermission("contacts")?"highlight":""}>
 					<thead>
@@ -155,7 +190,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 							<th>Learn More?</th>
 							<th>How hear about us?</th>
 							{checkPermission("tickets") ?
-							<th></th>:"" }
+							<th>Ticket</th>:"" }
 						</tr>
 					</thead>
 					<tbody>

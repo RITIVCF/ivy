@@ -57,9 +57,6 @@ export default class SideBar extends TrackerReact(React.Component) {
 						<a className="collapsible-header">Administration<i className="material-icons right">arrow_drop_down</i></a>
 						<div className="collapsible-body">
 							<ul>
-								<li className={FlowRouter.current().path.substring(0,12)=="/admin/users"?"active":""}>
-									<a href="/admin/users">User Management</a>
-								</li>
 								<li className={FlowRouter.current().path.substring(0,13)=="/admin/groups"?"active":""}>
 									<a href="/admin/groups">Groups Management</a>
 								</li>

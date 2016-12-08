@@ -6,6 +6,9 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
+		this.state = {
+			mounted: false
+		}
 
 	}
 
@@ -103,10 +106,14 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			};
 			historicalChart.update();
 		});
+		this.setState({mounted: true});
 	}
 
 
 	render() {
+		// if(this.state.mounted){
+		// 	this.refresh();
+		// }
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
@@ -126,7 +133,7 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 						<option value="1" >Past 1 Days</option>
 					</select>
 					<input type="text" id="amount" readOnly style={{border:0, color:"#f6931f", fontWeight:"bold"}} />
-					<div id="slider-range"></div>
+					{/*}<div id="slider-range"></div>*/}
 					<canvas id="historicalchart" width="400" height="400"></canvas>
 				</div>
 			</div>

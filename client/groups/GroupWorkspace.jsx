@@ -37,6 +37,13 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 	}
 
 	render() {
+		if(!this.props.group){
+			return <div>
+				<h5>Groups Workspace</h5>
+				<p>Please select a group to continue.</p>
+			</div>
+		}
+		
 
 		return (
 		<div className="row">

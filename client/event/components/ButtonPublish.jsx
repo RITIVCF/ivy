@@ -12,25 +12,13 @@ export default class ButtonPublish extends Component {
 
   render(){
     return(
-      <div>
-      {this.props.published ?
-        <button
-          onClick={this.togglePublishEvent.bind(this)}
-          className="btn btn-danger navbar-btn"
+        <a
           ref="togglePublish"
-          value={true} >
-          Unpublish
-        </button>
-        :
-        <button
-          ref="togglePublish"
-          className="btn btn-primary navbar-btn"
+          className="waves-effect waves-light btn indigo darken-4"
           onClick={this.togglePublishEvent.bind(this)}
-          value={false} >
-          Publish
-        </button>
-      }
-    </div>
+          >
+          {this.props.published ?"Unpublish":"Publish"}
+        </a>
     )
   }
 }

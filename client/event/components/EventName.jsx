@@ -40,6 +40,12 @@ export default class EventName extends Component {
     setNameFalse(this, this.props.ev._id);
   }
 
+  componentDidUpdate(){
+    if(this.refs.name){
+            this.refs.name.focus();
+    }
+  }
+
   shouldComponentUpdate(nextProps,nextState){
     if(!this.state.editting){
       this.state.name = nextProps.ev.name;

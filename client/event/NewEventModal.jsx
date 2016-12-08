@@ -42,7 +42,7 @@ export default class NewEventModal extends TrackerReact(React.Component) {
 
   render() {
     return (
-      <div id="neweventmodal" className="modal">
+      <div id="neweventmodal" className="modal bottom-sheet">
         <div className="modal-content">
           <div className="input-field col s12">
             <input ref="newname" id="newname" type="text" onChange={this.checkValue.bind(this)} defaultValue={"New Event"} />

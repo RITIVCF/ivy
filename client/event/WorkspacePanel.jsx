@@ -34,7 +34,11 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 
 	openDelete(){
 		event.preventDefault();
-		this.refs.deleteOverlay.openOverlay();
+		//this.refs.deleteOverlay.openOverlay();
+		if(window.confirm("Are you sure?\n\nTHIS CANNOT BE UNDONE.")){
+			Meteor.call("deleteEvent", this.props.ev._id);
+      FlowRouter.go("/events");
+		}
 	}
 
 
@@ -47,22 +51,22 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:""}
 				{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} ev={ev} />:""}
 				{perm?
-					<ButtonPublish published={ev.published} eid={this.props.eid} />
+					<ButtonPublish published={ev.published} eid={ev._id} />
 					:<p>Published: {ev.published?"Published":"Not Published"}</p>}
-				{perm?<button className="btn btn-danger navbar-btn" onClick={this.openDelete.bind(this)}>Delete</button>:""}
+				{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:""}
 				<EventDateControls ev={ev} perm={perm} />
 
 				<EventLocation ev={ev} perm={perm} />
 				<EventEVR ev={ev} perm={perm} />
 				<EventReserved ev={ev} perm={perm} />
-				<h3>Tags</h3>
-				<EventTags ev={ev} subscription={this.props.subscription.options} perm={perm} />
+				<h5>Tags</h5>
+				<EventTags ev={ev} perm={perm} />
 				<h4>Service Positions</h4>
-					{perm?<button className="btn btn-default navbar-btn"
+					{perm?<button className="btn indigo darken-4"
 						onClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
-					{this.props.subscription.contacts.ready() ? ev.jobs.map( (job)=>{
+					{ev.jobs.map( (job)=>{
 						return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
-					}):""}
+					})}
 			</div>
 		)
 	}

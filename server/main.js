@@ -15,6 +15,17 @@ SyncedCron.add({
     FunnelHistory.insert(rst);
   }
 });
+SyncedCron.add({
+  name: 'BackupContactsAttendance',
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.recur().on("00:00:59").time();
+  },
+  job: function() {
+    ContactsBackup.insert({contacts:Meteor.users.find().fetch(), timestamp: new Date()});
+    EventsAttendanceBackup.insert({events: Events.find({},{name: 1, start: 1, attendees: 1}).fetch(), timestamp: new Date()});
+  }
+});
 
 function getMyGroupsIDs(){
   var grps = Groups.find({users: this.userId}).fetch();

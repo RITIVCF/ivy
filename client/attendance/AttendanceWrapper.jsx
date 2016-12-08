@@ -59,14 +59,12 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
     console.log("true");
     document.title = "Ivy - Attendance Dashboard";
 		return (
-      <div className="container">
 				<div className="row">
 					<div className="col s12">
             {/*this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""*/}
             {this.subsReady()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
 					</div>
 				</div>
-			</div>
   )
 	}
 }

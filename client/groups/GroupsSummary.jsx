@@ -36,10 +36,10 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-      <div className="container">
+      <div>
         <div className="row">
           <div className="col s8">
-            <h1>Active Groups</h1>
+
           </div>
           <form onSubmit={this.createNew.bind(this)}>
             <div className="input-field col s4">
@@ -56,7 +56,9 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
         <div className="divider"></div>
         <div className="row">
           {this.props.sub.Contacts.ready()?this.groups().map( (group)=>{
-              return <GroupSingle key={group._id} group={group} sub={this.props.sub} parent={this} />
+              return <GroupSingle key={group._id}
+                selected={Session.get("groupselected")==group._id}
+                group={group} sub={this.props.sub} parent={this} />
           }):<div></div>}
         </div>
       </div>

@@ -83,6 +83,7 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
           <i className="material-icons black-text">view_module</i></a></li>
         :<li className="active" onClick={this.toggleView.bind(this)}><a className="waves-effect waves-light">
         <i  className="material-icons black-text">view_list</i></a></li>*/}
+
       <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
         <i className="material-icons black-text">{Meteor.user().preferences.churches_infobar?"info":"info_outline"}</i></a></li>
     </div>
@@ -105,13 +106,13 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
       <div className="col s12">
         <div className="row">
           <div className="col s12 m8 l8">
-
+            <form onSubmit={this.createNew.bind(this)}>
+              <label htmlFor="icon_prefix">New Church Name</label>
+                <input ref="name"  type="text" />
+            </form>
           </div>
           <div className="input-field col s12 m4 l4">
-            <form onSubmit={this.createNew.bind(this)}>
-              <input ref="name"  type="text" />
-              <label htmlFor="icon_prefix">New Church Name</label>
-            </form>
+
           </div>
         </div>
         <div className="divider"></div>

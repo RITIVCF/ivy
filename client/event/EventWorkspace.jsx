@@ -66,58 +66,25 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		if(!checkPermission('events')){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-		}
-	let ev = this.getEvent();
+		let ev = this.props.ev;
+		let perm = this.props.perm;
 
-	if(!ev){
-		return (<div>Loading...</div>);
-	}
-	document.title = "Ivy - "+ ev.name;
-	var perm = false;// ev.perm[""]
-	var view = false;
-	for(i=0; i < ev.permUser.length; i++){
-		if(ev.permUser[i].id == Meteor.userId()){
-			view = true;
-			perm = ev.permUser[i].edit;
-			break;
-		}
-	}
-	//console.log(ev.permGroup);
-	for(i=0; i < ev.permGroup.length; i++){
-		if(this.checkGroup(ev.permGroup[i].id)){
-			//console.log("true");
-			view = true;
-			perm = ev.permGroup[i].edit||perm;
-			break;
-		}
-	}
-	if(ev.owner==Meteor.userId()){
-		view = true;
-		perm = true;
-	}
-	if(!view){
-		return(<p>You do not have permission to view this event's workspace.</p>)
-	}
-
-		return (
-			<div className="row" style={{height: "100%"}}>
-				<div className="col s12">
-					<div className="card">
-						<div className="card-image">
-							<img src="/images/defaultEventSmall.png" />
-							<EventName ev={ev} perm={perm} />
-						</div>
-						<div className="card-content">
-							<EventDescription ev={ev} perm={perm} />
-							<EventWorkpad ev={ev} perm={perm} />
-							<RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
+		return ( 
+				<div className="row" style={{height: "100%"}}>
+					<div className="col s12">
+						<div className="card">
+							<div className="card-image">
+								<img src="/images/defaultEventSmall.png" />
+								<EventName ev={ev} perm={perm} />
+							</div>
+							<div className="card-content">
+								<EventDescription ev={ev} perm={perm} />
+								<EventWorkpad ev={ev} perm={perm} />
+								<RequestWrapper eid={this.props.eid} parent={this} perm={perm} />
+							</div>
 						</div>
 					</div>
 				</div>
-				<InfoBar content={<WorkspacePanel perm={perm} ev={ev} subscription={this.state.subscription} />} />
-			</div>
 		)
 	}
 }

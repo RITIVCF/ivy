@@ -35,7 +35,7 @@ export default class GroupItem extends TrackerReact(React.Component) {
 	render() {
 
 
-		return (<li onClick={this.go.bind(this)} className="collection-item" id="showhim">
+		return (<li onDoubleClick={this.go.bind(this)} className="collection-item" id="showhim">
       <span className="title">{this.props.group.name}</span>
 			<a id="showme" className="btn right valign"
 				onClick={this.leave.bind(this)}>Leave</a>

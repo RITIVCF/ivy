@@ -16,9 +16,12 @@ go(){
 	render() {
 
 
-		return (<li onClick={this.go.bind(this)} className="collection-item">
+		return (<li onDoubleClick={this.go.bind(this)} className="collection-item" id="showhim">
       <span className="title">{this.props.t.subject}</span>
-      <p>{this.props.t.status} <br />
+      <p>{this.props.t.status}
+				<a id="showme" className="btn right valign"
+					onClick={this.go.bind(this)}>Open</a>
+				<br />
 			Last Updated: {new moment(this.props.t.lastUpdated.toISOString()).format("DD MMM @ h:mmA")}
       </p>
 

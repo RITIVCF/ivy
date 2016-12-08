@@ -35,7 +35,7 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 					unset={this.unset.bind(this)}
 					users={true}
 					initialValue={""}
-					updateContact={this.addUser.bind(this)}
+					updateUser={this.addUser.bind(this)}
 					ref="contact" />
 				<table className="bordered striped">
 					<thead>

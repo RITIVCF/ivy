@@ -70,7 +70,7 @@ export default class ContactSingle extends Component {
         </div>
         <div className="card-content">
           <span className="card-title">{this.props.contact.name}</span>
-        <p className="truncate">{this.props.contact.email}</p>
+        <p className="truncate">{this.props.contact.emails[0].address}</p>
         <p>{this.props.contact.status}</p>
         {/*<p>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</p> */}
 

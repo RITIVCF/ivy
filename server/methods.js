@@ -10,7 +10,7 @@ Meteor.methods({
       Accounts.sendResetPasswordEmail(uid);
   },
   sendEventServiceRequest(uid,eid,pos){
-    var contact = Contacts.findOne(Meteor.users.findOne(uid));
+    var contact = Meteor.users.findOne(Meteor.users.findOne(uid));
     var event = Events.findOne(eid);
     this.unblock();
 
@@ -45,7 +45,7 @@ Meteor.methods({
     console.log(users);
     var emails = [];
     users.forEach(function(user){
-      var contact = Contacts.findOne(user.contact);
+      var contact = Meteor.users.findOne(user.contact);
       console.log("pushing: "+contact.email);
       emails.push(contact.email);
     });
@@ -62,7 +62,7 @@ Meteor.methods({
   },
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
-    var contact = Contacts.findOne(Meteor.users.findOne(uid).contact);
+    var contact = Meteor.users.findOne(Meteor.users.findOne(uid).contact);
     Email.send({
       to: contact.email,
       from: "Ivy Information System",
@@ -78,36 +78,39 @@ Meteor.methods({
     Accounts.setUsername(Meteor.userId(), username);
   },
   mergeAndDeleteContact(did,mid,options){
-    var dc = Contacts.findOne(did);
-    var mc = Contacts.findOne(mid);
+    var dc = Meteor.users.findOne(did);
+    var mc = Meteor.users.findOne(mid);
 
     if(options.name){
-      Contacts.update({_id:mc._id},{$set: {name: dc.name}});
+      Meteor.users.update({_id:mc._id},{$set: {name: dc.name}});
     }
     if(options.email){
-      Contacts.update({_id:mc._id},{$set: {email: dc.email}});
+      Meteor.users.update({_id:mc._id},{$set: {email: dc.email}});
     }
     if(options.phone){
-      Contacts.update({_id:mc._id},{$set: {phone: dc.phone}});
+      Meteor.users.update({_id:mc._id},{$set: {phone: dc.phone}});
     }
     if(options.major){
-      Contacts.update({_id:mc._id},{$set: {major: dc.major}});
+      Meteor.users.update({_id:mc._id},{$set: {major: dc.major}});
     }
     if(options.bio){
-      Contacts.update({_id:mc._id},{$set: {bio: dc.bio}});
+      Meteor.users.update({_id:mc._id},{$set: {bio: dc.bio}});
     }
     if(options.news){
-      Contacts.update({_id:mc._id},{$set: {newsletter: dc.newsletter}});
+      Meteor.users.update({_id:mc._id},{$set: {newsletter: dc.newsletter}});
     }
 
     Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}});
     Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}});
-    Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}});
-    Tickets.remove({_id: dc.ticket});
-    Contacts.remove({_id: did});
+    Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}},{multi: true});
+    Tickets.update({_id: dc.ticket},{$set: {deleted: true}});
+    //Tickets.remove({_id: dc.ticket});
+    Meteor.users.update({_id:did},{$set: {deleted: true}});
+    //Meteor.users.remove({_id: did});
+    /* CREATE A LOG OF ALL DELETED Meteor.users FOR HISTORY'S SAKE */
   },
   currentFunnel(){
-    var result = Contacts.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
+    var result = Meteor.users.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
     var rst = {};
     var max = 0;//var cnts = [];
     var max2 = 0;
@@ -146,6 +149,7 @@ Meteor.methods({
       timestamp: []
     };
     var totals = [];
+    var crowds = [];
     result.forEach((date)=>{
       rst.timestamp.push(new moment(date.timestamp).format("MM/DD/YY"));
       rst.crowd.push(date.Crowd?date.Crowd:0);
@@ -154,6 +158,7 @@ Meteor.methods({
       rst.server.push(date.Server?date.Server:0);
       rst.leader.push(date.Leader?date.Leader:0);
       rst.multiplier.push(date.Multiplier?date.Multiplier:0);
+      crowds.push(date.Crowd?date.Crowd:0);
       totals.push(
         (date.Crowd?date.Crowd:0)+
         (date.Visitor?date.Visitor:0)+
@@ -163,10 +168,13 @@ Meteor.methods({
         (date.Multiplier?date.Multiplier:0));
     });
     rst.max = Math.max.apply(null,totals);
-    rst.min = Math.min.apply(null,totals);
+    rst.min = Math.min.apply(null,crowds);
 
     rst.max = ((rst.max-rst.min)>20)?(rst.max+5):(rst.max+2);
     rst.min = ((rst.max-rst.min)>20)?(rst.min-5):(rst.min-2);
+    if(rst.min<0){
+      rst.min=0;
+    }
     console.log(rst);
     console.log(totals);
     console.log(rst.max);
@@ -176,17 +184,17 @@ Meteor.methods({
     console.log(Accounts.createUser({email: "testemail@email.com"}));
   },
   migrateDatabase(){
-    //var userContacts = Contacts.find({user: true}).fetch();
-    var notUserContacts = Contacts.find({user: {$ne: true}}).fetch();
+    //var userMeteor.users = Meteor.users.find({user: true}).fetch();
+    var notUserMeteor.users = Meteor.users.find({user: {$ne: true}}).fetch();
 
     // CONTACT ONLY UPDATE SECTION
-    notUserContacts.forEach((contact)=>{
+    notUserMeteor.users.forEach((contact)=>{
       console.log("Contact");
       console.log(contact);
       var contactid=contact._id;
       delete contact._id;
       var uid = Accounts.createUser(contact);
-      Contacts.update({_id: contactid},{$set: {user:true}});
+      Meteor.users.update({_id: contactid},{$set: {user:true}});
       Meteor.users.update({_id: uid},{$set: {contact: contactid}});
       //===========  Event update attendance ids
     Events.update(
@@ -198,21 +206,21 @@ Meteor.methods({
     );
     //===============
     Churches.update(
-      {contacts: contactid},
-      {$addToSet: {contacts: uid}},
+      {Meteor.users: contactid},
+      {$addToSet: {Meteor.users: uid}},
       {multi: true}
     );
     Churches.update(
-      {contacts: contactid},
-      {$pull: {contacts: contactid}},
+      {Meteor.users: contactid},
+      {$pull: {Meteor.users: contactid}},
       {multi: true}
     );
     //===============
     });
     //
     //     USER UPDATE SECTION
-    var userContacts = Contacts.find({user: true}).fetch();
-    userContacts.forEach((contact)=>{
+    var userMeteor.users = Meteor.users.find({user: true}).fetch();
+    userMeteor.users.forEach((contact)=>{
       console.log("Contact");
       console.log(contact);
       var contactid = contact._id;
@@ -233,13 +241,13 @@ Meteor.methods({
       );
       //===============
       Churches.update(
-        {contacts: contactid},
-        {$addToSet: {contacts: user._id}},
+        {Meteor.users: contactid},
+        {$addToSet: {Meteor.users: user._id}},
         {multi: true}
       );
       Churches.update(
-        {contacts: contactid},
-        {$pull: {contacts: contactid}},
+        {Meteor.users: contactid},
+        {$pull: {Meteor.users: contactid}},
         {multi: true}
       );
       //===============
@@ -247,8 +255,8 @@ Meteor.methods({
     });
     Meteor.users.update({},{$set: {preferences: {
     "theme-color": "Default",
-    "contacts_view":"Tile",
-    "contacts_infobar": true,
+    "Meteor.users_view":"Tile",
+    "Meteor.users_infobar": true,
     "tickets_view":"List",
     "tickets_infobar":true,
     "events_infobar":true,

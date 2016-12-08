@@ -48,10 +48,13 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     if(Options.findOne("calendarview")){
       return <div>
         <SubHeader content={this.getSubHeader()} />
+        <div className="main-box">
           <EventCalendar ref="calendar" height={650} />
-          {Meteor.user().preferences.events_infobar?
-          <InfoBar content={<EventPreview event={Events.findOne(Session.get("evselected"))} />} />:""}
+
         <EventHelp />
+        </div>
+        {Meteor.user().preferences.events_infobar?
+        <InfoBar content={<EventPreview event={Events.findOne(Session.get("evselected"))} />} />:""}
       </div>
     }
 		return (<LoaderCircle />)

@@ -15,6 +15,8 @@ import ContactGender from './components/ContactGender.jsx';
 import ContactGradTerm from './components/ContactGradTerm.jsx';
 import ContactCurrYear from './components/ContactCurrYear.jsx';
 import MemberForm from '../member/MemberForm.jsx';
+import NewAddressModal from './NewAddressModal.jsx';
+import Event from './Event.jsx';
 
 
 export default class ContactProfile extends TrackerReact(React.Component){
@@ -55,10 +57,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
         //console.log(Contacts.find().fetch());
         //console.log("user().contact:");
         //console.log(Meteor.user().contact);
-        return Contacts.findOne(Meteor.user().contact); //s.find({_id : Meteor.userId()}).fetch();
+        return Meteor.user(); //s.find({_id : Meteor.userId()}).fetch();
     }
     //console.log("not undefined so get contact:");
-    return Contacts.findOne(this.props.cid);
+    return Meteor.users.findOne(this.props.cid);
 	}
 
 
@@ -73,6 +75,17 @@ export default class ContactProfile extends TrackerReact(React.Component){
     var ethn = this.refs.ethn.value;
     Meteor.call('updateEthnicity', ethn);
   }
+
+  getEvents(){
+    if(this.props.cid){
+      var id = this.props.cid;
+    }
+    else{
+      var id = Meteor.userId();
+    }
+    return Events.find({"attendees._id":id}, {sort:{start:-1}}).fetch();
+  }
+
 
   openMemberOverlay(){
     //this.refs.becmemwin.openOverlay();
@@ -104,7 +117,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
     var viewmember = false;
     ////console.log(this.state.subscription.user.ready());
     //console.log("contact:");
-    if(this.props.parent.state.subscription.contact.ready()){
+    //if(this.props.parent.state.subscription.contact.ready()){
       contact = this.contactDetails();
       if(Meteor.user().contact == contact._id||checkPermission("contactdetails")){
         disable = false;
@@ -112,10 +125,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
       if(Meteor.user().contact == contact._id||checkPermission("memberdetail")){
         viewmember = true;
       }
-    }
+    //}
     //let contact = this.contactDetails();
     ////console.log(contact);
-    if(this.props.parent.state.subscription.contact.ready()&&contact){
+    if(contact){
         document.title = (this.props.cid==='undefined') ? "Ivy - My Profile" : "Ivy - "+contact.name+"'s Profile";
     }
     else{
@@ -124,9 +137,8 @@ export default class ContactProfile extends TrackerReact(React.Component){
 
     return (
       <div className="row">
-        {this.props.parent.state.subscription.contact.ready() ? contact ? (!contact.member)
-           ? <MemberForm ref="becmemwin" subscription={this.props.parent.state.subscription.options}
-           />:"":"":""}
+        {contact ? (!contact.member)
+           ? <MemberForm ref="becmemwin" />:"":""}
         <div className="col s12">
           {/*Contact profile header here: name, picture, wall picture*/}
           <div className="card">
@@ -138,10 +150,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-                {Meteor.user()?Meteor.user().contact==this.props.cid?this.props.parent.state.subscription.contact.ready()&&contact?(!contact.member) ?
+                {Meteor.user()?Meteor.user().contact==this.props.cid?contact?(!contact.member) ?
               <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
               :"":"":"":""}
-              {checkPermission("tickets")&&this.props.parent.state.subscription.contact.ready()&&contact.ticket?(this.props.cid==Meteor.user().contact)?
+              {checkPermission("tickets")&&contact.ticket?(this.props.cid==Meteor.user().contact)?
                 <div className="row">
                   <div className="col s12">
 
@@ -162,70 +174,75 @@ export default class ContactProfile extends TrackerReact(React.Component){
           <div className="card">
             <div className="card-content">
               <span className="card-title">Contact Information</span>
-                {this.props.parent.state.subscription.contact.ready()&&contact ?
+                {contact ?
                   <div><ContactName contact={contact} disabled={disable} />
                 <ContactEmail contact={contact} disabled={disable} />
                 <ContactPhone contact={contact} disabled={disable} />
                 <ContactNewsletter contact={contact} disabled={disable} />
                 </div>:""}
-                {this.props.parent.state.subscription.contact.ready()&&contact ?
+                {contact ?
                     <ContactMajor contact={contact} disabled={disable} />:""}
 
             </div>
           </div>
-          {this.props.parent.state.subscription.contact.ready()&&contact ?
+          {contact ?
             contact.member&&viewmember ?
           <div className="card">
             <div className="card-content">
               <span className="card-title">Ethnicity & Gender</span>
                 <h4>Ethnicity:</h4>
-                <ContactIntl contact={contact} disabled={disable} subscription={this.props.subscriptions.options} />
+                <ContactIntl contact={contact} disabled={disable} />
                 <ContactGender contact={contact} disabled={disable} />
             </div>
           </div>:<div></div>:<div></div>}
           <div className="card">
             <div className="card-content">
               <span className="card-title">Addresses</span>
-                {this.props.parent.state.subscription.contact.ready()&&contact ?
+                {contact ?
                 <AddressForm contact={contact} disabled={disable} addresses={contact.addresses} />:""}
             </div>
           </div>
+          <NewAddressModal />
         </div>
         <div className="col s12 m6 l6">
-          {this.props.parent.state.subscription.contact.ready()&&contact ?
+          {contact ?
             contact.member&&viewmember ?
               <div className="card">
                 <div className="card-content">
                   <span className="card-title">Involvement</span>
                     <h3>Campus Affiliations</h3>
-                    <CampusAffiliations contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                    <CampusAffiliations contact={contact} disabled={disable}  />
                     <h3>Community Life</h3>
-                    <CommunityLife contact={contact} disabled={disable}  subscription={this.props.subscriptions.options} />
+                    <CommunityLife contact={contact} disabled={disable} />
                 </div>
               </div>
           :"":""}
           <div className="card">
             <div className="card-content">
               <span className="card-title">Bio</span>
-                {this.props.parent.state.subscription.contact.ready()&&contact ?
+                {contact ?
                   <ContactBio contact={contact} disabled={disable} />
                   :""}
             </div>
           </div>
-          {this.props.parent.state.subscription.contact.ready()&&contact ?
+          {contact ?
             contact.member&&viewmember?
           <div className="card">
             <div className="card-content">
               <span className="card-title">University Info</span>
                 <ContactMajor contact={contact} disabled={disable} />
-                <ContactGradTerm contact={contact} disabled={disable}  parent={this} subscription={this.props.subscriptions.options} />
+                <ContactGradTerm contact={contact} disabled={disable}  parent={this} />
                 <ContactCurrYear contact={contact} disabled={disable} />
             </div>
           </div>:<div></div>:<div></div>}
           <div className="card">
             <div className="card-content">
               <span className="card-title">Events</span>
-
+              <ul className="collection">
+                {this.getEvents().map((event)=>{
+                  return <Event key={event._id} event={event} />
+                })}
+              </ul>
             </div>
           </div>
         </div>

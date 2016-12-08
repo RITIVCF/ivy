@@ -1,4 +1,5 @@
-
+ContactsBackup = new Mongo.Collection("contactsbackup");
+EventsAttendanceBackup = new Mongo.Collection("eventsattendancebackup");
 
 Meteor.publish("allEvents", function(){
   return Events.find();
@@ -6,6 +7,11 @@ Meteor.publish("allEvents", function(){
 
 Meteor.publish("summaryEvents", function(){
 
+  //return Events.find({$or: [{}]});
+});
+
+Meteor.publish("myAttendedEvents", function(){
+  return Events.find({"attendees._id": this.userId});
   //return Events.find({$or: [{}]});
 });
 
@@ -308,7 +314,8 @@ Meteor.publish("userSelf", function(){
   const options = {
     fields: {
     contact: 1,
-    preferences: 1
+    preferences: 1,
+    bio: 1
      }
   };
   return Meteor.users.find(selector, options);
