@@ -28,6 +28,14 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 		// this.state.subscription.contacts.stop();
   }
 
+	shouldComponentUpdate(nextProps, nextState){
+		if(nextProps.group._id=="admin"){
+			//this.setState({showPerm: false});
+			this.state.showPerm = false;
+		}
+		return true;
+	}
+
 	toglleAdmin(){
 		Meteor.call("toggleAdminGroup", this.props.group._id, this.refs.admin.checked);
 	}
@@ -43,7 +51,7 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 				<p>Please select a group to continue.</p>
 			</div>
 		}
-		
+
 
 		return (
 		<div className="row">

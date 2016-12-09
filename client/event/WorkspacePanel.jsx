@@ -50,10 +50,12 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				{perm?<JobsWindow ref="jobOverlay" eid={ev._id} />:""}
 				{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:""}
 				{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} ev={ev} />:""}
-				{perm?
-					<ButtonPublish published={ev.published} eid={ev._id} />
-					:<p>Published: {ev.published?"Published":"Not Published"}</p>}
-				{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:""}
+					{perm?
+						<ButtonPublish published={ev.published} eid={ev._id} />
+						:<p>Published: {ev.published?"Published":"Not Published"}</p>}
+					{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:""}
+
+
 				<EventDateControls ev={ev} perm={perm} />
 
 				<EventLocation ev={ev} perm={perm} />

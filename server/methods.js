@@ -10,12 +10,12 @@ Meteor.methods({
       Accounts.sendResetPasswordEmail(uid);
   },
   sendEventServiceRequest(uid,eid,pos){
-    var contact = Meteor.users.findOne(Meteor.users.findOne(uid));
+    var contact = Meteor.users.findOne(uid);
     var event = Events.findOne(eid);
     this.unblock();
 
     Email.send({
-      to: contact.email,
+      to: contact.email[0].address,
       from: "Ivy Information System",
       subject: "New Event Service Request: " + event.name + " - " +pos,
       text: "<p>Dear "+ contact.name + "</p><p>You have been requested to serve in the position of "
@@ -44,10 +44,10 @@ Meteor.methods({
     console.log("users");
     console.log(users);
     var emails = [];
-    users.forEach(function(user){
-      var contact = Meteor.users.findOne(user.contact);
-      console.log("pushing: "+contact.email);
-      emails.push(contact.email);
+    users.forEach(function(contact){
+      //var contact = Meteor.users.findOne(user.contact);
+      console.log("pushing: "+contact.email[0].address);
+      emails.push(contact.email[0].address);
     });
     console.log("emails:");
     console.log(emails);
@@ -62,9 +62,9 @@ Meteor.methods({
   },
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
-    var contact = Meteor.users.findOne(Meteor.users.findOne(uid).contact);
+    var contact = Meteor.users.findOne(uid);
     Email.send({
-      to: contact.email,
+      to: contact.email[0].address,
       from: "Ivy Information System",
       subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
       html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
@@ -185,16 +185,16 @@ Meteor.methods({
   },
   migrateDatabase(){
     //var userMeteor.users = Meteor.users.find({user: true}).fetch();
-    var notUserMeteor.users = Meteor.users.find({user: {$ne: true}}).fetch();
+    var notUserContacts = Contacts.find({user: {$ne: true}}).fetch();
 
     // CONTACT ONLY UPDATE SECTION
-    notUserMeteor.users.forEach((contact)=>{
+    notUserContacts.forEach((contact)=>{
       console.log("Contact");
       console.log(contact);
       var contactid=contact._id;
       delete contact._id;
       var uid = Accounts.createUser(contact);
-      Meteor.users.update({_id: contactid},{$set: {user:true}});
+      Contacts.update({_id: contactid},{$set: {user:true}});
       Meteor.users.update({_id: uid},{$set: {contact: contactid}});
       //===========  Event update attendance ids
     Events.update(
@@ -206,21 +206,21 @@ Meteor.methods({
     );
     //===============
     Churches.update(
-      {Meteor.users: contactid},
-      {$addToSet: {Meteor.users: uid}},
+      {contacts: contactid},
+      {$addToSet: {contacts: uid}},
       {multi: true}
     );
     Churches.update(
-      {Meteor.users: contactid},
-      {$pull: {Meteor.users: contactid}},
+      {contacts: contactid},
+      {$pull: {contacts: contactid}},
       {multi: true}
     );
     //===============
     });
     //
     //     USER UPDATE SECTION
-    var userMeteor.users = Meteor.users.find({user: true}).fetch();
-    userMeteor.users.forEach((contact)=>{
+    var userContacts = Contacts.find({user: true}).fetch();
+    userContacts.forEach((contact)=>{
       console.log("Contact");
       console.log(contact);
       var contactid = contact._id;
@@ -241,13 +241,13 @@ Meteor.methods({
       );
       //===============
       Churches.update(
-        {Meteor.users: contactid},
-        {$addToSet: {Meteor.users: user._id}},
+        {contacts: contactid},
+        {$addToSet: {contacts: user._id}},
         {multi: true}
       );
       Churches.update(
-        {Meteor.users: contactid},
-        {$pull: {Meteor.users: contactid}},
+        {contacts: contactid},
+        {$pull: {contacts: contactid}},
         {multi: true}
       );
       //===============

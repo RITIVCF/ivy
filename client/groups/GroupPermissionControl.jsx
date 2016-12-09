@@ -7,6 +7,8 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 
   }
 
+	
+
 	getPermissions(group){
 		if(group){
 			return PagePermissions.find({groups: this.props.group._id}).fetch();

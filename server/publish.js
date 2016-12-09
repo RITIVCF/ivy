@@ -187,7 +187,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     }
   }*/
 
-  var selector = {};
+  var selector = {deleted: {$ne: true}};
 /*
   if(filtr == "Contact"){
     selector = {
@@ -381,7 +381,16 @@ Meteor.publish("MyTickets", function(){
 		ids.push(group._id);
 	});
   //console.log(ids);
-  return Tickets.find({$or: [{assigneduser: this.userId}, {assigneduser:"", assignedgroup: {$in: ids}}, {submittedby: this.userId}]});
+  return Tickets.find(
+    {$and:[
+      {status: {$nin: ["Cancelled","Closed","Canceled"]}},
+      {$or: [
+        {assigneduser: this.userId},
+        {assigneduser:"", assignedgroup: {$in: ids}},
+        {submittedby: this.userId}
+      ]}
+    ]}
+  );
 });
 
 Meteor.publish("allTicketStatus", function(){

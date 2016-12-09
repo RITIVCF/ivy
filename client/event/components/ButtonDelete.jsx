@@ -17,7 +17,7 @@ export default class ButtonDelete extends Component {
 
   render(){
     return (
-      <a className="btn red" onClick={this.props.parent.openDelete()}>Delete</a>
+      <a className="btn-flat" onClick={this.props.parent.openDelete()}>Delete</a>
     )
   }
 }

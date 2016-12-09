@@ -241,21 +241,23 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     </div>
                   </div>
                 }
-                <table className="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>Activity</th>
-                      <th>Description</th>
-                      <th>User</th>
-                      <th>Date/Time</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activities.map( (activity) =>{
-                      return <Activity key={activity.createdAt} activity={activity} />
-                    })}
-                  </tbody>
-                </table>
+                <div style={{height: "400px",overflowY:"scroll", border: "solid darkgrey 2px", marginBottom: "1em"}}>
+                  <table className="striped">
+                    <thead>
+                      <tr>
+                        <th>Activity</th>
+                        <th>Description</th>
+                        <th>User</th>
+                        <th>Date/Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {activities.map( (activity) =>{
+                        return <Activity key={activity.createdAt} activity={activity} />
+                      })}
+                    </tbody>
+                  </table>
+                </div>
                 <div className="form-group">
                   <textarea ref="notebox" className="form-control" rows="3" />
                 </div>
