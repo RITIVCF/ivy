@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import ServiceRequestModal from './ServiceRequestModal.jsx';
 
 import ButtonPublish from './components/ButtonPublish.jsx';
 import ButtonDelete from './components/ButtonDelete.jsx';
@@ -22,14 +23,13 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
     };
   }
 
-	viewPermissions(event){
-		event.preventDefault();
-  	this.refs.overlay.toggleOverlay();
-  }
+	// viewPermissions(event){
+	// 	event.preventDefault();
+  // 	this.refs.overlay.toggleOverlay();
+  // }
 
-	viewJobs(event){
-		event.preventDefault();
-		this.refs.jobOverlay.toggleOverlay();
+	viewJobs(){
+		this.refs.servwindow.open();
 	}
 
 	openDelete(){
@@ -64,11 +64,12 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				<h5>Tags</h5>
 				<EventTags ev={ev} perm={perm} />
 				<h4>Service Positions</h4>
-					{perm?<button className="btn indigo darken-4"
-						onClick={this.viewJobs.bind(this)}>Schedule Request</button>:""}
+					{perm?<button
+						onClick={this.viewJobs.bind(this)}>Service Requests</button>:""}
 					{ev.jobs.map( (job)=>{
 						return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
 					})}
+					<ServiceRequestModal ev={this.props.ev} ref="servwindow"/>
 			</div>
 		)
 	}

@@ -8,4 +8,10 @@
   background-color: #fafafa;
   border-left: 1px #ddd solid;
   overflow-y: auto;
+  -webkit-transition: right 0.3s;
+  transition: right 0.3s;
+}
+
+.infohide {
+  right: -300px;
 }

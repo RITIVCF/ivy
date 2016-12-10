@@ -3,9 +3,6 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import TicketRow from './TicketRow.jsx';
 import NewTicketWindow from './NewTicketWindow.jsx';
 import EditTicketWindow from './EditTicketWindow.jsx';
-import SubHeader from '../layouts/SubHeader.jsx';
-import InfoBar from '../InfoBar.jsx';
-import TicketPreview from './TicketPreview.jsx';
 
 
 export default class TicketsSummary extends TrackerReact(React.Component) {
@@ -101,26 +98,13 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     Session.set("ticselected","");
   }
 
-  toggleView(){
-    Meteor.call("toggleTicketsInfoBar");
-  }
 
-  getSubHeader(){
-    return <div>
-      {Meteor.user().preferences.tickets_infobar?
-        <li className={Meteor.user().preferences.tickets_infobar?"active":""}>
-          <a className="waves-effect waves-light"><i onClick={this.toggleView.bind(this)} className="material-icons black-text">info</i></a></li>
-        :<li className={!Meteor.user().preferences.tickets_infobar?"active":""}>
-          <a className="waves-effect waves-light"><i onClick={this.toggleView.bind(this)} className="material-icons black-text">info_outline</i></a></li>}
-    </div>
-  }
 
 
 	render() {
-    console.log(this.props.sub);
+    //console.log(this.props.sub);
 		return (
         <div onClick={this.unselect.bind(this)} style={{height:"100%"}}>
-          <SubHeader content={this.getSubHeader()} />
           <div>
             <div className="row">
                 <a onClick={this.newTicket.bind(this)}
@@ -183,8 +167,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
             {(this.props.sub) ?
             <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
             }
-            {Meteor.user().preferences.tickets_infobar?
-            <InfoBar content={<TicketPreview tkt={Tickets.findOne(Session.get("ticselected"))} />} />:""}
           </div>
   )
 	}

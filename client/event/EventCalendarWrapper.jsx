@@ -1,8 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventCalendar from './EventCalendar.jsx';
-import InfoBar from '../InfoBar.jsx';
-import SubHeader from '../layouts/SubHeader.jsx';
+import MainBox from '../MainBox.jsx';
 import EventPreview from './EventPreview.jsx';
 import EventHelp from './EventHelp.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
@@ -46,16 +45,17 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	render() {
     document.title="Ivy - Event Calendar";
     if(Options.findOne("calendarview")){
-      return <div>
-        <SubHeader content={this.getSubHeader()} />
-        <div className="main-box">
+      return (
+      <MainBox
+        content={<div> 
           <EventCalendar ref="calendar" height={650} />
+          <EventHelp /></div>}
+        subheader={this.getSubHeader()}
+        showinfobar={Meteor.user().preferences.events_infobar}
+        infobar={<EventPreview event={Events.findOne(Session.get("evselected")) } />}
+        />
+    )
 
-        <EventHelp />
-        </div>
-        {Meteor.user().preferences.events_infobar?
-        <InfoBar content={<EventPreview event={Events.findOne(Session.get("evselected"))} />} />:""}
-      </div>
     }
 		return (<LoaderCircle />)
 	}
