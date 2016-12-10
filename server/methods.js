@@ -97,7 +97,7 @@ Meteor.methods({
 
     Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}});
     Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}});
-    Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}});
+    Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}},{multi: true});
     Tickets.remove({_id: dc.ticket});
     Contacts.remove({_id: did});
   },
