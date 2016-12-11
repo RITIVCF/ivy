@@ -27,7 +27,8 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
   }
 
   openHelp(){
-      $("#helpmodal").modal("open");
+      $("#helpmodal").appendTo("body").modal("open");
+      //$("#helpmodal").modal("open");
   }
 
   toggleInfoBar(){
@@ -45,15 +46,17 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	render() {
     document.title="Ivy - Event Calendar";
     if(Options.findOne("calendarview")){
-      return (
+      return (<div>
       <MainBox
-        content={<div> 
+        content={<div>
           <EventCalendar ref="calendar" height={650} />
-          <EventHelp /></div>}
+          </div>}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.events_infobar}
         infobar={<EventPreview event={Events.findOne(Session.get("evselected")) } />}
         />
+      <EventHelp />
+      </div>
     )
 
     }

@@ -2,8 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventWorkspace from './EventWorkspace.jsx';
 
-import InfoBar from '../InfoBar.jsx';
-import SubHeader from '../layouts/SubHeader.jsx';
+import MainBox from '../MainBox.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 
@@ -103,13 +102,12 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 		return (
-			<div>
-				<SubHeader content={""} />
-				<div className="main-box">
-					<EventWorkspace perm={perm} ev={ev} />
-				</div>
-				<InfoBar content={<WorkspacePanel perm={perm} ev={ev} />} />
-			</div>
+				<MainBox
+					content={<EventWorkspace perm={perm} ev={ev} />}
+					subheader={""}
+					showinfobar={true}
+					infobar={<WorkspacePanel perm={perm} ev={ev} />}
+					/>
 		)
 	}
 }

@@ -49,6 +49,26 @@ export default class EventWorkpad extends Component {
     return true;
   }
 
+  componentDidMount(){
+    var thiz = this;
+    tinymce.init({
+			selector: "#mytextarea",
+      theme: "modern",
+      height: 300,
+			plugins: "table link textcolor colorpicker autolink fullscreen paste contextmenu hr searchreplace",
+			elementpath: false,
+			menubar: "edit insert view format table",
+			setup : function(editor) {
+				editor.on('keyup', function(e) {
+            //console.log('key event', e);
+						updWorkpad(thiz.props.ev._id, tinymce.activeEditor.getContent());
+				    ////console.log(this);
+				    setWorkPadFalse(thiz, thiz.props.ev._id);
+        });
+    }
+  	});
+  }
+
   getEvent(){
 		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
@@ -68,7 +88,9 @@ export default class EventWorkpad extends Component {
       <div className="form-group">
 
         <label>Workspace</label>
-        <TinyMCETest />{/*}<br/>
+          <textarea id="mytextarea">
+          </textarea>
+        {/*<TinyMCETest ev={this.props.ev}/>}<br/>
         <textarea ref="workpad"
           className="form-control"
           rows="12"
