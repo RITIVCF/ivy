@@ -16,9 +16,7 @@ export default class SubHeader extends TrackerReact(React.Component) {
 		return(
 		<nav className="subheader z-depth-1">
 			<div className="nav-wrapper row">
-				<ul className="right hide-on-med-and-down">
-					{this.props.content}
-				</ul>
+				{this.props.content}
 			</div>
 		</nav>
 

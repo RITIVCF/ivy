@@ -44,7 +44,7 @@
     float: none;
     line-height: $sidenav-item-height;
 
-    &.active { background-color: rgba(0,0,0,.05); }
+    &.active { /*background-color: rgba(0,0,0,.05);*/ }
 
     // this changes the color to the
     // IV gold color

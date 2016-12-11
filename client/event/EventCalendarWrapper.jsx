@@ -37,9 +37,19 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
   getSubHeader(){
     return <div>
-      <a onClick={this.openHelp.bind(this)} className="waves-effect waves-green black-text">Help</a>
-      <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
+      <ul className="left">
+      <li><a><i className="material-icons black-text">skip_previous</i></a></li>
+      <li><a><i className="material-icons black-text">skip_next</i></a></li>
+      </ul>
+      <ul className="right">
+      <li><a><i className="material-icons black-text">today</i></a></li>
+      <li><a><i className="material-icons black-text">view_week</i></a></li>
+      <li><a><i className="material-icons black-text">list</i></a></li>
+      <li><a>|</a></li>
+      <li onClick={this.toggleInfoBar.bind(this)}><a>
           <i className="material-icons black-text">{Meteor.user().preferences.events_infobar?"info":"info_outline"}</i></a></li>
+      <li><a onClick={this.openHelp.bind(this)}><i className="material-icons black-text">live_help</i></a></li>
+      </ul>
     </div>
   }
 

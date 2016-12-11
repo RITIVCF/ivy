@@ -94,11 +94,7 @@ export default class Navbar extends TrackerReact(React.Component) {
 				</div>
 			</nav>
 			</div>
-			<ul id="slide-out" className="side-nav fixed gray z-depth-1" >
-
-
-
-
+			<ul id="slide-out" className="side-nav fixed gray z-depth-2" >
 								<li className="no-padding">
 									<ul className="collapsible collapsible-accordion">
 										<li className={FlowRouter.current().path=="/"?"active":""}>

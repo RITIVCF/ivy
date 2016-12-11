@@ -45,8 +45,7 @@ export default class Header extends TrackerReact(React.Component) {
 		<nav className="z-depth-1">
 			<div className="nav-wrapper row indigo darken-4">
 				<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
-				<a href="/" className="brand-logo">Ivy</a>
-				<a>{this.props.header}</a>
+				<a href="/" className="brand-logo">Ivy &nbsp; |&nbsp; {this.props.header}</a>
 				<ul className="right hide-on-med-and-down">
 				<li><a href="#!"><i className="material-icons">search</i></a></li>
 					<li><a href="mobile.html"></a></li>
