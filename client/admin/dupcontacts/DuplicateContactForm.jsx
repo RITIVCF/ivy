@@ -13,7 +13,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 	}
 
 	getContacts(){
-		return Contacts.find({_id: {$ne: Meteor.user().contact}},{sort:{name:1, email:1}}).fetch();
+		return Meteor.users.find({createdAt: {$ne: undefined}},{sort:{name:1, email:1, createdAt: 1}}).fetch();
 		//return PagePermissions.find().fetch();
 	}
 
@@ -57,9 +57,9 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 	render() {
 		return (
 
-					<div className="panel panel-default">
-						<div className="panel-heading">
-						</div>
+					<div className="card">
+						<div className="card-content">
+
 						{this.getContacts().length>1?
 						<div className="panel-body">
 							<div className="row">
@@ -72,8 +72,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 							</div>
 							<br/>
 							<div className="row">
-								<div className="col-md-6">
-									<div className="form-group">
+								<div className="col s12 m6">
 										<label>Choose contact card to delete:</label>
 										<select multiple ref="delete" className="browser-default" onChange={this.showContactDelete.bind(this)}>
 											{this.getContacts().map((contact)=>{
@@ -81,10 +80,8 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 											})}
 										</select><br/>
 									{this.state.deleteId ? <ContactDetails cid={this.state.deleteId} ref="deletecontact" /> : ""}
-									</div>
 								</div>
-								<div className="col-md-6">
-									<div className="form-group">
+								<div className="col s12 m6">
 										<label>Choose contact card to merge into:</label>
 										<select multiple ref="merge" className="browser-default" onChange={this.showContactMerge.bind(this)}>
 											{this.getContacts().map((contact)=>{
@@ -92,7 +89,6 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 											})}
 										</select><br/>
 										{this.state.mergeId ? <ContactDetails cid={this.state.mergeId} /> : ""}
-									</div>
 								</div>
 							</div>
 							<br/>
@@ -101,13 +97,12 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 									<button onClick={this.performDelete.bind(this)} className="btn btn-primary">Merge & Delete</button>
 								</div>
 							</div>
-						</div>
-						:
-						<div className="panel-body">
-							<div className="row">
-								<div className="col-md-12">Congrats! There are no duplicate contacts we can detect automatically.</div>
 							</div>
+						:
+						<div className="row">
+							<div className="col-md-12">Congrats! There are no duplicate contacts we can detect automatically.</div>
 						</div>}
+						</div>
 					</div>
 		)
 	}

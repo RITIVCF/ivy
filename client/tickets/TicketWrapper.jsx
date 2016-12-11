@@ -69,11 +69,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 		return (
 
       <MainBox
-        content={<div className="row" style={{height:"100%"}}>
-                    <div className="col s12" style={{height: "100%"}}>
-                              <TicketSummary sub={subsready} />
-                    </div>
-                  </div>}
+        content={<TicketSummary sub={subsready} />}
         subheader={this.getSubHeader()}
         infobar={<TicketPreview tkt={Tickets.findOne(Session.get("ticselected"))} />}
         showinfobar={Meteor.user().preferences.tickets_infobar}

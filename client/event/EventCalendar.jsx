@@ -54,12 +54,13 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       header: {
         left: "prev,next today",
         center: "title",
-        right:  !this.props.sidebar?"month,agendaWeek,agendaDay,listWeek":"month,basicWeek,basicDay,listWeek"
+        right:  "month,agendaWeek,listWeek"
       },
       defaultView: this.props.sidebar?(Session.get("calendarview")=="agendaWeek")?
         "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")
         :(Session.get("calendarview")=="basicWeek"||Session.get("calendarview")=="basicDay")?"agendaWeek":Session.get("calendarview"),
       firstDay: 1,
+      fixedWeekCount: false,
       theme: false,
       height: this.props.height,
       scrollTime: "12:00:00",
@@ -117,7 +118,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         date.add(5,"hours");
         console.log($('#neweventmodalstart'));
         console.log(newevent);
-        $('#neweventmodal').modal('open');
+        $('#neweventmodal').appendTo("body").modal('open');
         $('#newname').focus();
 
 

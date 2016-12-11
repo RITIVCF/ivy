@@ -225,7 +225,8 @@ Meteor.publish("allContacts", function(filtr, srt){
     curryear: 1,
     member: 1,
     status: 1,
-    user: 1
+    user: 1,
+    createdAt: 1
   },
   sort: {name: 1}
 };
@@ -293,7 +294,7 @@ Meteor.publish("duplicateContacts", function(){
           ids.push(result[i].ids[y]);
         }
       }
-    return Contacts.find({_id: {$in: ids}});
+    return Meteor.users.find({_id: {$in: ids}});
 });
 
 Meteor.publish("thisContact", function(){

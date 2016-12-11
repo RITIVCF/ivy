@@ -61,7 +61,7 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				<EventLocation ev={ev} perm={perm} />
 				<EventEVR ev={ev} perm={perm} />
 				<EventReserved ev={ev} perm={perm} />
-				<h5>Tags</h5>
+				<h5>Event Tags</h5>
 				<EventTags ev={ev} perm={perm} />
 				<h4>Service Positions</h4>
 					{perm?<button
