@@ -7,6 +7,7 @@ import SubHeader from '../layouts/SubHeader.jsx';
 //import ChurchSingle from './ChurchSingle.jsx';
 import GroupsWorkspace from './GroupWorkspace.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
+import MainBox from '../MainBox.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -47,19 +48,16 @@ export default class AdminGroupsWrapper extends TrackerReact(React.Component) {
 
 	render() {
     document.title = "Ivy - Groups Dashboard";
-    if(!this.state.subscription.Groups.ready()){
+    if(!(this.state.subscription.Groups.ready()&&this.state.subscription.Contacts.ready())){
       return (<LoaderCircle />)
     }
 		return (
-      <div>
-        <SubHeader content={this.getSubHeader()} />
-        <div className="main-box">
-            <GroupsSummary admin={true} parent={this} sub={this.state.subscription} />
-        </div>
-        {Meteor.user().preferences.groups_infobar?
-          <InfoBar content={this.getInfoBar()} />:""
-        }
-      </div>
+      <MainBox
+        content={<GroupsSummary admin={true} parent={this} sub={this.state.subscription} />}
+        subheader={this.getSubHeader()}
+        showinfobar={Meteor.user().preferences.groups_infobar}
+        infobar={this.getInfoBar()}
+        />
     )
 	}
 }

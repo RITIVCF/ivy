@@ -26,7 +26,7 @@ import EventCalendarSub from './event/EventCalendarSub.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
 import SigninWrapper from './event/forms/SignInWrapper.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
-import ChurchesSummary from './churches/ChurchesSummary.jsx';
+import ChurchesWrapper from './churches/ChurchesWrapper.jsx';
 import ChurchesWorkspace from './churches/ChurchesWorkspace.jsx';
 import ChurchesOld from './churches/ChurchesOld.jsx';
 import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
@@ -36,7 +36,7 @@ import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
 import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
 import TicketWrapper from './tickets/TicketWrapper.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
-import ContactSummary from './contact/ContactSummary.jsx';
+import ContactWrapper from './contact/ContactWrapper.jsx';
 import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
 import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
@@ -142,7 +142,7 @@ FlowRouter.route('/admin/users/:uid', {
 FlowRouter.route('/admin/duplicatecontacts', {
 	action() {
 		mount(MainLayout, {
-			header: "Administration",
+			header: "Duplicate Contacts",
 			content: <DuplicateContactWrapper />
 		})
 	}
@@ -179,7 +179,7 @@ FlowRouter.route('/contacts', {
 	action(){
 		mount(MainLayout, {
 			header: "Contacts",
-			content: (<ContactSummary />)
+			content: (<ContactWrapper />)
 		})
 	}
 });
@@ -266,7 +266,7 @@ FlowRouter.route('/churches',{
 	action() {
 		mount(MainLayout, {
 			header: "Churches",
-			content: (<ChurchesSummary />)
+			content: (<ChurchesWrapper />)
 		})
 	}
 });

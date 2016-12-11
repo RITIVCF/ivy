@@ -1,11 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SubHeader from '../layouts/SubHeader.jsx';
 import ContactSingle from './ContactSingle.jsx';
-import ContactPreview from './ContactPreview.jsx';
-import InfoBar from '../InfoBar.jsx';
-import LoaderCircle from '../LoaderCircle.jsx';
-import NoPerm from '../NoPerm.jsx';
 //import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
@@ -13,19 +8,10 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     super();
 
     this.state = {
-      subscription: {
-        Contacts: Meteor.subscribe("allContacts", "All", "Name"),
-        Events: Meteor.subscribe("EventAttendees")
-      },
       filter: ""
     };
 
 
-  }
-
-  componentWillUnmount() {
-    this.state.subscription.Contacts.stop();
-    this.state.subscription.Events.stop();
   }
 
   newContact(event){
@@ -133,41 +119,14 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     Session.set("conselected","");
   }
 
-  toggleView(){
-    Meteor.call("toggleContactsView");
-  }
 
-  toggleInfoBar(){
-    Meteor.call("toggleContactsInfoBar");
-  }
-
-  getSubHeader(){
-    return <div>
-      {Meteor.user().preferences.contacts_view=="Tile"?
-        <li className="active" onClick={this.toggleView.bind(this)} ><a className="waves-effect waves-light">
-          <i className="material-icons black-text">view_module</i></a></li>
-        :<li className="active" onClick={this.toggleView.bind(this)}><a className="waves-effect waves-light">
-        <i  className="material-icons black-text">view_list</i></a></li>}
-      <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
-        <i className="material-icons black-text">{Meteor.user().preferences.contacts_infobar?"info":"info_outline"}</i></a></li>
-    </div>
-  }
 
 
 	render() {
-    if(!this.state.subscription.Contacts.ready()){
-      return (<LoaderCircle />)
-    }
-    if(!checkPermission("contacts")){
-      return <NoPerm />
-    }
-    document.title="Ivy - Contact Dashboard";
-    var status;
-    var perm = checkPermission("ticket");
+    let perm = this.props.perm;
+
 		return (
       <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
-        <SubHeader content={this.getSubHeader()} />
-          <div className="main-box col s12">
             <div className="row">
               <div className="col s12 m7 l7">
                 <h1></h1>
@@ -181,37 +140,32 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                 {/*}
                       <p>Count: {this.contacts().length}</p>
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
-                      <div className="row">
-                      {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
-                        return <ContactSingle key={contact._id} row={false} contact={contact}
-                          selected={Session.get("conselected")==contact._id} perm={perm}
-                          select={this.select.bind(this)} parent={this}/>
-                      }):
-                      <table className="bordered highlight" >
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Newsletter</th>
-                            <th>Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {this.contacts().map( (contact)=>{
-                            return <ContactSingle key={contact._id} row={true} contact={contact}
-                              selected={Session.get("conselected")==contact._id} perm={perm}
-                              select={this.select.bind(this)} parent={this}/>
-                          })}
-                        </tbody>
-                      </table>
-                      }
-                      </div>
-
-          </div>
-          {Meteor.user().preferences.contacts_infobar?
-          <InfoBar content={<ContactPreview cid={Session.get("conselected")} />} />
-          :""}
+                <div className="row">
+                {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
+                  return <ContactSingle key={contact._id} row={false} contact={contact}
+                    selected={Session.get("conselected")==contact._id} perm={perm}
+                    select={this.select.bind(this)} parent={this}/>
+                }):
+                <table className="bordered highlight" >
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Newsletter</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.contacts().map( (contact)=>{
+                      return <ContactSingle key={contact._id} row={true} contact={contact}
+                        selected={Session.get("conselected")==contact._id} perm={perm}
+                        select={this.select.bind(this)} parent={this}/>
+                    })}
+                  </tbody>
+                </table>
+                }
+                </div>
           </div>
 
 
