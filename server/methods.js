@@ -100,6 +100,11 @@ Meteor.methods({
       Meteor.users.update({_id:mc._id},{$set: {newsletter: dc.newsletter}});
     }
 
+    // if(!Events.findOne({"attendees._id":uid, _id: eid})){
+    //   THis should check and make sure that the duplicate wasn't created at the same event.
+    //  Look at Emma conrick on the most recent event for explanation
+    //  It shows three people but there are 4 records
+    // }
     Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}});
     Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}});
     Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}},{multi: true});

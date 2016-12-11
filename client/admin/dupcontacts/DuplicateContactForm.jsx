@@ -57,8 +57,8 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 	render() {
 		return (
 
-					<div className="card">
-						<div className="card-content">
+					<div className="">
+						<div className="">
 
 						{this.getContacts().length>1?
 						<div className="panel-body">

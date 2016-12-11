@@ -63,9 +63,9 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       </ul>
       <ul className="right">
       <li><a className="dropdown-button" data-activates="caldrop">
-      {$('#calendar').fullCalendar('getView').name=="month" ? <i className="material-icons black-text">today</i> :
-        $('#calendar').fullCalendar('getView').name=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
-        $('#calendar').fullCalendar('getView').name=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
+      {Session.get("calendarview")=="month" ? <i className="material-icons black-text">today</i> :
+        Session.get("calendarview")=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
+        Session.get("calendarview")=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
       </a></li>
       <li><a>|</a></li>
       <li onClick={this.toggleInfoBar.bind(this)}><a>
