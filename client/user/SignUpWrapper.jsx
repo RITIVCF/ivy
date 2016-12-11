@@ -45,7 +45,7 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
       return;
     }
 
-    var userVar = event.target.username.value;
+    //var userVar = event.target.username.value;
     var passwordVar = event.target.loginPassword.value;
     //var emailVar = event.target.email.value;
 
