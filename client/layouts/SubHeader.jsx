@@ -8,10 +8,6 @@ export default class SubHeader extends TrackerReact(React.Component) {
 
 
 	}
-
-
-
-
 	render(){
 		return(
 		<nav className="subheader z-depth-1">
@@ -19,14 +15,6 @@ export default class SubHeader extends TrackerReact(React.Component) {
 				{this.props.content}
 			</div>
 		</nav>
-
-
-
-
-
-
-
-
 		)
 
 	}

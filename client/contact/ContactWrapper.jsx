@@ -36,15 +36,15 @@ export default class ContactWrapper extends TrackerReact(React.Component){
   }
 
   getSubHeader(){
-    return <div>
+    return <ul className="right">
       {Meteor.user().preferences.contacts_view=="Tile"?
-        <li className="active" onClick={this.toggleView.bind(this)} ><a className="waves-effect waves-light">
+        <li onClick={this.toggleView.bind(this)}><a>
           <i className="material-icons black-text">view_module</i></a></li>
-        :<li className="active" onClick={this.toggleView.bind(this)}><a className="waves-effect waves-light">
-        <i  className="material-icons black-text">view_list</i></a></li>}
-      <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
+        :<li onClick={this.toggleView.bind(this)}><a>
+        <i className="material-icons black-text">view_list</i></a></li>}
+      <li onClick={this.toggleInfoBar.bind(this)}><a>
         <i className="material-icons black-text">{Meteor.user().preferences.contacts_infobar?"info":"info_outline"}</i></a></li>
-    </div>
+    </ul>
   }
 
   render() {

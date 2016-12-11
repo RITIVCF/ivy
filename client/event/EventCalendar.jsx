@@ -52,9 +52,9 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $("#calendar").fullCalendar({
       events: [],
       header: {
-        left: "prev,next today",
-        center: "title",
-        right:  "month,agendaWeek,listWeek"
+        left: "",//"prev,next today",
+        center: "",//"title",
+        right:  ""//"month,agendaWeek,listWeek"
       },
       defaultView: this.props.sidebar?(Session.get("calendarview")=="agendaWeek")?
         "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")

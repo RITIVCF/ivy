@@ -45,13 +45,12 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
   }
 
   getSubHeader(){
-    return <div>
+    return <ul className="right">
       {Meteor.user().preferences.tickets_infobar?
-        <li className={Meteor.user().preferences.tickets_infobar?"active":""}>
-          <a onClick={this.toggleView.bind(this)} className="waves-effect waves-light"><i className="material-icons black-text">info</i></a></li>
-        :<li className={!Meteor.user().preferences.tickets_infobar?"active":""}>
-          <a onClick={this.toggleView.bind(this)} className="waves-effect waves-light"><i className="material-icons black-text">info_outline</i></a></li>}
-    </div>
+        <li onClick={this.toggleView.bind(this)}><a><i className="material-icons black-text">info</i></a></li>
+        :<li onClick={this.toggleView.bind(this)}>
+          <a><i className="material-icons black-text">info_outline</i></a></li>}
+    </ul>
   }
 
 
