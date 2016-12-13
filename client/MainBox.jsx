@@ -20,7 +20,7 @@ export default class MainBox extends TrackerReact(React.Component) {
 		return (
 				<div>
 	        <SubHeader content={this.props.subheader} />
-	        <div className={this.props.showinfobar?"main-box":"main-box info-hide"}>
+	        <div id="mainbox" className={this.props.showinfobar?"main-box":"main-box info-hide"}>
 						{this.props.content}
 	        </div>
 

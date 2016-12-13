@@ -1,0 +1,14 @@
+.calcenter {
+  margin: 0 auto;
+}
+
+#caldrop {
+  overflow: hidden;
+  > li {
+    height: 64px;
+    > a {
+      height: 64px;
+      line-height: 36px;
+    }
+  }
+}
