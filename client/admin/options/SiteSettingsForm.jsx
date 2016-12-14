@@ -18,7 +18,17 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 		return Options.find({_id:{$nin:["ticketstatuses","ticketcontact","ticketeventrequest"]}}).fetch();
 	}
 
-
+	merge(){
+		Meteor.call("migrateDatabase", function(error){
+			if(error){
+				console.log("Error:");
+				console.log(error);
+			}
+			else{
+				console.log("success");
+			}
+		});
+	}
 
 	getContactGroupDefault(){
 		return Groups.findOne(Options.findOne("ticketcontact").gid).name;
@@ -104,6 +114,13 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 						</div>
 					</div>
 				</div>
+				{checkPermission("removecontact")?
+				<div className="row">
+					<div className="col s6">
+						<p>Perform User & Contact Merge</p>
+						<a className="btn flat" onClick={this.merge.bind(this)}>Merge</a>
+					</div>
+				</div>:""}
 			</div>
 		)
 	}

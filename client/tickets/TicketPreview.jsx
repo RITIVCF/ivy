@@ -16,9 +16,7 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
     if(this.props.tkt.assigneduser==""){
       return {name:""};
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.tkt.assigneduser}).contact}
-      );
+    return Meteor.users.findOne({_id:this.props.tkt.assigneduser});
   }
 
   getGroup(){
@@ -52,15 +50,15 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
       <div>
         <a className="waves-effect waves-light btn"
           onClick={this.go.bind(this)} >Open Ticket</a>
-        <p>Ticket #: {tkt.ticketnum}</p>
-        <p>Subject: {tkt.subject}</p>
-        <p>For: {this.getCust().name}</p>
-        <p>Type: {tkt.type}</p>
+        <p><b>Ticket #:</b> {tkt.ticketnum}</p>
+        <p><b>Subject:</b> {tkt.subject}</p>
+        <p><b>For:</b> {this.getCust().name}</p>
+        <p><b>Type:</b> {tkt.type}</p>
         <p>{tkt.ereqtype}</p>
-        <p>Assigned To: {this.getUser().name}</p>
-        <p>Assigned Group: {tkt.assignedgroup?this.getGroup().name:""}</p>
-        <p>Status: {tkt.status}</p>
-        <p>Last Updated: {new moment(tkt.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
+        <p><b>Assigned To:</b> {this.getUser().name}</p>
+        <p><b>Assigned Group:</b> {tkt.assignedgroup?this.getGroup().name:""}</p>
+        <p><b>Status:</b> {tkt.status}</p>
+        <p><b>Last Updated:</b> {new moment(tkt.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
         <h5>Recent Activites</h5>
         {activities.map((activity, i)=>{
           if(i>2){

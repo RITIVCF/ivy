@@ -47,7 +47,7 @@ export default class ContactSingle extends Component {
           <td>{this.props.contact.newsletter?"Yes":"No"}</td>
           <td>{checkPermission("admin") ? <select
               ref="status"
-              className="browser-default"
+              className="browser-default black-text"
               value={this.props.contact.status}
               onClick={this.openDropdown.bind(this)}
               onChange={this.changeStatus.bind(this)} >

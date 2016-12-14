@@ -64,11 +64,11 @@ export default class ContactPreview extends Component {
         <div id="test1" className="col s12">
           <div className="card">
             <div className="card-content">
-              <p>Name: <br/>{contact.name}</p><br/>
-              <p>Email: <br/>{contact.emails[0].address}</p><br/>
-              <p>Phone: <br/>{contact.phone?contact.phone:"Not set"}</p><br/>
-              <p>Newsletter: <br/>{contact.newsletter?"Yes":"No"}</p><br/>
-              <p>Major: <br/>{contact.major?contact.major:"Not set"}</p>
+              <p><b>Name:</b> <br/>{contact.name}</p><br/>
+              <p><b>Email:</b> <br/>{contact.emails[0].address}</p><br/>
+              <p><b>Phone:</b> <br/>{contact.phone?contact.phone:"Not set"}</p><br/>
+              <p><b>Newsletter:</b> <br/>{contact.newsletter?"Yes":"No"}</p><br/>
+              <p><b>Major:</b> <br/>{contact.major?contact.major:"Not set"}</p>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    if(!Session.get("ticketfilter")){
+    if(!Session.get("ticketfilter")===undefined){
       Session.set("ticketfilter", "assigneduser");
     }
     if(!Session.get("tickettextfilter")){
