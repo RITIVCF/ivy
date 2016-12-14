@@ -17,7 +17,8 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       subscription: {
         myEvents: Meteor.subscribe("myEvents"),
         UnpublishedEvents: Meteor.subscribe("otherUnpublishedEvents")
-      }
+      },
+      viewtitle: ''
     };
   }
 
@@ -37,9 +38,13 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
   prevCal() {
     $('#calendar').fullCalendar('prev');
+    var viewtitle = $('#calendar').fullCalendar('getView').title;
+    this.setState({viewtitle: viewtitle});
   }
   nextCal() {
     $('#calendar').fullCalendar('next');
+    var viewtitle = $('#calendar').fullCalendar('getView').title;
+    this.setState({viewtitle: viewtitle});
   }
   monthView() {
     $('#calendar').fullCalendar('changeView','month');
@@ -50,16 +55,19 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
   listView() {
     $('#calendar').fullCalendar('changeView','listWeek');
   }
-  viewDate() {
-    var view = $('#calendar').fullCalendar('getView');
-    return view.title;
+  settitle() {
+    var viewtitle = $('#calendar').fullCalendar('getView').title;
+    this.setState({viewtitle: viewtitle});
   }
 
   getSubHeader(){
-    return <div><ul className="left">
+    var viewtitle = $('#calendar').fullCalendar('getView').title;
+    return <div>
+
+      <ul className="center calcenter">
       <li onClick={this.prevCal.bind(this)}><a><i className="material-icons black-text">skip_previous</i></a></li>
+      <h1>{this.state.viewtitle}</h1>
       <li onClick={this.nextCal.bind(this)}><a><i className="material-icons black-text">skip_next</i></a></li>
-      <li><a>Current week: {this.viewDate}</a></li>
       </ul>
       <ul className="right">
       <li><a className="dropdown-button" data-activates="caldrop">
@@ -76,9 +84,9 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       <li><a onClick={this.openHelp.bind(this)}><i className="material-icons black-text">live_help</i></a></li>
       </ul>
     <ul id="caldrop" className="dropdown-content">
-      <li onClick={this.monthView.bind(this)}><a><i className="material-icons black-text">today</i></a></li>
-      <li onClick={this.weekView.bind(this)}><a><i className="material-icons black-text">view_week</i></a></li>
-      <li onClick={this.listView.bind(this)}><a><i className="material-icons black-text">list</i></a></li>
+      <li onClick={this.monthView.bind(this)}><a><i className={Session.get("calendarview")=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>
+      <li onClick={this.weekView.bind(this)}><a><i className={Session.get("calendarview")=="agendaWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_week</i></a></li>
+      <li onClick={this.listView.bind(this)}><a><i className={Session.get("calendarview")=="listWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_list</i></a></li>
     </ul>
   </div>
   }
@@ -89,7 +97,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       return (<div>
       <MainBox
         content={<div>
-          <EventCalendar ref="calendar" height={650} />
+          <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
           </div>}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.events_infobar}

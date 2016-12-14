@@ -36,10 +36,10 @@ export default class AdminGroupsWrapper extends TrackerReact(React.Component) {
   }
 
   getSubHeader(){
-    return <div>
+    return <ul className="right">
       <li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
         <i className="material-icons black-text">{Meteor.user().preferences.groups_infobar?"info":"info_outline"}</i></a></li>
-    </div>
+    </ul>
   }
 
   getInfoBar(){
