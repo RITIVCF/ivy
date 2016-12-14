@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Tag from './Tag.jsx';
+import SelectTag from '../../sharedcomponents/SelectTag.jsx';
 
 
 export default class EventTags extends TrackerReact(React.Component) {
@@ -30,10 +31,17 @@ export default class EventTags extends TrackerReact(React.Component) {
     //return Options.findOne({_id:"eventtags"}).vals;
   }
 
-  submit(event){
-    event.preventDefault();
-    Meteor.call("addEventTag", this.props.ev._id, this.refs.tag.value);
+  submit(tag){
+    //event.preventDefault();
+    console.log("submitted");
+    Meteor.call("addEventTag", this.props.ev._id, tag);
     this.refs.tag.value="";
+
+
+  }
+
+  unset(){
+
   }
 
 
@@ -43,9 +51,14 @@ export default class EventTags extends TrackerReact(React.Component) {
   	var tags = ev.tags;
     return(
       <div style={{backgroundColor: "white", outline:"grey solid 1px", padding: "5px"}}>
-        <form onSubmit={this.submit.bind(this)}>
-          <input type="text" ref="tag" placeholder="+Tag" /> {/*LOOK INTO REACT-WIDGETS MULTISELECT*/}
-        </form>
+        {/*  <input type="text" ref="tag" placeholder="+Tag" /> LOOK INTO REACT-WIDGETS MULTISELECT*/}
+          <SelectTag
+            parent={this}
+            ref="tag"
+            unset={this.unset.bind(this)}
+            onSelected={this.submit.bind(this)}
+            initialValue={""}
+            />
     {/*this.props.subscription.ready() ? */// this.getTags().map( (tag)=>{
       ev.tags.map((tag)=>{
         return <Tag key={tag} eid={ev._id} tag={tag} />

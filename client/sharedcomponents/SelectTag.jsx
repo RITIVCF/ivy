@@ -23,7 +23,7 @@ function getSuggestions(value) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-    return inputLength === 0 ? [] : getList().filter(tag =>
+    return inputLength === 0 ? getList() : getList().filter(tag =>
       tag.toLowerCase().slice(0, inputLength) === inputValue
     );
 
@@ -42,7 +42,7 @@ function renderSuggestion(suggestion) {
 }
 
 function shouldRenderSuggestions(value) {
-  return value.trim().length > 0;
+  return value.trim().length >= 0;
 }
 
 

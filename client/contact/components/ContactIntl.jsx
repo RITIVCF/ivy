@@ -5,8 +5,9 @@ import EthnicitySelect from '../../ethnicity/EthnicitySelect.jsx';
 
 
 export default class ContactIntlEthnicity extends TrackerReact(React.Component) {
-  update(event){
-		event.preventDefault();
+  update(){
+		//event.preventDefault();
+    console.log(this.refs);
     if(!this.refs.intl.checked){
       Meteor.call("updateContactIntl", this.props.contact._id, this.refs.intl.checked);
       if(this.refs.ethn.selected)
@@ -36,29 +37,30 @@ export default class ContactIntlEthnicity extends TrackerReact(React.Component) 
         <input
           type="checkbox"
           ref="intl"
-          className="form-control"
+          id="intl"
           readOnly={true}
           disabled={this.props.disabled}
           onClick={this.update.bind(this)}
           checked={contact.intl}
-        /><label>International Student:
+        /><label htmlFor="intl">International Student:
       </label>
       <br/>
+        {!contact.intl ?
+             <label >
+               Ethnicity:
+        </label>
+        :
+        ""
+      }
       {!contact.intl ?
-      <div>
         <EthnicitySelect
           selected={contact.ethn}
           ref="ethn"
           contact={contact}
           disabled={this.props.disabled}
           intl={contact.intl}
-           />
-           <label>
-             Ethnicity:
-      </label></div>
-      :
-      ""
-    }
+           />:""}
+
   </div>
   )
   }

@@ -46,6 +46,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
     this.state.subscription.user.stop();
   }*/
 
+  componentDidMount(){
+    $('select').material_select();
+  }
+
 
   contactDetails() {
     ////console.log("cid:");

@@ -22,10 +22,11 @@ export default class ContactGender extends TrackerReact(React.Component) {
     }
     return (
       <div >
-
+        <label htmlFor="gender">Sex (Gender):</label>
       <select
-        className="form-control"
         ref="gender"
+        id="gender"
+        className="browser-default"
         value={this.props.contact.gender}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>
@@ -33,7 +34,6 @@ export default class ContactGender extends TrackerReact(React.Component) {
           <option value={"male"}>Male</option>
           <option value={"female"}>Female</option>
       </select>
-      <label>Sex (Gender):</label>
     </div>
     )
   }
