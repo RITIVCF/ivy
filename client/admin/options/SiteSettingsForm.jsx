@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Option from './Option.jsx';
 import SelectGroup from '../../sharedcomponents/SelectGroup.jsx';
+import EventTagForm from './EventTagForm.jsx';
 
 export default class SiteSettingsForm extends TrackerReact(React.Component) {
 	constructor(){
@@ -16,6 +17,8 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 	getOptions(){
 		return Options.find({_id:{$nin:["ticketstatuses","ticketcontact","ticketeventrequest"]}}).fetch();
 	}
+
+
 
 	getContactGroupDefault(){
 		return Groups.findOne(Options.findOne("ticketcontact").gid).name;
@@ -87,6 +90,10 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 										</select>
 							</div>
 						</div>
+					</div>
+					<div className="col s6" >
+						<div className="divider"></div>
+						<EventTagForm />
 					</div>
 					<div className="row">
 						<div className="col s12">

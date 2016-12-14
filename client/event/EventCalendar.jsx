@@ -225,13 +225,19 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     return events;
   }
   getUnPublishedEvents(){
+    if(checkPermission('events')){
+      var events = Events.find({published: false}).fetch();
+      events.forEach((event)=>{
+        event.editable=(!event.name)?false:true;
+        event.title=event.name;
+      })
+      return events;
+    }
+    else{
+      return []
+    }
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
-    var events = Events.find({published: false}).fetch();
-    events.forEach((event)=>{
-      event.editable=(!event.name)?false:true;
-      event.title=event.name;
-    })
-    return events;
+
   }
 
   refresh(){

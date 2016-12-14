@@ -25,22 +25,13 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
 		return (
       <div className="row">
   			<div className="col s12">
-          <div className="card">
-            <div className="card-content">
-              <span className="card-title">Feedback Summary</span>
-                {checkPermission("feedback")?<div>
-                  {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
-                    <FeedbackSummary />:""
-                  }
+          {checkPermission("feedback")?<div>
+            {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
+              <FeedbackSummary />:""
+            }
                 </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
-            </div>
-          </div>
-        </div>
-
-
-
-
       </div>
+    </div>
     )
 	}
 }

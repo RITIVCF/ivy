@@ -29,7 +29,7 @@ export default class EthnicitySelect extends TrackerReact(React.Component) {
   }
 
   render() {
-    if(!this.props.subscription.ready()){
+    if(!Options.findOne("ethnicities").vals){
       return (<div></div>);
     }
     return (

@@ -89,7 +89,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
 
   openMemberOverlay(){
     //this.refs.becmemwin.openOverlay();
-    $("#memberform").modal("open");
+    $("#memberform").appendTo("body").modal("open");
   }
 
   remove(){
@@ -119,10 +119,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
     //console.log("contact:");
     //if(this.props.parent.state.subscription.contact.ready()){
       contact = this.contactDetails();
-      if(Meteor.user().contact == contact._id||checkPermission("contactdetails")){
+      if(Meteor.userId() == contact._id||checkPermission("contactdetails")){
         disable = false;
       }
-      if(Meteor.user().contact == contact._id||checkPermission("memberdetail")){
+      if(Meteor.userId() == contact._id||checkPermission("memberdetail")){
         viewmember = true;
       }
     //}
@@ -141,16 +141,16 @@ export default class ContactProfile extends TrackerReact(React.Component){
            ? <MemberForm ref="becmemwin" />:"":""}
         <div className="col s12">
           {/*Contact profile header here: name, picture, wall picture*/}
-          <div className="card">
+          <div className="card">{/*
             <div className="card-image">
               <img src="/images/defaultEventSmall.png" style={{width: "100%"}}/>
-            </div>
+            </div>e*/}
             <div className="card-content">
               <span className="card-title">
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-                {Meteor.user()?Meteor.user().contact==this.props.cid?contact?(!contact.member) ?
+                {Meteor.user()?contact?Meteor.userId()==contact._id?(!contact.member) ?
               <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
               :"":"":"":""}
               {checkPermission("tickets")&&contact.ticket?(this.props.cid==Meteor.user().contact)?
@@ -180,8 +180,8 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <ContactPhone contact={contact} disabled={disable} />
                 <ContactNewsletter contact={contact} disabled={disable} />
                 </div>:""}
-                {contact ?
-                    <ContactMajor contact={contact} disabled={disable} />:""}
+                {contact?!contact.member ?
+                    <ContactMajor contact={contact} disabled={disable} />:"":""}
 
             </div>
           </div>
@@ -190,7 +190,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
           <div className="card">
             <div className="card-content">
               <span className="card-title">Ethnicity & Gender</span>
-                <h4>Ethnicity:</h4>
+                <p>Ethnicity:</p>
                 <ContactIntl contact={contact} disabled={disable} />
                 <ContactGender contact={contact} disabled={disable} />
             </div>
@@ -210,9 +210,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
               <div className="card">
                 <div className="card-content">
                   <span className="card-title">Involvement</span>
-                    <h3>Campus Affiliations</h3>
+                    <p>Campus Affiliations</p>
                     <CampusAffiliations contact={contact} disabled={disable}  />
-                    <h3>Community Life</h3>
+                    <p>Community Life</p>
                     <CommunityLife contact={contact} disabled={disable} />
                 </div>
               </div>

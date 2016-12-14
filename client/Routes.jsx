@@ -403,7 +403,7 @@ FlowRouter.route('/forgotpassword', {
 FlowRouter.route('/feedback',{
 	action() {
 		mount(MainLayout, {
-			header: "Feedback",
+			header: "Feedback Summary",
 			content: (<FeedbackWrapper />)
 		})
 	}

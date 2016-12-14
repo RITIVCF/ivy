@@ -63,7 +63,7 @@ export default class ContactSingle extends Component {
     }
     return (
       <div className="col s12 m6 l4">
-      <div className={this.props.selected?"card left hoverable addBorderToCard":"card left hoverable"}
+      <div className={this.props.selected?"card left addBorderToCard":"card left "}
         onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
         <div className="card-image">
           <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />

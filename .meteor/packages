@@ -46,3 +46,4 @@ http
 check
 percolate:synced-cron
 hb5:meteor-freewall
+ulfschneider:tinycolorpick

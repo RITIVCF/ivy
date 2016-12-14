@@ -21,11 +21,11 @@ export default class ChurchSingle extends Component {
       <div className="col s12 m6 l4">
         <div className={this.props.selected?
                         this.props.church.active?
-                        "card left hoverable addBorderToCard":"card left grey hoverable addBorderToCard"
+                        "card left addBorderToCard":"card left grey addBorderToCard"
                         :
                         this.props.church.active?
-                        "card left hoverable"
-                        :"card grey left hoverable"}
+                        "card left"
+                        :"card grey left"}
           onClick={this.edit.bind(this)}>
           <div className="card-image">
             <img

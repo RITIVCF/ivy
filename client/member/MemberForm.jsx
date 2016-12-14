@@ -20,9 +20,10 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
   addMember(event){
     event.preventDefault();
+    console.log("submitting");
     //console.log(event.target.value);
     //console.log(this);
-    var cid = Meteor.user().contact;
+    var cid = Meteor.userId();
 
     Meteor.call("updateGender", cid, this.refs.gender.value);
     if(!this.refs.intl.checked){
@@ -98,21 +99,25 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
     render() {
       return (
-        <div id="memberform" className="modal">
+        <div id="memberform" className="modal bottom-sheet modal-fixed-footer">
           <form onSubmit={this.addMember.bind(this)}>
             <div className="modal-content">
               <h3>Set Membership Info</h3>
               <p>Intervarsity requires we keep track of our membership information. Please tell us about yourself below. Thank you!</p>
-              <div className="input-field col s12">
-                <select ref="gradterm" value="">
-                  <option value="" disabled>Select graduation term</option>
-                  {this.getGradTerms().map( (term)=>{
-                      return <SelectOption key={term} value={term} displayvalue={term}  />
-                  })}
-                </select>
-                <label>Expected Graduation Term:*</label>
+              <div className="divider"></div>
+              <br/>
+              <div className="s12 m6">
+                <div className="input-field col s12">
+                  <select ref="gradterm" value="">
+                    <option value="" disabled>Select graduation term</option>
+                    {this.getGradTerms().map( (term)=>{
+                        return <SelectOption key={term} value={term} displayvalue={term}  />
+                    })}
+                  </select>
+                  <label>Expected Graduation Term:*</label>
+                </div>
               </div>
-              <div className="input-field col s12">
+              <div className="input-field col s12 m6">
 
                 <select ref="year" value="">
                   <option value="" disabled>Select year</option>
@@ -126,20 +131,17 @@ export default class MemberForm extends TrackerReact(React.Component) {
                 </select>
                 <label>Current Year Level:*</label>
               </div>
-              <div className="input-field col s12">
+              <div className="input-field col s12 m6">
 
               </div>
               <p>International Student:</p>
-              <p>
-
-                <input ref="intl"
-                  id="intl"
-                  type="checkbox"
-                  onClick={this.hideShowEthnicity.bind(this)}
-                  />
-                <label htmlFor="intl">Yes:</label>
-              </p>
-              {!this.state.intl ?<div className="input-field col s12">
+              <input ref="intl"
+                id="intl"
+                type="checkbox"
+                onClick={this.hideShowEthnicity.bind(this)}
+                />
+              <label htmlFor="intl">Yes:</label>
+              {!this.state.intl ?<div className="input-field col s12 m6">
               <select ref="ethn" value="" id="ethn">
                 <option value={""} disabled>Select ethnicity</option>
                 {this.getEthnicities().map( (ethnicity)=>{
@@ -148,7 +150,8 @@ export default class MemberForm extends TrackerReact(React.Component) {
               </select>
               <label>Ethnicity:*</label>
             </div>:<div></div>}
-            <div className="input-field col s12">
+            <div className="divider"></div>
+            <div className="input-field col s12 m6">
 
                 <select ref="gender" value="">
                   <option value="" disabled>Select gender</option>
@@ -160,21 +163,23 @@ export default class MemberForm extends TrackerReact(React.Component) {
             </div>
             <p>Campus Affiliations:</p>
               {this.getAffiliations().map( (tag)=>{
-                return <p key={tag} ><label htmlFor={tag} >{tag}: </label>
+                return <div key={tag} >
                   <input type="checkbox" ref={"affiliations."+tag} id={tag} name={tag} />
-                  </p>
+                  <label htmlFor={tag} >{tag}: </label>
+                  </div>
               })}
             <p>Community Involvement:</p>
               {this.getCommunityLife().map( (tag)=>{
-                return <p key={tag} ><label htmlFor={tag}>{tag}: </label>
+                return <div key={tag} >
                   <input type="checkbox" ref={"communitylife."+tag} id={tag} name={tag} />
-                  </p>
+                  <label htmlFor={tag}>{tag}: </label>
+                  </div>
               })}
 
             </div>
             <div className="modal-footer">
               <a className="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
-              <a type="submit" className="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
+              <input type="submit" className="modal-action modal-close waves-effect waves-green btn-flat" value="Submit"/>
             </div>
           </form>
         </div>

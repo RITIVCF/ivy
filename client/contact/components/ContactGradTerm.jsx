@@ -25,9 +25,9 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
   		return (<div></div>);
   	}
     return (
-      <div className="form-group">
-        <label>Expected Grad Term:</label>
-        {this.props.subscription.ready() ?
+      <div >
+
+        {Options.findOne("gradterms").vals ?
       <select
         className="form-control"
         value={this.props.contact.gradterm}
@@ -37,6 +37,7 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
               return <SelectOption key={term} value={term} displayvalue={term}  />
           })}
       </select>:""}
+      <label>Expected Grad Term:</label>
     </div>
     )
   }

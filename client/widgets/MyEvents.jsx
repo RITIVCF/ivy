@@ -8,22 +8,24 @@ export default class MyEvents extends TrackerReact(React.Component) {
 
 		this.state = {
 			subscription:{
-				events: Meteor.subscribe("UpcomingAndAttendedEvents")
+				Uevents: Meteor.subscribe("UpcomingEvents"),
+				Aevents: Meteor.subscribe("AttendedEvents")
 			}
 		};
 
 	}
 
 	componentWillUnmount(){
-		this.state.subscription.events.stop();
+		this.state.subscription.Uevents.stop();
+		this.state.subscription.Aevents.stop();
 	}
 
 	getUpcoming(){
-		return Events.find({published: true, start: {$gte: new Date()}}).fetch();
+		return Events.find({published: true, start: {$gte: new Date()}},{sort: {start: 1}}).fetch();
 	}
 
 	getRecent(){
-		return Events.find({"attendees._id":Meteor.user().contact} ).fetch();
+		return Events.find({"attendees._id":Meteor.userId()} ,{sort: {start: -1}}).fetch();
 	}
 
 
@@ -34,13 +36,15 @@ export default class MyEvents extends TrackerReact(React.Component) {
 					<span className="card-title">My Events</span>
 					<p><b>Upcoming Events</b></p>
 					<ul className="collection">
-						{this.state.subscription.events.ready()?this.getUpcoming().length!=0?this.getUpcoming().map((event)=>{
+						{this.state.subscription.Uevents.ready()&&this.state.subscription.Aevents.ready()
+							?this.getUpcoming().length!=0?this.getUpcoming().map((event)=>{
 							return <EventItem key={event._id} rsvp={true} event={event} />
 						}):<li className="collection-item">No Upcoming Events.</li>:""}
 					</ul>
 					<p><b>Events I recently attended</b></p>
 					<ul className="collection">
-						{this.state.subscription.events.ready()?this.getRecent().length!=0?this.getRecent().map((event)=>{
+						{this.state.subscription.Uevents.ready()&&this.state.subscription.Aevents.ready()
+							?this.getRecent().length!=0?this.getRecent().map((event)=>{
 							return <EventItem key={event._id} rsvp={false} event={event} />
 						}):<li className="collection-item">No Recent Events.</li>:""}
 					</ul>

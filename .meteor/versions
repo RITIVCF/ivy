@@ -114,6 +114,7 @@ templating-tools@1.0.5
 tmeasday:check-npm-versions@0.2.0
 tracker@1.1.1
 ui@1.0.12
+ulfschneider:tinycolorpick@1.0.1
 ultimatejs:tracker-react@1.0.0
 underscore@1.0.10
 url@1.0.11

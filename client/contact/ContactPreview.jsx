@@ -47,8 +47,8 @@ export default class ContactPreview extends Component {
         <div>
           <h4>Summary</h4>
 
-          {checkPermission("admin")?<ul><FunnelChart />
-        <FunnelChartLimited /></ul>:<ul><p>Total:{this.contactsCount()}</p></ul>}
+          {checkPermission("admin")?<ul><FunnelChart count={Meteor.users.find().fetch()} />
+        <FunnelChartLimited count={Meteor.users.find().fetch()} /></ul>:<ul><p>Total:{this.contactsCount()}</p></ul>}
         </div>
       )
     }

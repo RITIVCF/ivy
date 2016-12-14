@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {Tracker} from 'meteor/tracker';
 import ContactProfile from './ContactProfile.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
 
 
 
@@ -17,7 +18,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 				contact: Meteor.subscribe("contact", FlowRouter.getParam('cid')),
 				ticket: Meteor.subscribe("ticket", FlowRouter.getParam('cid')),
 				options: Meteor.subscribe("allOptions"),
-				Events: Meteor.subscribe("myAttendedEvents") 
+				Events: Meteor.subscribe("myAttendedEvents")
 			}
 		};});
 
@@ -91,15 +92,15 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 		if(!this.state.contact.ready()){
 			return(<div></div>)
 		}*/
-		/*if(!this.state.subscription.contact.ready()){
-			return(<div></div>)
-		}*/
+		if(!this.state.subscription.contact.ready()){
+			return(<LoaderCircle />)
+		}
 		if(!checkPermission("contacts")){
 			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
 		}
 
 		return (
-		<div className="container">
+		<div className="container" >
 			<ContactProfile cid={this.props.cid} parent={this} subscriptions={this.state.subscription} />
 		</div>
 		)

@@ -19,8 +19,8 @@ export default class ContactCurrYear extends TrackerReact(React.Component) {
 
   render() {
     return (
-      <div className="form-group">
-        <label>Current Year Level:</label>
+      <div >
+
       <select
         className="form-control"
         value={this.props.contact.curryear}
@@ -34,6 +34,7 @@ export default class ContactCurrYear extends TrackerReact(React.Component) {
           <option value={"6"}>6</option>
           <option value={"7"}>7</option>
       </select>
+      <label>Current Year Level:</label>
     </div>
     )
   }

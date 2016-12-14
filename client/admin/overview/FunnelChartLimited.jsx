@@ -7,7 +7,8 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 		super();
 
 		this.state = {
-			ttl: ""
+			ttl: "",
+			mounted: false
 		}
 
 	}
@@ -43,6 +44,7 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 									parseInt(result.Multiplier);
 				thiz2.setState({ttl: total});
 		});
+		this.setState({mounted: true});
 	}
 
 	refresh(){

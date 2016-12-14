@@ -22,26 +22,25 @@ export default class FeedbackSingle extends TrackerReact(React.Component) {
   }
 
   getUser(){
-    return Contacts.findOne(
-      Meteor.users.findOne(this.props.feedback.user).contact
-      ).name;
+    return Meteor.users.findOne(this.props.feedback.user).name;
   }
 
+
 	render() {
-    var status = "card";
+    var status = {};
     if(this.props.feedback.type=="Issue"){
-      status="card red";
+      status={outline: "solid red 2px"};
     }
     else if(this.props.feedback.type=="Comment"){
-      status="card yellow";
+      status={outline: "solid yellow 2px"};
     }
     else if(this.props.feedback.type=="Suggestion"){
-      status="card green";
+      status={outline: "solid green 2px"};
     }
 
 
 		return (
-      <div className={status}>
+      <div className="card" style={status}>
         <div className="card-content">
           <span className="card-title">{this.props.feedback.type}</span>
           <p>User: {this.getUser()}</p>

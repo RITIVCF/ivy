@@ -21,8 +21,8 @@ export default class ContactGender extends TrackerReact(React.Component) {
       return(<div></div>)
     }
     return (
-      <div className="form-group">
-        <label>Sex (Gender):</label>
+      <div >
+
       <select
         className="form-control"
         ref="gender"
@@ -33,6 +33,7 @@ export default class ContactGender extends TrackerReact(React.Component) {
           <option value={"male"}>Male</option>
           <option value={"female"}>Female</option>
       </select>
+      <label>Sex (Gender):</label>
     </div>
     )
   }

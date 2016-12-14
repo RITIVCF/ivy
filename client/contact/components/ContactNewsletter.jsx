@@ -19,8 +19,7 @@ export default class ContactNewsletter extends Component {
   	}*/
 
     return(
-      <div className="form-group">
-        <label htmlFor="news">I would like to receive the RIT IVCF Newsletter: </label>
+      <div>
           <input type="checkbox"
             readOnly={true}
             ref="newsletter"
@@ -31,6 +30,7 @@ export default class ContactNewsletter extends Component {
             onClick={this.updateNewsletter.bind(this)}
             checked={contact.newsletter}
           />
+        <label htmlFor="news">I would like to receive the RIT IVCF Newsletter: </label>
       </div>
     )
   }

@@ -47,8 +47,13 @@ Meteor.publish("mySchedule", function(){
   return Events.find({"jobs.uid": this.userId, end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}});
 });
 
-Meteor.publish("UpcomingAndAttendedEvents", function(){
-  return Events.find({$or:[  {"attendees._id":Meteor.users.findOne(this.userId).contact}    , {published: true, start: {$gte: new Date()}}  ]});
+Meteor.publish("UpcomingEvents", function(){
+  var twoweeks = new moment(new Date().toISOString()).add(2,"weeks")._d;
+  return Events.find({published: true, start: {$gte: new Date(),$lte: twoweeks}},{limit: 3});
+});
+
+Meteor.publish("AttendedEvents", function(){
+  return Events.find({"attendees._id":this.userId, start: {$lt: new Date()}}, {sort: {start: -1},limit: 3});
 });
 
 Meteor.publish("myEvents", function(){
@@ -71,9 +76,13 @@ Meteor.publish("otherUnpublishedEvents", function(){
 	// grps.forEach(function(group){
 	// 	ids.push(group._id);
 	// });
-	// //console.log("GGroups:");
-	// //console.log(ids);
-	return Events.find({}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
+	//console.log("GGroups:");
+	//console.log(ids);
+  //console.log(checkPermission("events", this.userId));
+  //if(perm){
+    return Events.find({}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
+  //}
+
 });
 
 // all published events, plus my unpublished events
@@ -142,7 +151,7 @@ Meteor.publish("contact", function(cid){
   if(!cid){
     //console.log("Finding one");
     try{
-      cid = Meteor.users.findOne(this.userId).contact; //Meteor.user().contact;
+      cid = this.userId; //Meteor.user().contact;
     }
     catch (error){
       cid = "";
@@ -158,6 +167,7 @@ Meteor.publish("contact", function(cid){
     name: 1,
     addresses: 1,
     email: 1,
+    emails: 1,
     phone: 1,
     newsletter: 1,
     gender: 1,
@@ -174,7 +184,7 @@ Meteor.publish("contact", function(cid){
     member: 1
      }
   }
-  return Contacts.find(selector, options);
+  return Meteor.users.find(selector, options);
 });
 
 Meteor.publish("allContacts", function(filtr, srt){
@@ -314,9 +324,27 @@ Meteor.publish("userSelf", function(){
 
   const options = {
     fields: {
+    createdAt: 1,
+    name:1,
     contact: 1,
     preferences: 1,
-    bio: 1
+    bio: 1,
+    phone: 1,
+    howhear: 1,
+    ticket: 1,
+    addresses: 1,
+    affiliations: 1,
+    communitylife: 1,
+    status: 1,
+    newsletter: 1,
+    major: 1,
+    intl:1,
+    gender: 1,
+    ethn: 1,
+    gradterm: 1,
+    curryear: 1,
+    member: 1,
+    memberAt: 1
      }
   };
   return Meteor.users.find(selector, options);

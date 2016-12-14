@@ -11,8 +11,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     super(props);
     this.state={
       assignedu: "",
-      status: props.ticket.status
-
+      status: props.ticket.status,
+      notedisable: true
     }
   }
 
@@ -102,6 +102,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     }
     else{
       this.refs.status.value = this.state.status;
+    }
+  }
+
+  noteChangeHandle(event){
+    if(event.target.value==""){
+      this.setState({notedisable: true});
+    }
+    else{
+      this.setState({notedisable: false});
     }
   }
 
@@ -259,9 +268,13 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                   </table>
                 </div>
                 <div className="form-group">
-                  <textarea ref="notebox" className="form-control" rows="3" />
+                  <textarea ref="notebox"
+                    className="browser-default"
+                    rows="3"
+                    onChange={this.noteChangeHandle.bind(this)}
+                    placeholder="Add note here...." />
                 </div>
-                <a className="waves-effect waves-light btn" onClick={this.addNote.bind(this)} >Add Note</a>
+                <a className="waves-effect waves-light btn" disabled={this.state.notedisable} onClick={this.addNote.bind(this)} >Add Note</a>
               </div>
             </div>
           </div>

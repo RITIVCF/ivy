@@ -31,8 +31,8 @@ export default class ContactIntlEthnicity extends TrackerReact(React.Component) 
   	}
 
     return(
-      <div className="form-group">
-      <label>International Student:
+      <div >
+
         <input
           type="checkbox"
           ref="intl"
@@ -41,20 +41,21 @@ export default class ContactIntlEthnicity extends TrackerReact(React.Component) 
           disabled={this.props.disabled}
           onClick={this.update.bind(this)}
           checked={contact.intl}
-        />
+        /><label>International Student:
       </label>
       <br/>
       {!contact.intl ?
-      <label>
-        Ethnicity:
+      <div>
         <EthnicitySelect
           selected={contact.ethn}
           ref="ethn"
           contact={contact}
           disabled={this.props.disabled}
           intl={contact.intl}
-          subscription={this.props.subscription} />
-      </label>
+           />
+           <label>
+             Ethnicity:
+      </label></div>
       :
       ""
     }

@@ -19,25 +19,22 @@ export default class FeedbackSummary extends TrackerReact(React.Component) {
     return Feedback.find({completed: false, working: false}, {sort: {createdAt: -1}}).fetch();
   }
 
+
 	render() {
 		return (
       <div>
-        <div className="card">
-          <div className="card-content">
-            <span className="card-title">Working on these</span>
-              {this.workingOn().map((feedback)=>{
-                return <FeedbackSingle key={feedback._id} feedback={feedback} />
-              })}
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-content">
-            <span className="card-title">The Rest</span>
-              {this.theRest().map((feedback)=>{
-                return <FeedbackSingle key={feedback._id} feedback={feedback} />
-              })}
-          </div>
-        </div>
+        <h4>Working on these</h4>
+        <div className="divider"></div>
+          {this.workingOn().length>0?this.workingOn().map((feedback)=>{
+            return <FeedbackSingle key={feedback._id}
+              feedback={feedback} />
+          }):<p>No currently working feedback.</p>}
+        <h4>The Rest</h4>
+        <div className="divider"></div>
+          {this.theRest().length>0?this.theRest().map((feedback)=>{
+            return <FeedbackSingle key={feedback._id}
+              feedback={feedback} />
+          }):<p>Congrats, you finished it all!</p>}
       </div>
     )
 	}

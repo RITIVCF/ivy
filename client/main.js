@@ -9,7 +9,7 @@ document.title="Ivy";
 
 
 //For testing
-Meteor.subscribe("allUsers");
+//Meteor.subscribe("allUsers");
 
 
 Meteor.subscribe("contact");
