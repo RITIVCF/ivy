@@ -136,6 +136,9 @@ Meteor.publish("SGs", function(){
   return Groups.find({sg:true});
 });
 
+Meteor.publish("MySG", function(){
+  return Groups.find({users: this.userId,type:"Small Group"});
+});
 
 Meteor.publish("allChurches", function(){
   return Churches.find();
