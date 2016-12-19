@@ -37,6 +37,11 @@ export default class SideBar extends TrackerReact(React.Component) {
 						<a href="/" className="waves-effect collapsible-header">
 							<i className="material-icons">dashboard</i>My Dashboard</a>
 					</li>
+					{Groups.find({$or:[{leader: Meteor.userId()},{users: Meteor.userId()}], type:"Small Group"}).fetch().length>0?
+					<li className={FlowRouter.current().path=="/mysg"?"active":""}>
+						<a href="/mysg" className="waves-effect collapsible-header">
+							<i className="material-icons">forum</i>My Small Group</a>
+					</li>:""}
 					{/*checkPermission("events")?*/}
 						<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/events">
