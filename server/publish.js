@@ -128,6 +128,10 @@ Meteor.publish("adminGroups", function(){
   return Groups.find({admingroup: true});
 });
 
+Meteor.publish("Structures", function(){
+  return Groups.find({});
+});
+
 Meteor.publish("MyGroups", function(){
   return Groups.find({users: this.userId}, {fields:{name:1, users:1}});
 });

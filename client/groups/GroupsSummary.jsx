@@ -16,6 +16,7 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 
   componentDidMount() {
     $('.collapsible').collapsible();
+    $('ul.tabs').tabs();
   }
 
   createNew(event){
@@ -29,7 +30,7 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 
 
   groups(){
-    return Groups.find({admingroup: true}).fetch();
+    return Groups.find({type: Meteor.user().preferences.groups_view}).fetch();
   }
 
 
@@ -55,11 +56,11 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
         </div>
         <div className="divider"></div>
         <div className="row">
-          {this.props.sub.Contacts.ready()?this.groups().map( (group)=>{
+          {this.groups().map( (group)=>{
               return <GroupSingle key={group._id}
                 selected={Session.get("groupselected")==group._id}
                 group={group} sub={this.props.sub} parent={this} />
-          }):<div></div>}
+          })}
         </div>
       </div>
     )
