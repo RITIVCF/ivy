@@ -29,16 +29,17 @@ import RSVPWrapper from './event/forms/RSVP.jsx';
 import ChurchesWrapper from './churches/ChurchesWrapper.jsx';
 import ChurchesWorkspace from './churches/ChurchesWorkspace.jsx';
 import ChurchesOld from './churches/ChurchesOld.jsx';
-import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
-import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
-import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
+//import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
+import MySmallGroupWrapper from './sgroups/MySmallGroupWrapper.jsx';
+//import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
+//import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
 import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
 import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
 import TicketWrapper from './tickets/TicketWrapper.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
 import ContactWrapper from './contact/ContactWrapper.jsx';
-import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
-import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
+//import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
+import GroupsWrapper from './groups/GroupsWrapper.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
@@ -97,8 +98,8 @@ FlowRouter.route('/admin', {
 FlowRouter.route('/admin/groups', {
 	action() {
 		mount(MainLayout, {
-			header: "User Groups",
-			content: (<AdminGroupsWrapper />)
+			header: "Structures",
+			content: (<GroupsWrapper />)
 		})
 	}
 });
@@ -169,7 +170,7 @@ FlowRouter.route('/profile',{
 FlowRouter.route('/contacts/:cid',{
 	action(params) {
 		mount(MainLayout, {
-			header: "Contacts",
+			header: "People",
 			content: (<ContactProfileWrapper cid={params.cid} />)
 		})
 	}
@@ -178,7 +179,7 @@ FlowRouter.route('/contacts/:cid',{
 FlowRouter.route('/contacts', {
 	action(){
 		mount(MainLayout, {
-			header: "Contacts",
+			header: "People",
 			content: (<ContactWrapper />)
 		})
 	}
@@ -196,6 +197,15 @@ FlowRouter.route('/newcontact', {
 	action(){
 		mount(FormLayout, {
 			content: (<NewContactWrapper route={"/signup"} />)
+		})
+	}
+});
+
+FlowRouter.route('/mysg', {
+	action() {
+		mount(MainLayout, {
+			header: "My Small Group",
+			content: (<MySmallGroupWrapper />)
 		})
 	}
 });
