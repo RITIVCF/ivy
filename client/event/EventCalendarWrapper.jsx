@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventCalendar from './EventCalendar.jsx';
+import LegendFilter from './LegendFilter.jsx';
 import MainBox from '../MainBox.jsx';
 import EventPreview from './EventPreview.jsx';
 import EventHelp from './EventHelp.jsx';
@@ -97,6 +98,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       return (<div>
       <MainBox
         content={<div>
+          <LegendFilter />
           <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
           </div>}
         subheader={this.getSubHeader()}

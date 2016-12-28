@@ -65,7 +65,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         thiz.props.settitle();
         Session.set("calendarview", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
-        var height = $('#mainbox').innerHeight();
+        var height = $('#mainbox > div').height();
         $('#calendar').fullCalendar('option','height', height);
       },
       defaultDate: this.props.date?this.props.date:Session.get("calendardate"),
@@ -275,18 +275,14 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
     return (
       <div>
-        <div className="row">
-          <div className="col s12">
-            <div ref="calendar" id="calendar"></div>
-            {this.getPublishedEvents().map((event)=>{
-              return <EventContent key={event._id} event={event} />
-            })}
-            {this.getUnPublishedEvents().map((event)=>{
-              return <EventContent key={event._id} event={event} />
-            })}
-            <NewEventModal />
-          </div>
-        </div>
+        <div ref="calendar" id="calendar"></div>
+        {this.getPublishedEvents().map((event)=>{
+          return <EventContent key={event._id} event={event} />
+        })}
+        {this.getUnPublishedEvents().map((event)=>{
+          return <EventContent key={event._id} event={event} />
+        })}
+        <NewEventModal />
       </div>
     );
   }
