@@ -56,18 +56,11 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 		return (
 		<div className="row">
 			<div className="col s12">
-				{/*<GroupName group={this.props.group} />
-				<input type="checkbox" ref="admin" value={this.props.group.admingroup} onChange={this.toggleAdmin.bind(this)} />*/}
+				<GroupName group={this.props.group} />
+				{/*<input type="checkbox" ref="admin" value={this.props.group.admingroup} onChange={this.toggleAdmin.bind(this)} />*/}
 				{/*this.props.group.admingroup ? <p><i>This is an admin group.</></p>:<div></div>*/}
-				{this.props.group._id!="admin"?
-				<a className="waves-effect waves-light btn" onClick={this.togglePerm.bind(this)} >{this.state.showPerm?"Hide Permissions":"Show Permissions"}</a>
-				:<div></div>}
-
-				{this.state.showPerm?<GroupPermissionControl group={this.props.group} />:<div></div>}
-				{!this.props.group.admingroup ?
-				<GroupContactControl group={this.props.group} />
-				:
-				<GroupUserControl group={this.props.group} />}
+				{this.props.group._id!="admin"?<GroupPermissionControl group={this.props.group} />:false}
+				<GroupUserControl group={this.props.group} />
 			</div>
 		</div>
 		)

@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import GroupSingle from './GroupSingle.jsx';
+import NewGroupModal from './NewGroupModal.jsx';
 //import ChurchSingle from './ChurchSingle.jsx';
 //import ChurchWorkspace from './GroupsWorkspace.jsx';
 
@@ -23,9 +24,15 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
     event.preventDefault();
     //Meteor.call('addBlankChurch');
     if(this.refs.name.value!=""){
-      Meteor.call("addGroup", this.refs.name.value, this.props.admin);
+      Meteor.call("addGroup", this.refs.name.value,
+      Meteor.user().preferences.groups_view);
       this.refs.name.value="";
     }
+  }
+
+  openNew(){
+    //$("newgroupmodal").modal("open");
+    this.refs.newgroupmodal.open();
   }
 
 
@@ -37,8 +44,9 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-      <div>
-        <div className="row">
+      <div className="">
+        <NewGroupModal ref="newgroupmodal" type={Meteor.user().preferences.groups_view} />
+        {/*<div className="row">
           <div className="col s8">
 
           </div>
@@ -51,11 +59,20 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
         </div>
         <div className="row">
           <div className="col s12">
-            <p>Enter a new group name and press enter, or select a group from below to edit.</p>
+            <p>Select a group to edit, or create a new one.</p>
           </div>
-        </div>
+        </div>*/}
         <div className="divider"></div>
         <div className="row">
+          <div className="col s12 m6 l4">
+            <div className={"card left"}
+              style={{width: "100%"}} onClick={this.openNew.bind(this)}>
+              <div className="card-content">
+                <span className="card-title">Add New</span>
+
+              </div>
+            </div>
+          </div>
           {this.groups().map( (group)=>{
               return <GroupSingle key={group._id}
                 selected={Session.get("groupselected")==group._id}

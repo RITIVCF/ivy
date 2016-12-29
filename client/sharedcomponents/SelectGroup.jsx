@@ -5,7 +5,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-      return Groups.find({admingroup:true}).fetch();
+      return Groups.find().fetch();
 }
 
 function getSuggestions(value) {

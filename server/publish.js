@@ -2,7 +2,7 @@ ContactsBackup = new Mongo.Collection("contactsbackup");
 EventsAttendanceBackup = new Mongo.Collection("eventsattendancebackup");
 
 Meteor.publish("allEvents", function(){
-  return Events.find();
+  return Events.find({deleted: {$ne: true}});
 });
 
 Meteor.publish("summaryEvents", function(){
@@ -11,12 +11,12 @@ Meteor.publish("summaryEvents", function(){
 });
 
 Meteor.publish("myAttendedEvents", function(){
-  return Events.find({"attendees._id": this.userId});
+  return Events.find({"attendees._id": this.userId, deleted: {$ne: true}});
   //return Events.find({$or: [{}]});
 });
 
 Meteor.publish("ownerEvents", function(){
-  return Events.find({owner: this.userId});
+  return Events.find({owner: this.userId, deleted: {$ne: true}});
 });
 
 Contacts.allow({update: function(){return true;}});
@@ -40,20 +40,28 @@ Meteor.publish("Event", function(eid){
 });
 
 Meteor.publish("EventAttendees", function(){
-  return Events.find({},{fields: {name:1, attendees: 1, start: 1}});
+  return Events.find({deleted: {$ne: true}},{fields: {name:1, attendees: 1, start: 1}});
 });
 
 Meteor.publish("mySchedule", function(){
-  return Events.find({"jobs.uid": this.userId, end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}});
+  return Events.find({
+    "jobs.uid": this.userId,
+    end: {$gte: new Date()},
+    "jobs.status": {$ne: "Declined"},
+    deleted: {$ne: true}});
 });
 
 Meteor.publish("UpcomingEvents", function(){
   var twoweeks = new moment(new Date().toISOString()).add(2,"weeks")._d;
-  return Events.find({published: true, start: {$gte: new Date(),$lte: twoweeks}},{limit: 3});
+  return Events.find({published: true, start: {$gte: new Date(),$lte: twoweeks}, deleted: {$ne: true}},{limit: 3});
 });
 
 Meteor.publish("AttendedEvents", function(){
-  return Events.find({"attendees._id":this.userId, start: {$lt: new Date()}}, {sort: {start: -1},limit: 3});
+  return Events.find({
+    "attendees._id":this.userId,
+    start: {$lt: new Date()},
+    deleted: {$ne: true}
+  }, {sort: {start: -1},limit: 3});
 });
 
 Meteor.publish("myEvents", function(){
@@ -67,7 +75,7 @@ Meteor.publish("myEvents", function(){
     {published: true},
     {"permUser.id": this.userId},
     {"permGroup.id": {$in: ids}}
-  ]});
+  ], deleted: {$ne: true}});
 });
 
 Meteor.publish("otherUnpublishedEvents", function(){
@@ -80,7 +88,7 @@ Meteor.publish("otherUnpublishedEvents", function(){
 	//console.log(ids);
   //console.log(checkPermission("events", this.userId));
   //if(perm){
-    return Events.find({}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
+    return Events.find({deleted: {$ne: true}}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
   //}
 
 });
@@ -88,7 +96,7 @@ Meteor.publish("otherUnpublishedEvents", function(){
 // all published events, plus my unpublished events
 
 Meteor.publish("publishedEvents", function(){
-  return Events.find({published: true});
+  return Events.find({published: true, deleted: {$ne: true}});
   //console.log(Events.find({published: true}));
   // var events = Events.aggregate([{ "$project" : { title:"$name", start: 1, end: 1 }}, {"$match": {published: true}}]);
   // console.log(events);
@@ -98,11 +106,17 @@ Meteor.publish("publishedEvents", function(){
 
 Meteor.publish("pastEvents", function(lim){
   if(lim == 0){
-    return Events.find({published: true, start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d} },{
-      sort: {start:-1} // Sorts descending chronologically by start
+    return Events.find({
+      published: true,
+      start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
+      deleted: {$ne: true}
+    },{sort: {start:-1} // Sorts descending chronologically by start
     });
   }
-  return Events.find({published: true, start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d} },{
+  return Events.find({
+    published: true,
+    start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
+    deleted: {$ne: true}},{
     sort: {start:-1}, // Sorts descending chronologically by start
     limit: lim    // limits the number of events to publish until told to publish more
   });
@@ -370,6 +384,7 @@ Meteor.publish("allUsers", function(){
     addresses: 1,
     contact: 1,
     email: 1,
+    emails: 1,
     phone: 1,
     newsletter: 1,
     gender: 1,

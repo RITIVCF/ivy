@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Option from './Option.jsx';
-import SelectGroup from '../../sharedcomponents/SelectGroup.jsx';
+import SelectTeam from '../../sharedcomponents/SelectTeam.jsx';
 import EventTagForm from './EventTagForm.jsx';
 
 export default class SiteSettingsForm extends TrackerReact(React.Component) {
@@ -68,7 +68,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 								<span className="card-title">Default Ticket Groups Configuration</span>
 									<br/>
 									<label>Default Contact Type Group</label>
-										<SelectGroup
+										<SelectTeam
 										 parent={this}
 										 id={"contacttype"}
 										 className="form-control"
@@ -78,7 +78,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 										 ref={"contacttype"}
 										 /><br/>
 									<label>Default Event Request Type Group</label>
-										<SelectGroup
+										<SelectTeam
 										 parent={this}
 										 id={"eventrequesttype"}
 										 className="form-control"

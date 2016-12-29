@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SelectUser from '../sharedcomponents/SelectUser.jsx';
-import SelectGroup from '../sharedcomponents/SelectGroup.jsx';
+import SelectTeam from '../sharedcomponents/SelectTeam.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
@@ -200,7 +200,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                      :"" }
                      <div className="form-group">
                        <label>Assigned Group:</label>
-                         <SelectGroup
+                         <SelectTeam
                    				parent={this}
                    				id={"assignedgroup"}
                           className="form-control"

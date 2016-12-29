@@ -33,6 +33,7 @@ export default class MySchedule extends TrackerReact(React.Component) {
   }
 
 	getEvents(){
+		console.log(Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch());
 		return Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch();
 	}
 

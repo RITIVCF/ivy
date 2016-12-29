@@ -1,12 +1,13 @@
 import React, { Component, PropTypes } from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Permission from './Permission.jsx';
 import SelectUser from '../../sharedcomponents/SelectUser.jsx';
-import SelectGroup from '../../sharedcomponents/SelectGroup.jsx';
+import SelectTeam from '../../sharedcomponents/SelectTeam.jsx';
 
 //Groups = new Mongo.Collection("groups");
 
 // Permission component - represents a single todo item
-export default class PermissionWindow extends Component
+export default class PermissionWindow extends TrackerReact(React.Component)
 {
     constructor(props)
     {
@@ -35,23 +36,23 @@ export default class PermissionWindow extends Component
 
     toggleOverlay()
     {
-        if(this.state.overlayState == "hidden")
-        {
-            this.setState({overlayState: ""});
-            this.stateSync();
-        }
-        else
-        {
-            this.setState({overlayState: "hidden"});
-        }
+        // if(this.state.overlayState == "hidden")
+        // {
+        //     this.setState({overlayState: ""});
+        //     this.stateSync();
+        // }
+        // else
+        // {
+        //     this.setState({overlayState: "hidden"});
+        // }
     }
 
     users()
     {
         var users = Meteor.users.find({}).fetch();
-        users.forEach(function(user){
-          user.name = Contacts.findOne(user.contact).name;
-        });
+        // users.forEach(function(user){
+        //   user.name = Meteor.findOne(user.contact).name;
+        // });
         return users;
     }
 
@@ -137,31 +138,7 @@ export default class PermissionWindow extends Component
         ));
     }
 
-    generateOption(option, optionType)
-    {
-        var text;
-        var id;
-        if(optionType == "users")
-        {
-            text = option.name;
-            id = option._id + "_USER";
-        }
-        else
-        {
-            text = option.name;
-            id = option._id + "_GROUP";
-        }
-        return (
-                <option value={id}>{text}</option>
-        );
-    }
 
-    generateOptions(options, optionType)
-    {
-        return options.map((option) => (
-                    this.generateOption(option, optionType)
-        ));
-    }
 
     changeOwner(newowner)
     {
@@ -169,8 +146,15 @@ export default class PermissionWindow extends Component
         //newOwnerId = newOwnerId.substring(0, newOwnerId.lastIndexOf("_"));
         if(confirm("Once the owner changes, you will not be able to make additional changes. Are you sure you want to continue?"))
         {
-            Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);
-            this.toggleOverlay();
+          if(newowner.emails[0].verified==false){
+            if(confirm("This user does not have an account. Are you sure?")){
+                Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);
+            }
+          }
+          else{
+            Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);  
+          }
+            //this.toggleOverlay();
         }
     }
 
@@ -178,121 +162,92 @@ export default class PermissionWindow extends Component
 
     }
 
-    printState(){
-      //console.log(this.state);
-    }
+
 
     render()
     {
-      if(!Contacts.findOne(Meteor.userId())){
-        return <div></div>
-      }
+      // if(!Contacts.findOne(Meteor.userId())){
+      //   return <div></div>
+      // }
         var event = this.props.ev; //parent.getEvent();
         var owner = Meteor.users.findOne(event.owner);//event.username;
         //console.log("Event Owner: "+ event.owner);
         //console.log("Event Owner: "+ owner.contact);
-        var name = Contacts.findOne(owner.contact).name;
+        //var name = Contacts.findOne(owner.contact).name;
         //console.log(name);
         var permUsers = event.permUser;
         var permGroups = event.permGroup;
 
         return (
-            <div>
-                <div id="overlay" className={this.state.overlayState} onClick={this.toggleOverlay.bind(this)}></div>
-                <div id="popup" className={this.state.overlayState}>
-                    <h3>Edit {event.name} Permissions</h3>
-                    <h5 id="permWindowOwner">Event Owner:
-                      <SelectUser
-                          parent={this}
-                          id={"owner"}
-                          unset={this.unset.bind(this)}
-                          updateContact={this.changeOwner.bind(this)}
-                          initialValue={name}
-                          ref={"owner"}
-                          />
-                      </h5>
-                  {/*  <select id="ownerSelect" ref="ownerSelect">
-                        {this.generateOptions(this.users(), "users")}
-                    </select>
-                    <button onClick={this.changeOwner.bind(this)} type="button" id="changeOwner">Change</button>
-
-                    <div id="permBlock">
-                        <div id="headerRow">
-                            <div id="nameHeader">
-                                Group / User Name
-                            </div>
-                            <div id="editHeader">
-                                Edit
-                            </div>
-                            <div id="viewHeader">
-                                View Only
-                            </div>
-                            <div id="deleteHeader">
-                                Delete
-                            </div>
-                        </div>
-                        <div id="permList">
-                            {/*this.renderPermissions(permGroups, "groups")*/}
-                            {/*this.renderPermissions(permUsers, "users")*/}
-                        <table className="table table-striped table-responsive">
-                          <thead>
-                            <tr>
-                              <th>Remove</th>
-                              <th>Group/User Name</th>
-                              <th>Edit</th>
-                              <th>View Only</th>
-                              {/*}<th>Delete</th>*/}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {event.permGroup.map( (perm)=>{
-                              return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"groups"} />
-                            })}
-                            {event.permUser.map( (perm)=>{
-                              return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"users"} />
-                            })}
-                            </tbody>
-                          </table>
-                        {/*}</div>
-                    </div>*/}
-                    <div id="addPermWrapper">
-                      <label>Add Group:
-                      <SelectGroup
-                				parent={this}
-                				id={"group"}
-                				unset={this.unset.bind(this)}
-                				updateContact={this.addGroupPerm.bind(this)}
-                				initialValue={""}
-                				ref={"group"}
-                				/></label><br/>
-                      <label>Add User:
-                      <SelectUser
-                  				parent={this}
-                  				id={"user"}
-                  				unset={this.unset.bind(this)}
-                  				updateContact={this.addUserPerm.bind(this)}
-                  				initialValue={""}
-                  				ref={"user"}
-                  				/></label>
-                      {/*}  <select id="newPermSelect" ref="newPermSelect">
-                            {this.generateOptions(this.groups(), "groups")}
-                            {this.generateOptions(this.users(), "users")}
-                        </select>
-                        <button type="button" id="addPermHolder" onClick={this.addPerm.bind(this)}>Add</button>
-                        */}
-
-                    </div>
-                    <div id="closeWrapper">
-                    {/*  <button onClick={this.printState.bind(this)}>Test State</button>*/}
-                        <button type="button" id="closeWindow" className="btn btn-info" onClick={this.toggleOverlay.bind(this)}>Close</button>
-                    </div>
+          <div id="permwindow" className="modal">
+            <div className="modal-content">
+              <h3>Edit {event.name} Permissions</h3>
+              <div className="row">
+                <div className="col s6">
+                  <h5>Event Owner:
+                    <SelectUser
+                        parent={this}
+                        id={"owner"}
+                        unset={this.unset.bind(this)}
+                        updateUser={this.changeOwner.bind(this)}
+                        initialValue={owner.name}
+                        ref={"owner"}
+                        />
+                    </h5>
                 </div>
+              </div>
+              <div className="row">
+                <div className="col s12">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Remove</th>
+                        <th>Group/User Name</th>
+                        <th>Edit</th>
+                        <th>View Only</th>
+                        {/*}<th>Delete</th>*/}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {event.permGroup.map( (perm)=>{
+                        return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"groups"} />
+                      })}
+                      {event.permUser.map( (perm)=>{
+                        return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"users"} />
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col 6 offset-s6">
+                  <label>Add Group:
+                  <SelectTeam
+                    parent={this}
+                    id={"group"}
+                    unset={this.unset.bind(this)}
+                    updateContact={this.addGroupPerm.bind(this)}
+                    initialValue={""}
+                    ref={"group"}
+                    /></label><br/>
+                  <label>Add User:
+                  <SelectUser
+                      parent={this}
+                      id={"user"}
+                      unset={this.unset.bind(this)}
+                      updateUser={this.addUserPerm.bind(this)}
+                      initialValue={""}
+                      ref={"user"}
+                      /></label>
+                </div>
+              </div>
+
+
             </div>
+            <div className="modal-footer">
+              <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+          </div>
         );
     }
 }
-
-PermissionWindow.propTypes = {
-    // This component gets the permission to display through a React prop.
-    // We can use propTypes to indicate it is required
-};

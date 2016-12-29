@@ -18,7 +18,7 @@ export default class MyGroups extends TrackerReact(React.Component) {
 	}
 
 	getGroups(){
-		return Groups.find({users: Meteor.userId()}).fetch();
+		return Groups.find({users: Meteor.userId(),types: {$ne:"Role"}}).fetch();
 	}
 
 
