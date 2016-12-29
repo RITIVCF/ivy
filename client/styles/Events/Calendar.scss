@@ -12,3 +12,63 @@
     }
   }
 }
+
+.legend {
+  > li {
+    display: inline-block;
+    > input[type=checkbox] {
+      display: none;
+    }
+    > input[type=checkbox]+label:before {
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      font-family: FontAwesome;
+      content: '\f0c8';
+      color: inherit;
+      margin-left: -1.5rem;
+      margin-right: 0.625rem;
+      position: absolute;
+      top: auto;
+      left: auto;
+      width: auto;
+      height: auto;
+      z-index: 0;
+      border: none;
+      border-radius: 0;
+      margin-top: 0;
+      transition: .2s;
+    }
+    > input[type=checkbox]:checked+label:before {
+      content: '\f14a';
+      top: auto;
+      left: auto;
+      width: auto;
+      height: auto;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      transform: none;
+      backface-visibility: hidden;
+      transform-origin: 100% 100%;
+    }
+    > input[type="checkbox"]:not(.filled-in) + label:after {
+      display: none;
+    }
+  }
+}
+
+/*
+[type="checkbox"]:not(.filled-in) + label:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    z-index: 0;
+    border: 2px solid #5a5a5a;
+    border-radius: 1px;
+    margin-top: 2px;
+    transition: .2s;
+}*/
