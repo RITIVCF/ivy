@@ -38,9 +38,10 @@ export default class EventTags extends TrackerReact(React.Component) {
   submit(tag){
     //event.preventDefault();
     console.log("submitted");
+    console.log(tag);
     Meteor.call("addEventTag", this.props.ev._id, tag);
     //this.refs.tag.initialValue="";
-    this.setState({value: ""});
+    //this.setState({value: ""});
 
 
   }

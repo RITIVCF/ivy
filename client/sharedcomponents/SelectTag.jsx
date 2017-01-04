@@ -42,7 +42,7 @@ function renderSuggestion(suggestion) {
 }
 
 function shouldRenderSuggestions(value) {
-  //console.log("Pre trim value", value);
+  console.log("Pre trim value", value);
   return value.trim().length >= 0;
 }
 
@@ -93,28 +93,41 @@ shouldComponentUpdate(nextProps, nextState){
     // I need to do something with suggestion. This holds the contact info.
     //console.log(suggestion);
     //this.setState({value:suggestion.name});
-    suggestion.component = this;
+    //suggestion.component = this;
     this.props.onSelected(suggestion);
+    if(!this.props.unset){
+      // console.log("UNSET PROP FALSE");
+        this.setState({value: ''}, function(){
+          //console.log("NOT keeping name:", this.state);
+        });
+    }
+    else{
+      this.setState({value: suggestion.tag}, function(){
+        //console.log("keeping name:", this.state);
+      });
+    }
   }
 
 
   onChange(event, { newValue, method }) {
     //console.log(method);
     if(method != 'tab'){
-      this.props.unset();
+      if(this.props.unset){
+        this.props.unset();
+      }
     }
     const value = event.target.value;
     //console.log("value");
     //console.log(value);
-    if(typeof newValue !== 'undefined') {
-        this.setState({
-            value: newValue
-        });
-    }
-    this.props.onChange(event.target.value);
-    // this.setState({
-    //   value: newValue
-    // });
+    // if(typeof newValue !== 'undefined') {
+    //     this.setState({
+    //         value: newValue
+    //     });
+    // }
+    //this.props.onChange(event.target.value);
+    this.setState({
+      value: newValue
+    });
   }
 
 
