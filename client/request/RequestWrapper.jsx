@@ -54,7 +54,7 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 							<tbody>
 								{(this.props.parent.state.subscription.tickets.ready()&&this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()) ? this.requests().map( (ticket)=>{
                     return <RequestSingle key={ticket._id} perm={this.props.perm} request={ticket} />
-                }):""}
+                }):false}
 							</tbody>
             </table>
 		</div>

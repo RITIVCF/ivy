@@ -118,7 +118,7 @@ export default class SignIn extends TrackerReact(React.Component){
     this.setState({new: false});
     //console.log("print state");
     //console.log(this.state);
-    this.refs.email.value = contt.email;
+    this.refs.email.value = contt.emails[0].address;
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});

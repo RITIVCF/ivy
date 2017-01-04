@@ -43,7 +43,7 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
   render() {
     let tkt = this.props.tkt;
     if(!tkt){
-      return <h4>Ticket Dashboard</h4>
+      return <p>Please select a ticket to view the details...</p>
     }
     var activities = tkt.activities.reverse();
     return (

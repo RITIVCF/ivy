@@ -110,6 +110,7 @@ shouldComponentUpdate(nextProps, nextState){
             value: newValue
         });
     }
+    this.props.onChange(event.target.value);
     // this.setState({
     //   value: newValue
     // });

@@ -5,6 +5,10 @@ import SelectTag from '../../sharedcomponents/SelectTag.jsx';
 
 
 export default class EventTags extends TrackerReact(React.Component) {
+  constructor(){
+    super();
+    this.state ={value: ""};
+  }
   updateTags(event){
 		event.preventDefault();
     var tags = [];   // Initiate tags
@@ -35,9 +39,14 @@ export default class EventTags extends TrackerReact(React.Component) {
     //event.preventDefault();
     console.log("submitted");
     Meteor.call("addEventTag", this.props.ev._id, tag);
-    this.refs.tag.value="";
+    //this.refs.tag.initialValue="";
+    this.setState({value: ""});
 
 
+  }
+
+  setTextValue(txt){
+    this.setState({value: txt});
   }
 
   unset(){
@@ -56,8 +65,9 @@ export default class EventTags extends TrackerReact(React.Component) {
             parent={this}
             ref="tag"
             unset={this.unset.bind(this)}
+            onChange={this.setTextValue.bind(this)}
             onSelected={this.submit.bind(this)}
-            initialValue={""}
+            initialValue={this.state.value}
             />
     {/*this.props.subscription.ready() ? */// this.getTags().map( (tag)=>{
       ev.tags.map((tag)=>{

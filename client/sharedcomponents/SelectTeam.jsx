@@ -5,49 +5,34 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-      if(unCreated){
-        var users = Meteor.users.find({emails: {$elemMatch: {verified: false}}}).fetch();
-      }
-      else{
-        var users = Meteor.users.find().fetch();
-      }
-      // users.forEach(function(user){
-      //   //console.log(user.contact);
-      //   user.name = Contacts.findOne(user.contact).name;
-      //
-      // });
-      //console.log(users);
-      return users;
-
-
+      return Groups.find({type: "Team"}).fetch();
 }
 
-const getSuggestions = value => {
+function getSuggestions(value) {
   //users: true, find Users
   //       fasle, use contacts
-  console.log("getSuggestions value: ", value);
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-    return inputLength === 0 ? [] : getList().filter(user =>
-      user.name.toLowerCase().slice(0, inputLength) === inputValue
+    return inputLength === 0 ? [] : getList().filter(group =>
+      group.name.toLowerCase().slice(0, inputLength) === inputValue
     );
 
 
 
 }
 
-const getSuggestionValue = suggestion => { // when suggestion selected, this function tells
+function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
   return suggestion.name;                 // what should be the value of the input
 }
 
-const renderSuggestion = suggestion => {
+function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion.name}<span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span></span>
+    <span>{suggestion.name}</span>
   );
 }
 
-const shouldRenderSuggestions = value => {
+function shouldRenderSuggestions(value) {
   return value.trim().length > 1;
 }
 
@@ -55,11 +40,11 @@ const shouldRenderSuggestions = value => {
 
 
 
-export default class SelectUser extends React.Component {
+export default class SelectTeam extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
 
-    unCreated = props.unCreated;
+
 
       this.state = {
         value: '',
@@ -99,42 +84,26 @@ shouldComponentUpdate(nextProps, nextState){
     //console.log(suggestion);
     //this.setState({value:suggestion.name});
     suggestion.component = this;
-    this.props.updateUser(suggestion);
-    // console.log("UNSET PROP:", this.props.unset);
-    // console.log("suggestion selected this.state: ", this.state);
-    if(!this.props.unset){
-      // console.log("UNSET PROP FALSE");
-        this.setState({value: ''}, function(){
-          //console.log("NOT keeping name:", this.state);
-        });
-    }
-    else{
-      this.setState({value: suggestion.name}, function(){
-        //console.log("keeping name:", this.state);
-      });
-    }
+    this.props.updateContact(suggestion);
   }
 
 
   onChange(event, { newValue, method }) {
     //console.log(method);
     if(method != 'tab'){
-      if(this.props.unset){
-        this.props.unset();
-      }
+      this.props.unset();
     }
     const value = event.target.value;
     //console.log("value");
-    // console.log("State Value:", this.state.value);
-    // console.log("On Change Value: ", newValue);
-    // if(typeof newValue !== 'undefined') {
-    //     this.setState({
-    //         value: newValue
-    //     });
-    // }
-    this.setState({
-      value: newValue
-    });
+    //console.log(value);
+    if(typeof newValue !== 'undefined') {
+        this.setState({
+            value: newValue
+        });
+    }
+    // this.setState({
+    //   value: newValue
+    // });
   }
 
 
@@ -144,28 +113,27 @@ shouldComponentUpdate(nextProps, nextState){
     });
   }
 
-  onSuggestionsClearRequested() {
+  onSuggestionsClearRequested(){
+    // Autosuggest will call this function every time you need to clear suggestions.
     this.setState({
       suggestions: []
     });
-  }
+  };
 
   render() {
 
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Enter name...',
+      placeholder: 'Enter group name...',
       value,
       onChange: this.onChange
     };
-    //console.log("ID PROP:",this.props.id);
     if(this.props.id){
-      //console.log("PROP IS TRUE");
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={false}
+                     focusFirstSuggestion={true}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
@@ -180,7 +148,7 @@ shouldComponentUpdate(nextProps, nextState){
       return (
         <Autosuggest suggestions={suggestions}
                      getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={false}
+                     focusFirstSuggestion={true}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}

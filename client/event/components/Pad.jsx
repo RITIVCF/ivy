@@ -53,6 +53,9 @@ export default class Pad extends Component {
     }
   	});
     tinymce.get(this.props.pad.name.replace(" ","")+"pad").setContent(this.props.pad.content);
+    if(!this.props.editperm){
+      tinymce.get(this.props.pad.name.replace(" ","")+"pad").setMode("readonly");
+    }
     $('ul.tabs').tabs();
   }
 
@@ -88,6 +91,12 @@ export default class Pad extends Component {
     if((this.props.pad.content==nextProps.pad.content)&&
         (this.props.pad.lock==nextProps.pad.lock)&&
         (this.state.editting==nextState.editting)){
+          if(nextProps.editperm){
+            tinymce.get(this.props.pad.name.replace(" ","")+"pad").setMode();
+          }
+          else{
+            tinymce.get(this.props.pad.name.replace(" ","")+"pad").setMode("readonly");
+          }
       return false;
     }
     return true;

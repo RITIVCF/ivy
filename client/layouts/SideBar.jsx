@@ -50,42 +50,42 @@ export default class SideBar extends TrackerReact(React.Component) {
 					{checkPermission("tickets")?
 						<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/tickets">
-								<i className="material-icons">receipt</i>Ticket Dashboard</a>
+								<i className="material-icons">receipt</i>To-Dos</a>
 						</li>:""}
 					{checkPermission("contacts")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/contacts">
-								<i className="material-icons">perm_identity</i>Contact Dashboard</a>
+								<i className="material-icons">supervisor_account</i>People</a>
 						</li>:""}
 					{checkPermission("churches")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/churches"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/churches">
-								<i className="material-icons">store</i>Churches Dashboard</a>
+								<i className="material-icons">store</i>Churches</a>
 						</li>:""}
 					{!checkPermission("admin")?"":
 					<li>
 						<a className="collapsible-header">
-							<i className="material-icons">settings</i>Administration<i className="material-icons right">arrow_drop_down</i></a>
+							<i className="material-icons">perm_data_setting</i>Administration<i className="material-icons right">arrow_drop_down</i></a>
 						<div className="collapsible-body">
 							<ul>
 								<li className={FlowRouter.current().path.substring(0,13)=="/admin/groups"?"active":""}>
-									<a href="/admin/groups">Groups Management</a>
+									<a href="/admin/groups"><i className="material-icons">recent_actors</i>Structures</a>
 								</li>
 							{/*}	<li>
 									<a href="/admin/pages">Page Permissions</a>
 								</li> */}
 								<li className={FlowRouter.current().path.substring(0,15)=="/admin/settings"?"active":""}>
-									<a href="/admin/settings">Site Settings</a>
+									<a href="/admin/settings"><i className="material-icons">settings</i>Site Settings</a>
 								</li>
 								<li className={FlowRouter.current().path.substring(0,24)=="/admin/duplicatecontacts"?"active":""}>
-									<a href="/admin/duplicatecontacts">Duplicate Contacts</a>
+									<a href="/admin/duplicatecontacts"><i className="material-icons">call_merge</i>Duplicate Contacts</a>
 								</li>
 								{checkPermission("feedback")?
 									<li className={FlowRouter.current().path.substring(0,9)=="/feedback"?"active":""}>
-										<a href="/feedback">Feedback</a>
+										<a href="/feedback"><i className="material-icons">swap_vert</i>Feedback</a>
 									</li>:""}
 								<li className={FlowRouter.current().path.substring(0,14)=="/admin/overiew"?"active":""}>
-									<a href="/admin/overview">Chapter Overview</a>
+									<a href="/admin/overview"><i className="material-icons">assessment</i>Chapter Overview</a>
 								</li>
 							</ul>
 						</div>

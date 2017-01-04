@@ -100,12 +100,12 @@ export default class EventWorkpad extends Component {
               {this.getWorkpads().map((tab)=>{
                 return <Tab key={tab.name} tab={tab} eid={this.props.eid} />
               })}
-              <li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>
+              {this.props.perm?<li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>:""}
             </ul>
           </div>
 
         {this.getWorkpads().map((pad)=>{
-          return <Pad key={pad.name} eid={this.props.ev._id} pad={pad} />
+          return <Pad key={pad.name} eid={this.props.ev._id} pad={pad} editperm={this.props.perm} />
         })}
 
 

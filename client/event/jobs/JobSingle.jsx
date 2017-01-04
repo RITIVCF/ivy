@@ -4,9 +4,7 @@ export default class JobSingle extends Component {
   getUser(){
     //console.log(this);
 
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.job.uid}).contact}
-      );
+    return  Meteor.users.findOne(this.props.job.uid);
   }
 
   delete(){
@@ -18,12 +16,15 @@ export default class JobSingle extends Component {
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
 
     return (
-        <div className="form-group">
-          {this.props.perm?<button onClick={this.delete.bind(this)} className="form-control">X</button>:""}
-        <div>{this.props.job.status}</div>
-        <div>{this.getUser().name}</div>
-        <div>{this.props.job.job}</div>
-      </div>
+        <li className="collection-item" id="showhim">
+          <span className="title">{this.getUser().name}</span>
+          <p style={{margin: "0px"}}>{this.props.job.job}
+            {this.props.perm?
+              <span onClick={this.delete.bind(this)} className="material-icons right" id="showme">call_received</span>:""}
+            <br/>
+            {this.props.job.status}
+          </p>
+      </li>
 
     )
   }

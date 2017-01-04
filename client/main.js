@@ -44,9 +44,12 @@ else {
 
 
 checkEventPermission = function(ev){
-  if(!ev.permUser){
-    return {"view":false,"edit": false};
-  }
+  // if(!ev.permUser){
+  //   return {"view":false,"edit": false};
+  // }
+	if(ev.owner==Meteor.userId()){
+		return {view: true, edit: true}
+	}
   var perm = false;// ev.perm[""]
 	var view = false;
 	for(i=0; i < ev.permUser.length; i++){
@@ -64,10 +67,6 @@ checkEventPermission = function(ev){
 			perm = ev.permGroup[i].edit||perm;
 			break;
 		}
-	}
-	if(ev.owner==Meteor.userId()){
-		view = true;
-		perm = true;
 	}
   return {"view": view,"edit": perm};
 }

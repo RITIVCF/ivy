@@ -84,7 +84,7 @@ export default class Permission extends Component
             //         break;
             //     }
             // }
-            text = Contacts.findOne(Meteor.users.findOne(this.props.perm.id).contact).name;
+            text = Meteor.users.findOne(this.props.perm.id).name;
         }
 
         type += "Perm";
