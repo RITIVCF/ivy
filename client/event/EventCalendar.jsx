@@ -236,7 +236,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
-      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: false}).fetch();
+      var events = Events.find({published: false}).fetch();
       events.forEach((event)=>{
         event.editable=(!event.name)?false:true;
         event.title=event.name;
