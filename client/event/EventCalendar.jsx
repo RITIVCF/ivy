@@ -210,10 +210,18 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   getPublishedEvents(){
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
+    let tags = Options.findOne("eventtags").vals;
     var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: true}).fetch();
     events.forEach((event)=>{
       event.title=event.name;
+      var newcolors = [];
+      event.tags.forEach((tagname)=>{
+        var color = tags.filter(tag => tag.tag == tagname)[0].color;
+        newcolors.push(color);
+      });
+      event.tags=newcolors;
     });
+
 
     //console.log(Groups.find({users: Meteor.userId()}).fetch());
     var grps = Groups.find({users: Meteor.userId()}).fetch();
@@ -236,10 +244,20 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
+      let tags = Options.findOne("eventtags").vals;
       var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: false}).fetch();
       events.forEach((event)=>{
         event.editable=(!event.name)?false:true;
-        event.title=event.name;
+        event.title=event.name?event.name:"";
+        if(event.tags) {
+          var newcolors = [];
+          event.tags.forEach((tagname)=>{
+            var color = tags.filter(tag => tag.tag == tagname)[0].color;
+            newcolors.push(color);
+          });
+          event.tags=newcolors;
+        }
+        //event.title=event.name;
       })
       return events;
     }
@@ -262,7 +280,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       }
     );
     $(calendar).fullCalendar( 'rerenderEvents');
-    $('.modal').modal();
+    //$('.modal').modal();
 
   }
 
@@ -286,12 +304,12 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     return (
       <div>
         <div ref="calendar" id="calendar"></div>
-        {this.getPublishedEvents().map((event)=>{
+        /*{this.getPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}
         {this.getUnPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
-        })}
+        })}*/
         <NewEventModal />
       </div>
     );
