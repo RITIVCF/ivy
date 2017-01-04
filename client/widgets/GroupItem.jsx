@@ -25,7 +25,7 @@ export default class GroupItem extends TrackerReact(React.Component) {
 		var ids = this.props.group.users;
 		var memberstring = "";
 		ids.forEach((id)=>{
-			memberstring += Contacts.findOne(Meteor.users.findOne(id).contact).name+", ";
+			memberstring += Meteor.users.findOne(id).name+", ";
 		})
 		memberstring = memberstring.slice(0, -2);
 		return memberstring;
