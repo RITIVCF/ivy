@@ -175,10 +175,19 @@ export default class SignIn extends TrackerReact(React.Component){
                       type="text"
                       ref="user"
                       className="validate" />
-                    <input ref="email" placeholder="Email" id="email" type="email" required />
+                      <div className="input-field">
+                        <input ref="email" id="email" type="email" className="validate" required />
+                        <label htmlFor="email">Email</label>
+                      </div>
                     {this.state.new?<div>
-                      <input ref="phone" placeholder="Phone number (optional)" type="tel" />
-                      <input ref="major" placeholder="Major (optional)" type="text" />
+                      <div className="input-field">
+                        <input ref="phone" id="phone" className="validate" type="tel" />
+                        <label htmlFor="phone">Phone number (optional)</label>
+                      </div>
+                      <div className="input-field">
+                        <input ref="major" id="major" className="validate" type="text" />
+                        <label htmlFor="major">Major (optional)</label>
+                      </div>
                       <HowHearSelect ref="howhear" />
                       <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
                       <label htmlFor="news">Please sign me up for the newsletter</label>
