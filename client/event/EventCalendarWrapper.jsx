@@ -94,7 +94,8 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
 	render() {
     document.title="Ivy - Event Calendar";
-    if(Options.findOne("calendarview")){
+    //if(Options.findOne("calendarview")&&Options.findOne("eventtags")){
+    if(SiteOptions.ready()){
       return (<div>
       <MainBox
         content={<div>
