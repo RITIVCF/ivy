@@ -16,7 +16,7 @@ Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
 Meteor.subscribe("allGroups");
 Meteor.subscribe("allCounters");
-Meteor.subscribe("allOptions");
+SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 
 checkPermission = function(id){
