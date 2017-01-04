@@ -18,6 +18,9 @@ export default class Option extends TrackerReact(React.Component) {
 						<span className="card-title">{this.props.option._id}</span>
 						{!this.props.option.vals ? <p>Value: {this.props.option.val}</p>:
 							this.props.option.vals.map((value)=>{
+								if(value.tag){
+									return <div key={value.tag}>{value.tag}</div>
+								}
 								return <div key={value} >{value}</div>
 						})
 					}

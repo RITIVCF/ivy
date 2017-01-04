@@ -27,7 +27,7 @@ export default class Tag extends TrackerReact(React.Component) {
 			<li className="collection-item">
 				<div>
 				{/*}	<i className="material-icons" onClick={this.removeTag.bind(this)}>close</i>*/}
-					{this.props.tag}
+					{this.props.tag.tag}
 					<a className="secondary-content">
 					<i className="material-icons">stop</i>
 					</a>

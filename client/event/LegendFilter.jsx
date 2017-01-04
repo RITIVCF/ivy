@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import moment from 'moment';
+import LegendItem from './LegendItem.jsx';
 
 export default class LegendFilter extends TrackerReact(React.Component) {
   /*
@@ -16,9 +17,13 @@ export default class LegendFilter extends TrackerReact(React.Component) {
     var thiz = this;
   }
 */
+
   getEventTags(){
-    var eventags = Options.findOne("eventtags");
-    return eventags.vals;
+    var eventtags = Options.findOne("eventtags");
+    if(!eventtags.vals){
+      return [];
+    }
+    return eventtags.vals;
   }
 
   render() {
@@ -26,10 +31,14 @@ export default class LegendFilter extends TrackerReact(React.Component) {
       <div>
         <ul className="legend">
         {this.getEventTags().map((tag)=>{
-          return <li>
-            <input id={tag.tag} type="checkbox"></input>
-            <label htmlFor={tag.tag} style={{color: tag.color}}>{tag.tag}</label>
-          </li>
+          // var checked = false;
+          if(!Session.get("calendartagfilter")){
+            return false;
+          }
+          // if(Session.get("calendartagfilter").indexOf(tag.tag)){
+          //   var checked= true;
+          // }
+          return <LegendItem key={tag.tag} tag={tag} checked={Session.get("calendartagfilter").indexOf(tag.tag)!=-1} />
         })}
       </ul>
       </div>

@@ -61,8 +61,8 @@ export default class EventContent extends TrackerReact(React.Component) {
 
 
     var perms = checkEventPermission(this.props.event);
-    var isformopen = (this.props.event.start<new moment(new Date).add(2,"hours"));
-    console.log(perms);
+    var isformopen = (this.props.event.start<(new moment(new Date).add(2,"hours")));
+    /*console.log(perms);*/
     return (
       <div id={this.props.event._id} className="modal">
         <div className="modal-content">

@@ -24,7 +24,7 @@ function getSuggestions(value) {
   const inputLength = inputValue.length;
 
     return inputLength === 0 ? getList() : getList().filter(tag =>
-      tag.toLowerCase().slice(0, inputLength) === inputValue
+      tag.tag.toLowerCase().slice(0, inputLength) === inputValue
     );
 
 
@@ -32,16 +32,17 @@ function getSuggestions(value) {
 }
 
 function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
-  return suggestion;                 // what should be the value of the input
+  return suggestion.tag;                 // what should be the value of the input
 }
 
 function renderSuggestion(suggestion) {
   return (
-    <span>{suggestion}</span>
+    <span>{suggestion.tag}</span>
   );
 }
 
 function shouldRenderSuggestions(value) {
+  //console.log("Pre trim value", value);
   return value.trim().length >= 0;
 }
 

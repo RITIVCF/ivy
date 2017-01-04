@@ -23,6 +23,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     if(!Session.get("calendardate")){
       Session.set("calendardate", moment()._d);
     }
+    console.log(Session.get("calendardate"));
+    if(!Session.get("calendartagfilter")){
+      var result = Options.findOne("eventtags").vals;
+      var tags = [];
+      result.forEach((tag)=>{
+        tags.push(tag.tag);
+      });
+      Session.set("calendartagfilter", tags);
+    }
     this.state = {
        mounted: false
     }
@@ -65,10 +74,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         thiz.props.settitle();
         Session.set("calendarview", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
+        console.log($(calendar).fullCalendar( 'getDate' )._d);
         var height = $('#mainbox > div').height();
         $('#calendar').fullCalendar('option','height', height);
       },
-      defaultDate: this.props.date?this.props.date:Session.get("calendardate"),
+      defaultDate: Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
         //FlowRouter.go("/attendance/event/"+calEvent._id);
         if(!calEvent.name){
@@ -116,8 +126,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         newevent = {start: date};
         $('#neweventmodalstart')[0].innerHTML="Start: "+ date.subtract(5,"hours").format("Do MMM h:mmA"); $('.modal').modal();
         date.add(5,"hours");
-        console.log($('#neweventmodalstart'));
-        console.log(newevent);
+        //console.log($('#neweventmodalstart'));
+        //console.log(newevent);
         $('#neweventmodal').appendTo("body").modal('open');
         $('#newname').focus();
 
@@ -200,7 +210,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   getPublishedEvents(){
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
-    var events = Events.find({published: true}).fetch();
+    var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: true}).fetch();
     events.forEach((event)=>{
       event.title=event.name;
     });
@@ -211,14 +221,14 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   	grps.forEach(function(group){
   		ids.push(group._id);
   	});
-  	console.log("GGroups:");
-  	console.log(ids);
-    console.log(Events.find({$or: [
-      {owner: Meteor.userId()},
-      {published: true},
-      {"permUser.id": Meteor.userId()},
-      {"permGroup.id": {$in: ids}}
-    ]}).fetch());
+  	//console.log("GGroups:");
+  	//console.log(ids);
+    // console.log(Events.find({$or: [
+    //   {owner: Meteor.userId()},
+    //   {published: true},
+    //   {"permUser.id": Meteor.userId()},
+    //   {"permGroup.id": {$in: ids}}
+    // ]}).fetch());
 
 
 
@@ -226,7 +236,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
-      var events = Events.find({published: false}).fetch();
+      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: false}).fetch();
       events.forEach((event)=>{
         event.editable=(!event.name)?false:true;
         event.title=event.name;
@@ -258,7 +268,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   test(){
     $('.modal').modal();
-    console.log($('#XynJraXPfs46EXMGP'));
+    //console.log($('#XynJraXPfs46EXMGP'));
     $('#XynJraXPfs46EXMGP').modal('open');
   }
 

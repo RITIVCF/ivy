@@ -45,9 +45,9 @@ export default class EventTags extends TrackerReact(React.Component) {
 
   }
 
-  setTextValue(txt){
-    this.setState({value: txt});
-  }
+  // setTextValue(txt){
+  //   this.setState({value: txt});
+  // }
 
   unset(){
 
@@ -61,11 +61,12 @@ export default class EventTags extends TrackerReact(React.Component) {
     return(
       <div style={{backgroundColor: "white", outline:"grey solid 1px", padding: "5px"}}>
         {/*  <input type="text" ref="tag" placeholder="+Tag" /> LOOK INTO REACT-WIDGETS MULTISELECT*/}
+        {/*}  unset={this.unset.bind(this)} */}
+        {/*}  onChange={this.setTextValue.bind(this)} */}
           <SelectTag
             parent={this}
             ref="tag"
-            unset={this.unset.bind(this)}
-            onChange={this.setTextValue.bind(this)}
+
             onSelected={this.submit.bind(this)}
             initialValue={this.state.value}
             />

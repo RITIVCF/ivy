@@ -32,7 +32,7 @@ export default class EventTagForm extends TrackerReact(React.Component) {
 					</form>*/}
 					<ul className="collection">
 						{this.getEventTags().map((tag)=>{
-							return <Tag key={tag} tag={tag} />
+							return <Tag key={tag.tag} tag={tag} />
 						})}
 					</ul>
 				</div>
