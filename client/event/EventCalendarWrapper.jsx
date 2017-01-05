@@ -104,7 +104,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
           </div>}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.events_infobar}
-        infobar={<EventPreview event={Events.findOne(Session.get("evselected")) } />}
+        infobar={<EventPreview event={Events.findOne(Session.get("evselected"))} ready={this.state.subscription.myEvents.ready()} />}
         />
       <EventHelp />
       </div>

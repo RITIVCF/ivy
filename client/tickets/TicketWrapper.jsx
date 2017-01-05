@@ -15,7 +15,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
         Tickets: Meteor.subscribe("allActiveTickets"),
         options: Meteor.subscribe("allOptions"),
       //  events: Meteor.subscribe("allEvents"),
-        users: Meteor.subscribe("allUsers"),
+        //users: Meteor.subscribe("allUsers"),
         contacts: Meteor.subscribe("allContacts")
       },
       filter: "assigneduser",
@@ -26,7 +26,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 
   componentWillUnmount() {
     this.state.subscription.Tickets.stop();
-    this.state.subscription.users.stop();
+    //this.state.subscription.users.stop();
     this.state.subscription.contacts.stop();
     this.state.subscription.options.stop();
   //  this.state.subscription.events.stop();
@@ -34,7 +34,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 
   checkSubs(){
     return this.state.subscription.Tickets.ready()&&
-    this.state.subscription.users.ready()&&
+    //this.state.subscription.users.ready()&&
     this.state.subscription.contacts.ready()&&
     this.state.subscription.options.ready();
   //  this.state.subscription.events.ready();

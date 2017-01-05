@@ -8,8 +8,8 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         Feedback: Meteor.subscribe("allFeedback"),
-        Contacts: Meteor.subscribe("allContacts"),
-        Users: Meteor.subscribe("allUsers")
+        Contacts: Meteor.subscribe("allContacts")
+        //Users: Meteor.subscribe("allUsers")
       }
     }
   }
@@ -17,7 +17,7 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
   componentWillUnmount(){
     this.state.subscription.Feedback.stop();
     this.state.subscription.Contacts.stop();
-    this.state.subscription.Users.stop();
+    //this.state.subscription.Users.stop();
   }
 
 	render() {
@@ -26,7 +26,7 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
       <div className="row">
   			<div className="col s12">
           {checkPermission("feedback")?<div>
-            {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
+            {this.state.subscription.Contacts.ready()?
               <FeedbackSummary />:""
             }
                 </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}

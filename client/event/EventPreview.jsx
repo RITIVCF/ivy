@@ -103,7 +103,7 @@ export default class EventPreview extends TrackerReact(React.Component) {
         </div>
       </div>
     }
-    if(!this.props.event){
+    if(!this.props.event||!this.props.ready){
       return <div className="preloader-wrapper big active">
               <div className="spinner-layer spinner-blue-only">
                 <div className="circle-clipper left">

@@ -74,6 +74,28 @@ Meteor.methods({
       + "- Ivy"
     });
   },
+  getDuplicateContacts(){
+    var result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
+      {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+      {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }] );
+      //console.log(result);
+    var ids =[];
+      for(var i=0;i<result.length;i++){
+        for(var y=0;y<result[i].ids.length;y++){
+          ids.push(result[i].ids[y]);
+        }
+      }
+      //console.log(ids);
+      result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
+        {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+        {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } ]);
+        for(var i=0;i<result.length;i++){
+          for(var y=0;y<result[i].ids.length;y++){
+            ids.push(result[i].ids[y]);
+          }
+        }
+    return ids;
+  },
   setUserUsername(username){
     Accounts.setUsername(Meteor.userId(), username);
   },
@@ -105,8 +127,8 @@ Meteor.methods({
     //  Look at Emma conrick on the most recent event for explanation
     //  It shows three people but there are 4 records
     // }
-    Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}});
-    Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}});
+    Events.update({"attendees._id":did},{$set:{"attendees.$.ticket":""}},{multi: true});
+    Events.update({"attendees._id":did},{$set:{"attendees.$.firsttime":false}},{multi: true});
     Events.update({"attendees._id":did},{$set:{"attendees.$._id":mid}},{multi: true});
     Tickets.update({_id: dc.ticket},{$set: {deleted: true}});
     //Tickets.remove({_id: dc.ticket});

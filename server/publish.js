@@ -371,7 +371,7 @@ Meteor.publish("userSelf", function(){
   return Meteor.users.find(selector, options);
 });
 
-Meteor.publish("allUsers", function(){
+Meteor.publish("allActiveUsers", function(){
   /*const options = {
     fields: {
       _id: 1,
@@ -398,7 +398,37 @@ Meteor.publish("allUsers", function(){
     member: 1
      }
    }
-  return Meteor.users.find({}, options);
+  return Meteor.users.find({deleted:{$ne: true}}, options);
+});
+
+Meteor.publish("allInactiveUsers", function(){
+  /*const options = {
+    fields: {
+      _id: 1,
+      contact: 1
+    }
+  }*/
+  const options = {
+    fields: {
+    name: 1,
+    addresses: 1,
+    contact: 1,
+    email: 1,
+    emails: 1,
+    phone: 1,
+    newsletter: 1,
+    gender: 1,
+    affiliations: 1,
+    communitylife: 1,
+    intl: 1,
+    ethn: 1,
+    ethnicity: 1,
+    gradterm: 1,
+    curryear: 1,
+    member: 1
+     }
+   }
+  return Meteor.users.find({deleted: true}, options);
 });
 
 Meteor.publish("allUsersEverything", function(){
