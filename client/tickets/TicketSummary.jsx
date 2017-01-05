@@ -12,6 +12,9 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     if(Session.get("ticketfilter")===undefined){
       Session.set("ticketfilter", "assigneduser");
     }
+    if(Session.get("tickettypefilter")===undefined){
+      Session.set("tickettypefilter","All");
+    }
     if(!Session.get("tickettextfilter")){
       Session.set("tickettextfilter", "subject");
     }
@@ -32,6 +35,10 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     console.log(event.target.value);
     //this.setState({filter: this.refs.filter.value});
     Session.set("ticketfilter",event.target.value);
+  }
+
+  filterTypeChange(event){
+    Session.set("tickettypefilter",event.target.value);
   }
 
   changeTextFilter(event){
@@ -111,12 +118,18 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                   className="waves-effect waves-light btn right">New Ticket</a>
             </div>
             <div className="row">
-              <div className="input-field col s12 m6">
+              <div className="input-field col s12 m3">
                 <select ref="filter" className="browser-default" value={Session.get("ticketfilter")}
                   onChange={this.filterChange.bind(this)}>
                     <option value={"assigneduser"}>My Active Tickets</option>
                     <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
                     <option value={""}>All Active Tickets</option>
+                  </select>
+              </div>
+              <div className="input-field col s12 m3">
+                <select ref="typefilter" className="browser-default" value={Session.get("tickettypefilter")}
+                  onChange={this.filterTypeChange.bind(this)}>
+                    {/*Use a multiple select thing for this*/}
                   </select>
               </div>
               <div className="input-field col s4 m2">
