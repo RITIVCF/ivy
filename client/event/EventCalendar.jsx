@@ -245,7 +245,10 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   getUnPublishedEvents(){
     if(checkPermission('events')){
       let tags = Options.findOne("eventtags").vals;
-      var events = Events.find({published: false}).fetch();
+
+var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
+
+      //var events = Events.find({published: false}).fetch();
       events.forEach((event)=>{
         event.editable=(!event.name)?false:true;
         event.title=event.name?event.name:"";
@@ -256,6 +259,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
             newcolors.push(color);
           });
           event.tags=newcolors;
+        } else {
+          event.tags = [];
         }
         //event.title=event.name;
       })

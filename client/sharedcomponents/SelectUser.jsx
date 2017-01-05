@@ -51,6 +51,12 @@ const shouldRenderSuggestions = value => {
   return value.trim().length > 1;
 }
 
+const inputComponent = inputProps => {
+  return <div className="input-field">
+    <input id="name" {...inputProps} required />
+    <label htmlFor="name">Name</label>
+  </div>
+}
 
 
 
@@ -150,6 +156,8 @@ shouldComponentUpdate(nextProps, nextState){
     });
   }
 
+
+
   render() {
 
     const { value, suggestions } = this.state;
@@ -171,6 +179,7 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
+                     renderInputComponent={inputComponent}
                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />

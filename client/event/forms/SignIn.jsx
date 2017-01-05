@@ -119,6 +119,7 @@ export default class SignIn extends TrackerReact(React.Component){
     //console.log("print state");
     //console.log(this.state);
     this.refs.email.value = contt.emails[0].address;
+    Materialize.updateTextFields();
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});
@@ -133,6 +134,7 @@ export default class SignIn extends TrackerReact(React.Component){
     if(!this.state.user){
       this.state.new = true;
     }
+    Materialize.updateTextFields();
   }
 
   unset(){
@@ -141,6 +143,7 @@ export default class SignIn extends TrackerReact(React.Component){
     this.setState({new: true});
     this.setState({user: false});
     this.refs.email.value="";
+    Materialize.updateTextFields();
     // this.refs.phone.value="";
     // this.refs.newsletter.checked=false;
     // this.refs.major.value="";
@@ -154,6 +157,7 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   render() {
+    Materialize.updateTextFields();
       return (
         <div className="valign" id="signinformcontainer">
           <div className="col s4">
@@ -163,7 +167,6 @@ export default class SignIn extends TrackerReact(React.Component){
                 <h1>Welcome to {this.props.ev.name}!</h1>
                 <h2>Please sign in</h2>
                 <form className="publicForm" onSubmit={this.submit.bind(this)} name="form">
-                  <div className="form-group">
                     <SelectUser
                       parent={this}
                       unset={this.unset.bind(this)}
@@ -195,7 +198,6 @@ export default class SignIn extends TrackerReact(React.Component){
                       <label htmlFor="more">I would like to learn more about IV</label>
                       </div>:""}
                     <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
-                  </div>
                 </form>
               </div>
             </div>
