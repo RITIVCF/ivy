@@ -7,12 +7,15 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 	constructor(){
 		super();
 		this.state = {
+			showall: false,
 			deleteId: false,
 			mergeId: false
 		}
 	}
 
 	getContacts(){
+		Meteor.users.aggregate(     {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
+      {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
 		return Meteor.users.find({createdAt: {$ne: undefined}},{sort:{name:1, email:1, createdAt: 1}}).fetch();
 		//return PagePermissions.find().fetch();
 	}
@@ -94,7 +97,8 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 							<br/>
 							<div className="row">
 								<div className="col-md-12">
-									<button onClick={this.performDelete.bind(this)} className="btn btn-primary">Merge & Delete</button>
+									{(this.state.deleteId&&this.state.mergId)&&
+									<button onClick={this.performDelete.bind(this)} className="btn btn-primary">Merge & Delete</button>}
 								</div>
 							</div>
 							</div>
