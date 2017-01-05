@@ -131,6 +131,10 @@ export default class SignIn extends TrackerReact(React.Component){
     this.refs.major.disabled = true;
     this.refs.howhear.refs.howhear.value = contt.howhear;
     this.refs.howhear.refs.howhear.disabled = true;
+    this.refs.newsletter.checked = contt.newsletter;
+    this.refs.newsletter.disabled = true;
+    this.refs.learnmore.checked = contt.learnmore;
+    this.refs.learnmore.disabled = true;
     $('select').material_select();
     Materialize.updateTextFields();
     //this.refs.phone.value = this.state.contact.phone;
@@ -163,6 +167,10 @@ export default class SignIn extends TrackerReact(React.Component){
     this.refs.major.disabled = false;
     this.refs.howhear.refs.howhear.value ="";
     this.refs.howhear.refs.howhear.disabled = false;
+    this.refs.newsletter.checked = false;
+    this.refs.newsletter.disabled = false;
+    this.refs.learnmore.checked = false;
+    this.refs.learnmore.disabled = false;
     $('select').material_select();
     Materialize.updateTextFields();
     // this.refs.phone.value="";

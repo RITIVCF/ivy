@@ -123,7 +123,7 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onChange(event, { newValue, method }) {
-    //console.log(method);
+    Materialize.updateTextFields();
     if(method != 'tab'){
       if(this.props.unset){
         this.props.unset();
@@ -141,6 +141,7 @@ shouldComponentUpdate(nextProps, nextState){
     this.setState({
       value: newValue
     });
+
   }
 
 
@@ -159,10 +160,9 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   render() {
-
+    Materialize.updateTextFields();
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: '',
       value,
       onChange: this.onChange
     };
