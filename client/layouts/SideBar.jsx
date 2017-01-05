@@ -91,6 +91,10 @@ export default class SideBar extends TrackerReact(React.Component) {
 						</div>
 					</li>
 				}
+				<li className="">
+					<a href="/" className="waves-effect collapsible-header">
+						<i className="material-icons">play_circle_filled</i>Collapse</a>
+				</li>
 				</ul>
 			</li>
 		</ul>

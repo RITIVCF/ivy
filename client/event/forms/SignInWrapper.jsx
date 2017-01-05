@@ -44,10 +44,8 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
 
     return (
-      <div key={this.state.id} className="container">
-        <div className="valign-wrapper">
-          <SignIn parent={this} ev={ev} />
-        </div>
+      <div key={this.state.id}>
+        <SignIn parent={this} ev={ev} />
       </div>
     )
   }
