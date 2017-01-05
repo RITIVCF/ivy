@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import ServiceRequestModal from './jobs/ServiceRequestModal.jsx';
+import ServiceRequestModal from './ServiceRequestModal.jsx';
 
 import ButtonPublish from './components/ButtonPublish.jsx';
 import ButtonDelete from './components/ButtonDelete.jsx';
@@ -75,13 +75,13 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				<div className="row" style={{marginTop: "1em"}}>
 					{perm?<a className="btn"
 						onClick={this.viewJobs.bind(this)}>Service Requests</a>:""}
-					{/*}<ul className="collection">
+					<ul className="collection">
 						{ev.jobs.map( (job)=>{
 							return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
 						})}
-					</ul>*/}
+					</ul>
 				</div>
-					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
+					<ServiceRequestModal ev={this.props.ev} ref="servwindow"/>
 					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
 			</div>
 		)
