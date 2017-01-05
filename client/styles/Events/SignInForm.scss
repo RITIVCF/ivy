@@ -73,6 +73,9 @@
   > input[type="checkbox"]:not(.filled-in) + label:after {
     display: none;
   }
+  > input[type="checkbox"]:not(:checked):disabled + label:before {
+    background-color: rgba(0, 0, 0, 0);
+  }
 }
 
 #sign-in-button {
