@@ -13,7 +13,8 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       Session.set("ticketfilter", "assigneduser");
     }
     if(Session.get("tickettypefilter")===undefined){
-      Session.set("tickettypefilter","All");
+      var array = ["Contact","Event Request","Prayer","Other"];
+      Session.set("tickettypefilter",array);
     }
     if(!Session.get("tickettextfilter")){
       Session.set("tickettextfilter", "subject");
@@ -85,6 +86,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       // when doing variable text filtering use:
       //   filter[field] = textfilter
     }
+    query.type = {$in: Session.get("tickettypefilter")};
     console.log(query);
     return Tickets.find(query).fetch();
   }
@@ -95,6 +97,20 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
   select(id){
     this.setState({selected: id});
+  }
+
+  handleCheck(id){
+    var array = Session.get("tickettypefilter");
+    console.log(array);
+    if(array.includes(id)){
+        array.splice(array.indexOf(id), 1);
+    }else{
+        array.push(id);
+    }
+    Session.set("tickettypefilter", array);
+    // var state = {};
+    // state[id]=!this.state[id];
+    // this.setState(state);
   }
 
   stopPropa(event){
@@ -109,16 +125,19 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
 
 	render() {
+    var types = Session.get("tickettypefilter");
+    console.log("types: ", types);
+    console.log(types.includes("Contact"));
     //console.log(this.props.sub);
 		return (
       <div className="row" onClick={this.unselect.bind(this)}>
           <div className="col s12">
-            <div className="row">
+          {/*}  <div className="row">
                 <a onClick={this.newTicket.bind(this)}
                   className="waves-effect waves-light btn right">New Ticket</a>
-            </div>
-            <div className="row">
-              <div className="input-field col s12 m3">
+            </div> */}
+            <div className="">
+              <div className="input-field col s12 m6">
                 <select ref="filter" className="browser-default" value={Session.get("ticketfilter")}
                   onChange={this.filterChange.bind(this)}>
                     <option value={"assigneduser"}>My Active Tickets</option>
@@ -126,12 +145,13 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                     <option value={""}>All Active Tickets</option>
                   </select>
               </div>
-              <div className="input-field col s12 m3">
+              {/*<div className="input-field col s12 m3">
                 <select ref="typefilter" className="browser-default" value={Session.get("tickettypefilter")}
                   onChange={this.filterTypeChange.bind(this)}>
-                    {/*Use a multiple select thing for this*/}
+                    Use a multiple select thing for this
                   </select>
-              </div>
+
+              </div>*/}
               <div className="input-field col s4 m2">
                 <select ref="textfilter" className="browser-default" value={Session.get("tickettextfilter")}
                   onChange={this.textFilterChange.bind(this)}>
@@ -143,10 +163,26 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                     correctly.  AM I MAYBE CHANGING OUT THE INPUT TYPE TO select
                     FOR SOME OF THESE CHOICES?  I WOULD LIKE TO*/}
                   </select>
+
+
               </div>
               <div className="input-field col s8 m4">
                 <input ref="filter" onChange={this.changeTextFilter.bind(this)} type="text" className="validate" />
                 <label htmlFor="icon_prefix">Search</label>
+              </div>
+            </div>
+            <div className="" onClick={this.stopPropa.bind(this)}>
+              <div className="col s12">
+                <p>Type Filter:
+                <input type="checkbox" id="contacttype" checked={types.includes("Contact")} onChange={this.handleCheck.bind(this,"Contact")} />
+                  <label htmlFor="contacttype">Contact</label>
+                <input type="checkbox" id="requesttype" checked={types.includes("Event Request")} onChange={this.handleCheck.bind(this,"Event Request")} />
+                  <label htmlFor="requesttype">Event Request</label>
+                <input type="checkbox" id="prayertype"  checked={types.includes("Prayer")}  onChange={this.handleCheck.bind(this,"Prayer")} />
+                  <label htmlFor="prayertype" >Prayer Request</label>
+                <input type="checkbox" id="othertype"   checked={types.includes("Other")}   onChange={this.handleCheck.bind(this,"Other")} />
+                  <label htmlFor="othertype"  >Other</label>
+                </p>
               </div>
             </div>
 
