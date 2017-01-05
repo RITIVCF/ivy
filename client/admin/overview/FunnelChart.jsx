@@ -29,7 +29,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	        scales: {
 	            yAxes: [{
 	                ticks: {
-											max: ((result.max + 2))<50?(result.max+2):(result.max+5),
+											max: ((result.max + 2)) < 50?(result.max+2):(result.max+5),
 	                    beginAtZero:true
 	                }
 	            }]

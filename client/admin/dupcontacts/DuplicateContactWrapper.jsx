@@ -9,7 +9,7 @@ export default class DuplicateContactWrapper extends TrackerReact(React.Componen
 
 		this.state={
 			subscription: {
-					Contacts: Meteor.subscribe("duplicateContacts"),
+					Contacts: Meteor.subscribe("allContacts"),
 			}
 		};
 
