@@ -243,6 +243,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     email: 1,
     emails: 1,
     phone: 1,
+    major: 1,
     newsletter: 1,
     gender: 1,
     affiliations: 1,

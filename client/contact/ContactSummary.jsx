@@ -101,9 +101,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     // }
     // else{
     //   return Contacts.find({},{sort: {name: 1}}).fetch();
-    // }
+    // }{$regex:this.state.textfilter, $options : 'i'}
     if(this.state.filter!=""){
-      return Meteor.users.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
+      return Meteor.users.find({name: { $regex : this.state.filter, $options : 'i'} },{sort: {name: 1}}).fetch();
     }
     else{
       return Meteor.users.find({},{sort: {name: 1}}).fetch();

@@ -103,7 +103,8 @@ export default class MemberForm extends TrackerReact(React.Component) {
           <form onSubmit={this.addMember.bind(this)}>
             <div className="modal-content">
               <h3>Set Membership Info</h3>
-              <p>Intervarsity requires we keep track of our membership information. Please tell us about yourself below. Thank you!</p>
+              <p>InterVarsity Christian Fellowship/USA requires we keep track of our membership
+                information. Please tell us about yourself below. Thank you!</p>
               <div className="divider"></div>
               <br/>
               <div className="s12 m6">
