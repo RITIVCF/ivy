@@ -18,20 +18,121 @@
   background-color: #1a3d6d;
 }
 
+.select-dropdown {
+  z-index: 10;
+  > input {
+    background-color: #fff !important;
+  }
+}
+
+.publicForm {
+  > .input-field {
+    margin: 0;
+  }
+  > input[type=checkbox] {
+    display: none;
+  }
+  > input[type=checkbox]+label {
+    padding-left: 22px;
+    padding-right: 10px;
+  }
+  > input[type=checkbox]+label:before {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-family: FontAwesome;
+    content: '\f0c8';
+    color: #1a3d6d;
+    margin-left: -1.5rem;
+    margin-right: 0.625rem;
+    position: absolute;
+    top: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    border: none;
+    border-radius: 0;
+    margin-top: 0;
+    transition: .2s;
+  }
+  > input[type=checkbox]:checked+label:before {
+    content: '\f14a';
+    top: auto;
+    left: auto;
+    width: auto;
+    height: auto;
+    color: #FCB816;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    transform: none;
+    backface-visibility: hidden;
+    transform-origin: 100% 100%;
+  }
+  > input[type="checkbox"]:not(.filled-in) + label:after {
+    display: none;
+  }
+}
+
+#sign-in-button {
+  width: 100%;
+  margin-top: 5px;
+}
+
 #signinformcontainer {
   font-size: 10px;
   h1, h2 {
+    margin: 0.67em 0;
     font-family: 'Montserrat', sans-serif;
     font-size: 2.5em;
     margin-bottom: 0.2em;
     color: #FCB816;
     font-weight: 300;
     line-height: 2.5rem;
-    margin-bottom: 1rem;
     text-transform: uppercase;
   }
   h2 {
     font-size: 2em;
     color: #7c8081;
+  }
+  .react-autosuggest__container {
+    position: relative;
+    margin: 0 0 20px 0;
+  }
+  .react-autosuggest__suggestions-container {
+    box-sizing: border-box;
+    position: absolute;
+    top: 2.8em;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    border: 2px #1a3d6d solid;
+    color: #1a3d6d;
+    display: block;
+    text-decoration: none;
+    width: 100%;
+    outline: 0 !important;
+    border-radius: 0 !important;
+    font-size: 1.5em !important;
+    background-color: #fff;
+    z-index: 2;
+    ul {
+      margin: 0;
+    }
+  }
+
+  .react-autosuggest__input {
+    margin: 0;
+  }
+
+  .react-autosuggest__suggestion {
+    cursor: pointer;
+    padding: 0.5em 0.4em;
+  }
+
+  .react-autosuggest__suggestion--focused {
+    background-color: #1a3d6d;
+    color: #FCB816;
   }
 }

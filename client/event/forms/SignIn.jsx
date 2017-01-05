@@ -14,6 +14,11 @@ export default class SignIn extends TrackerReact(React.Component){
     };
   }
 
+  submitForm(event) {
+    event.preventDefault();
+    this.refs.publicForm.submit();
+  }
+
   submit(event){
     event.preventDefault();
     var thiz = this;
@@ -119,6 +124,14 @@ export default class SignIn extends TrackerReact(React.Component){
     //console.log("print state");
     //console.log(this.state);
     this.refs.email.value = contt.emails[0].address;
+    this.refs.email.disabled = true;
+    this.refs.phone.value = contt.phone;
+    this.refs.phone.disabled = true;
+    this.refs.major.value = contt.major;
+    this.refs.major.disabled = true;
+    this.refs.howhear.refs.howhear.value = contt.howhear;
+    this.refs.howhear.refs.howhear.disabled = true;
+    $('select').material_select();
     Materialize.updateTextFields();
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
@@ -142,7 +155,15 @@ export default class SignIn extends TrackerReact(React.Component){
     //this.state.contact = false;
     this.setState({new: true});
     this.setState({user: false});
-    this.refs.email.value="";
+    this.refs.email.value = "";
+    this.refs.email.disabled = false;
+    this.refs.phone.value = "";
+    this.refs.phone.disabled = false;
+    this.refs.major.value = "";
+    this.refs.major.disabled = false;
+    this.refs.howhear.refs.howhear.value ="";
+    this.refs.howhear.refs.howhear.disabled = false;
+    $('select').material_select();
     Materialize.updateTextFields();
     // this.refs.phone.value="";
     // this.refs.newsletter.checked=false;
@@ -166,7 +187,7 @@ export default class SignIn extends TrackerReact(React.Component){
               <div className="card-content">
                 <h1>Welcome to {this.props.ev.name}!</h1>
                 <h2>Please sign in</h2>
-                <form className="publicForm" onSubmit={this.submit.bind(this)} name="form">
+                <form ref="publicForm" className="publicForm" onSubmit={this.submit.bind(this)} name="form">
                     <SelectUser
                       parent={this}
                       unset={this.unset.bind(this)}
@@ -182,7 +203,6 @@ export default class SignIn extends TrackerReact(React.Component){
                         <input ref="email" id="email" type="email" className="validate" required />
                         <label htmlFor="email">Email</label>
                       </div>
-                    {this.state.new?<div>
                       <div className="input-field">
                         <input ref="phone" id="phone" className="validate" type="tel" />
                         <label htmlFor="phone">Phone number (optional)</label>
@@ -192,12 +212,13 @@ export default class SignIn extends TrackerReact(React.Component){
                         <label htmlFor="major">Major (optional)</label>
                       </div>
                       <HowHearSelect ref="howhear" />
-                      <input type="checkbox" ref="newsletter" id="news" name="news"  value="Yes" />
+                      <input type="checkbox" ref="newsletter" id="news" name="news" value="Yes" />
                       <label htmlFor="news">Please sign me up for the newsletter</label>
                       <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
                       <label htmlFor="more">I would like to learn more about IV</label>
-                      </div>:""}
-                    <input type="submit" name="submit" value={this.state.new?"Sign In":"Welcome Back"} className="form-control button" />
+                      <div>
+                        <input type="submit" id="sign-in-button" className="waves-effect waves-light btn" value={this.state.new?"Sign In":"Welcome Back"} />
+                      </div>
                 </form>
               </div>
             </div>

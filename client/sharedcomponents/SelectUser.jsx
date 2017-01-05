@@ -52,7 +52,7 @@ const shouldRenderSuggestions = value => {
 }
 
 const inputComponent = inputProps => {
-  return <div className="input-field">
+  return <div className="input-field select-dropdown">
     <input id="name" {...inputProps} required />
     <label htmlFor="name">Name</label>
   </div>
