@@ -14,13 +14,43 @@ export default class SignIn extends TrackerReact(React.Component){
     };
   }
 
+  circle() {
+    $("#submit-circle").animate({
+      'width': '+=2000px',
+      'height': '+=2000px',
+      'margin': '-=1000px',
+      'backgroundColor': '#fff'
+    }, 500);
+    var counter = 5;
+    setInterval(function() {
+      counter--;
+      if (counter >= 0) {
+        $('#sign-in-button').html(counter);
+      }
+      // Display 'counter' wherever you want to display it.
+      if (counter === 0) {
+        $("#submit-circle").animate({
+          'width': '-=2000px',
+          'height': '-=2000px',
+          'margin': '+=1000px',
+          'backgroundColor': '#1a3d6d'
+        }, 500);
+        $('#sign-in-button').html("<i class='material-icons'>send</i>");
+        clearInterval(counter);
+      }
+    }, 1000);
+  }
+
   submitForm(event) {
     event.preventDefault();
+
     this.refs.publicForm.submit();
   }
 
   submit(event){
     event.preventDefault();
+
+
     var thiz = this;
     console.log(this.state);
     var eid = this.props.ev._id;
@@ -188,60 +218,57 @@ export default class SignIn extends TrackerReact(React.Component){
   render() {
     Materialize.updateTextFields();
       return (
-        <div className="valign" id="signinformcontainer">
-          <div className="col s4">
-            {!this.state.submitted?
-            <div className="card-panel hoverable" id="cardwait">
-              <div className="card-content">
-                <h1>Welcome to {this.props.ev.name}!</h1>
-                <h2>Please sign in</h2>
-                <form ref="publicForm" className="publicForm" onSubmit={this.submit.bind(this)} name="form">
-                    <SelectUser
-                      parent={this}
-                      unset={this.unset.bind(this)}
-                      onBlur={this.setNew.bind(this)}
-                      initialValue={""}
-                      onChange={this.changeName.bind(this)}
-                      updateUser={this.update.bind(this)}
-                      id="first_name"
-                      type="text"
-                      ref="user"
-                      className="validate" />
-                      <div className="input-field">
-                        <input ref="email" id="email" type="email" className="validate" required />
-                        <label htmlFor="email">Email</label>
-                      </div>
-                      <div className="input-field">
-                        <input ref="phone" id="phone" className="validate" type="tel" />
-                        <label htmlFor="phone">Phone number (optional)</label>
-                      </div>
-                      <div className="input-field">
-                        <input ref="major" id="major" className="validate" type="text" />
-                        <label htmlFor="major">Major (optional)</label>
-                      </div>
-                      <HowHearSelect ref="howhear" />
-                      <input type="checkbox" ref="newsletter" id="news" name="news" value="Yes" />
-                      <label htmlFor="news">Please sign me up for the newsletter</label>
-                      <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
-                      <label htmlFor="more">I would like to learn more about IV</label>
-                      <div>
-                        <input type="submit" id="sign-in-button" className="waves-effect waves-light btn" value={this.state.new?"Sign In":"Welcome Back"} />
-                      </div>
-                </form>
-              </div>
+        <div id="signinformcontainer">
+          <div className="card-panel z-depth-5" id="cardwait">
+            <div className="card-content">
+              <h1>Welcome to {this.props.ev.name}!</h1>
+              <h2>Please sign in</h2>
+              <form ref="publicForm" className="publicForm" onSubmit={this.submit.bind(this)} name="form">
+                <SelectUser
+                  parent={this}
+                  unset={this.unset.bind(this)}
+                  onBlur={this.setNew.bind(this)}
+                  initialValue={""}
+                  onChange={this.changeName.bind(this)}
+                  updateUser={this.update.bind(this)}
+                  id="first_name"
+                  type="text"
+                  ref="user"
+                  className="validate" />
+                  <div className="input-field">
+                    <input ref="email" id="email" type="email" className="validate" required />
+                    <label htmlFor="email">Email</label>
+                  </div>
+                  <div className="input-field">
+                    <input ref="phone" id="phone" className="validate" type="tel" />
+                    <label htmlFor="phone">Phone number (optional)</label>
+                  </div>
+                  <div className="input-field">
+                    <input ref="major" id="major" className="validate" type="text" />
+                    <label htmlFor="major">Major (optional)</label>
+                  </div>
+                  <HowHearSelect ref="howhear" />
+                  <input type="checkbox" ref="newsletter" id="news" name="news" value="Yes" />
+                  <label htmlFor="news">Please sign me up for the newsletter</label>
+                  <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
+                  <label htmlFor="more">I would like to learn more about IV</label>
+
+                  <a onClick={this.circle.bind(this)}>expand</a>
+
+                  <button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
+                    <div className="welcome-message">Welcome!!</div>
+                    <span id="sign-in-button">
+                     <i className="material-icons">send</i>
+                    </span>
+                  </button>
+                  <div className="clear-fix"></div>
+              </form>
             </div>
-            :
-            <div className="card" id="cardsubmit">
-              <div className="card-content">
-                <img className="logo" src={"/images/InterVarsity-RIT-logo.png"} />
-                <br />
-                <p style={{textAlign: "center"}}>Welcome to {this.props.ev.name}!</p>
-                <p style={{textAlign: "center"}}>We're glad you're here!</p>
-              </div>
-            </div>}
           </div>
         </div>
       )
+
+/* adding something more*/
 
   }
 }
