@@ -29,7 +29,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
   }
 
   openHelp(){
-      $("#helpmodal").appendTo("body").modal("open");
+      this.refs.eventhelp.open();
       //$("#helpmodal").modal("open");
   }
 
@@ -106,7 +106,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
         showinfobar={Meteor.user().preferences.events_infobar}
         infobar={<EventPreview event={Events.findOne(Session.get("evselected"))} ready={this.state.subscription.myEvents.ready()} />}
         />
-      <EventHelp />
+      <EventHelp ref="eventhelp" />
       </div>
     )
 

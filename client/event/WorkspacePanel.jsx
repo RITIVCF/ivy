@@ -6,8 +6,8 @@ import ButtonPublish from './components/ButtonPublish.jsx';
 import ButtonDelete from './components/ButtonDelete.jsx';
 import PermissionWindow from './permissions/PermissionWindow.jsx';
 import DeleteEventWindow from './DeleteEventWindow.jsx';
-import JobsWindow from './jobs/JobsWindow.jsx';
-import JobSingle from './jobs/JobSingle.jsx';
+//import JobsWindow from './jobs/JobsWindow.jsx';
+//import JobSingle from './jobs/JobSingle.jsx';
 import EventDateControls from './components/EventDateControls.jsx';
 import EventLocation from './components/EventLocation.jsx';
 import EventTags from './components/EventTags.jsx';
@@ -24,20 +24,15 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
   }
 
 	componentDidMount(){
-		$('.modal').modal();
-	}
 
-	// viewPermissions(event){
-	// 	event.preventDefault();
-  // 	this.refs.overlay.toggleOverlay();
-  // }
+	}
 
 	viewJobs(){
 		this.refs.servwindow.open();
 	}
 
 	openPerm(){
-		$("#permwindow").appendTo("body").modal('open');
+		this.refs.permwindow.open();
 	}
 
 	openDelete(){
@@ -55,9 +50,6 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 		let perm = this.props.perm;
 		return (
 			<div>
-				{perm?<JobsWindow ref="jobOverlay" eid={ev._id} />:false}
-				{perm?<DeleteEventWindow ref="deleteOverlay" eid={ev._id} />:false}
-				{Meteor.userId()==ev.owner ? <PermissionWindow ref="overlay" parent={this} ev={ev} />:false}
 					{perm?
 						<ButtonPublish published={ev.published} eid={ev._id} />
 						:<p>Published: {ev.published?"Published":"Not Published"}</p>}
@@ -83,6 +75,7 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 				</div>
 					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
 					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
+					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:false}
 			</div>
 		)
 	}

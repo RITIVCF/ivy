@@ -19,6 +19,10 @@ export default class PermissionWindow extends TrackerReact(React.Component)
         this.stateSync();
     }
 
+    componentDidMount(){
+      $('.modal').modal();
+    }
+
     stateSync()
     {
         let evt = this.props.ev; //parent.getEvent();
@@ -34,17 +38,9 @@ export default class PermissionWindow extends TrackerReact(React.Component)
         }
     }
 
-    toggleOverlay()
+    open()
     {
-        // if(this.state.overlayState == "hidden")
-        // {
-        //     this.setState({overlayState: ""});
-        //     this.stateSync();
-        // }
-        // else
-        // {
-        //     this.setState({overlayState: "hidden"});
-        // }
+        $("#permwindow").appendTo("body").modal('open');
     }
 
     users()

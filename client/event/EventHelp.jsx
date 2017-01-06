@@ -3,6 +3,13 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 export default class EventHelp extends TrackerReact(React.Component) {
 
+  componentDidMount(){
+    $('.modal').modal();
+  }
+
+  open(){
+    $("#helpmodal").appendTo("body").modal("open");
+  }
 
   render() {
     return (
