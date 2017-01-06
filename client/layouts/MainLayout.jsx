@@ -3,6 +3,7 @@ import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 //import NavBar from './NavBar.jsx';
 import Header from './Header.jsx';
 import SideBar from './SideBar.jsx';
+import SideBarMobile from './SideBarMobile.jsx'
 
 
 // <nav className="navbar navbar-default nabar-cls-top" role="navigation" style={margin-bottom: "0"} >
@@ -15,6 +16,7 @@ export var MainLayout = ({header, content}) => (   // export const MainLayout
 				{/*}<NavBar header={header} />*/}
 				<Header header={header}/>
 				<SideBar />
+				<SideBarMobile />
       	<main>
 					{content}
 				</main>
