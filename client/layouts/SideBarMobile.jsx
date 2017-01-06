@@ -21,7 +21,8 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 		$(".dropdown-button").dropdown();
 		$("#nav-mobile").appendTo('body');
 		$(".button-collapse").sideNav({
-			draggable: true
+			draggable: true,
+			closeOnClick: true
 		});
 	}
 
@@ -30,30 +31,23 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 		$('.collapsible').collapsible();
 	}
 
-	toggleCollapse(){
-		this.setState({navCollapsed:!this.state.navCollapsed})
-		/*$('main').toggleClass('nav-collapsed');
-		$('.nav-label').toggleClass('nav-collapsed');
-		$('#nav-collapse-button').toggleClass('nav-collapsed');
-		$('.side-nav').toggleClass('nav-collapsed');
-		$('#drop-nav').fadeToggle(100);
-		*/
-		setTimeout(function() {
-			$('main').toggleClass('nav-collapsed');
-			$('.nav-label').toggleClass('nav-collapsed');
-			$('#nav-collapse-button').toggleClass('nav-collapsed');
-			$('.side-nav').toggleClass('nav-collapsed');
-    }, this.state.navCollapsed?0:200);
-		setTimeout(function() {
-      $('#drop-nav').toggleClass('nav-collapsed');
-    }, this.state.navCollapsed?200:0);
+	getContact(){
+		return Meteor.user()?Meteor.user().name:"";
 	}
-
 
 	render(){
 		return(
 
 		<ul id="nav-mobile" className="side-nav">
+			<li>
+				<div className="userView">
+		      <div className="background">
+		        <img src="images/defaultEvent.png" />
+		      </div>
+		      <a href="#!user"><img className="circle" src="images/defaultPic.png" /></a>
+		      <a href="#!name"><span className="white-text name">{this.getContact()}</span></a>
+		    </div>
+			</li>
 			<li className={FlowRouter.current().path=="/"?"active":""}>
 						<a href="/" className="waves-effect collapsible-header">
 							<span className="nav-icon">
