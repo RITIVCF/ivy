@@ -64,16 +64,17 @@ export default class EventTags extends TrackerReact(React.Component) {
         {/*  <input type="text" ref="tag" placeholder="+Tag" /> LOOK INTO REACT-WIDGETS MULTISELECT*/}
         {/*}  unset={this.unset.bind(this)} */}
         {/*}  onChange={this.setTextValue.bind(this)} */}
+        {this.props.perm&&
           <SelectTag
             parent={this}
             ref="tag"
 
             onSelected={this.submit.bind(this)}
             initialValue={this.state.value}
-            />
+            />}
     {/*this.props.subscription.ready() ? */// this.getTags().map( (tag)=>{
       ev.tags.map((tag)=>{
-        return <Tag key={tag} eid={ev._id} tag={tag} />
+        return <Tag key={tag} eid={ev._id} tag={tag} perm={this.props.perm} />
     }) /* : <div></div>*/}
   </div>
   )

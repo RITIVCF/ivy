@@ -38,9 +38,10 @@ export default class MySchedule extends TrackerReact(React.Component) {
 		var jobs = [];
 		var evs = Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch();
 		evs.forEach((ev)=>{
-			ev.jobs.filter((job)=>{
+			var jobs = ev.jobs.filter((job)=>{
 				return job.uid==Meteor.userId();
-			}).forEach((job)=>{
+			});
+			jobs.forEach((job)=>{
 				job.evid=ev._id;
 				job.evname=ev.name;
 				job.evstart=ev.start;

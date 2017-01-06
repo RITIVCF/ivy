@@ -13,7 +13,7 @@ export default class Tag extends Component {
     return(
       <div className="chip">
         {this.props.tag}
-        <i onClick={this.removeTag.bind(this)} className="close material-icons">close</i>
+      {this.props.perm&&<i onClick={this.removeTag.bind(this)} className="close material-icons">close</i>}  
       </div>
     )
   }

@@ -133,9 +133,9 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 
     renderPermissions(permHolders, type)
     {
-        return Object.keys(permHolders).map((permHolder) => (
+        return Object.keys(permHolders).map((permHolder) => {
                     <Permission key={permHolder._id} permHolder={[permHolder, permHolders[permHolder]]} type={type} groups={this.groups()} users={this.users()} clickFunc={this.setPerm} parent={this} deleteFunc={this.deletePerm} />
-        ));
+        });
     }
 
 
@@ -204,7 +204,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
                     initialValue={""}
                     ref={"group"}
                     /></label><br/>
-                  
+
                   <SelectUser
                       parent={this}
                       id={"user"}

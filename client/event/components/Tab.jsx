@@ -17,6 +17,10 @@ export default class Tab extends Component {
 
   }
 
+  prevDef(event){
+    event.preventDefault();
+  }
+
   update(){
     Meteor.call("changeTabName", this.props.eid, this.props.tab, this.refs.tab.value);
     this.setState({editting: false});
@@ -30,7 +34,9 @@ export default class Tab extends Component {
       )
     }
     return(
-      <li onDoubleClick={this.editName.bind(this)} className="tab"><a href={"#"+this.props.tab.name.replace(" ","")}>{tab.name}</a></li>
+      <li onDoubleClick={this.editName.bind(this)} className="tab">
+        <a onClick={this.prevDef.bind(this)} href={"#"+this.props.tab.name.replace(" ","")} >{tab.name}</a>
+      </li>
     )
   }
 }

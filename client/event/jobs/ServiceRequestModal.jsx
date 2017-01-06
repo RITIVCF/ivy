@@ -128,7 +128,7 @@ export default class ServiceRequestModal extends TrackerReact(React.Component) {
 								</div>
 							</form>
 							<ul className="collection">
-								{this.getRequests().length>0?this.getRequests().map((req,i)=>{
+								{this.getRequests().length > 0?this.getRequests().map((req,i)=>{
 									return <SinglePosition key={i} job={req} eid={this.props.eid} />
 								}):<li className="collection-item">No Requested Positions</li>}
 							</ul>
@@ -151,7 +151,7 @@ export default class ServiceRequestModal extends TrackerReact(React.Component) {
 											<div className="collapsible-header">Position</div>
 											<div className="collapsible-body">*/}
 												<ul className="collection">
-													{this.getSignUps().length>0?this.getSignUps().map((req,i)=>{
+													{this.getSignUps().length > 0?this.getSignUps().map((req,i)=>{
 														return <SinglePosition key={i} job={req} eid={this.props.eid} />
 													}):<li className="collection-item">No Signup Positions</li>}
 												</ul>{/*}
