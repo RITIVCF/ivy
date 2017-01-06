@@ -25,7 +25,7 @@ export default class EventReserved extends Component {
 
             checked={this.props.ev.reserved}
           />
-          <label onClick={this.updateEventReserved.bind(this)} htmlFor="reserved">Location Reserved:</label>
+          <label onClick={this.updateEventReserved.bind(this)} htmlFor="reserved">Location Reserved</label>
       </div>
     )
   }

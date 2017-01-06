@@ -54,7 +54,7 @@ const shouldRenderSuggestions = value => {
 const inputComponent = inputProps => {
   return <div className="input-field select-dropdown">
     <input id="name" {...inputProps} required />
-    <label htmlFor="name">Name</label>
+    <label htmlFor="name">{inputProps.label}</label>
   </div>
 }
 
@@ -163,6 +163,7 @@ shouldComponentUpdate(nextProps, nextState){
     Materialize.updateTextFields();
     const { value, suggestions } = this.state;
     const inputProps = {
+      label: this.props.label?this.props.label:"Name",
       value,
       onChange: this.onChange
     };

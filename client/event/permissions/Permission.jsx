@@ -88,13 +88,14 @@ export default class Permission extends Component
         }
 
         type += "Perm";
+        console.log("Perm type",type);
         return (
             <tr id={'"permission_' + permHolderId + '"'}>
 
                 {/*}<div className="permHolder">*/}
-                  <td><span aria-hidden="true" onClick={this.deleteFunc.bind(this)}  className="glyphicon glyphicon-trash"  ></span></td>
+                  <td><span aria-hidden="true" onClick={this.deleteFunc.bind(this)}  className="material-icons"  >close</span></td>
                   <td>
-                    {text}
+                    <span className="small material-icons">{this.props.type=="groups"?"group":"person"}</span>{text}
                   </td>
                 {/*}</div>
                 <div className="editButtonWrapper">
@@ -108,11 +109,16 @@ export default class Permission extends Component
                       onChange={this.props.clickFunc.bind(this.props.parent)}
                       style={{width:"initial", height:"initial"}} /> >*/}
                       <td>
+
                     <input checked={this.props.perm.edit}
+                      className="with-gap"
                       type="radio" name={this.props.perm.id}
+                      id={this.props.perm.id+"_edit"}
                       ref={this.props.perm.id+"_edit"}
                       value={"edit"} onClick={this.changePerm.bind(this)}
                       style={{width: "initial", height: "initial"}} />
+                    <label htmlFor={this.props.perm.id+"_edit"}></label>
+
 
                     {/*}</div>*/}
                 </td>
@@ -127,11 +133,16 @@ export default class Permission extends Component
                         onChange={this.props.clickFunc.bind(this.props.parent)}
                         style={{width:"initial", height:"initial"}} />  */}
                         <td>
+
                     <input checked={!this.props.perm.edit}
+                      className="with-gap"
                       type="radio" name={this.props.perm.id}
+                      id={this.props.perm.id+"_view"}
                       ref={this.props.perm.id+"_view"}
                       value={"view"} onClick={this.changePerm.bind(this)}
                       style={{width: "initial", height: "initial"}} />
+                    <label htmlFor={this.props.perm.id+"_view"}></label>
+
                     {/*}</div>*/}
                     </td>
                     {/*<td>

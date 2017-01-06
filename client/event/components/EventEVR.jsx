@@ -25,7 +25,7 @@ export default class EventEVR extends Component {
 
             checked={this.props.ev.evr}
           />
-          <label htmlFor="evr"             onClick={this.updateEventEVR.bind(this)}>EVR Complete:</label>
+          <label htmlFor="evr" onClick={this.updateEventEVR.bind(this)}>EVR Complete</label>
       </div>
     )
   }

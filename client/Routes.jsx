@@ -246,6 +246,22 @@ FlowRouter.route('/events/workspace/:eid',{
 	}
 });
 
+FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
+	action(params) {
+		if(params.aord=="accept"){
+			Meteor.call("acceptJobRequest", params.eid, params.jid);
+		}
+		else{
+			Meteor.call("declineJobRequest", params.eid, params.jid);
+		}
+		// mount(MainLayout, {
+		// 	header: params.aord=="accept"?"Accept":"Decline",
+		// 	content: (< />)
+		// })
+		FlowRouter.go("/");
+	}
+});
+
 // FlowRouter.route('/events/old',{
 // 	action() {
 // 		mount(MainLayout, {

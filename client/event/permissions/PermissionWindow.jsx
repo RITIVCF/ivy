@@ -152,7 +152,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
             }
           }
           else{
-            Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);  
+            Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);
           }
             //this.toggleOverlay();
         }
@@ -179,23 +179,44 @@ export default class PermissionWindow extends TrackerReact(React.Component)
         var permGroups = event.permGroup;
 
         return (
-          <div id="permwindow" className="modal">
+          <div id="permwindow" className="modal modal-fixed-footer bottom-sheet">
             <div className="modal-content">
-              <h3>Edit {event.name} Permissions</h3>
+              {/*}<h3>Edit {event.name} Permissions</h3>*/}
               <div className="row">
-                <div className="col s6">
-                  <h5>Event Owner:
-                    <SelectUser
-                        parent={this}
-                        id={"owner"}
-                        unset={this.unset.bind(this)}
-                        updateUser={this.changeOwner.bind(this)}
-                        initialValue={owner.name}
-                        ref={"owner"}
-                        />
-                    </h5>
+                <div className="col s12 m5 l3">
+                  <SelectUser
+                      parent={this}
+                      id={"owner"}
+                      unset={this.unset.bind(this)}
+                      updateUser={this.changeOwner.bind(this)}
+                      initialValue={owner.name}
+                      ref={"owner"}
+                      />
+                </div>
+                <div className="col s12 m2 l6"></div>
+                <div className="col s12 m5 l3">
+                  <label>Add Group:
+                  <SelectTeam
+                    parent={this}
+                    id={"group"}
+                    unset={this.unset.bind(this)}
+                    updateContact={this.addGroupPerm.bind(this)}
+                    initialValue={""}
+                    ref={"group"}
+                    /></label><br/>
+                  
+                  <SelectUser
+                      parent={this}
+                      id={"user"}
+                      label="Add User"
+                      unset={this.unset.bind(this)}
+                      updateUser={this.addUserPerm.bind(this)}
+                      initialValue={""}
+                      ref={"user"}
+                      />
                 </div>
               </div>
+
               <div className="row">
                 <div className="col s12">
                   <table>
@@ -220,26 +241,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
                 </div>
               </div>
               <div className="row">
-                <div className="col 6 offset-s6">
-                  <label>Add Group:
-                  <SelectTeam
-                    parent={this}
-                    id={"group"}
-                    unset={this.unset.bind(this)}
-                    updateContact={this.addGroupPerm.bind(this)}
-                    initialValue={""}
-                    ref={"group"}
-                    /></label><br/>
-                  <label>Add User:
-                  <SelectUser
-                      parent={this}
-                      id={"user"}
-                      unset={this.unset.bind(this)}
-                      updateUser={this.addUserPerm.bind(this)}
-                      initialValue={""}
-                      ref={"user"}
-                      /></label>
-                </div>
+
               </div>
 
 
