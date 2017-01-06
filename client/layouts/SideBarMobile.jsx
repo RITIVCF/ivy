@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 
 
-export default class SideBar extends TrackerReact(React.Component) {
+export default class SideBarMobile extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
@@ -19,6 +19,10 @@ export default class SideBar extends TrackerReact(React.Component) {
 
 	componentDidMount(){
 		$(".dropdown-button").dropdown();
+		$("#nav-mobile").appendTo('body');
+		$(".button-collapse").sideNav({
+			draggable: true
+		});
 	}
 
 	componentDidUpdate(){
@@ -49,8 +53,8 @@ export default class SideBar extends TrackerReact(React.Component) {
 	render(){
 		return(
 
-		<ul className="side-nav z-depth-1 fixed" >
-					<li className={FlowRouter.current().path=="/"?"active":""}>
+		<ul id="nav-mobile" className="side-nav">
+			<li className={FlowRouter.current().path=="/"?"active":""}>
 						<a href="/" className="waves-effect collapsible-header">
 							<span className="nav-icon">
 								<i className="material-icons">dashboard</i>
@@ -67,6 +71,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 							<span className="nav-label">My Small Group</span>
 						</a>
 					</li>:""}
+					{/*checkPermission("events")?*/}
 						<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/events">
 								<span className="nav-icon">
@@ -74,7 +79,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 								</span>
 								<span className="nav-label">Events</span>
 							</a>
-						</li>
+						</li>{/*}:""*/}
 					{checkPermission("tickets")?
 						<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/tickets">
@@ -147,15 +152,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 					</li>
 				</ul>
 			</li>
-				}
-				<li className="">
-					<a className="waves-effect collapsible-header" onClick={this.toggleCollapse.bind(this)}>
-						<span className="nav-icon">
-							<i id="nav-collapse-button" className="material-icons">play_circle_filled</i>
-						</span>
-						<span className="nav-label">Collapse</span>
-					</a>
-				</li>
+		}
 		</ul>
 
 		)

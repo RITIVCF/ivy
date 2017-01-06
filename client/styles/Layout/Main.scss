@@ -7,6 +7,14 @@ main {
   padding: 1rem;
   overflow-y: auto;
   overflow-x: hidden;
+  -webkit-transition: left 0.3s;
+  transition: left 0.3s;
+  -webkit-transition-delay: 0.1s;
+  transition-delay: 0.1s;
+}
+
+main.nav-collapsed {
+  left: 44px;
 }
 
 @media only screen and (max-width : 992px) {

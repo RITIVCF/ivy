@@ -22,7 +22,6 @@ export default class Header extends TrackerReact(React.Component) {
 
 	componentDidUpdate(){
 		$(".dropdown-button").dropdown();
-		$(".button-collapse").sideNav();
 		$('.collapsible').collapsible();
 	}
 
