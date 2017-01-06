@@ -57,7 +57,7 @@ import { Accounts } from 'meteor/accounts-base';
   Accounts.emailTemplates.enrollAccount.text = function(user, url){
     //var name = Contacts.findOne(user.contact).name;
     var name = "name";
-    return "Dear "+ name + "\n\nPlease follow the link below to set your password and create a username:\n\n"
+    return "Dear "+ name + "\n\nPlease follow the link below to set your password:\n\n"
     + "Confirmation link: " + url;
   };
   Accounts.emailTemplates.resetPassword.from = function(){

@@ -64,7 +64,7 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 					{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:false}
 
 
-				<EventDateControls ev={ev} perm={perm} />
+				<EventDateControls eid={ev._id} start={ev.start} end={ev.end} perm={perm} />
 
 				<EventLocation ev={ev} perm={perm} />
 				<EventEVR ev={ev} perm={perm} />
