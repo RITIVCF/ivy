@@ -75,28 +75,6 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	let ev = this.getEvent();
 
 	document.title = "Ivy - "+ ev.name;
-	// var perm = false;// ev.perm[""]
-	// var view = false;
-	// for(i=0; i < ev.permUser.length; i++){
-	// 	if(ev.permUser[i].id == Meteor.userId()){
-	// 		view = true;
-	// 		perm = ev.permUser[i].edit;
-	// 		break;
-	// 	}
-	// }
-	// //console.log(ev.permGroup);
-	// for(i=0; i < ev.permGroup.length; i++){
-	// 	if(this.checkGroup(ev.permGroup[i].id)){
-	// 		//console.log("true");
-	// 		view = true;
-	// 		perm = ev.permGroup[i].edit||perm;
-	// 		break;
-	// 	}
-	// }
-	// if(ev.owner==Meteor.userId()){
-	// 	view = true;
-	// 	perm = true;
-	// }
 	var perms = checkEventPermission(ev);
 	if(!perms.view){
 		return(<p>You do not have permission to view this event's workspace.</p>)

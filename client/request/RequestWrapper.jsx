@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import RequestSingle from './RequestSingle.jsx';
-import NewTicketWindow from '../tickets/NewTicketWindow.jsx';
+import NewRequestModal from './NewRequestModal.jsx';
 
 
 //Tickets = new Mongo.Collection("tickets");
@@ -24,39 +24,40 @@ export default class RequestWrapper extends TrackerReact(React.Component) {
 		return Tickets.find().fetch();
 	}
 
-	openOverlay(){
-		this.refs.newticketoverlay.openOverlay();
+	newRequest(){
+		this.refs.newreqmodal.open();
 	}
 
 	render() {
 
 		return (
-		<div className="panel panel-default">
-			{!(this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()&&this.props.perm) ? "":
-			<NewTicketWindow ref="newticketoverlay" parent={this} eid={this.props.eid} />}
-			<div className="panel-heading">{this.props.perm?<button
-				onClick={this.openOverlay.bind(this)}
-				className="btn indigo darken-4"
-				style={{float: "right" }}
-				>New Request</button>:<div></div>}
+		<div className="">
+			<div className="divider"></div>
+			{this.props.perm&&<NewRequestModal ref="newreqmodal" parent={this} eid={this.props.eid} />}
+			<div>
+				{this.props.perm&&<button
+					onClick={this.newRequest.bind(this)}
+					className="btn"
+					style={{float: "right" }}
+					>New Request</button>}
 				<h3>Requests</h3>
 				</div>
-				<table className={checkPermission("tickets")?"table table-striped table-hover table-responsive":"table table-striped table-responsive"}>
-							<thead>
-								<tr>
-								<th>Last Update</th>
-								<th>Status</th>
-								<th>Quick Description</th>
-								<th>Assigned To</th>
-								<th>Created</th>
-								</tr>
-							</thead>
-							<tbody>
-								{(this.props.parent.state.subscription.tickets.ready()&&this.props.parent.state.subscription.users.ready()&&this.props.parent.state.subscription.contacts.ready()) ? this.requests().map( (ticket)=>{
-                    return <RequestSingle key={ticket._id} perm={this.props.perm} request={ticket} />
-                }):false}
-							</tbody>
-            </table>
+				<table className={checkPermission("tickets")?"striped highlight":"striped"}>
+					<thead>
+						<tr>
+							<th>Last Update</th>
+							<th>Status</th>
+							<th>Quick Description</th>
+							<th>Assigned To</th>
+							<th>Created</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.requests().map( (ticket)=>{
+	              return <RequestSingle key={ticket._id} perm={this.props.perm} request={ticket} />
+	          })}
+					</tbody>
+	      </table>
 		</div>
 		)
 	}

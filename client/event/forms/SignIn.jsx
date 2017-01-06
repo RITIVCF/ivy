@@ -56,7 +56,7 @@ export default class SignIn extends TrackerReact(React.Component){
     var eid = this.props.ev._id;
     var user = this.state.user;
     var evname = this.props.ev.name;
-    var name = this.refs.user.state.value;
+    var name = this.refs.user.state.value.trim();
     if(this.state.new){
         var newsletter = this.refs.newsletter.checked;
         var more = this.refs.learnmore.checked;
@@ -71,7 +71,7 @@ export default class SignIn extends TrackerReact(React.Component){
     if( !user ){
 
       var id = Meteor.call("createNewUser",
-        this.refs.user.state.value,
+        name,
         this.refs.email.value,
         this.refs.phone.value,
         this.refs.major.value,

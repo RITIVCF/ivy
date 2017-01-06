@@ -309,12 +309,12 @@ var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{
     return (
       <div>
         <div ref="calendar" id="calendar"></div>
-        /*{this.getPublishedEvents().map((event)=>{
+        {/*{this.getPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}
         {this.getUnPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
-        })}*/
+        })}*/}
         <NewEventModal />
       </div>
     );
