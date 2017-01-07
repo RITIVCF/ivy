@@ -33,10 +33,16 @@ function renderSuggestion(suggestion) {
 }
 
 function shouldRenderSuggestions(value) {
+  console.log(value);
   return value.trim().length > 1;
 }
 
-
+const inputComponent = inputProps => {
+  return <div className="input-field">
+    <input id={inputProps.id} {...inputProps} required />
+    <label htmlFor={inputProps.id}>{inputProps.label}</label>
+  </div>
+}
 
 
 
@@ -89,6 +95,7 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onChange(event, { newValue, method }) {
+    console.log("OnChange triggered");
     //console.log(method);
     if(method != 'tab'){
       this.props.unset();
@@ -108,6 +115,7 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onSuggestionsFetchRequested({ value }) {
+    console.log("Fetch Requested");
     this.setState({
       suggestions: getSuggestions(value)
     });
@@ -124,7 +132,8 @@ shouldComponentUpdate(nextProps, nextState){
 
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Enter group name...',
+      id: this.props.id?this.props.id:"",
+      label: this.props.label?this.props.label:"Team",
       value,
       onChange: this.onChange
     };
@@ -139,6 +148,7 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
+                     renderInputComponent={inputComponent}
                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />
@@ -154,6 +164,7 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
+                     renderInputComponent={inputComponent}
                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />

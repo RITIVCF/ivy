@@ -43,12 +43,15 @@ const getSuggestionValue = suggestion => { // when suggestion selected, this fun
 
 const renderSuggestion = suggestion => {
   return (
-    <span>{suggestion.name}<span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span></span>
+      <span>{suggestion.name}
+        <span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span>
+      </span>
+
   );
 }
 
 const shouldRenderSuggestions = value => {
-  return value.trim().length > 1;
+  return value.trim().length > -1;
 }
 
 const inputComponent = inputProps => {
@@ -57,6 +60,13 @@ const inputComponent = inputProps => {
     <label htmlFor="name">{inputProps.label}</label>
   </div>
 }
+
+// function renderSuggestionsContainer({ children, ...rest }) {
+//   console.log({...rest});
+//   // var rest = {...rest};
+//   // rest.className="autocomplete-content dropdown-content";
+//   return children;
+// }
 
 
 
@@ -165,7 +175,8 @@ shouldComponentUpdate(nextProps, nextState){
     const inputProps = {
       label: this.props.label?this.props.label:"Name",
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      className:"autocomplete-content dropdown-content"
     };
     //console.log("ID PROP:",this.props.id);
     if(this.props.id){
@@ -196,6 +207,7 @@ shouldComponentUpdate(nextProps, nextState){
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
                      inputProps={inputProps}
+                     renderInputComponent={inputComponent}
                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />

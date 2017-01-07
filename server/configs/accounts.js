@@ -33,6 +33,7 @@ import { Accounts } from 'meteor/accounts-base';
       "contacts_infobar": true,
       "tickets_view":"List",
       "tickets_infobar":true,
+      "calendar_view":"month",
       "events_infobar":true,
       "churches_view":"Tile",
       "churches_infobar":true

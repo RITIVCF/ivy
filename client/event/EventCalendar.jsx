@@ -17,9 +17,9 @@ import NewEventModal from './NewEventModal.jsx';
 export default class EventCalendar extends TrackerReact(React.Component) {
   constructor(){
     super();
-    if(!Session.get("calendarview")){
-      Session.set("calendarview",Options.findOne("calendarview").val);
-    }
+    // if(!Session.get("calendarview")){
+    //   Session.set("calendarview",Options.findOne("calendarview").val);
+    // }
     if(!Session.get("calendardate")){
       Session.set("calendardate", moment()._d);
     }
@@ -62,9 +62,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     $("#calendar").fullCalendar({
       events: [],
       header: false,
-      defaultView: this.props.sidebar?(Session.get("calendarview")=="agendaWeek")?
-        "basicWeek":(Session.get("calendarview")=="agendaDay")?"basicDay":Session.get("calendarview")
-        :(Session.get("calendarview")=="basicWeek"||Session.get("calendarview")=="basicDay")?"agendaWeek":Session.get("calendarview"),
+      defaultView: Meteor.user().preferences.calendar_view,
       firstDay: 1,
       fixedWeekCount: false,
       theme: false,
@@ -72,7 +70,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
         thiz.props.settitle();
-        Session.set("calendarview", view.name);
+        //Session.set("calendarview", view.name);
+        Meteor.call("setCalendarView", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
         console.log($(calendar).fullCalendar( 'getDate' )._d);
         var height = $('#mainbox > div').height();

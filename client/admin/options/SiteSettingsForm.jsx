@@ -11,6 +11,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
+		Materialize.updateTextFields();
 		$('select').material_select();
 	}
 
@@ -34,24 +35,23 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 		return Groups.findOne(Options.findOne("ticketcontact").gid).name;
 	}
 
-	getEventRequestGroupDefault(){
-		return Groups.findOne(Options.findOne("ticketeventrequest").gid).name;
+
+	getTypeGroup(gid){
+		return Groups.findOne(gid).name;
 	}
 
 	updateContactGroup(group){
 		Meteor.call("setContactGroupDefault", group._id);
 	}
 
-	updateEventRequestGroup(group){
-		Meteor.call("setEventRequestGroupDefault", group._id);
+	getTypes(){
+		return Options.findOne("requesttypes").vals;
 	}
 
-	changeCalendarView(event){
-		event.preventDefault();
-		console.log(event.target.value);
-		console.log(this.refs.defaultView.value);
-		Meteor.call("setDefaultCalendarView", this.refs.defaultView.value);
+	updateEventRequestGroup(type,group){
+		Meteor.call("setEventRequestGroupDefault", group._id,type.label);
 	}
+
 
 	unset(){
 
@@ -67,27 +67,28 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 							<div className="card-content">
 								<span className="card-title">Default Ticket Groups Configuration</span>
 									<br/>
-									<label>Default Contact Type Group</label>
+
 										<SelectTeam
 										 parent={this}
 										 id={"contacttype"}
-										 className="form-control"
+										 label={"Default Contact Type Team"}
 										 unset={this.unset.bind(this)}
 										 updateContact={this.updateContactGroup.bind(this)}
 										 initialValue={this.getContactGroupDefault()}
 										 ref={"contacttype"}
-										 /><br/>
-									<label>Default Event Request Type Group</label>
-										<SelectTeam
-										 parent={this}
-										 id={"eventrequesttype"}
-										 className="form-control"
-										 unset={this.unset.bind(this)}
-										 updateContact={this.updateEventRequestGroup.bind(this)}
-										 initialValue={this.getEventRequestGroupDefault()}
-										 ref={"eventrequesttype"}
-										 /><br/>
-									 <label>Default Event Calendar View</label>
+										 />
+									 {this.getTypes().map((type)=>{
+										 return <SelectTeam
+															  parent={this}
+															  id={type.label+"type"}
+															  label={"Default "+type.label+" Event Request Team"}
+															  unset={this.unset.bind(this)}
+															  updateContact={this.updateEventRequestGroup.bind(this, type)}
+															  initialValue={this.getTypeGroup(type.gid)}
+															  />
+									 })}
+
+									 {/*}<label>Default Event Calendar View</label>
 										<select
 											value={Options.findOne("calendarview").val}
 											onChange={this.changeCalendarView.bind(this)}
@@ -97,7 +98,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 											<option value={"agendaWeek"}>Week Agenda</option>
 											<option value={"month"}>Month</option>
 											<option value={"agendaDay"}>Day Agenda</option>
-										</select>
+										</select>*/}
 							</div>
 						</div>
 					</div>

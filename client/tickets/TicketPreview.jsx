@@ -30,9 +30,7 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
     if(this.props.tkt.type == "Contact"){
       return {name: ""};//Contacts.findOne(this.props.tkt.customer).name;
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.tkt.customer}).contact
-      });
+    return Meteor.users.findOne({_id:this.props.tkt.customer});
   }
 
   go(){
@@ -42,6 +40,7 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
 
   render() {
     let tkt = this.props.tkt;
+    
     if(!tkt){
       return <p>Please select a ticket to view the details...</p>
     }

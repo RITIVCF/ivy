@@ -45,7 +45,7 @@ export default class ContactSingle extends Component {
           <td>{this.props.contact.emails[0].address}</td>
           <td>{this.props.contact.phone}</td>
           <td>{this.props.contact.newsletter?"Yes":"No"}</td>
-          <td>{checkPermission("admin") ? <select
+          <td>{false ? <select
               ref="status"
               className="browser-default black-text"
               value={this.props.contact.status}

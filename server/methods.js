@@ -158,8 +158,8 @@ Meteor.methods({
   },
   funnelTime(numdays){
     if(numdays!="0"){
-        console.log("Numdays: "+numdays);
-        console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
+      //  console.log("Numdays: "+numdays);
+      //  console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
         var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+1, "days")._d}}).fetch();
     }
     else{
@@ -202,9 +202,9 @@ Meteor.methods({
     if(rst.min<0){
       rst.min=0;
     }
-    console.log(rst);
-    console.log(totals);
-    console.log(rst.max);
+    // console.log(rst);
+    // console.log(totals);
+    // console.log(rst.max);
     return rst;
   },
   testCreation(){
@@ -281,14 +281,15 @@ Meteor.methods({
 
     });
     Meteor.users.update({},{$set: {preferences: {
-    "theme-color": "Default",
-    "Meteor.users_view":"Tile",
-    "Meteor.users_infobar": true,
-    "tickets_view":"List",
-    "tickets_infobar":true,
-    "events_infobar":true,
-    "churches_view":"Tile",
-    "churches_infobar":true
+      "theme-color": "Default",
+      "contacts_view":"Tile",
+      "contacts_infobar": true,
+      "tickets_view":"List",
+      "tickets_infobar":true,
+      "calendar_view":"month",
+      "events_infobar":true,
+      "churches_view":"Tile",
+      "churches_infobar":true
       }
     }}, {multi: true});
 

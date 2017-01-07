@@ -126,8 +126,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
 	render() {
     var types = Session.get("tickettypefilter");
-    console.log("types: ", types);
-    console.log(types.includes("Contact"));
     //console.log(this.props.sub);
 		return (
       <div className="row" onClick={this.unselect.bind(this)}>

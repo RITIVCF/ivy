@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ContactSingle from './ContactSingle.jsx';
+import Checkbox from './Checkbox.jsx';
 //import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
@@ -8,8 +9,13 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     super();
 
     this.state = {
+      statuses: ["Crowd","Visitor","Member","Server","Leader","Multiplier"],
       filter: ""
     };
+
+    if(Session.get("contactstatusfilter")===undefined){
+      Session.set("contactstatusfilter",this.state.statuses);
+    }
 
 
   }
@@ -102,16 +108,29 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     // else{
     //   return Contacts.find({},{sort: {name: 1}}).fetch();
     // }{$regex:this.state.textfilter, $options : 'i'}
+    var query= {status: {$in: Session.get("contactstatusfilter")}};
     if(this.state.filter!=""){
-      return Meteor.users.find({name: { $regex : this.state.filter, $options : 'i'} },{sort: {name: 1}}).fetch();
+      query.name={ $regex : this.state.filter, $options : 'i'};
     }
-    else{
-      return Meteor.users.find({},{sort: {name: 1}}).fetch();
-    }
+    return Meteor.users.find(query,{sort: {name: 1}}).fetch();
   }
 
   select(id){
     this.setState({selected: id});
+  }
+
+  handleCheck(id){
+    var array = Session.get("contactstatusfilter");
+    console.log(array);
+    if(array.includes(id)){
+        array.splice(array.indexOf(id), 1);
+    }else{
+        array.push(id);
+    }
+    Session.set("contactstatusfilter", array);
+    // var state = {};
+    // state[id]=!this.state[id];
+    // this.setState(state);
   }
 
   unselect(){
@@ -124,12 +143,19 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 	render() {
     let perm = this.props.perm;
-
+    let statuses = Session.get("contactstatusfilter");
 		return (
       <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
             <div className="row">
               <div className="col s12 m7 l7">
-                <h1></h1>
+                <p>Status Filter:
+                {this.state.statuses.map((status)=>{
+                  return <Checkbox key={status}
+                                    label={status}
+                                    onChange={this.handleCheck.bind(this, status)}
+                                    checked={statuses.includes(status)} />
+                })}
+              </p>
               </div>
               <div className="input-field col s12 m5 l5">
                 <input ref="filter" onChange={this.changeFilter.bind(this)} type="text" className="validate" />
