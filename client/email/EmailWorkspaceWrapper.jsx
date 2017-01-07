@@ -1,11 +1,11 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../MainBox.jsx';
-import EmailBanner from './EmailBanner.jsx';
+import EmailContainer from './EmailContainer.jsx'
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
 
-import EmailPreview from './EmailPreview.jsx';
+import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
 
 //Contacts = new Mongo.Collection('contacts');
 
@@ -49,10 +49,10 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
     return (
       <MainBox
-        content={<EmailBanner />}
+        content={<EmailContainer />}
         subheader={this.getSubHeader()}
         showinfobar={true}
-        infobar={<EmailPreview />}
+        infobar={<EmailWorkspacePanel />}
         />
     )
   }
