@@ -47,6 +47,8 @@ import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 import OverviewWrapper from './admin/overview/OverviewWrapper.jsx';
+import EmailWrapper from './email/EmailWrapper.jsx';
+import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
 
 
 
@@ -293,6 +295,24 @@ FlowRouter.route('/churches',{
 		mount(MainLayout, {
 			header: "Churches",
 			content: (<ChurchesWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/emails',{
+	action(){
+		mount(MainLayout, {
+			header: "Emails",
+			content: (<EmailWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/emails/workspace/:emid',{
+	action(params){
+		mount(MainLayout, {
+			header: "Email Workspace",
+			content: (<EmailWorkspaceWrapper emid={params.emid} />)
 		})
 	}
 });

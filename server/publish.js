@@ -506,6 +506,14 @@ Meteor.publish("uncompletedFeedback", function(){
   return Feedback.find({completed: false});
 });
 
+// ******    Email Section   **********
+
+Meteor.publish("myEmails", function(){
+  return Emails.find({uid: this.userId});
+});
+
+//***************************************
+
 Meteor.publish("allCounters", function(){
   return Counters.find();
 });
