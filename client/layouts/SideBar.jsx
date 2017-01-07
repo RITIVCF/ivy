@@ -18,37 +18,51 @@ export default class SideBar extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		$(".dropdown-button").dropdown();
+		/*$(".dropdown-button").dropdown({
+			alignment: 'right',
+			beloworigin: true
+		});*/
 	}
 
 	componentDidUpdate(){
-		$(".dropdown-button").dropdown();
+		$(".dropdown-button").dropdown({
+			alignment: 'right',
+			belowOrigin: true
+		});
 		$('.collapsible').collapsible();
 	}
 
 	toggleCollapse(){
-		this.setState({navCollapsed:!this.state.navCollapsed})
-		/*$('main').toggleClass('nav-collapsed');
-		$('.nav-label').toggleClass('nav-collapsed');
-		$('#nav-collapse-button').toggleClass('nav-collapsed');
-		$('.side-nav').toggleClass('nav-collapsed');
-		$('#drop-nav').fadeToggle(100);
-		*/
+		this.setState({navCollapsed:!this.state.navCollapsed});
+		/*$('#adminfull').toggleClass('collapsible');
+		$('#adminfull').toggleClass('collapsible-accordion');
+		$('#adminfullheader').toggleClass('collapsible-header');
+		$('#adminfullheader').toggleClass('dropdown-button');
+		setTimeout(function() {
+			if(this.state.navCollapsed) {
+				$(".dropdown-button").dropdown({
+					alignment: 'right',
+					belowOrigin: true
+				});
+			} else {
+				$('.collapsible').collapsible();
+			}
+		}, 500);*/
 		setTimeout(function() {
 			$('main').toggleClass('nav-collapsed');
-			$('.nav-label').toggleClass('nav-collapsed');
+			//$('.nav-label').toggleClass('nav-collapsed');
 			$('#nav-collapse-button').toggleClass('nav-collapsed');
-			$('.side-nav').toggleClass('nav-collapsed');
+			//$('.side-nav').toggleClass('nav-collapsed');
+			$('.hide-scroll').toggleClass('nav-collapsed');
     }, this.state.navCollapsed?0:200);
 		setTimeout(function() {
-      $('#drop-nav').toggleClass('nav-collapsed');
+      //$('#drop-nav').toggleClass('nav-collapsed');
     }, this.state.navCollapsed?200:0);
 	}
 
 
 	render(){
-		return(
-
+		return(<div className="hide-scroll z-depth-1">
 		<ul className="side-nav z-depth-1 fixed" >
 					<li className={FlowRouter.current().path=="/"?"active":""}>
 						<a href="/" className="waves-effect collapsible-header">
@@ -75,7 +89,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 								<span className="nav-label">Events</span>
 							</a>
 						</li>
-					{checkPermission("tickets")?
+					{checkPermission("tickets")&&
 						<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/tickets">
 								<span className="nav-icon">
@@ -83,7 +97,16 @@ export default class SideBar extends TrackerReact(React.Component) {
 								</span>
 								<span className="nav-label">To-Dos</span>
 							</a>
-						</li>:""}
+						</li>}
+					{checkPermission("emails")&&
+						<li className={FlowRouter.current().path.substring(0,7)=="/emails"&&"active"}>
+							<a className="waves-effect collapsible-header" href="/emails">
+								<span className="nav-icon">
+									<i className="material-icons">receipt</i>
+								</span>
+								<span className="nav-label">Emails</span>
+							</a>
+						</li>}
 					{checkPermission("contacts")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/contacts">
@@ -110,12 +133,11 @@ export default class SideBar extends TrackerReact(React.Component) {
 							<span className="nav-icon">
 								<i className="material-icons">perm_data_setting</i>
 							</span>
-							<span className="nav-label">Administration
-								<i id="drop-nav" className="material-icons right">arrow_drop_down</i>
-							</span>
+							<span className="nav-label">Administration</span>
+							<i id="drop-nav" className="material-icons right">arrow_drop_down</i>
 						</a>
 						<div className="collapsible-body">
-							<ul>
+							<ul className="custom-collapsible">
 								<li className={FlowRouter.current().path.substring(0,13)=="/admin/groups"?"active":""}>
 									<a href="/admin/groups">
 										<i className="material-icons">recent_actors</i>Structures
@@ -157,6 +179,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 					</a>
 				</li>
 		</ul>
+	</div>
 
 		)
 
