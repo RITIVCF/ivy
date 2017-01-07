@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../MainBox.jsx';
-import EmailPreview from './EmailPreview.jsx';
+import EmailSummaryPanel from './EmailSummaryPanel.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
 
@@ -51,7 +51,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
         content={<EmailSummary />}
         subheader={this.getSubHeader()}
         showinfobar={true}
-        infobar={<EmailPreview />}
+        infobar={<EmailSummaryPanel />}
         />
     )
   }
