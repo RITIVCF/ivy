@@ -83,6 +83,15 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 								<span className="nav-label">To-Dos</span>
 							</a>
 						</li>:""}
+						{checkPermission("emails")&&
+							<li className={FlowRouter.current().path.substring(0,7)=="/emails"&&"active"}>
+								<a className="waves-effect collapsible-header" href="/emails">
+									<span className="nav-icon">
+										<i className="material-icons">email</i>
+									</span>
+									<span className="nav-label">Emails</span>
+								</a>
+							</li>}
 					{checkPermission("contacts")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/contacts">

@@ -88,7 +88,11 @@ Meteor.publish("otherUnpublishedEvents", function(){
 	//console.log(ids);
   //console.log(checkPermission("events", this.userId));
   //if(perm){
-    return Events.find({deleted: {$ne: true}}, {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}});
+  var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}};
+  if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
+		options = {};
+	}
+    return Events.find({deleted: {$ne: true}}, options);
   //}
 
 });
@@ -509,7 +513,7 @@ Meteor.publish("uncompletedFeedback", function(){
 // ******    Email Section   **********
 
 Meteor.publish("myEmails", function(){
-  return Emails.find({uid: this.userId});
+  return Emails.find({$or:[{uid: this.userId},{isTemplate: true}]});
 });
 
 //***************************************

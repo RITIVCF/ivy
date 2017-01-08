@@ -5,27 +5,19 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-      if(unCreated){
-        var users = Meteor.users.find({emails: {$elemMatch: {verified: false}}}).fetch();
-      }
-      else{
-        var users = Meteor.users.find().fetch();
-      }
-      // users.forEach(function(user){
-      //   //console.log(user.contact);
-      //   user.name = Contacts.findOne(user.contact).name;
-      //
-      // });
-      //console.log(users);
-      return users;
-
-
+      var list = [];
+      Meteor.users.find().fetch().forEach((user)=>{
+        user.isUser=true;
+        list.push(user);
+      });
+      Groups.find().fetch().forEach((group)=>{
+        group.isGroup=true;
+        list.push(group);
+      })
+      return list;
 }
 
 const getSuggestions = value => {
-  //users: true, find Users
-  //       fasle, use contacts
-  console.log("getSuggestions value: ", value);
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
@@ -43,20 +35,22 @@ const getSuggestionValue = suggestion => { // when suggestion selected, this fun
 
 const renderSuggestion = suggestion => {
   return (
-      <span>{suggestion.name}
-        <span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span>
+      <span>
+        <i className="material-icons">{suggestion.isUser?"person":"group"}</i>
+        {suggestion.name}
+        {suggestion.isUser&&<span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span>}
       </span>
 
   );
 }
 
 const shouldRenderSuggestions = value => {
-  return value.trim().length > -1;
+  return value.trim().length > 2;
 }
 
 const inputComponent = inputProps => {
   return <div className="input-field select-dropdown">
-    <input id="name" {...inputProps} required />
+    <input id="name" {...inputProps} />
     <label htmlFor="name">{inputProps.label}</label>
   </div>
 }
@@ -71,7 +65,7 @@ const inputComponent = inputProps => {
 
 
 
-export default class SelectUser extends React.Component {
+export default class SelectRecip extends React.Component {
   constructor(props) {
     super(props);
 
@@ -114,8 +108,8 @@ shouldComponentUpdate(nextProps, nextState){
     // I need to do something with suggestion. This holds the contact info.
     //console.log(suggestion);
     //this.setState({value:suggestion.name});
-    suggestion.component = this;
-    this.props.updateUser(suggestion);
+  //  suggestion.component = this;
+    this.props.updateRecip(suggestion);
     // console.log("UNSET PROP:", this.props.unset);
     // console.log("suggestion selected this.state: ", this.state);
     if(!this.props.unset){
@@ -131,6 +125,19 @@ shouldComponentUpdate(nextProps, nextState){
     }
   }
 
+  onBlur(){
+    Materialize.updateTextFields();
+  }
+
+  // onKeyDown(event){
+  //   if(event.keyCode == 13) {
+  //     if(this.props.onSubmit){
+  //       if(this.state.value!=""){
+  //         this.props.onSubmit();
+  //       }
+  //     }
+  //   }
+  // }
 
   onChange(event, { newValue, method }) {
     if(method != 'tab'){
@@ -153,10 +160,6 @@ shouldComponentUpdate(nextProps, nextState){
 
   }
 
-  onBlur(){
-    Materialize.updateTextFields();
-  }
-
 
   onSuggestionsFetchRequested({ value }) {
     this.setState({
@@ -175,11 +178,11 @@ shouldComponentUpdate(nextProps, nextState){
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      label: this.props.label?this.props.label:"Name",
+      label: this.props.label?this.props.label:"Recipient Name",
       value,
       onChange: this.onChange,
-      className:"autocomplete-content dropdown-content",
       onBlur: this.onBlur
+      //onKeyDown: this.onKeyDown.bind(this)
     };
     //console.log("ID PROP:",this.props.id);
     if(this.props.id){

@@ -23,6 +23,16 @@ export default class PermissionWindow extends TrackerReact(React.Component)
       $('.modal').modal();
     }
 
+    componentShouldUpdate(nextProps, nextState){
+      if(this.props.ev.permUser==nextProps.permUser&&
+        this.props.ev.permGroup==nextProps.permGroup&&
+        this.props.ev.owner==nextProps.owner){
+          return false;
+      }else{
+        return true;
+      }
+    }
+
     stateSync()
     {
         let evt = this.props.ev; //parent.getEvent();

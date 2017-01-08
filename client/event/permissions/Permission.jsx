@@ -88,7 +88,7 @@ export default class Permission extends Component
         }
 
         type += "Perm";
-        console.log("Perm type",type);
+        //console.log("Perm type",type);
         return (
             <tr id={'"permission_' + permHolderId + '"'}>
 

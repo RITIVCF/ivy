@@ -57,7 +57,7 @@ export default class ContactSingle extends Component {
             <option value="Server">Server</option>
             <option value="Leader">Leader</option>
             <option value="Multiplier">Multiplier</option>
-          </select> : <p>{this.props.contact.status}</p>}</td>
+          </select> : this.props.contact.status}</td>
         </tr>
       )
     }
@@ -74,7 +74,9 @@ export default class ContactSingle extends Component {
         <p>{this.props.contact.status}</p>
         {/*<p>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</p> */}
 
-        {this.props.perm?<p><button className="btn btn-primary" onClick={this.viewTicket.bind(this)}>View Ticket</button></p>:""}
+        {this.props.perm?<p>
+          <button className="btn"  onClick={this.viewTicket.bind(this)}>View Ticket</button>
+        </p>:""}
       </div>
     </div>
     </div>

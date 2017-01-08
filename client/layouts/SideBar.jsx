@@ -102,7 +102,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 						<li className={FlowRouter.current().path.substring(0,7)=="/emails"&&"active"}>
 							<a className="waves-effect collapsible-header" href="/emails">
 								<span className="nav-icon">
-									<i className="material-icons">receipt</i>
+									<i className="material-icons">email</i>
 								</span>
 								<span className="nav-label">Emails</span>
 							</a>

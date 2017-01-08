@@ -181,7 +181,6 @@ export default class SignIn extends TrackerReact(React.Component){
     if(!this.state.user){
       this.state.new = true;
     }
-    Materialize.updateTextFields();
   }
 
   unset(){
@@ -216,7 +215,6 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   render() {
-    Materialize.updateTextFields();
       return (
         <div id="signinformcontainer">
           <div className="card-panel z-depth-5" id="cardwait">

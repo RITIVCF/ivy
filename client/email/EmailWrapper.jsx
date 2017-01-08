@@ -15,7 +15,8 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     this.state = {
       subscription: {
         email: Meteor.subscribe("myEmails")
-      }
+      },
+      panel: false
     };
 
 
@@ -26,7 +27,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
   }
 
   toggleInfoBar(){
-
+    this.setState({panel: true});
   }
 
   getSubHeader(){
@@ -50,7 +51,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
       <MainBox
         content={<EmailSummary />}
         subheader={this.getSubHeader()}
-        showinfobar={true}
+        showinfobar={this.state.panel}
         infobar={<EmailSummaryPanel />}
         />
     )

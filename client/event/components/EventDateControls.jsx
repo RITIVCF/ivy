@@ -19,6 +19,14 @@ export default class EventDateControls extends TrackerReact(React.Component) {
     }
   }
 
+  componentShouldUpdate(nextProps, nextState){
+    if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
+      return false
+    }else{
+      return true;
+    }
+  }
+
   updateStartDate(event){
     Meteor.call("updateEventStart", this.props.eid, event);
     console.log("Starttime: ", event);

@@ -20,6 +20,9 @@ SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 
 checkPermission = function(id){
+	if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
+		return true;
+	}
 	var grps = Groups.find({users: Meteor.userId()}).fetch();
 	var ids = [];
 	grps.forEach(function(group){
@@ -44,6 +47,9 @@ else {
 
 
 checkEventPermission = function(ev){
+	if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
+		return {view: true, edit: true};
+	}
   // if(!ev.permUser){
   //   return {"view":false,"edit": false};
   // }
