@@ -389,7 +389,8 @@ Meteor.publish("userSelf", function(){
     gradterm: 1,
     curryear: 1,
     member: 1,
-    memberAt: 1
+    memberAt: 1,
+    deleted: 1
      }
   };
   return Meteor.users.find(selector, options);
