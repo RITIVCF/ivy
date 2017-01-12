@@ -86,38 +86,48 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
   render() {
     document.title="Ivy - Set Password";
     return (
-      <div id="card" className="panel panel-info">
-        <div className="panel-heading">Ivy Set Password</div>
-        <div className="panel-body">
-          <p>Please set a password.</p>
-          <form className="publicForm" onSubmit={this.submit.bind(this)}>
-          {/*}  <label>Username</label> <br />
-            <input type="text"
-              name="username"
-              ref="username"
-              required
-              />
-            <br />*/}
-            <label>Password</label> <br />
-            <input type="password"
-              name="loginPassword"
-              ref="loginPassword"
-              onChange={this.checkPasswords.bind(this)}
-              required
-              />
-            <br />
-            <label>Password</label> <br />
-            <input type="password"
-              name="loginPasswordCheck"
-              ref="loginPasswordCheck"
-              onChange={this.checkPasswords.bind(this)}
-              required
-              />
-            <br />
-            <p>Passwords Match: {this.state.passwordcheck?"Yes":"No"}</p>
-            <br />
-            <input type="submit" name="submit" value="Sign Up!" />
-          </form>
+      <div className="card">
+        <div className="card-content">
+          <span className="card-title">Ivy Set Password</span>
+          <div className="row">
+            <p>Please set a password.</p>
+          </div>
+            <form className="publicForm" onSubmit={this.submit.bind(this)}>
+            {/*}  <label>Username</label> <br />
+              <input type="text"
+                name="username"
+                ref="username"
+                required
+                />
+              <br />*/}
+
+              <div className="input-field">
+                <input type="password"
+                  name="loginPassword"
+                  ref="loginPassword"
+                  id="pass1"
+                  onChange={this.checkPasswords.bind(this)}
+                  required
+                  />
+                <label htmlFor="pass1">Password</label>
+              </div>
+              <div className="input-field">
+                <input type="password"
+                  name="loginPasswordCheck"
+                  ref="loginPasswordCheck"
+                  id="pass2"
+                  onChange={this.checkPasswords.bind(this)}
+                  required
+                  />
+                <label htmlFor="pass2">Confirm Password</label>
+              </div>
+              <p>Passwords Match: {this.state.passwordcheck?"Yes":"No"}</p>
+              <button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
+                <span id="sign-in-button">
+                 <i className="material-icons">send</i>
+                </span>
+              </button>
+            </form>
         </div>
       </div>
     )

@@ -72,7 +72,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 							<span className="nav-label">My Dashboard</span>
 						</a>
 					</li>
-					{Groups.find({$or:[{leader: Meteor.userId()},{users: Meteor.userId()}], type:"Small Group"}).fetch().length>0?
+					{/*Groups.find({$or:[{leader: Meteor.userId()},{users: Meteor.userId()}], type:"Small Group"}).fetch().length>0&&
 					<li className={FlowRouter.current().path=="/mysg"?"active":""}>
 						<a href="/mysg" className="waves-effect collapsible-header">
 							<span className="nav-icon">
@@ -80,7 +80,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 							</span>
 							<span className="nav-label">My Small Group</span>
 						</a>
-					</li>:""}
+					</li>*/}
 						<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
 							<a className="waves-effect collapsible-header" href="/events">
 								<span className="nav-icon">
