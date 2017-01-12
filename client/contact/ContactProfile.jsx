@@ -82,6 +82,11 @@ export default class ContactProfile extends TrackerReact(React.Component){
     $("#memberform").appendTo("body").modal("open");
   }
 
+  getEvents(){
+    return Events.find({},{sort:{start:-1}}).fetch();
+  }
+
+
   remove(){
     if(confirm("Only remove a contact if it is a mistake creation.")){
       Meteor.call("removeContact", this.props.cid);
