@@ -33,7 +33,7 @@ export default class NewContactForm extends Component {
           return;
         }
         Meteor.call("updateNewsletter", uid, newsletter);
-        window.alert("Success!");
+        Materialize.toast("Success!",4000);
         if(thiz.state.route){
           FlowRouter.go(thiz.state.route);
         }
@@ -50,24 +50,45 @@ export default class NewContactForm extends Component {
     //Meteor.call('addMember');
     }
 
+    handleChange(event){
+      Materialize.updateTextFields();
+    }
+
     render() {
       return (
-        <div className="container-fluid">
-          <div className="panel panel-default">
+        <div id="signinformcontainer">
+        <div className="card-panel z-depth-5" id="cardwait">
+          <div className="card-content">
             <h1>New Contact</h1>
             <form className="publicForm" onSubmit={this.submit.bind(this)}>
-              <div className="form-group">
-                <input ref="name" placeholder="Name" id="name" required />
-                <input ref="email" placeholder="Email" id="email" type="email" required />
-                <input ref="phone" placeholder="Phone number (optional)" type="tel" className={this.state.new?"hidden":""} />
-                <input ref="major" placeholder="Major" type="text" className={this.state.new?"hidden":""} />
-                <HowHearSelect ref="howhear" />
-                <input type="checkbox" ref="newsletter" id="news" name="news" className={this.state.new?"hidden":""} value="Yes" />
-                <label htmlFor="news">Please sign me up for the newsletter</label>
-                <input type="submit" name="submit" value="Create" className="form-control button" />
+              <div className="input-field">
+                <input ref="name" id="nm" required placeholder="Name" />
               </div>
+              <div className="input-field">
+                <input ref="email"  id="email" type="email" required />
+                <label htmlFor="email">Email</label>
+              </div>
+              <div className="input-field">
+                <input ref="phone" id="phone" type="tel" />
+                <label htmlFor="phone">Phone number (optional)</label>
+              </div>
+              <div className="input-field">
+                <input ref="major" type="text" />
+                <label htmlFor="major">Major</label>
+              </div>
+              <HowHearSelect ref="howhear" />
+              <input type="checkbox" ref="newsletter" id="news" name="news" value="Yes" />
+              <label htmlFor="news">Please sign me up for the newsletter</label>
+              <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
+              <label htmlFor="more">I would like to learn more about IV</label>
+              <button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
+                <span id="sign-in-button">
+                 <i className="material-icons">send</i>
+                </span>
+              </button>
             </form>
           </div>
+        </div>
         </div>
       )
     }

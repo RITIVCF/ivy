@@ -15,7 +15,7 @@ import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
 import SelectContactWrapper from './user/SelectContactWrapper.jsx';
 import ForgotPassword from './user/ForgotPassword.jsx';
-import NewContactWrapper from './contact/NewContactWrapper.jsx';
+import NewContactWrapper from './user/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
 import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';

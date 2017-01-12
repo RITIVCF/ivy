@@ -89,7 +89,7 @@ Meteor.publish("otherUnpublishedEvents", function(){
   //console.log(checkPermission("events", this.userId));
   //if(perm){
   var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}};
-  if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
+  if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
 	}
     return Events.find({deleted: {$ne: true}}, options);
