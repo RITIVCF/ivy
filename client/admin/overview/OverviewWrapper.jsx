@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import OverviewPage from './OverviewPage.jsx';
+import LoaderCircle from '../../LoaderCircle.jsx';
 
 export default class OverviewWrapper extends TrackerReact(React.Component) {
 	constructor(){
@@ -26,12 +27,11 @@ export default class OverviewWrapper extends TrackerReact(React.Component) {
 		if(!checkPermission("admin")){
 			return <div>Sorry you don't have permission to view this page. Please see the leadership team to get access.</div>
 		}
+		if(!this.state.subscription.Funnel.ready()){
+			return <LoaderCircle />
+		}
 		return (
-			<div className="container">
-						{this.state.subscription.Funnel.ready()?<OverviewPage />:<div></div>}
-
-
-			</div>
+				<OverviewPage />
 		)
 	}
 }

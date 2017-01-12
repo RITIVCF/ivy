@@ -2,7 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Chart from 'chart.js'
 
-export default class FunnelChartLimited extends TrackerReact(React.Component) {
+export default class FunnelChartMembership extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
@@ -15,9 +15,9 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 
 	componentDidMount(){
 		console.log("did mount");
-		var thiz = this;
-		Meteor.call("currentFunnel", function(error, result){
-			snapshotChart2 = new Chart($(funnelchart2), {
+		thiz2 = this;
+		Meteor.call("currentFunnelMembership", function(error, result){
+			membershipFunnel = new Chart($("#membershipFunnel"), {
 				type: "bar",
 				data: {
 					labels: ["Visitor", "Member", "Server", "Leader", "Multiplier"],
@@ -42,18 +42,18 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 									parseInt(result.Server?result.Server:0)+
 									parseInt(result.Leader?result.Leader:0)+
 									parseInt(result.Multiplier?result.Multiplier:0);
-				thiz.setState({ttl: total});
+				thiz2.setState({ttl: total});
 		});
 		this.setState({mounted: true});
 	}
 
 	refresh(){
-		Meteor.call("currentFunnel", function(error, result){
-			snapshotChart2.data.datasets[0]= {
+		Meteor.call("currentFunnelMembership", function(error, result){
+			membershipFunnel.data.datasets[0]= {
 				label: "Counts",
 				data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 			};
-			snapshotChart2.update();
+			membershipFunnel.update();
 		});
 	}
 
@@ -62,11 +62,11 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					Funnel Status - Limited | <b>Total:</b> {this.state.ttl}
+					Funnel Status - Membership | <b>Total:</b> {this.state.ttl}
 				</div>
 				<div className="panel-body">
 					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
-					<canvas id="funnelchart2" width="400" height="400"></canvas>
+					<canvas id="membershipFunnel" width="400" height="400"></canvas>
 				</div>
 			</div>
 		)
