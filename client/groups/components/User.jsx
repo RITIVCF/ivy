@@ -7,24 +7,30 @@ export default class Contact extends Component {
   }
 
   getContact(){
-    return Contacts.findOne(Meteor.users.findOne(this.props.uid).contact);
+    return Meteor.users.findOne(this.props.uid);
   }
 
 
   render(){
     contact = this.getContact();
     return(
-      <tr id="hover-me">
+      <tr id="showhim">
         <td>{contact.name}</td>
         <td>
-          {contact.email}
-          <button
+          {contact.emails[0].address}
+        {/*}  <button
             style={{float: "right"}}
-            className="btn btn-danger" 
+            className="btn btn-danger"
             id="hover-content"
             onClick={this.remove.bind(this)}>
               Remove
-          </button>
+          </button>*/}
+        </td>
+        <td>
+          <span onClick={this.remove.bind(this)}
+            className="material-icons" id="showme" >
+            close
+          </span>
         </td>
       </tr>
     )

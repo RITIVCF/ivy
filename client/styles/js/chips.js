@@ -13,7 +13,9 @@
       if ($chips.attr('data-initialized')) {
         return;
       }
-      $(this).closest('.chip').remove();
+    //  $(this).closest('.chip').remove(); had to remove this
+    // so that it didn't remove the element before react did
+    // so that we could remove it in the database
     });
   });
 

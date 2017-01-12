@@ -12,14 +12,25 @@ export default class Option extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-		<div>
-			<h1>{this.props.option._id}</h1>
-			{!this.props.option.vals ? <p>Value: {this.props.option.val}</p>:
-				this.props.option.vals.map((value)=>{
-					return <div key={value} >{value}</div>
-			})
-		}
-		</div>
+			<div className="col s4">
+				<div className="card left">
+					<div className="card-content">
+						<span className="card-title">{this.props.option._id}</span>
+						{!this.props.option.vals ? <p>Value: {this.props.option.val}</p>:
+							this.props.option.vals.map((value,i)=>{
+								if(value.tag){
+									return <div key={i}>{value.tag}</div>
+								}
+								if(value.label){
+									return <div key={i}>{value.label}</div>
+								}
+								return <div key={i} >{value}</div>
+						})
+					}
+					</div>
+				</div>
+			</div>
+
 		)
 	}
 }

@@ -30,7 +30,7 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 
   submit(event){
     event.preventDefault();
-    var userVar = event.target.username.value;
+    var userVar = event.target.email.value;
     var passwordVar = event.target.loginPassword.value;
     var thiz = this;
     Meteor.loginWithPassword(userVar, passwordVar, function(error){
@@ -51,27 +51,32 @@ export default class LoginWrapper extends TrackerReact(React.Component){
   render() {
     document.title="Ivy - Login";
     return (
-      <div id="card" className="card">
-        <div className="front">
-          <h1>Ivy Sign-In</h1>
-          <form className="publicForm" onSubmit={this.submit.bind(this)}>
-            <label>Username</label> <br />
-            {this.state.forgot?<p>Incorrect username or password. Please try again or click 'forgot password'.</p>:""}
-            <input type="text" name="username" />
-            <br />
-            <br />
-            <label>Password</label> <br />
-            <input type="password" name="loginPassword" ref="password" />
-            <br />
-            <br />
-            <input type="submit" value="Login" />
-          </form>
-          <br />
-          <br />
-          <button  onClick={this.createAccount.bind(this)} >Create An Account</button>
-          <button style={{float: 'right'}} onClick={this.forgotPassword.bind(this)} >Forgot Password</button>
+        <div className="row">
+          <div className="col s12 m8 offset-m2">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Ivy Sign In</span>
+                  <form className="publicForm" onSubmit={this.submit.bind(this)}>
+                    {this.state.forgot?<p>Incorrect username or password. Please try again or click 'forgot password'.</p>:""}
+                    <div className="input-field col s12">
+                      <input type="text" name="email" /> 
+                      <label>Email</label>
+                    </div>
+                    <div className="input-field col s12">
+                      <input type="password" name="loginPassword" ref="password" />
+                      <label>Password</label>
+                    </div>
+                    <button className="btn waves-effect waves-light" type="submit" name="action">Login
+                    </button>
+                  </form>
+                  <br />
+                  <br />
+                  <a className="waves-effect waves-teal btn-flat" onClick={this.createAccount.bind(this)} >Create An Account</a>
+                  <a className="waves-effect waves-teal btn-flat" onClick={this.forgotPassword.bind(this)} >Forgot Password</a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
     )
   }
 }

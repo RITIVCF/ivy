@@ -5,7 +5,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-      return Groups.find({admingroup:true}).fetch();
+      return Groups.find().fetch();
 }
 
 function getSuggestions(value) {
@@ -36,7 +36,12 @@ function shouldRenderSuggestions(value) {
   return value.trim().length > 1;
 }
 
-
+const inputComponent = inputProps => {
+  return <div className="input-field">
+    <input id="grp" {...inputProps} required />
+    <label htmlFor="grp">{inputProps.label}</label>
+  </div>
+}
 
 
 
@@ -63,7 +68,7 @@ export default class SelectGroup extends TrackerReact(React.Component) {
     //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
 shouldComponentUpdate(nextProps, nextState){
@@ -107,17 +112,24 @@ shouldComponentUpdate(nextProps, nextState){
   }
 
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsFetchRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });
   }
 
+  onSuggestionsClearRequested(){
+    // Autosuggest will call this function every time you need to clear suggestions.
+    this.setState({
+      suggestions: []
+    });
+  };
+
   render() {
 
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Enter group name...',
+      label: this.props.label?this.props.label:"Group",
       value,
       onChange: this.onChange
     };
@@ -125,27 +137,33 @@ shouldComponentUpdate(nextProps, nextState){
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={true}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     renderInputComponent={inputComponent}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={true}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     renderInputComponent={inputComponent}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
 

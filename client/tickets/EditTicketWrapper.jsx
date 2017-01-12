@@ -1,6 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EditTicketForm from './EditTicketForm.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 
 
 export default class EditTicketsWrapper extends TrackerReact(React.Component) {
@@ -10,9 +12,9 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         ticket: Meteor.subscribe("thisTicket", props.tid),
-        options: Meteor.subscribe("allOptions"),
-        events: Meteor.subscribe("allEvents"),
-        users: Meteor.subscribe("allUsers"),
+    //    options: Meteor.subscribe("allOptions"),
+    //    events: Meteor.subscribe("allEvents"),
+        //users: Meteor.subscribe("allUsers"),
         contacts: Meteor.subscribe("allContacts")
       }
     };
@@ -20,18 +22,18 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
 
   componentWillUnmount() {
     this.state.subscription.ticket.stop();
-    this.state.subscription.users.stop();
+  //  this.state.subscription.users.stop();
     this.state.subscription.contacts.stop();
-    this.state.subscription.options.stop();
-    this.state.subscription.events.stop();
+    //this.state.subscription.options.stop();
+//    this.state.subscription.events.stop();
   }
 
   checkSubscriptions(){
     if(this.state.subscription.ticket.ready()&&
-    this.state.subscription.users.ready()&&
-    this.state.subscription.contacts.ready()&&
-    this.state.subscription.options.ready()&&
-    this.state.subscription.events.ready()){
+  //  this.state.subscription.users.ready()&&
+    this.state.subscription.contacts.ready()){
+  //  this.state.subscription.options.ready()&&
+    //this.state.subscription.events.ready())
       return true;
     }
     return false;
@@ -41,14 +43,14 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
 	render() {
     document.title="Ivy - Ticket ";
     if(!checkPermission("tickets")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+			return <NoPerm />
 		}
     var ticket = Tickets.findOne(this.props.tid);
     if(ticket){
         document.title="Ivy - "+ ticket.subject;
     }
     if(!this.checkSubscriptions()){
-      return (<div></div>)
+      return (<LoaderCircle />)
     }
 		return (
       <div>

@@ -5,52 +5,38 @@ import ChurchWorkspace from './ChurchesWorkspace.jsx';
 export default class ChurchSingle extends Component {
   constructor() {
     super();
-    this.state = {
-      editting: false
-    };
+    // this.state = {
+    //   editting: false
+    // };
   }
 
   edit(event){
-    event.preventDefault();
-    this.setState({editting: true});
-  }
-
-  close(event){
-    event.preventDefault();
-    this.setState({editting: false});
+    event.stopPropagation();
+    Session.set("chselected",this.props.church._id);
   }
 
   render() {
-    // This area needs styled, so however we need to do it to style
-    // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
-    /* <div className="panel default">
-      <a href={"/churches/workspace/" + this.props.church._id}>
-        <div>{this.props.church.name}</div>
-        <div>{this.props.church.url}</div>
-      </a>
-      {this.props.showActiveBtn ?
-      <ButtonActive active={this.props.church.active} cid={this.props.church._id} /> : "" }
-    </div>
-
-    <button onClick={this.close.bind(this)}>Close Edit</button>
-    {/*onMouseLeave={this.close.bind(this)} */
 
     return (
-      <div className="panel panel-default">
-        <div className="panel-heading" onClick={this.edit.bind(this)}>
-          {this.props.church.name}
+      <div className="col s12 m6 l4">
+        <div className={this.props.selected?
+                        this.props.church.active?
+                        "card left addBorderToCard":"card left grey addBorderToCard"
+                        :
+                        this.props.church.active?
+                        "card left"
+                        :"card grey left"}
+          onClick={this.edit.bind(this)}>
+          <div className="card-image">
+            <img
+              src={"/images/defaultChurch.png"} style={{width: "100%"}} />
+          </div>
+          <div className="card-content">
+            <span className="card-title">{this.props.church.name}</span>
+            {/*}<p className="truncate">{this.props.church.url}</p>*/}
+          </div>
         </div>
-        {this.state.editting ?
-        <div  >
-          <button onClick={this.close.bind(this)}>Close</button>
-        <ChurchWorkspace ch={this.props.church} />
-        </div>
-      :
-      <div className="panel-body">
-        {this.props.church.url}
-      </div>}
       </div>
-
     )
   }
 }

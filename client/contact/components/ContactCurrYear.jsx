@@ -19,10 +19,10 @@ export default class ContactCurrYear extends TrackerReact(React.Component) {
 
   render() {
     return (
-      <div className="form-group">
-        <label>Current Year Level:</label>
+      <div >
+      <label>Current Year Level:</label>
       <select
-        className="form-control"
+        className="browser-default"
         value={this.props.contact.curryear}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>

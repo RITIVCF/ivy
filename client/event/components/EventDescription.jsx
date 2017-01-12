@@ -60,11 +60,13 @@ export default class EventDescription extends Component {
   	var description = ev.description;
     */
     return(
-      <div className="form-group">
-        <label>Description</label>
+      <div>
+        <label htmlFor="description">Description</label>
         <textarea ref="description"
-          className="form-control"
-          rows="3"
+          name="description"
+          className="browser-default"
+          style={{width: "100%", maxWidth: "100%", minHeight: "100px"}}
+          rows="5"
           value={this.state.description}
           onChange={this.handleDescriptionChange.bind(this)}
           disabled={this.state.descriptionlock||!this.props.perm}

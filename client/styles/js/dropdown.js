@@ -87,7 +87,6 @@
         // Constrain width
         if (curr_options.constrain_width === true) {
           activates.css('width', origin.outerWidth());
-
         } else {
           activates.css('white-space', 'nowrap');
         }

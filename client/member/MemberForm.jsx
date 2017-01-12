@@ -13,11 +13,17 @@ export default class MemberForm extends TrackerReact(React.Component) {
     };
   }
 
+  componentDidMount(){
+    $('.modal').modal();
+    $('select').material_select();
+  }
+
   addMember(event){
     event.preventDefault();
+    console.log("submitting");
     //console.log(event.target.value);
     //console.log(this);
-    var cid = Meteor.user().contact;
+    var cid = Meteor.userId();
 
     Meteor.call("updateGender", cid, this.refs.gender.value);
     if(!this.refs.intl.checked){
@@ -63,7 +69,16 @@ export default class MemberForm extends TrackerReact(React.Component) {
     }
 
     hideShowEthnicity(){
+      if(!this.state.intl){
+        $('#ethn').material_select('destroy');
+      } // if removing, destroy before the element is removed
       this.setState({intl: this.refs.intl.checked});
+    }
+
+    componentDidUpdate(){
+      if(!this.state.intl){
+        $('select').material_select();
+      }//initialize after select has be rendered
     }
 
     getGradTerms(){
@@ -84,66 +99,91 @@ export default class MemberForm extends TrackerReact(React.Component) {
 
     render() {
       return (
-        <div>
-        <h1>Set Membership Info</h1>
-        <h2>Intervarsity requires we keep track of our membership information. Please update the fields below. Thank you!</h2>
-        <form className="publicForm" onSubmit={this.addMember.bind(this)}>
-          <label>Expected Graduation Term:*</label>
-          <select ref="gradterm">
-            {this.props.subscription.ready() ? this.getGradTerms().map( (term)=>{
-                return <SelectOption key={term} value={term} displayvalue={term}  />
-            }):<option></option>}
-          </select>
-          <br/>
-          <label>Current Year Level:*</label>
-          <select ref="year">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-          </select>
-          <br/>
-          <label>International Student:</label>
-          <label>Yes:</label>
-          <input ref="intl"
-            type="checkbox"
-            onClick={this.hideShowEthnicity.bind(this)}
-            />
-          {!this.state.intl ?
-          <label>Ethnicity:*
-          <select ref="ethn" >
-            <option value={""}></option>
-            {this.getEthnicities().map( (ethnicity)=>{
-              return <option key={ethnicity} value={ethnicity} >{ethnicity}</option>
-            })}
-          </select>
-        </label>:<div></div>}
-            <br />
-          <label>Gender: *
-            <select ref="gender" >
-              <option value={"na"}>Not Specified</option>
-              <option value={"male"}>Male</option>
-              <option value={"female"}>Female</option>
-            </select>
-          </label>
-          <br/>
-          <label>Campus Affiliations:</label>
-            {this.props.subscription.ready() ? this.getAffiliations().map( (tag)=>{
-              return <label key={tag} >{tag}: <input type="checkbox" ref={"affiliations."+tag} name={tag} />
-            </label>
-            }) :<div></div> }
-            <br/>
-          <label>Community Involvement:</label>
-            {this.props.subscription.ready() ? this.getCommunityLife().map( (tag)=>{
-              return <label key={tag} >{tag}: <input type="checkbox" ref={"communitylife."+tag} name={tag} />
-            </label>
-            }) :<div></div>}
-          <input type="submit"></input>
-        </form>
-      </div>
+        <div id="memberform" className="modal bottom-sheet modal-fixed-footer">
+          <form onSubmit={this.addMember.bind(this)}>
+            <div className="modal-content">
+              <h3>Set Membership Info</h3>
+              <p>InterVarsity Christian Fellowship/USA requires we keep track of our membership
+                information. Please tell us about yourself below. Thank you!</p>
+              <div className="divider"></div>
+              <br/>
+              <div className="s12 m6">
+                <div className="input-field col s12">
+                  <select ref="gradterm" value="">
+                    <option value="" disabled>Select graduation term</option>
+                    {this.getGradTerms().map( (term)=>{
+                        return <SelectOption key={term} value={term} displayvalue={term}  />
+                    })}
+                  </select>
+                  <label>Expected Graduation Term:*</label>
+                </div>
+              </div>
+              <div className="input-field col s12 m6">
+
+                <select ref="year" value="">
+                  <option value="" disabled>Select year</option>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>7</option>
+                </select>
+                <label>Current Year Level:*</label>
+              </div>
+              <div className="input-field col s12 m6">
+
+              </div>
+              <p>International Student:</p>
+              <input ref="intl"
+                id="intl"
+                type="checkbox"
+                onClick={this.hideShowEthnicity.bind(this)}
+                />
+              <label htmlFor="intl">Yes:</label>
+              {!this.state.intl ?<div className="input-field col s12 m6">
+              <select ref="ethn" value="" id="ethn">
+                <option value={""} disabled>Select ethnicity</option>
+                {this.getEthnicities().map( (ethnicity)=>{
+                  return <option key={ethnicity} value={ethnicity} >{ethnicity}</option>
+                })}
+              </select>
+              <label>Ethnicity:*</label>
+            </div>:<div></div>}
+            <div className="divider"></div>
+            <div className="input-field col s12 m6">
+
+                <select ref="gender" value="">
+                  <option value="" disabled>Select gender</option>
+                  <option value={"na"}>Not Specified</option>
+                  <option value={"male"}>Male</option>
+                  <option value={"female"}>Female</option>
+                </select>
+                <label>Gender: *</label>
+            </div>
+            <p>Campus Affiliations:</p>
+              {this.getAffiliations().map( (tag)=>{
+                return <div key={tag} >
+                  <input type="checkbox" ref={"affiliations."+tag} id={tag} name={tag} />
+                  <label htmlFor={tag} >{tag}: </label>
+                  </div>
+              })}
+            <p>Community Involvement:</p>
+              {this.getCommunityLife().map( (tag)=>{
+                return <div key={tag} >
+                  <input type="checkbox" ref={"communitylife."+tag} id={tag} name={tag} />
+                  <label htmlFor={tag}>{tag}: </label>
+                  </div>
+              })}
+
+            </div>
+            <div className="modal-footer">
+              <a className="modal-action modal-close waves-effect waves-red btn-flat">Close</a>
+              <input type="submit" className="modal-action modal-close waves-effect waves-green btn-flat" value="Submit"/>
+            </div>
+          </form>
+        </div>
       )
     }
   }

@@ -28,22 +28,10 @@ export default class NewTicketWindow extends Component
       //  addTicket(subj, desc, assg, assu, cust, typ)
     }
 
-
-    toggleOverlay()
-    {
-        if(this.state.overlayState == "hidden")
-        {
-            this.setState({overlayState: ""});
-        }
-        else
-        {
-            this.setState({overlayState: "hidden"});
-        }
+    componentDidMount(){
+      $('select').material_select();
     }
 
-    openOverlay(){
-      this.setState({overlayState:""});
-    }
 
     updateAssignedU(user){
       this.state.assigned = user;
@@ -57,7 +45,7 @@ export default class NewTicketWindow extends Component
       // does nothing
     }
 
-    createClose(){
+    createNew(){
       this.setState({overlayState:"hidden"});
       //console.log(this);
       if(!this.state.eid){
@@ -121,65 +109,56 @@ export default class NewTicketWindow extends Component
     render()
     {
         return (
-            <div>
-              <div id="overlay" className={this.state.overlayState} onClick={this.closeOverlay.bind(this)}>
+
+
+          <div id="newticketmodal" className="modal">
+            <div className="modal-content">
+              <div className="input-field col s12">
+                <input ref="subj" id="subject" type="text" required />
+                <label htmlFor="icon_prefix">Subject</label>
               </div>
-              <div id="newEventPopup" className={this.state.overlayState}>
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label>Subject</label>
-                      <input type="text" ref="subj" className="form-control" placeholder="Subject" required/>
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-sm-12">
-                    <div className="form-group">
-                      <label>Description</label>
-                      <textarea ref="desc"
-                        placeholder="Description"
-                        className="form-control"
-                        rows="4" />
-                    </div>
-                  </div>
-                </div>
-
-                {!this.props.eid ?
-                  <label>Assigned User<br/>
-                  <SelectUser parent={this}
-                    unset={this.unset.bind(this)}
-                    updateContact={this.updateAssignedU.bind(this)}
-                    intitialValue={""}
-                    ref="assigneduser"  />
-                  </label>
-                : ""}
-
-                {!this.props.eid ? <label>Regarding<br/>
-                  <SelectUser parent={this}
-                    unset={this.unset.bind(this)}
-                    updateContact={this.updateRegardU.bind(this)}
-                    intitialValue={""}
-                    ref="cust"  />
+              <div className="input-field col s12">
+                <textarea ref="desc" rows="4" />
+                <label htmlFor="icon_prefix">Description</label>
+              </div>
+              {!this.props.eid ?
+                <label>Assigned User<br/>
+                <SelectUser parent={this}
+                  unset={this.unset.bind(this)}
+                  updateContact={this.updateAssignedU.bind(this)}
+                  intitialValue={""}
+                  ref="assigneduser"  />
                 </label>
-              :""}
-                {!this.props.eid ? <div></div>:<div>
-                <label>Type of Request</label>
-                <div className="form-group">
-                  <select ref="type" className="form-control" >
-                    <option value=""></option>
-                      {this.getRequestTypes().map( (type)=>{
-                          return <SelectOption key={type} value={type} displayvalue={type}  />
-                      })}
-                  </select>
-                </div>
-              </div>}
-                <div id="btnsCreateCancel">
-                  <button className="btn btn-default" onClick={this.createClose.bind(this)}>Create</button>
-                  <button className="btn btn-default" onClick={this.closeOverlay.bind(this)}>Cancel</button>
-                </div>
+              : ""}
+
+              {!this.props.eid ? <label>Regarding<br/>
+                <SelectUser parent={this}
+                  unset={this.unset.bind(this)}
+                  updateContact={this.updateRegardU.bind(this)}
+                  intitialValue={""}
+                  ref="cust"  />
+              </label>
+            :""}
+              {!this.props.eid ? <div></div>:<div>
+              <label>Type of Request</label>
+              <div className="form-group">
+                <select ref="type" className="form-control" >
+                  <option value=""></option>
+                    {this.getRequestTypes().map( (type)=>{
+                        return <SelectOption key={type} value={type} displayvalue={type}  />
+                    })}
+                </select>
               </div>
+            </div>}
             </div>
+            <div className="modal-footer">
+              <a onClick={this.createNew.bind(this)}
+                className="modal-action modal-close waves-effect waves-green btn-flat">Submit
+              </a>
+              <a className="modal-action modal-close waves-effect waves-green btn-flat">Cancel
+              </a>
+            </div>
+          </div>
         );
     }
 }

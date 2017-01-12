@@ -27,19 +27,10 @@ export default class OverviewWrapper extends TrackerReact(React.Component) {
 			return <div>Sorry you don't have permission to view this page. Please see the leadership team to get access.</div>
 		}
 		return (
-			<div className="container-fluid">
-				<div className="row">
-					<div className="col-sm-3 col-lg-2">
-						<nav className="navbar navbar-default navbar-fixed-side">
-
-						</nav>
-					</div>
-					<div className="col-sm-9 col-lg-10">
-						<h1>Chapter Overview</h1>
+			<div className="container">
 						{this.state.subscription.Funnel.ready()?<OverviewPage />:<div></div>}
 
-					</div>
-				</div>
+
 			</div>
 		)
 	}

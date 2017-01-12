@@ -4,60 +4,82 @@ export default class ContactSingle extends Component {
   constructor(){
     super();
     this.state = {
-      ran: false,
-      opened: false
+
     };
   }
 
   viewTicket(){
-    this.state.ran = true;
     FlowRouter.go("/tickets/"+this.props.contact.ticket);
   }
 
   changeStatus(){
     Meteor.call("updateStatus", this.props.contact, this.refs.status.value);
-    this.state.opened = false;
   }
 
-  openDropdown(){
-    this.state.opened = true;
+  openDropdown(event){
+    event.stopPropagation();
   }
 
-  closeDropdown(){
-    this.state.opened = false;
+  selectThis(event){
+    event.stopPropagation();
+    //this.props.select(this.props.contact._id);
+    if(Session.get("conselected")==this.props.contact._id){
+      Session.set("conselected","");
+    }
+    else{
+      Session.set("conselected", this.props.contact._id);
+    }
   }
 
   go(){
-    if(this.state.ran||this.state.opened){
-      return;
-    }
     FlowRouter.go("/contacts/"+this.props.contact._id);
   }
   render() {
     // This area needs styled, so however we need to do it to style
     // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
+    if(this.props.row){
+      return (
+        <tr className={this.props.selected?"blue white-text":""}
+          onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
+          <td>{this.props.contact.name}</td>
+          <td>{this.props.contact.emails[0].address}</td>
+          <td>{this.props.contact.phone}</td>
+          <td>{this.props.contact.newsletter?"Yes":"No"}</td>
+          <td>{false ? <select
+              ref="status"
+              className="browser-default black-text"
+              value={this.props.contact.status}
+              onClick={this.openDropdown.bind(this)}
+              onChange={this.changeStatus.bind(this)} >
+            <option value="Crowd">Crowd</option>
+            <option value="Visitor">Visitor</option>
+            <option value="Member">Member</option>
+            <option value="Server">Server</option>
+            <option value="Leader">Leader</option>
+            <option value="Multiplier">Multiplier</option>
+          </select> : this.props.contact.status}</td>
+        </tr>
+      )
+    }
     return (
-      <tr onClick={this.go.bind(this)}>
-        <td>{this.props.contact.name}</td>
-        <td>{this.props.contact.email}</td>
-        <td>{this.props.contact.phone}</td>
-        <td>{this.props.contact.newsletter ? "Yes":"No"}</td>
-        {/*<td>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</td> */}
-        {checkPermission("admin") ? <td><select
-            ref="status"
-            value={this.props.contact.status}
-            onClick={this.openDropdown.bind(this)}
-            onBlur={this.closeDropdown.bind(this)}
-            onChange={this.changeStatus.bind(this)} >
-          <option value="Crowd">Crowd</option>
-          <option value="Visitor">Visitor</option>
-          <option value="Member">Member</option>
-          <option value="Server">Server</option>
-          <option value="Leader">Leader</option>
-          <option value="Multiplier">Multiplier</option>
-        </select></td> : <td>{this.props.contact.status}</td>}
-        {this.props.perm?<td><button className="btn btn-primary" onClick={this.viewTicket.bind(this)}>View Ticket</button></td>:""}
-      </tr>
+      <div className="col s12 m6 l4">
+      <div className={this.props.selected?"card left addBorderToCard":"card left "}
+        onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
+        <div className="card-image">
+          <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
+        </div>
+        <div className="card-content">
+          <span className="card-title">{this.props.contact.name}</span>
+        <p className="truncate">{this.props.contact.emails[0].address}</p>
+        <p>{this.props.contact.status}</p>
+        {/*<p>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</p> */}
+
+        {this.props.perm?<p>
+          <button className="btn"  onClick={this.viewTicket.bind(this)}>View Ticket</button>
+        </p>:""}
+      </div>
+    </div>
+    </div>
 
     )
   }

@@ -292,6 +292,23 @@ $deep-orange: (
   "accent-4":    #dd2c00
 );
 
+$gold: (
+  "base":       #fcb816 /*,
+  "lighten-5":  #fbe9e7,
+  "lighten-4":  #ffccbc,
+  "lighten-3":  #ffab91,
+  "lighten-2":  #ff8a65,
+  "lighten-1":  #ff7043,
+  "darken-1":   #f4511e,
+  "darken-2":   #e64a19,
+  "darken-3":   #d84315,
+  "darken-4":   #bf360c,
+  "accent-1":    #ff9e80,
+  "accent-2":    #ff6e40,
+  "accent-3":    #ff3d00,
+  "accent-4":    #dd2c00*/
+);
+
 $brown: (
   "base":       #795548,
   "lighten-5":  #efebe9,
@@ -331,11 +348,30 @@ $grey: (
   "darken-4":   #212121
 );
 
+$iv-blue: (
+  "base":       #1a3d6d /*,
+  "lighten-5":  #fbe9e7,
+  "lighten-4":  #ffccbc,
+  "lighten-3":  #ffab91,
+  "lighten-2":  #ff8a65,
+  "lighten-1":  #ff7043,
+  "darken-1":   #f4511e,
+  "darken-2":   #e64a19,
+  "darken-3":   #d84315,
+  "darken-4":   #bf360c,
+  "accent-1":    #ff9e80,
+  "accent-2":    #ff6e40,
+  "accent-3":    #ff3d00,
+  "accent-4":    #dd2c00*/
+);
+
 $shades: (
   "black":        #000000,
   "white":        #FFFFFF,
   "transparent":  transparent
 );
+
+
 
 $colors: (
   "materialize-red": $materialize-red,
@@ -346,6 +382,7 @@ $colors: (
   "indigo": $indigo,
   "blue": $blue,
   "light-blue": $light-blue,
+  "iv-blue": $iv-blue,
   "cyan": $cyan,
   "teal": $teal,
   "green": $green,
@@ -358,8 +395,11 @@ $colors: (
   "brown": $brown,
   "blue-grey": $blue-grey,
   "grey": $grey,
-  "shades": $shades
+  "shades": $shades,
+  "gold": $gold
 );
+
+
 
 
 // Color Classes
@@ -409,4 +449,3 @@ $colors: (
   @warn "Unknown `#{name}` in $colors.";
   @return null;
 }
-

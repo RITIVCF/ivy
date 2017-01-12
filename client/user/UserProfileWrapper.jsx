@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {Tracker} from 'meteor/tracker';
 import ContactProfile from '../contact/ContactProfile.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
 
 
 
@@ -21,10 +22,7 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 
 		this.state={
 			subscription: {
-				Ethnicities: Meteor.subscribe("allEthnicities"),
-				user: Meteor.subscribe("userSelf"),
-				contact: Meteor.subscribe("thisContact"),
-				options: Meteor.subscribe("allOptions")
+				Events: Meteor.subscribe("myAttendedEvents")
 			}
 		};
 
@@ -65,10 +63,11 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 
 	componentWillUnmount() {
 		//console.log(this.state);
-		this.state.subscription.Ethnicities.stop();
-		this.state.subscription.user.stop();
-    this.state.subscription.contact.stop();
-		this.state.subscription.options.stop();
+		// this.state.subscription.Ethnicities.stop();
+		// this.state.subscription.user.stop();
+    // this.state.subscription.contact.stop();
+		// this.state.subscription.options.stop();
+		this.state.subscription.Events.stop();
 		//console.log("Wrapper unmounted");
   }
 
@@ -85,6 +84,7 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 		//console.log("Wrapper Mounted");
 	}
 
+
 	render() {
 		/*
 		console.log(!this.state.contact);
@@ -100,8 +100,12 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 			return(<div></div>)
 		}*/
 
+		if(!this.state.subscription.Events.ready()){
+			return <LoaderCircle />
+		}
+
 		return (
-		<div>
+		<div className="container">
 			<ContactProfile cid={this.props.cid} parent={this} subscriptions={this.state.subscription} />
 		</div>
 		)

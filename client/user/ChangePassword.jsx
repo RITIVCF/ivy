@@ -37,43 +37,42 @@ export default class ChangePassword extends TrackerReact(React.Component) {
 	render() {
     document.title="Ivy - Change Password";
 		return (
-      <div>
+      <div className="container">
         <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h1>Change Password</h1>
-            <div className="panel panel-info">
-              <div className="panel-heading">
-              </div>
-              <div className="panel-body">
-                <div className="form-group">
-                  <label>Old Password</label>
-                  <input className="form-control" type="password" ref="old" required />
-                </div>
-                <div className="form-group">
-                  <label>New Password</label>
-                  <input className="form-control"
-                    type="password"
-                    ref="new"
-                    onChange={this.check.bind(this)} required />
-                </div>
-                <div className={this.state.match?"form-group has-success":"form-group has-error"} >
-                  <label>Confirm New Password</label>
-                  <input className="form-control"
-                    type="password"
-                    ref="confirm"
-                    onChange={this.check.bind(this)} required />
-                </div>
-                <div className="form-group">
-                  <button className="btn btn-info"
+          <div className="col s12">
+            <div className="card">
+              <div className="card-content">
+                <span className="card-title">Change Password</span>
+                <div className="row">
+                <form className="col s12">
+                  <div className="input-field col s12">
+                    <input type="password" ref="old" required />
+                    <label>Old Password</label>
+                  </div>
+                  <div className="input-field col s12">
+                    <input
+                      type="password"
+                      ref="new"
+                      onChange={this.check.bind(this)} required />
+                    <label>New Password</label>
+                  </div>
+                  <div  className="input-field col s12">
+                    <input className="validate"
+                      type="password"
+                      id="pass"
+                      ref="confirm"
+                      data-error="wrong" data-success="right"
+                      onChange={this.check.bind(this)} required />
+                    <label htmlFor="pass" >Confirm New Password</label>
+                  </div>
+                  <a
+                    className="btn waves-effect waves-light" name="action"
                     disabled={!this.state.match}
                     onClick={this.submit.bind(this)} >
                     Change
-                  </button>
+                  </a>
+                </form>
+                
                 </div>
               </div>
             </div>

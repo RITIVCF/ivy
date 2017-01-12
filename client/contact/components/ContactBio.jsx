@@ -31,18 +31,17 @@ export default class ContactBio extends Component {
   	}
     */
     return(
-      <div className="form-group">
-        <label>Bio</label>
+
           <textarea
             ref="bio"
-            className="form-control"
+            className="materialize-textarea"
             rows="4"
             disabled={this.props.disabled}
             onBlur={this.updateBio.bind(this)}
             onChange={this.handleBioChange}
             value={this.props.contact.bio}
           />
-      </div>
+      
     )
   }
 }

@@ -9,40 +9,45 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-        Tickets: Meteor.subscribe("allActiveTickets"),
-        options: Meteor.subscribe("allOptions"),
-        events: Meteor.subscribe("allEvents"),
-        users: Meteor.subscribe("allUsers"),
-        contacts: Meteor.subscribe("allContacts")
-      },
-      filter: "assigneduser",
-      ticketId: false
-    };
-
-    if(!Session.get("ticketfilter")){
+    if(Session.get("ticketfilter")===undefined){
       Session.set("ticketfilter", "assigneduser");
     }
-  }
-
-  componentWillUnmount() {
-    this.state.subscription.Tickets.stop();
-    this.state.subscription.users.stop();
-    this.state.subscription.contacts.stop();
-    this.state.subscription.options.stop();
-    this.state.subscription.events.stop();
+    if(Session.get("tickettypefilter")===undefined){
+      var array = ["Contact","Event Request","Prayer","Other"];
+      Session.set("tickettypefilter",array);
+    }
+    if(!Session.get("tickettextfilter")){
+      Session.set("tickettextfilter", "subject");
+    }
+    this.state = {
+      selected: "",
+      textfilter:""
+    };
   }
 
   newTicket(event){
 		event.preventDefault();
-  	this.refs.newticketoverlay.openOverlay();
+  	$("#newticketmodal").modal("open");
   }
 
   filterChange(event){
     event.preventDefault();
+    event.stopPropagation();
+    console.log(event.target.value);
     //this.setState({filter: this.refs.filter.value});
-    Session.set("ticketfilter",this.refs.filter.value);
+    Session.set("ticketfilter",event.target.value);
+  }
+
+  filterTypeChange(event){
+    Session.set("tickettypefilter",event.target.value);
+  }
+
+  changeTextFilter(event){
+    this.setState({textfilter: event.target.value});
+  }
+
+  textFilterChange(event){
+    Session.set("tickettextfilter", event.target.value);
   }
 
   editTicket(tid){
@@ -55,11 +60,13 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
   tickets(filter){
     // pulls upcoming, published events
+    var query ={};
     if(filter==""){
-      return Tickets.find().fetch();
+      //return Tickets.find().fetch();
     }
     if(filter=="assigneduser"){
-      return Tickets.find({assigneduser:Meteor.userId()});
+      query.assigneduser = Meteor.userId();
+      //return Tickets.find({assigneduser:Meteor.userId()});
     }
     if(filter=="assignedgroup"){
       var grps = Groups.find({users: Meteor.userId()}).fetch();
@@ -67,75 +74,147 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       grps.forEach(function(group){
         ids.push(group._id);
       });
-      //console.log("GGroups:");
-      //console.log(ids);
-      return Tickets.find({"assignedgroup": {$in: ids}});
+      console.log("GGroups:");
+      console.log(ids);
+      query.assignedgroup = {$in: ids};
+      //return Tickets.find({"assignedgroup": {$in: ids}});
     }
-    return Tickets.find().fetch();
+    if(this.state.textfilter!=""){
+
+      query[Session.get("tickettextfilter")]
+        = {$regex:this.state.textfilter, $options : 'i'};
+      // when doing variable text filtering use:
+      //   filter[field] = textfilter
+    }
+    query.type = {$in: Session.get("tickettypefilter")};
+    console.log(query);
+    return Tickets.find(query).fetch();
+  }
+
+  getSelected(){
+    return Tickets.findOne(this.state.selected);
+  }
+
+  select(id){
+    this.setState({selected: id});
+  }
+
+  handleCheck(id){
+    var array = Session.get("tickettypefilter");
+    console.log(array);
+    if(array.includes(id)){
+        array.splice(array.indexOf(id), 1);
+    }else{
+        array.push(id);
+    }
+    Session.set("tickettypefilter", array);
+    // var state = {};
+    // state[id]=!this.state[id];
+    // this.setState(state);
+  }
+
+  stopPropa(event){
+    event.stopPropagation();
+  }
+
+  unselect(){
+    Session.set("ticselected","");
   }
 
 
+
+
 	render() {
-    document.title="Ivy - Ticket Dashboard";
-    if(!checkPermission("tickets")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-		}
-    var ticket = Tickets.findOne(this.state.ticketId);
+    var types = Session.get("tickettypefilter");
+    //console.log(this.props.sub);
 		return (
-      <div>
-        {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-        <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""}
-          {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-          <EditTicketWindow ref="editticketoverlay" parent={this} ticket={ticket} /> : ""}
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    {(this.state.subscription.users.ready()&&this.state.subscription.contacts.ready()) ?
-                    <button className="btn btn-primary" onClick={this.newTicket.bind(this)}>New</button>
-                      : <button className="btn btn-primary" >New</button>}
-                  </div>
-                </div>
-
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h1>Ticket Dashboard</h1>
-            <div className="panel panel-default">
-
-              <div className="panel-body">
-                <select ref="filter" value={Session.get("ticketfilter")} onChange={this.filterChange.bind(this)}>
-                  <option value={"assigneduser"}>My Active Tickets</option>
-                  <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
-                  <option value={""}>All Active Tickets</option>
-                </select>
+      <div className="row" onClick={this.unselect.bind(this)}>
+          <div className="col s12">
+          {/*}  <div className="row">
+                <a onClick={this.newTicket.bind(this)}
+                  className="waves-effect waves-light btn right">New Ticket</a>
+            </div> */}
+            <div className="">
+              <div className="input-field col s12 m6">
+                <select ref="filter" className="browser-default" value={Session.get("ticketfilter")}
+                  onChange={this.filterChange.bind(this)}>
+                    <option value={"assigneduser"}>My Active Tickets</option>
+                    <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
+                    <option value={""}>All Active Tickets</option>
+                  </select>
               </div>
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th>Ticket ID</th>
-                  <th>Subject</th>
-                  <th>Customer</th>
-                  <th>Ticket Type</th>
-                  <th>Request Type</th>
-                  <th>Assigned User</th>
-                  <th>Assigned Group</th>
-                  <th>Status</th>
-                  <th>Last Updated</th>
-                </tr>
-              </thead>
-              {!(this.state.subscription.Tickets.ready()&&this.state.subscription.contacts.ready()&&this.state.subscription.users.ready()) ? <tbody></tbody>:
-              <tbody>
-                {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
-                    return <TicketRow key={ticket._id} tkt={ticket} parent={this} />
-                })}
-              </tbody>}
-            </table>
+              {/*<div className="input-field col s12 m3">
+                <select ref="typefilter" className="browser-default" value={Session.get("tickettypefilter")}
+                  onChange={this.filterTypeChange.bind(this)}>
+                    Use a multiple select thing for this
+                  </select>
+
+              </div>*/}
+              <div className="input-field col s4 m2">
+                <select ref="textfilter" className="browser-default" value={Session.get("tickettextfilter")}
+                  onChange={this.textFilterChange.bind(this)}>
+                    <option value={"subject"}>Subject</option>
+                    {/*}<option value={"assigneduser"}>Assigned User</option>
+                    <option value={"assignedgroup"}>Assigned Group</option>
+                    /* FINISH THIS AREA HERE YOU ARE ADDING TYPES, then you need to
+                    check the functions to mke sure the session variable is set
+                    correctly.  AM I MAYBE CHANGING OUT THE INPUT TYPE TO select
+                    FOR SOME OF THESE CHOICES?  I WOULD LIKE TO*/}
+                  </select>
+
+
+              </div>
+              <div className="input-field col s8 m4">
+                <input ref="filter" onChange={this.changeTextFilter.bind(this)} type="text" className="validate" />
+                <label htmlFor="icon_prefix">Search</label>
+              </div>
+            </div>
+            <div className="" onClick={this.stopPropa.bind(this)}>
+              <div className="col s12">
+                <p>Type Filter:
+                <input type="checkbox" id="contacttype" checked={types.includes("Contact")} onChange={this.handleCheck.bind(this,"Contact")} />
+                  <label htmlFor="contacttype">Contact</label>
+                <input type="checkbox" id="requesttype" checked={types.includes("Event Request")} onChange={this.handleCheck.bind(this,"Event Request")} />
+                  <label htmlFor="requesttype">Event Request</label>
+                <input type="checkbox" id="prayertype"  checked={types.includes("Prayer")}  onChange={this.handleCheck.bind(this,"Prayer")} />
+                  <label htmlFor="prayertype" >Prayer Request</label>
+                <input type="checkbox" id="othertype"   checked={types.includes("Other")}   onChange={this.handleCheck.bind(this,"Other")} />
+                  <label htmlFor="othertype"  >Other</label>
+                </p>
+              </div>
+            </div>
+
+
+            <div className="divider"></div><br/>
+              <table className="bordered highlight responsive-table">
+                <thead>
+                  <tr>
+                    <th>Ticket ID</th>
+                    <th>Subject</th>
+                    <th>Customer</th>
+                    <th>Ticket Type</th>
+                    <th>Request Type</th>
+                    <th>Assigned User</th>
+                    <th>Assigned Group</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                  </tr>
+                </thead>
+                {!this.props.sub ? <tbody></tbody>:
+                <tbody>
+                  {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
+                      return <TicketRow key={ticket._id} tkt={ticket}
+                        selected={Session.get("ticselected")==ticket._id}
+                        select={this.select.bind(this)} parent={this} />
+                  })}
+                </tbody>}
+              </table>
+
+            </div>
+            {(this.props.sub) ?
+            <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
+            }
           </div>
-        </div>
-      </div>
-    </div>
   )
 	}
 }

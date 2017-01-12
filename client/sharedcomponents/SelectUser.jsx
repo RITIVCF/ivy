@@ -5,22 +5,27 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-
-      var users = Meteor.users.find().fetch();
-      users.forEach(function(user){
-        //console.log(user.contact);
-        user.name = Contacts.findOne(user.contact).name;
-
-      });
+      if(unCreated){
+        var users = Meteor.users.find({emails: {$elemMatch: {verified: false}}}).fetch();
+      }
+      else{
+        var users = Meteor.users.find().fetch();
+      }
+      // users.forEach(function(user){
+      //   //console.log(user.contact);
+      //   user.name = Contacts.findOne(user.contact).name;
+      //
+      // });
       //console.log(users);
       return users;
 
 
 }
 
-function getSuggestions(value) {
+const getSuggestions = value => {
   //users: true, find Users
   //       fasle, use contacts
+  console.log("getSuggestions value: ", value);
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
@@ -32,29 +37,45 @@ function getSuggestions(value) {
 
 }
 
-function getSuggestionValue(suggestion) { // when suggestion selected, this function tells
+const getSuggestionValue = suggestion => { // when suggestion selected, this function tells
   return suggestion.name;                 // what should be the value of the input
 }
 
-function renderSuggestion(suggestion) {
+const renderSuggestion = suggestion => {
   return (
-    <span>{suggestion.name}</span>
+      <span>{suggestion.name}
+        <span style={{float: "right"}}>{suggestion.emails&&suggestion.emails[0].address}</span>
+      </span>
+
   );
 }
 
-function shouldRenderSuggestions(value) {
-  return value.trim().length > 1;
+const shouldRenderSuggestions = value => {
+  return value.trim().length > -1;
 }
 
+const inputComponent = inputProps => {
+  return <div className="input-field select-dropdown">
+    <input id="name" {...inputProps} required />
+    <label htmlFor="name">{inputProps.label}</label>
+  </div>
+}
+
+// function renderSuggestionsContainer({ children, ...rest }) {
+//   console.log({...rest});
+//   // var rest = {...rest};
+//   // rest.className="autocomplete-content dropdown-content";
+//   return children;
+// }
 
 
 
 
-export default class SelectUser extends TrackerReact(React.Component) {
+export default class SelectUser extends React.Component {
   constructor(props) {
     super(props);
 
-
+    unCreated = props.unCreated;
 
       this.state = {
         value: '',
@@ -73,7 +94,7 @@ export default class SelectUser extends TrackerReact(React.Component) {
     //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
-    this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
+    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
   }
 
 shouldComponentUpdate(nextProps, nextState){
@@ -94,68 +115,105 @@ shouldComponentUpdate(nextProps, nextState){
     //console.log(suggestion);
     //this.setState({value:suggestion.name});
     suggestion.component = this;
-    this.props.updateContact(suggestion);
+    this.props.updateUser(suggestion);
+    // console.log("UNSET PROP:", this.props.unset);
+    // console.log("suggestion selected this.state: ", this.state);
+    if(!this.props.unset){
+      // console.log("UNSET PROP FALSE");
+        this.setState({value: ''}, function(){
+          //console.log("NOT keeping name:", this.state);
+        });
+    }
+    else{
+      this.setState({value: suggestion.name}, function(){
+        //console.log("keeping name:", this.state);
+      });
+    }
   }
 
 
   onChange(event, { newValue, method }) {
-    //console.log(method);
     if(method != 'tab'){
-      this.props.unset();
+      if(this.props.unset){
+        this.props.unset();
+      }
     }
     const value = event.target.value;
     //console.log("value");
-    //console.log(value);
-    if(typeof newValue !== 'undefined') {
-        this.setState({
-            value: newValue
-        });
-    }
-    // this.setState({
-    //   value: newValue
-    // });
+    // console.log("State Value:", this.state.value);
+    // console.log("On Change Value: ", newValue);
+    // if(typeof newValue !== 'undefined') {
+    //     this.setState({
+    //         value: newValue
+    //     });
+    // }
+    this.setState({
+      value: newValue
+    });
+
+  }
+
+  onBlur(){
+    Materialize.updateTextFields();
   }
 
 
-  onSuggestionsUpdateRequested({ value }) {
+  onSuggestionsFetchRequested({ value }) {
     this.setState({
       suggestions: getSuggestions(value)
     });
   }
 
-  render() {
+  onSuggestionsClearRequested() {
+    this.setState({
+      suggestions: []
+    });
+  }
 
+
+
+  render() {
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: 'Enter name...',
+      label: this.props.label?this.props.label:"Name",
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
+      className:"autocomplete-content dropdown-content",
+      onBlur: this.onBlur
     };
+    //console.log("ID PROP:",this.props.id);
     if(this.props.id){
+      //console.log("PROP IS TRUE");
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     renderInputComponent={inputComponent}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
                      focusFirstSuggestion={false}
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     renderInputComponent={inputComponent}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                     />
       );
     }
 

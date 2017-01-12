@@ -6,11 +6,16 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
+		this.state = {
+			ttl: "",
+			mounted: false
+		}
 
 	}
 
 	componentDidMount(){
 		console.log("did mount");
+		thiz2 = this;
 		Meteor.call("currentFunnel", function(error, result){
 			snapshotChart2 = new Chart($(funnelchart2), {
 				type: "bar",
@@ -32,7 +37,14 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 	        }
 	    }
 			});
+			var total = parseInt(result.Visitor)+
+									parseInt(result.Member)+
+									parseInt(result.Server)+
+									parseInt(result.Leader)+
+									parseInt(result.Multiplier);
+				thiz2.setState({ttl: total});
 		});
+		this.setState({mounted: true});
 	}
 
 	refresh(){
@@ -50,7 +62,7 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					Funnel Status - Current - Membership
+					Funnel Status - Membership | <b>Total:</b> {this.state.ttl}
 				</div>
 				<div className="panel-body">
 					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>

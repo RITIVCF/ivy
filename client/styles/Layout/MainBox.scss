@@ -1,0 +1,21 @@
+.main-box {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  //padding: 1rem;
+  right: 300px;
+  -webkit-transition: right 0.3s;
+  transition: right 0.3s;
+}
+
+.main-box > div {
+  height: 100%;
+  padding: 1rem;
+}
+
+.info-hide {
+  right: 0;
+}

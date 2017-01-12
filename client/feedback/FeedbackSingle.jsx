@@ -22,41 +22,35 @@ export default class FeedbackSingle extends TrackerReact(React.Component) {
   }
 
   getUser(){
-    return Contacts.findOne(
-      Meteor.users.findOne(this.props.feedback.user).contact
-      ).name;
+    return Meteor.users.findOne(this.props.feedback.user).name;
   }
 
+
 	render() {
-    var status = "panel panel-info";
+    var status = {};
     if(this.props.feedback.type=="Issue"){
-      status="panel panel-danger";
+      status={outline: "solid red 2px"};
     }
     else if(this.props.feedback.type=="Comment"){
-      status="panel panel-warning";
+      status={outline: "solid yellow 2px"};
     }
     else if(this.props.feedback.type=="Suggestion"){
-      status="panel panel-success";
+      status={outline: "solid green 2px"};
     }
 
 
 		return (
-      <div className={status}>
-        <div className="panel-heading">
-          {this.props.feedback.type}
-        </div>
-        <div className="panel-body">
+      <div className="card" style={status}>
+        <div className="card-content">
+          <span className="card-title">{this.props.feedback.type}</span>
           <p>User: {this.getUser()}</p>
           <p>{this.props.feedback.text}</p>
           <p>Submitted: {moment(this.props.feedback.createdAt).format("MMM DD, YY  h:mm A")}</p>
-          <button className="btn btn-success"
-            onClick={this.complete.bind(this)}
-            >Complete</button>
+          <a onClick={this.complete.bind(this)} className="waves-effect waves-light btn">Complete</a>
+
           {this.props.feedback.working?"":
-          <button className="btn btn-warning"
-            onClick={this.working.bind(this)}>
-            Work On It!
-          </button>}
+            <a onClick={this.working.bind(this)} className="waves-effect waves-light btn">Work on it!</a>
+          }
         </div>
       </div>
     )

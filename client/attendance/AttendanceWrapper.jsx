@@ -42,7 +42,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 		var attendees = [];
 		var contact;
 		ev.attendees.map( (attendee)=>{
-			contact = Contacts.findOne(attendee._id);
+			contact = Meteor.users.findOne(attendee._id);
 			for(var key in contact){
 				attendee[key] = contact[key];
 			}
@@ -59,19 +59,12 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
     console.log("true");
     document.title = "Ivy - Attendance Dashboard";
 		return (
-      <div className="container-fluid">
 				<div className="row">
-					<div className="col-sm-4 col-lg-3">
-						<nav className="navbar navbar-default navbar-fixed-side">
-              {this.subsReady()?FlowRouter.current().path=="/attendance"?<div></div>:<AttendanceSummary date={this.getEvent().start} />:<div></div>}
-						</nav>
-					</div>
-					<div className="col-sm-8 col-lg-9">
-            {this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""}
+					<div className="col s12">
+            {/*this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""*/}
             {this.subsReady()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
 					</div>
 				</div>
-			</div>
   )
 	}
 }

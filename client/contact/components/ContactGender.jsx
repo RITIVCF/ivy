@@ -21,11 +21,12 @@ export default class ContactGender extends TrackerReact(React.Component) {
       return(<div></div>)
     }
     return (
-      <div className="form-group">
-        <label>Sex (Gender):</label>
+      <div >
+        <label htmlFor="gender">Sex (Gender):</label>
       <select
-        className="form-control"
         ref="gender"
+        id="gender"
+        className="browser-default"
         value={this.props.contact.gender}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>

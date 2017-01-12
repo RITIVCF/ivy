@@ -7,7 +7,7 @@ export default class Contact extends Component {
   }
 
   getContact(){
-    return Contacts.findOne(this.props.cid);
+    return Meteor.users.findOne(this.props.cid);
   }
 
 
@@ -17,7 +17,7 @@ export default class Contact extends Component {
       <tr>
         <td><button onClick={this.remove.bind(this)}>X</button></td>
         <td>{contact.name}</td>
-        <td>{contact.email}</td>
+        <td>{contact.emails[0].address}</td>
       </tr>
     )
   }

@@ -26,9 +26,10 @@ export default class UserRow extends TrackerReact(React.Component) {
 			Meteor.call("passReset", this.props.uid, function(error,result){
 				if(error){
 					console.log(error);
-					thiz.props.parent.postError();
+					Materialize.toast('Oops! Looks like something went wrong. Try again later. If the problem persists, '
+						+ 'contact support.', 4000);
 				}
-				thiz.props.parent.postSuccess();
+				Materialize.toast('Success! Password reset has been sent.', 4000);
 			});
 		}
 	}
@@ -51,25 +52,21 @@ export default class UserRow extends TrackerReact(React.Component) {
 	render() {
 		var user = this.getUser(this.props.uid);
 		return (
-			<tr onClick={this.go.bind(this)} id="hover-me">
-				<td>{user.name}</td>
-				<td>{user.email}
-					<button
-						className="btn btn-info"
-						onClick={this.resetPass.bind(this)}
-						id="hover-content"
-						style={{float: "right"}} >
-							Reset Password
-					</button>
-					<button
-						className="btn btn-success"
-						onClick={this.openUser.bind(this)}
-						id="hover-content"
-						style={{float: "right"}} >
-							Open User
-					</button>
-				</td>
-			</tr>
+
+			<div className="col s12 m6 l4">
+				<div className="card left hoverable">
+					<div className="card-image">
+	          <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
+	        </div>
+					<div className="card-content">
+						<span className="card-title">{user.name}</span>
+					</div>
+					<div className="card-action">
+						<button className="btn" onClick={this.resetPass.bind(this)}>Reset Pass</button>
+						<button className="btn" onClick={this.openUser.bind(this)}>Groups</button>
+					</div>
+				</div>
+			</div>
 		)
 	}
 }

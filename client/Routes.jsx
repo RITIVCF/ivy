@@ -18,7 +18,7 @@ import ForgotPassword from './user/ForgotPassword.jsx';
 import NewContactWrapper from './contact/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
-import EventWorkspace from './event/EventWorkspace.jsx';
+import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
 import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
@@ -26,19 +26,20 @@ import EventCalendarSub from './event/EventCalendarSub.jsx';
 import MemberWrapper from './member/MemberWrapper.jsx';
 import SigninWrapper from './event/forms/SignInWrapper.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
-import ChurchesSummary from './churches/ChurchesSummary.jsx';
+import ChurchesWrapper from './churches/ChurchesWrapper.jsx';
 import ChurchesWorkspace from './churches/ChurchesWorkspace.jsx';
 import ChurchesOld from './churches/ChurchesOld.jsx';
-import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
-import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
-import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
+//import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
+import MySmallGroupWrapper from './sgroups/MySmallGroupWrapper.jsx';
+//import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
+//import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
 import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
 import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
-import TicketSummary from './tickets/TicketSummary.jsx';
+import TicketWrapper from './tickets/TicketWrapper.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
-import ContactSummary from './contact/ContactSummary.jsx';
-import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
-import AdminGroupsWrapper from './groups/AdminGroupsWrapper.jsx';
+import ContactWrapper from './contact/ContactWrapper.jsx';
+//import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
+import GroupsWrapper from './groups/GroupsWrapper.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
@@ -46,6 +47,8 @@ import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 import OverviewWrapper from './admin/overview/OverviewWrapper.jsx';
+import EmailWrapper from './email/EmailWrapper.jsx';
+import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
 
 
 
@@ -71,6 +74,7 @@ FlowRouter.triggers.enter([signInForceCheck]);
 FlowRouter.route('/',{
 	action() {
 		mount(MainLayout, {
+			header: "Dashboard",
 			content: (<DashboardWrapper />)
 		})
 	}
@@ -87,6 +91,7 @@ FlowRouter.route('/',{
 FlowRouter.route('/admin', {
 	action() {
 		mount(MainLayout, {
+			header: "Administration",
 			content: (<AdminDashboard />)
 		})
 	}
@@ -95,7 +100,8 @@ FlowRouter.route('/admin', {
 FlowRouter.route('/admin/groups', {
 	action() {
 		mount(MainLayout, {
-			content: (<AdminGroupsWrapper />)
+			header: "Structures",
+			content: (<GroupsWrapper />)
 		})
 	}
 });
@@ -103,6 +109,7 @@ FlowRouter.route('/admin/groups', {
 FlowRouter.route('/admin/pages', {
 	action() {
 		mount(MainLayout, {
+			header: "Administration",
 			content: <PagePermissionsWrapper />
 		})
 	}
@@ -111,6 +118,7 @@ FlowRouter.route('/admin/pages', {
 FlowRouter.route('/admin/settings', {
 	action() {
 		mount(MainLayout, {
+			header: "Site Settings",
 			content: <SiteSettingsWrapper />
 		})
 	}
@@ -119,6 +127,7 @@ FlowRouter.route('/admin/settings', {
 FlowRouter.route('/admin/users', {
 	action() {
 		mount(MainLayout, {
+			header: "Users",
 			content: <UserManagementWrapper />
 		})
 	}
@@ -127,6 +136,7 @@ FlowRouter.route('/admin/users', {
 FlowRouter.route('/admin/users/:uid', {
 	action(params) {
 		mount(MainLayout, {
+			header: "Administration",
 			content: <UserManagementWrapper uid={params.uid} />
 		})
 	}
@@ -135,6 +145,7 @@ FlowRouter.route('/admin/users/:uid', {
 FlowRouter.route('/admin/duplicatecontacts', {
 	action() {
 		mount(MainLayout, {
+			header: "Duplicate Contacts",
 			content: <DuplicateContactWrapper />
 		})
 	}
@@ -143,6 +154,7 @@ FlowRouter.route('/admin/duplicatecontacts', {
 FlowRouter.route('/admin/overview', {
 	action() {
 		mount(MainLayout, {
+			header: "Chapter Overview",
 			content: <OverviewWrapper />
 		})
 	}
@@ -151,6 +163,7 @@ FlowRouter.route('/admin/overview', {
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
+			header: "My Account",
 			content: (<UserProfileWrapper />)
 		})
 	}
@@ -159,6 +172,7 @@ FlowRouter.route('/profile',{
 FlowRouter.route('/contacts/:cid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "People",
 			content: (<ContactProfileWrapper cid={params.cid} />)
 		})
 	}
@@ -167,7 +181,8 @@ FlowRouter.route('/contacts/:cid',{
 FlowRouter.route('/contacts', {
 	action(){
 		mount(MainLayout, {
-			content: (<ContactSummary />)
+			header: "People",
+			content: (<ContactWrapper />)
 		})
 	}
 });
@@ -188,58 +203,80 @@ FlowRouter.route('/newcontact', {
 	}
 });
 
-FlowRouter.route('/calendar', {
+FlowRouter.route('/mysg', {
 	action() {
 		mount(MainLayout, {
+			header: "My Small Group",
+			content: (<MySmallGroupWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/events', {
+	action() {
+		mount(MainLayout, {
+			header: "Events",
 			content: (<EventCalendarWrapper />)
 		})
 	}
 });
 
-FlowRouter.route('/attendance',{
-	action() {
-		mount(MainLayout, {
-			content: (<AttendanceSummary />)
-		})
-	}
-});
+// FlowRouter.route('/attendance',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<AttendanceSummary />)
+// 		})
+// 	}
+// });
 
 FlowRouter.route('/attendance/event/:eid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "Attendance",
 			content: (<EventDetailWrapper eid={params.eid} />)
 		})
 	}
 });
 
-FlowRouter.route('/events',{
-	action() {
-		mount(MainLayout, {
-			content: (<EventsWrapper />)
-		})
-	}
-});
 
 FlowRouter.route('/events/workspace/:eid',{
 	action(params) {
 		mount(MainLayout, {
-			content: (<EventWorkspace eid={params.eid} />)
+			header: "Event Workspace",
+			content: (<EventWorkspaceWrapper eid={params.eid} />)
 		})
 	}
 });
 
-FlowRouter.route('/events/old',{
-	action() {
-		mount(MainLayout, {
-			content: (<EventOld />)
-		})
+FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
+	action(params) {
+		if(params.aord=="accept"){
+			Meteor.call("acceptJobRequest", params.eid, params.jid);
+		}
+		else{
+			Meteor.call("declineJobRequest", params.eid, params.jid);
+		}
+		// mount(MainLayout, {
+		// 	header: params.aord=="accept"?"Accept":"Decline",
+		// 	content: (< />)
+		// })
+		FlowRouter.go("/");
 	}
 });
+
+// FlowRouter.route('/events/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<EventOld />)
+// 		})
+// 	}
+// });
 
 FlowRouter.route('/tickets',{
 	action() {
 		mount(MainLayout, {
-			content: (<TicketSummary />)
+			header: "Tickets",
+			content: (<TicketWrapper />)
 		})
 	}
 });
@@ -247,6 +284,7 @@ FlowRouter.route('/tickets',{
 FlowRouter.route('/tickets/:tid',{
 	action(params) {
 		mount(MainLayout, {
+			header: "Tickets",
 			content: (<EditTicketWrapper tid={params.tid} />)
 		})
 	}
@@ -255,50 +293,69 @@ FlowRouter.route('/tickets/:tid',{
 FlowRouter.route('/churches',{
 	action() {
 		mount(MainLayout, {
-			content: (<ChurchesSummary />)
+			header: "Churches",
+			content: (<ChurchesWrapper />)
 		})
 	}
 });
 
-FlowRouter.route('/churches/workspace/:cid',{
-	action(params) {
+FlowRouter.route('/emails',{
+	action(){
 		mount(MainLayout, {
-			content: (<ChurchesWorkspace cid={params.cid} />)
+			header: "Emails",
+			content: (<EmailWrapper />)
 		})
 	}
 });
 
-FlowRouter.route('/churches/old',{
-	action() {
+FlowRouter.route('/emails/workspace/:emid',{
+	action(params){
 		mount(MainLayout, {
-			content: (<ChurchesOld />)
+			header: "Email Workspace",
+			content: (<EmailWorkspaceWrapper emid={params.emid} />)
 		})
 	}
 });
 
-FlowRouter.route('/sg',{
-	action() {
-		mount(MainLayout, {
-			content: (<SmallGroupsSummary />)
-		})
-	}
-});
+// FlowRouter.route('/churches/workspace/:cid',{
+// 	action(params) {
+// 		mount(MainLayout, {
+// 			content: (<ChurchesWorkspace cid={params.cid} />)
+// 		})
+// 	}
+// });
 
-FlowRouter.route('/sg/workspace/:gid',{
-	action(params) {
-		mount(MainLayout, {
-			content: (<SmallGroupsWorkspace gid={params.gid} />)
-		})
-	}
-});
+// FlowRouter.route('/churches/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<ChurchesOld />)
+// 		})
+// 	}
+// });
 
-FlowRouter.route('/sg/old',{
-	action() {
-		mount(MainLayout, {
-			content: (<SmallGRoupsOld />)
-		})
-	}
-});
+// FlowRouter.route('/sg',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<SmallGroupsSummary />)
+// 		})
+// 	}
+// });
+//
+// FlowRouter.route('/sg/workspace/:gid',{
+// 	action(params) {
+// 		mount(MainLayout, {
+// 			content: (<SmallGroupsWorkspace gid={params.gid} />)
+// 		})
+// 	}
+// });
+//
+// FlowRouter.route('/sg/old',{
+// 	action() {
+// 		mount(MainLayout, {
+// 			content: (<SmallGRoupsOld />)
+// 		})
+// 	}
+// });
 
 
 FlowRouter.route('/forms/member', {
@@ -337,14 +394,14 @@ FlowRouter.route('/forms/rsvp/:eid', {
 	}
 });
 
-FlowRouter.route('/ethnicity', {
-	action() {
-		mount(MainLayout, {
-				content: (<EthnicityWrapper />)
-			}
-		)
-	}
-});
+// FlowRouter.route('/ethnicity', {
+// 	action() {
+// 		mount(MainLayout, {
+// 				content: (<EthnicityWrapper />)
+// 			}
+// 		)
+// 	}
+// });
 
 FlowRouter.route('/login', {
 	action(params, queryParams) {
@@ -375,6 +432,7 @@ FlowRouter.route('/signup/:t', {
 FlowRouter.route('/changepassword', {
 	action() {
 		mount(MainLayout, {
+			header: "My Account",
 			content: (<ChangePassword />)
 		})
 	}
@@ -391,6 +449,7 @@ FlowRouter.route('/forgotpassword', {
 FlowRouter.route('/feedback',{
 	action() {
 		mount(MainLayout, {
+			header: "Feedback Summary",
 			content: (<FeedbackWrapper />)
 		})
 	}
