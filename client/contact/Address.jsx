@@ -38,6 +38,7 @@ export default class Address extends Component {
   }
 
   remove(event){
+    event.stopPropagation();
     event.preventDefault();
     Meteor.call("removeMailingAddress", this.props.contact._id, this.props.address.line1);
   }
@@ -69,7 +70,7 @@ export default class Address extends Component {
 
   render(){
     return(
-      <li>
+      <li className="collection-item" id="showhim">
     {this.state.editting==true ?
       <form>
         {/*}<input type="hidden" ref="id" value={this.props.address._id} />*/}
@@ -84,14 +85,15 @@ export default class Address extends Component {
       </form>
       :
       <div onClick={this.edit.bind(this)}>
+        {this.props.disabled ? <div></div>:
+        <a className="btn right" id="showme" onClick={this.remove.bind(this)}>Remove</a>}
         <div>{this.props.address.line1}</div>
         <div>{this.props.address.line2}</div>
         <div>{this.props.address.line3}</div>
         <div>{this.props.address.city}, {this.props.address.state} {this.props.address.zip}</div>
       </div>
     }
-    {this.props.disabled ? <div></div>:
-    <button onClick={this.remove.bind(this)}>X</button>}
+
     </li>
     )
   }

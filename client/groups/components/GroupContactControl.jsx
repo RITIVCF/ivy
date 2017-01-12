@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectContact from '../../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 import Contact from './Contact.jsx';
 
 
@@ -30,10 +30,10 @@ export default class GroupContactControl extends TrackerReact(React.Component) {
 		<div>
 
 			<p>Add contacts to the group:</p>
-			<SelectContact
+			<SelectUser
 				parent={this}
 				unset={this.unset.bind(this)}
-				updateContact={this.addContact.bind(this)}
+				updateUser={this.addContact.bind(this)}
 				ref="contact" />
 			<table>
 				<thead>

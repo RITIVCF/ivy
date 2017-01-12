@@ -45,14 +45,15 @@ export default class TicketDescription extends Component {
 
   render(){
     return(
-      <div className="form-group">
-        <label>Description</label><br/>
+      <div className="input-field">
         <textarea ref="description"
           value={this.state.description}
-          className="form-control"
+          id="ticdesc"
+          className="materialize-textarea"
           rows="5"
           disabled={this.state.descriptionlock}
           onChange={this.handleDescriptionChange.bind(this)} />
+        <label htmlFor="ticdesc">Description</label>
       </div>
     )
   }

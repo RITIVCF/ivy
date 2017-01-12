@@ -28,6 +28,14 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 		// this.state.subscription.contacts.stop();
   }
 
+	shouldComponentUpdate(nextProps, nextState){
+		if(nextProps.group._id=="admin"){
+			//this.setState({showPerm: false});
+			this.state.showPerm = false;
+		}
+		return true;
+	}
+
 	toglleAdmin(){
 		Meteor.call("toggleAdminGroup", this.props.group._id, this.refs.admin.checked);
 	}
@@ -37,21 +45,23 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 	}
 
 	render() {
+		if(!this.props.group){
+			return <div>
+				<h5>Groups Workspace</h5>
+				<p>Please select a group to continue.</p>
+			</div>
+		}
+
 
 		return (
-		<div>
-			<GroupName group={this.props.group} />
-			{/*<input type="checkbox" ref="admin" value={this.props.group.admingroup} onChange={this.toggleAdmin.bind(this)} />*/}
-			{/*this.props.group.admingroup ? <p><i>This is an admin group.</></p>:<div></div>*/}
-			{this.props.group._id!="admin"?<label>Show Permissions
-			<input type="checkbox" onClick={this.togglePerm.bind(this)} /></label>
-			:<div></div>}
-
-			{this.state.showPerm?<GroupPermissionControl group={this.props.group} />:<div></div>}
-			{!this.props.group.admingroup ?
-			<GroupContactControl group={this.props.group} />
-			:
-			<GroupUserControl group={this.props.group} />}
+		<div className="row">
+			<div className="col s12">
+				<GroupName group={this.props.group} />
+				{/*<input type="checkbox" ref="admin" value={this.props.group.admingroup} onChange={this.toggleAdmin.bind(this)} />*/}
+				{/*this.props.group.admingroup ? <p><i>This is an admin group.</></p>:<div></div>*/}
+				{this.props.group._id!="admin"?<GroupPermissionControl group={this.props.group} />:false}
+				<GroupUserControl group={this.props.group} />
+			</div>
 		</div>
 		)
 	}

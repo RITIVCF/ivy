@@ -1,0 +1,9 @@
+.trunc-cell > span {
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  overflow: hidden;
+}
+
+.hide-emails > li {
+  display: none;
+}

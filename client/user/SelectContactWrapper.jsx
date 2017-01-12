@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectContact from '../sharedcomponents/SelectContactNoUser.jsx';
+import SelectUser from '../sharedcomponents/SelectUser.jsx';
 
 export default class SelectContactWrapper extends TrackerReact(React.Component){
   constructor(props) {
@@ -33,9 +33,25 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
     if(!this.state.contact){
       return;
     }
+    var thiz= this;
     //console.log(this.state.contact);
-    Meteor.call("createNewUser", this.state.contact.email, this.state.contact._id);
-    this.setState({submitted: true});
+    // Meteor.call("createNewUser", this.state.contact._id, this.state.contact.email, function(error, result){
+    //   if(error){
+    //     console.log(error);
+    //   }
+    //   else{
+    //     console.log(result);
+    //   }
+    // });
+    Meteor.call("enrollUser", this.state.contact._id, function(error){
+      if(error){
+        window.alert("Sorry something went wrong. Please try again.");
+        console.log(error);
+      }
+      else{
+        thiz.setState({submitted: true});
+      }
+    });
 
   }
 
@@ -45,35 +61,34 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
 
 
     return(
-      <div className="panel panel-info">
-        <div className="panel-heading">
-          Select Contact
-        </div>
-        <div className="panel-body">
+      <div className="card">
+        <div className="card-content">
+          <h5>Select Contact</h5>
           <p>An email will be sent to your email with a sign up link.</p>
           <p>Please select yourself from the list:</p>
-            <SelectContact
+            <SelectUser
               parent={this}
               unset={this.unset.bind(this)}
-              users={false}
+              unCreated={true}
               initialValue={""}
-              updateContact={this.setContact.bind(this)}
+              updateUser={this.setContact.bind(this)}
               ref="contact"  />
-            <p>If your name does not show up, go <a href="/newcontact">here</a> to create a new contact card.</p>
+            {!this.state.contact?
+              <p>If your name does not show up, go <a href="/newcontact">here</a> to create a new contact card.</p>
+              :""}
         </div>
-        <form onSubmit={this.submit.bind(this)}>
-          <input type="submit" name="submit" value="Send Confirmation"/>
-        </form>
+        {!this.state.contact?"":
+        <div className="card-action">
+            <a className="waves-effect waves-light btn" onClick={this.submit.bind(this)} >Send Confirmation</a>
+        </div>}
       </div>
     )
   }
   else{
     return(
-      <div className="panel panel-info">
-        <div className="panel-heading">
-          Select Contact
-        </div>
-        <div className="panel-body">
+      <div className="card">
+        <div className="card-content">
+          <h5>Select Contact</h5>
           <p>Please check your email and follow the link.</p>
         </div>
       </div>

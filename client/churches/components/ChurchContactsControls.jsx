@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Contact from './Contact.jsx';
 import SelectOption from '../../sharedcomponents/SelectOption.jsx';
-import SelectContact from '../../sharedcomponents/SelectContact.jsx';
+import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 
 
 export default class ChurchContactsControls extends TrackerReact(React.Component) {
@@ -50,7 +50,7 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
 
   getContactsInfo(){
     //console.log(this.props.ch.contacts);
-    return Contacts.find({_id:{$in:this.props.ch.contacts}}).fetch();
+    return Meteor.users.find({_id:{$in:this.props.ch.contacts}}).fetch();
   }
 
 
@@ -62,27 +62,18 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
       <div>
         <div className="panel-heading"><h4>Church Contacts</h4></div>
         <p>Choose a name from the list to add person</p>
-        <SelectContact
+        <SelectUser
           parent={this}
           unset={this.unset.bind(this)}
           initialValue={""}
-          updateContact={this.addContact.bind(this)}
+          updateUser={this.addContact.bind(this)}
           ref="contact"  />
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Remove</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.getContactsInfo().map((contact)=>{
-              return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
-            })}
-          </tbody>
-        </table>
+        <div className="row">
+          {this.getContactsInfo().map((contact)=>{
+            return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
+          })}
+        </div>
+
       </div>
     )
   }

@@ -6,9 +6,7 @@ export default class RequestSingle extends Component {
     if(this.props.request.assigneduser==""){
       return {name:"-"};
     }
-    return Contacts.findOne({_id:
-        Meteor.users.findOne({_id:this.props.request.assigneduser}).contact}
-      );
+    return Meteor.users.findOne({_id:this.props.request.assigneduser});
   }
 
   go(){

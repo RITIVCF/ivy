@@ -32,10 +32,15 @@ export default class EventDetailWrapper extends TrackerReact(React.Component) {
 		var attendees = [];
 		var contact;
 		ev.attendees.map( (attendee)=>{
-			contact = Contacts.findOne(attendee._id);
-			for(var key in contact){
-				attendee[key] = contact[key];
-			}
+			contact = Meteor.users.findOne(attendee._id);
+				attendee[name] = contact[name];
+				attendee[email] = contact[email];
+				attendee[phone] = contact[phone];
+				attendee[firsttime] = contact[firsttime];
+				attendee[more] = contact[more];
+				attendee[howhear] = contact[howhear];
+				attendee[firsttime] = contact[firsttime];
+				console.log(attendee);
 		});
 		return ev;
 	}

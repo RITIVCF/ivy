@@ -25,11 +25,12 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
   		return (<div></div>);
   	}
     return (
-      <div className="form-group">
-        <label>Expected Grad Term:</label>
-        {this.props.subscription.ready() ?
+      <div >
+      <label htmlFor="gradterm">Expected Grad Term:</label>
+        {Options.findOne("gradterms").vals ?
       <select
-        className="form-control"
+        id="gradterm"
+        className="browser-default"
         value={this.props.contact.gradterm}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>

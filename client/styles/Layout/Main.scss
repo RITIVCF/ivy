@@ -1,0 +1,22 @@
+main {
+  position: fixed;
+  top: 64px;
+  left: 240px;
+  right: 0;
+  bottom: 0;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-transition: left 0.3s;
+  transition: left 0.3s;
+}
+
+main.nav-collapsed {
+  left: 40px;
+}
+
+@media only screen and (max-width : 992px) {
+  main {
+    left: 0px;
+  }
+}

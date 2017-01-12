@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import Tag from './Tag.jsx';
+import SelectTag from '../../sharedcomponents/SelectTag.jsx';
 
 
-
-export default class EventTags extends Component {
+export default class EventTags extends TrackerReact(React.Component) {
+  constructor(){
+    super();
+    this.state ={value: ""};
+  }
   updateTags(event){
 		event.preventDefault();
     var tags = [];   // Initiate tags
@@ -25,30 +31,50 @@ export default class EventTags extends Component {
 	}
 
   getTags(){
-    return Options.findOne({_id:"eventtags"}).vals;
+
+    //return Options.findOne({_id:"eventtags"}).vals;
+  }
+
+  submit(tag){
+    //event.preventDefault();
+    console.log("submitted");
+    console.log(tag);
+    Meteor.call("addEventTag", this.props.ev._id, tag);
+    //this.refs.tag.initialValue="";
+    //this.setState({value: ""});
+
+
+  }
+
+  // setTextValue(txt){
+  //   this.setState({value: txt});
+  // }
+
+  unset(){
+
   }
 
 
   render(){
     let ev = this.props.ev;//this.getEvent();
 
-  	if(!ev){
-  		return (<div>Loading...</div>);
-  	}
   	var tags = ev.tags;
     return(
-      <div className="form-group">
-    {/*this.props.subscription.ready() ? */ this.getTags().map( (tag)=>{
-      return <li key={tag}><label>{tag}
-        <input
-          type="checkbox"
-          ref={tag}
-          readOnly={true}
-          name={tag}
-          disabled={!this.props.perm}
-          onClick={this.updateTags.bind(this)}
-          checked={(tags.indexOf(tag) != -1) ? "checked": ""}
-        /></label></li>
+      <div style={{backgroundColor: "white", outline:"grey solid 1px", padding: "5px"}}>
+        {/*  <input type="text" ref="tag" placeholder="+Tag" /> LOOK INTO REACT-WIDGETS MULTISELECT*/}
+        {/*}  unset={this.unset.bind(this)} */}
+        {/*}  onChange={this.setTextValue.bind(this)} */}
+        {this.props.perm&&
+          <SelectTag
+            parent={this}
+            ref="tag"
+
+            onSelected={this.submit.bind(this)}
+            initialValue={this.state.value}
+            />}
+    {/*this.props.subscription.ready() ? */// this.getTags().map( (tag)=>{
+      ev.tags.map((tag)=>{
+        return <Tag key={tag} eid={ev._id} tag={tag} perm={this.props.perm} />
     }) /* : <div></div>*/}
   </div>
   )

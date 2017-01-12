@@ -27,30 +27,30 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 	render() {
 
 		return (
-		<div>
+			<div>
 
-			<p>Add users to the group:</p>
-			<SelectUser
-				parent={this}
-				unset={this.unset.bind(this)}
-				users={true}
-				initialValue={""}
-				updateContact={this.addUser.bind(this)}
-				ref="contact" />
-			<table className="table table-striped">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Email</th>
-					</tr>
-				</thead>
-				<tbody>
-					{this.props.group.users.map((uid)=>{
-						return <User key={uid} gid={this.props.group._id} uid={uid} />
-					})}
-				</tbody>
-			</table>
-		</div>
+				<p>Add users to the group:</p>
+				<SelectUser
+					parent={this}
+					unset={this.unset.bind(this)}
+					users={true}
+					initialValue={""}
+					updateUser={this.addUser.bind(this)}
+					ref="contact" />
+				<table className="bordered striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Email</th>
+						</tr>
+					</thead>
+					<tbody>
+						{this.props.group.users.map((uid)=>{
+							return <User key={uid} gid={this.props.group._id} uid={uid} />
+						})}
+					</tbody>
+				</table>
+			</div>
 		)
 	}
 }

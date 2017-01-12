@@ -6,11 +6,15 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
-
+		this.state = {
+			ttl: "",
+			mounted: false
+		};
 	}
 
 	componentDidMount(){
 		console.log("did mount");
+		thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
 			snapshotChart = new Chart($(funnelchart), {
 				type: "bar",
@@ -25,14 +29,22 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	        scales: {
 	            yAxes: [{
 	                ticks: {
-											max: ((result.max + 2))<50?(result.max+2):(result.max+5),
+											max: ((result.max + 2)) < 50?(result.max+2):(result.max+5),
 	                    beginAtZero:true
 	                }
 	            }]
 	        }
 	    }
 			});
+			var total = parseInt(result.Crowd)+
+									parseInt(result.Visitor)+
+									parseInt(result.Member)+
+									parseInt(result.Server)+
+									parseInt(result.Leader)+
+									parseInt(result.Multiplier);
+				thiz.setState({ttl: total});
 		});
+		this.setState({mounted: true});
 	}
 
 	refresh(){
@@ -48,14 +60,10 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-					Funnel Status - Current
-				</div>
-				<div className="panel-body">
-					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
+			<div>
+					Funnel Status - Current | <b>Total:</b> {this.state.ttl} <br/>
+				<button onClick={this.refresh.bind(this)} className="btn waves-effect waves-light">Refresh</button>
 					<canvas id="funnelchart" width="400" height="400"></canvas>
-				</div>
 			</div>
 		)
 	}

@@ -8,8 +8,8 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
     this.state = {
       subscription: {
         Feedback: Meteor.subscribe("allFeedback"),
-        Contacts: Meteor.subscribe("allContacts"),
-        Users: Meteor.subscribe("allUsers")
+        Contacts: Meteor.subscribe("allContacts")
+        //Users: Meteor.subscribe("allUsers")
       }
     }
   }
@@ -17,35 +17,21 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
   componentWillUnmount(){
     this.state.subscription.Feedback.stop();
     this.state.subscription.Contacts.stop();
-    this.state.subscription.Users.stop();
+    //this.state.subscription.Users.stop();
   }
 
 	render() {
     document.title="Ivy - Feedback";
 		return (
       <div className="row">
-  			<div className="col-sm-3 col-lg-2">
-  				<nav className="navbar navbar-default navbar-fixed-side">
-
-  				</nav>
-  			</div>
-  			<div className="col-sm-9 col-lg-10">
-          <h1>All Feedback</h1>
-          <div className="panel panel-primary">
-            <div className="panel-heading">
-
-            </div>
-            <div className="panel-body">
-              {checkPermission("feedback")?<div>
-                {this.state.subscription.Contacts.ready()&&this.state.subscription.Users.ready()?
-                  <FeedbackSummary />:""
-                }
-              </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
-
-            </div>
-          </div>
-        </div>
+  			<div className="col s12">
+          {checkPermission("feedback")?<div>
+            {this.state.subscription.Contacts.ready()?
+              <FeedbackSummary />:""
+            }
+                </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
       </div>
+    </div>
     )
 	}
 }

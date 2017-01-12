@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Address from './Address.jsx';
+import NewAddressModal from './NewAddressModal.jsx';
 
 export default class AddressForm extends Component {
   // props are: address list from contact object
@@ -9,9 +10,12 @@ export default class AddressForm extends Component {
     return this.props.addresses;
   }*/
 
+
   addAddress(){
     //Meteor.call('addMailingAddress');
-    Meteor.call('addMailingAddress', this.props.contact._id);
+    //Meteor.call('addMailingAddress', this.props.contact._id);
+    console.log($('#newaddressmodal'));
+    $('#newaddressmodal').modal('open');
   }
 
   render(){
@@ -21,12 +25,13 @@ export default class AddressForm extends Component {
     return (
     <div>
       {this.props.disabled ? <div></div>  :
-        <button onClick={this.addAddress.bind(this)}>Add New Address</button>}
-      <ul>
+        <a className="btn waves-effect waves-light" onClick={this.addAddress.bind(this)}>Add New Address</a>}
+      <ul className="collection">
         {this.props.contact.addresses.map( (address)=>{
   				return <Address key={address.line1} disabled={this.props.disabled} contact={this.props.contact} address={address} />
   			})}
       </ul>
+      {/*<NewAddressModal />*/}
     </div>
   )
   }

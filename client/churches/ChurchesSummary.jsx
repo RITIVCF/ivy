@@ -1,7 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ChurchSingle from './ChurchSingle.jsx';
-import ChurchWorkspace from './ChurchesWorkspace.jsx';
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -11,16 +10,6 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-        Churches: Meteor.subscribe("allChurches"),
-        options: Meteor.subscribe("allOptions")
-      }
-    };
-  }
-
-  componentWillUnmount() {
-    this.state.subscription.Churches.stop();
   }
 
   createNew(event){
@@ -44,55 +33,48 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
       //setID(result);
     });
     */
-    Meteor.call('addBlankChurch');
+    Meteor.call('addChurch', this.refs.name.value);
+    this.refs.name.value="";
   }
 
 
   churches(){
     // pulls upcoming, published events
-    return Churches.find({active: true}).fetch();
+    return Churches.find({},{sort: {active: -1}}).fetch();
   }
 
   oldchurches(){
     return Churches.find({active: false}).fetch();
   }
 
+  unselect(){
+    Session.set("chselected","");
+  }
+
 
 	render() {
-    document.title="Ivy - Churches Dashboard";
-    if(!checkPermission("churches")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-		}
 		return (
-      <div>
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    <button type="button" className="btn btn-primary" onClick={this.createNew.bind(this)}>New</button>
-                  </div>
-                </div>
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h1>Churches Dashboard</h1>
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <h2>Active Churches</h2>
-                {this.churches().map( (church)=>{
-                    return <ChurchSingle key={church._id} church={church} parent={this} />
-                })}
-                <h2>Old/Inactive Churches</h2>
-                  {this.oldchurches().map( (church)=>{
-                      return <ChurchSingle key={church._id} church={church} parent={this} />
-                  })}
-              </div>
+      <div className="row"  onClick={this.unselect.bind(this)}>
+        <div className="col s12">
+          <div className="row">
+            <div className="col s12 m8 l8">
+              <form onSubmit={this.createNew.bind(this)}>
+                <label htmlFor="icon_prefix">New Church Name</label>
+                  <input ref="name"  type="text" />
+              </form>
+            </div>
+            <div className="input-field col s12 m4 l4">
+
             </div>
           </div>
+          <div className="divider"></div>
+          <div className="row">
+            {this.churches().map( (church)=>{
+                return <ChurchSingle key={church._id} church={church} selected={Session.get("chselected")==church._id} parent={this} />
+            })}
+          </div>
         </div>
-      {/*<a href="/churches/old"><button>View old/inactive churches</button></a>  */}
-    </div>
+      </div>
   )
 	}
 }

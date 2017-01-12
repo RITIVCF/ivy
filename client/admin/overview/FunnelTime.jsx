@@ -6,12 +6,15 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
+		this.state = {
+			mounted: false
+		}
 
 	}
 
 	componentDidMount(){
 		console.log("did mount");
-		Meteor.call("funnelTime", function(error, result){
+		Meteor.call("funnelTime", this.refs.date.value, function(error, result){
 			console.log(result);
 			historicalChart = new Chart($(historicalchart), {
 				type: "line",
@@ -48,7 +51,8 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	            yAxes: [{
 									stacked: true,
 	                ticks: {
-											max: ((result.max + 2))<50?(result.max+2):(result.max+5),
+											max: result.max,
+											min: result.min,
 	                    beginAtZero:true
 	                }
 	            }]
@@ -56,10 +60,26 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	    }
 			});
 		});
+		$( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ 75, 300 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+
 	}
 
+
 	refresh(){
-		Meteor.call("funnelTime", function(error, result){
+		Meteor.call("funnelTime", this.refs.date.value, function(error, result){
+			historicalChart.data.labels = result.timestamp;
+			historicalChart.options.scales.yAxes[0].ticks.max = result.max;
+			historicalChart.options.scales.yAxes[0].ticks.min = result.min;
 			historicalChart.data.datasets[0]= {
 				label: "Crowd",
 				data: result.crowd
@@ -86,10 +106,14 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			};
 			historicalChart.update();
 		});
+		this.setState({mounted: true});
 	}
 
 
 	render() {
+		// if(this.state.mounted){
+		// 	this.refresh();
+		// }
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
@@ -97,6 +121,19 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 				</div>
 				<div className="panel-body">
 					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
+					<label>Date Range</label>
+					<select ref="date">
+					  <option value="0" >All time</option>
+					  <option value="180" >Past 180 Days</option>
+					  <option value="90" >Past 90 Days</option>
+						<option value="60" >Past 60 Days</option>
+						<option value="30" >Past 30 Days</option>
+						<option value="15" >Past 15 Days</option>
+						<option value="2" >Past 2 Days</option>
+						<option value="1" >Past 1 Days</option>
+					</select>
+					<input type="text" id="amount" readOnly style={{border:0, color:"#f6931f", fontWeight:"bold"}} />
+					{/*}<div id="slider-range"></div>*/}
 					<canvas id="historicalchart" width="400" height="400"></canvas>
 				</div>
 			</div>

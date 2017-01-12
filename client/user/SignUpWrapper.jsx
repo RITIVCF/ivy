@@ -1,6 +1,5 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectContact from '../sharedcomponents/SelectContact.jsx';
 
 export default class SignUpWrapper extends TrackerReact(React.Component){
   constructor(props) {
@@ -18,10 +17,6 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
 
   go(){
     FlowRouter.go("/");
-  }
-
-  getContact(){
-    return Contacts.findOne(this.props.cid);
   }
 
   unset(){
@@ -50,7 +45,7 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
       return;
     }
 
-    var userVar = event.target.username.value;
+    //var userVar = event.target.username.value;
     var passwordVar = event.target.loginPassword.value;
     //var emailVar = event.target.email.value;
 
@@ -64,7 +59,7 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
       if(error){
         window.alert("error");
       }
-      Meteor.call("setUserUsername", userVar);
+      //Meteor.call("setUserUsername", userVar);
       FlowRouter.go("/");
     });
     // Accounts.createUser({
@@ -80,12 +75,12 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
     return;
   }
 
-  setUsername(event){
-    event.preventDefault();
-    //console.log(Meteor.userId());
-    Meteor.call("setUserUsername", this.refs.username.value);
-    FlowRouter.go("/");
-  }
+  // setUsername(event){
+  //   event.preventDefault();
+  //   //console.log(Meteor.userId());
+  //   Meteor.call("setUserUsername", this.refs.username.value);
+  //   FlowRouter.go("/");
+  // }
 
 
   render() {
@@ -96,13 +91,13 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
         <div className="panel-body">
           <p>Please set a password.</p>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
-            <label>Username</label> <br />
+          {/*}  <label>Username</label> <br />
             <input type="text"
               name="username"
               ref="username"
               required
               />
-            <br />
+            <br />*/}
             <label>Password</label> <br />
             <input type="password"
               name="loginPassword"

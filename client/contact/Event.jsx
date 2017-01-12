@@ -4,22 +4,27 @@ export default class Event extends Component {
   constructor() {
     super();
 
+
   }
 
   go(){
-    FlowRouter.go("/attendance/event/"+this.props.event._id);
+    if(checkPermission("attendance")){
+        FlowRouter.go("/attendance/event/"+this.props.event._id);
+    }
   }
 
 
   render(){
     let event = this.props.event;
     return(
-      <div key={event._id} className="panel panel-default">
-          <div className="panel-heading" onClick={this.go.bind(this)}>
-            <p>{event.name}</p>
-            <p>{new moment(event.start.toISOString()).format("Do MMM YYYY")}</p>
-          </div>
-      </div>
+      <li className="collection-item" id={checkPermission("attendance")?"showhim":""} onDoubleClick={this.go.bind(this)}>
+        {event.name}
+        <a   onClick={this.go.bind(this)}
+            className="btn waves-effect waves-light right"
+            id={checkPermission("attendance")?"showme":""}>View</a>
+        <br/>
+        {new moment(event.start.toISOString()).format("DD MMM @ h:mmA")}
+      </li>
     )
   }
 }

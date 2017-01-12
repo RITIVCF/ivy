@@ -17,24 +17,20 @@ export default class OverviewPage extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-				</div>
-				<div className="panel-body">
+			<div className="container">
 					<div className="row">
-						<div className="col-sm-12 col-md-6">
+						<div className="col s12 m6">
 							<FunnelChart ref="funnelchart" />
 						</div>
-						<div className="col-sm-12 col-md-6">
+						<div className="col s12 m6">
 							<FunnelChartLimited />
 						</div>
 					</div>
 					<div className="row">
-						<div className="col-sm-8">
+						<div className="col s12">
 							<FunnelTime />
 						</div>
 					</div>
-				</div>
 			</div>
 		)
 	}

@@ -55,14 +55,15 @@ export default class EventLocation extends Component {
   render(){
 
     return(
-      <div className="form-group">
-        <label>Location</label>
+      <div className="input-field">
 				<input type="text"
+          id="evlocation"
           ref="location"
           className="form-control"
           value={this.state.location}
           disabled={this.state.locationlock||!this.props.perm}
           onChange={this.handleLocationChange.bind(this)} />
+        <label htmlFor="evlocation">Location</label>
       </div>
     )
   }

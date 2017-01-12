@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SelectUser from '../sharedcomponents/SelectUser.jsx';
-import SelectGroup from '../sharedcomponents/SelectGroup.jsx';
+import SelectTeam from '../sharedcomponents/SelectTeam.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
@@ -11,9 +11,14 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     super(props);
     this.state={
       assignedu: "",
-      status: props.ticket.status
-
+      status: props.ticket.status,
+      notedisable: true
     }
+  }
+
+  componentDidMount(){
+    Materialize.updateTextFields();
+    $('select').material_select();
   }
 
   getUser(id){
@@ -26,7 +31,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     //console.log(id);
     //console.log(Meteor.users.findOne(id).contact);
     //console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
-    return Contacts.findOne(Meteor.users.findOne(id).contact).name;
+    //return Contacts.findOne(Meteor.users.findOne(id).contact).name;
+    return Meteor.users.findOne(id).name;
   }
 
   getGroup(id){
@@ -38,6 +44,12 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   getEventName(){
     return Events.findOne(this.props.ticket.eid).name;
+  }
+
+  goToEvent(){
+    if(checkPermission('attendance')){
+      FlowRouter.go("/attendance/event/"+this.props.ticket.eid);
+    }
   }
 
   getTypes(){
@@ -94,6 +106,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     }
   }
 
+  noteChangeHandle(event){
+    if(event.target.value==""){
+      this.setState({notedisable: true});
+    }
+    else{
+      this.setState({notedisable: false});
+    }
+  }
+
   addNote(){
     Meteor.call("addTicketNote", this.props.ticket._id, this.refs.notebox.value);
     this.refs.notebox.value="";
@@ -117,114 +138,141 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
 
 	render() {
+    var activities = this.props.ticket.activities.reverse();
 		return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <div className="panel panel-default">
-              <div className="panel-body">
+      <div className="row">
+        <div className="col s12">
+        <div className="card">
+          <div className="card-content">
+            <div className="row">
+              <div className="col s12 m6">
+                <div className="col s4">
+                  <p>Date created:</p>
+                </div>
+                <div className="col s8">
+                  <p>{new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
+                </div>
+                <div className="col s4">
+                  <p>Submitted by:</p>
+                </div>
+                <div className="col s8">
+                  <p>{this.getUser(this.props.ticket.submittedby)}</p>
+                </div>
+                <div className="col s4">
+                  <p>Ticket #: </p>
+                </div>
+                <div className="col s8">
+                  <p>{this.props.ticket.ticketnum}</p>
+                </div>
                 <div className="row">
-                  <div className="col-sm-6">
-                    <p>Date created: {new moment(this.props.ticket.createdAt).format("MM/DD/YY hh:mmA")}</p>
-                    <p>Submitted by: {this.getUser(this.props.ticket.submittedby)}</p>
-                    <p>Ticket #: {this.props.ticket.ticketnum}</p>
-                      {this.props.ticket.type == "Contact" ? <div></div> :<div>
-                      <label>User: </label><SelectUser parent={this}
-                        id={"customer"}
-                        unset={this.unset.bind(this)}
-                        updateContact={this.updateCust.bind(this)}
-                        initialValue={this.getUser(this.props.ticket.customer)}
-                        ref="cust"  /></div>}
+                  <div className="col s12">
+                  {this.props.ticket.type != "Contact"&&
+                  <SelectUser parent={this}
+                    id={"customer"}
+                    label="Ticket for"
+                    unset={this.unset.bind(this)}
+                    updateContact={this.updateCust.bind(this)}
+                    initialValue={this.getUser(this.props.ticket.customer)}
+                    ref="cust"  />}
 
-                        <TicketSubject parent={this} ticket={this.props.ticket} />
-                        <TicketDescription parent={this} ticket={this.props.ticket} />
-                        <div className="form-group">
-                        <label>Type:</label>
-                          <select ref="type" className="form-control"
-                            value={this.props.ticket.type}
-                            onChange={this.updateType.bind(this)}>
-                            {this.getTypes().map( (type) =>{
-                              return <option key={type} value={type} >{type}</option>
-                            })}
-                          </select>
-                        </div>
-                        {this.props.ticket.type == "Event Request" ? <div className="form-group">
-                        <label>Request Type:</label>
-                          <select ref="reqtype"
-                            className="form-control"
-                            value={this.props.ticket.ereqtype}
-                            onChange={this.updateReqType.bind(this)}>
-                            <option value={""}></option>
-                            {this.getReqTypes().map( (type) =>{
-                              return <option key={type} value={type} >{type}</option>
-                            })}
-                          </select>
-                        </div>
-                         :"" }
-                         <div className="form-group">
-                           <label>Assigned Group:</label>
-                             <SelectGroup
-                       				parent={this}
-                       				id={"assignedgroup"}
-                              className="form-control"
-                       				unset={this.unset.bind(this)}
-                       				updateContact={this.updateAssignedG.bind(this)}
-                       				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
-                       				ref={"assignedgroup"}
-                       				/>
-                            {/*<button className="btn btn-info" onClick={this.assignToMyGroup.bind(this)}>Assign to My Group</button>*/}
-                         </div>
-                        <div className="form-group">
-                          <label>Assigned User:</label>
-                          <SelectUser parent={this}
-                            id={"assigneduser"}
-                            unset={this.unset.bind(this)}
-                            initialValue={this.getUser(this.props.ticket.assigneduser)}
-                            updateContact={this.updateAssignedU.bind(this)}
-                            ref="assigneduser" className="form-control" aria-describedby="assignme"/>
-                          <button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>
-                        </div>
-                        <div className="from-group">
-                          <label>Status:</label>
-                            <select className="form-control"
-                              ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
-                              {this.getStatuses().map( (type) =>{
-                                return <option key={type} value={type} >{type}</option>
-                              })}
-                            </select>
-                        </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <p>Last updated: {new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
-                    {this.props.ticket.eid ? <p>Event: {this.getEventName()}</p>:""}
-                    <table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Activity</th>
-                          <th>Description</th>
-                          <th>User</th>
-                          <th>Date/Time</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.props.ticket.activities.map( (activity) =>{
-                          return <Activity key={activity.createdAt} activity={activity} />
+                    <TicketSubject parent={this} ticket={this.props.ticket} />
+                    <TicketDescription parent={this} ticket={this.props.ticket} />
+                    <div className="">
+                    <label>Type:</label>
+                      <select ref="type" className="browser-default"
+                        value={this.props.ticket.type}
+                        onChange={this.updateType.bind(this)}>
+                        {this.getTypes().map( (type) =>{
+                          return <option key={type} value={type} >{type}</option>
                         })}
-                      </tbody>
-                    </table>
-                    <div className="form-group">
-                      <textarea ref="notebox" className="form-control" rows="3" />
+                      </select>
                     </div>
-                    <button className="form-control" onClick={this.addNote.bind(this)} >Add Note</button>
+                    {this.props.ticket.type == "Event Request" && <div>
+                    <label>Request Type:</label>
+                      <select ref="reqtype"
+                        className="browser-default"
+                        value={this.props.ticket.ereqtype}
+                        onChange={this.updateReqType.bind(this)}>
+                        {this.getReqTypes().map( (type) =>{
+                          return <option key={type.label} value={type.label} >{type.label}</option>
+                        })}
+                      </select>
+                    </div>}
+
+                     <SelectTeam
+               				parent={this}
+               				id={"assignedgroup"}
+               				unset={this.unset.bind(this)}
+               				updateContact={this.updateAssignedG.bind(this)}
+               				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
+               				ref={"assignedgroup"}
+               				/>
+                    <SelectUser parent={this}
+                      id={"assigneduser"}
+                      label="Assigned User"
+                      unset={this.unset.bind(this)}
+                      initialValue={this.getUser(this.props.ticket.assigneduser)}
+                      updateContact={this.updateAssignedU.bind(this)}
+                      ref="assigneduser" aria-describedby="assignme"/>
+                    {/*}<button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>*/}
+                    <label>Status:</label>
+                    <select className="browser-default"
+                      ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
+                      {this.getStatuses().map( (type) =>{
+                        return <option key={type} value={type} >{type}</option>
+                      })}
+                    </select>
                   </div>
                 </div>
               </div>
+              <div className="col s12 m6">
+                <div className="col s4">
+                  <p>Last updated: </p>
+                </div>
+                <div className="col s8">
+                  <p>{new moment(this.props.ticket.lastUpdated).format("MM/DD/YY hh:mmA")}</p>
+                </div>
+                {
+                  !this.props.ticket.eid?"":
+                  <div className="row">
+                    <div className="col s4">
+                      <p>Event:</p>
+                    </div>
+                    <div className="col s8">
+                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:
+                      <a href={"/attendance/event/"+this.props.ticket.eid}>{this.getEventName()}</a>}
+                    </div>
+                  </div>
+                }
+                <div style={{height: "400px",overflowY:"scroll", border: "solid darkgrey 2px", marginBottom: "1em"}}>
+                  <table className="striped">
+                    <thead>
+                      <tr>
+                        <th>Activity</th>
+                        <th>Description</th>
+                        <th>User</th>
+                        <th>Date/Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {activities.map( (activity) =>{
+                        return <Activity key={activity.createdAt} activity={activity} />
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="form-group">
+                  <textarea ref="notebox"
+                    className="browser-default"
+                    rows="3"
+                    onChange={this.noteChangeHandle.bind(this)}
+                    placeholder="Add note here...." />
+                </div>
+                <a className="waves-effect waves-light btn" disabled={this.state.notedisable} onClick={this.addNote.bind(this)} >Add Note</a>
+              </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
   )

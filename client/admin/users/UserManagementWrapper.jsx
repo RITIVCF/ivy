@@ -21,35 +21,17 @@ export default class UserManagementWrapper extends TrackerReact(React.Component)
 		this.state.subscription.Contacts.stop();
 	}
 
-	createNew(){
-		FlowRouter.go("/signup");
-	}
+	
 
 	render() {
 		if(!checkPermission("admin")){
 			return <div>Sorry you don't have permission to view this page. Please see the leadership team to get access.</div>
 		}
 		return (
-			<div className="container-fluid">
-				<div className="row">
-					<div className="col-sm-3 col-lg-2">
-						<nav className="navbar navbar-default navbar-fixed-side">
-							{!this.props.uid?
-							<div className="btn-group btn-group-justified" role="group" aria-label="...">
-								<div className="btn-group" role="group">
-									<button className="btn btn-primary"
-										onClick={this.createNew.bind(this)}>New</button>
-								</div>
-							</div>:<div></div>
-							}
-						</nav>
-					</div>
-					<div className="col-sm-9 col-lg-10">
-						{!this.props.uid?(this.state.subscription.Users.ready()&&this.state.subscription.Contacts.ready())?
-							<UserManagementForm />
-						:"":<UserPage uid={this.props.uid} />}
-					</div>
-				</div>
+			<div className="container">
+				{!this.props.uid?(this.state.subscription.Users.ready()&&this.state.subscription.Contacts.ready())?
+					<UserManagementForm />
+				:"":<UserPage uid={this.props.uid} />}
 			</div>
 		)
 	}

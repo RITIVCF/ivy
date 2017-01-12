@@ -4,27 +4,33 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class FeedbackForm extends TrackerReact(React.Component) {
 	constructor(){
 		super();
-		this.state={
-			error: false,
-			success: false
-		}
+
+	}
+
+	componentDidMount(){
+			$('select').material_select();
 	}
 
 	submit(event){
 		event.preventDefault();
-		//console.log(this);
-		//console.log(event);
-		this.setState({error: false});
-		this.setState({success: false});
+		if(this.refs.feedback.value==""){
+			Materialize.toast("Please enter feedback.", 4000);
+			return;
+		}
+		if(this.refs.type.value==""){
+			Materialize.toast("Please select a type from the list.", 4000);
+			return;
+		}
 		var thiz = this;
 		Meteor.call("submitFeedback", this.refs.feedback.value, this.refs.type.value,function(error){
 			if(error){
-				thiz.setState({error: true});
+				Materialize.toast('Oops! Looks like something went wrong. Try again later. If the problem persists, '
+					+ 'contact support.', 4000);
 			}
 			else {
-				thiz.setState({success: true});
+					Materialize.toast('Success! Your feedback was successfully submitted. Thanks for letting us know!', 4000);
 				thiz.refs.feedback.value="";
-				thiz.refs.type.value="Issue";
+				thiz.refs.type.value="";
 			}
 		});
 
@@ -33,42 +39,31 @@ export default class FeedbackForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-					Ivy Feedback
-				</div>
-				<div className="panel-body">
-					{this.state.error?<div className="alert alert-danger alert-dismissible" role="alert">
-						  <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-								<span aria-hidden="true">&times;</span></button>
-						  <strong>Oops!</strong> Looks like something went wrong. Try again later. If the problem persists,
-								contact support.
-						</div>:""}
-						{this.state.success?<div className="alert alert-success alert-dismissible" role="alert">
-							  <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-									<span aria-hidden="true">&times;</span></button>
-							  <strong>Success!</strong> Your feedback was successfully submitted. Thanks for letting us know!
-							</div>:""}
+			<div className="card">
+				<div className="card-content">
+					<span className="card-title">Ivy Feedback</span>
 					<form onSubmit={this.submit.bind(this)}>
 						<p>If you have any thoughts, comments, or issues, please submit them
 						below.<br/>Thank you! - RIT IVCF Web Development Team</p>
-						<div className="form-group">
-
-							<textarea ref="feedback" className="form-control" rows="5" placeholder="Yo man, I got this big problem with..."/>
-						</div>
-						<div className="form-group">
-							<label>Type</label>
-							<select ref="type" className="form-control" >
+						<div className="input-field col s12">
+							<textarea
+								ref="feedback"
+								id="textarea1"
+								className="materialize-textarea"></textarea>
+				 			<label htmlFor="textarea1">Feedback</label>
+	        	</div>
+						<div className="input-field col s12">
+					    <select ref="type" value="">
+					      <option value="">Choose your option</option>
 								<option value="Issue">Issue</option>
 								<option value="Comment">Comment</option>
 								<option value="Suggestion">Suggestion</option>
 								<option value="Other">Other</option>
-							</select>
-						</div>
-						<div className="form-group">
-							<input className="form-control"
-								type="submit" value="Submit" />
-						</div>
+					    </select>
+					    <label>Select Type</label>
+					  </div>
+						<button className="btn waves-effect waves-light" type="submit" name="action">Submit
+					  </button>
 					</form>
 				</div>
 			</div>

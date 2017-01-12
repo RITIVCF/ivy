@@ -11,26 +11,19 @@ export default class ButtonPublish extends Component {
 	}
 
   render(){
+    var style = {};
+    if(this.props.published){
+      style={paddingRight:"20px",paddingLeft:"20px",maxWidth:"127px"};
+    }
     return(
-      <div>
-      {this.props.published ?
-        <button
-          onClick={this.togglePublishEvent.bind(this)}
-          className="btn btn-danger navbar-btn"
+        <a
           ref="togglePublish"
-          value={true} >
-          Unpublish
-        </button>
-        :
-        <button
-          ref="togglePublish"
-          className="btn btn-primary navbar-btn"
+          style={style}
+          className="waves-effect waves-light btn-flat"
           onClick={this.togglePublishEvent.bind(this)}
-          value={false} >
-          Publish
-        </button>
-      }
-    </div>
+          >
+          {this.props.published ?"Unpublish":"Publish"}
+        </a>
     )
   }
 }

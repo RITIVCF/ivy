@@ -9,12 +9,18 @@ export default class Contact extends Component {
 
   render(){
     return(
-      <tr>
-        <td><button onClick={this.remove.bind(this)}>X</button></td>
-        <td>{this.props.contact.name}</td>
-        <td>{this.props.contact.email}</td>
-        <td>{this.props.contact.phone}</td>
-      </tr>
+      <div className="col s12 m6 l4">
+        <div className="card-panel left">
+          <div className="card-content">
+            <span className="card-title">{this.props.contact.name}</span>
+            <p>{this.props.contact.emails[0].address}</p>
+          </div>
+          <div className="card-action">
+              <a className="waves-effect waves-light btn red"
+                onClick={this.remove.bind(this)}>Remove</a>
+            </div>
+        </div>
+      </div>
     )
   }
 }

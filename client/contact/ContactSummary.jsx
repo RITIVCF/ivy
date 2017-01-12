@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ContactSingle from './ContactSingle.jsx';
+import Checkbox from './Checkbox.jsx';
 //import NewContactWrapper from './NewContactWindow.jsx';
 
 export default class ContactSummary extends TrackerReact(React.Component) {
@@ -8,15 +9,15 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     super();
 
     this.state = {
-      subscription: {
-        Contacts: Meteor.subscribe("allContacts", "All", "Name")
-      },
-      filter: "All"
+      statuses: ["Crowd","Visitor","Member","Server","Leader","Multiplier"],
+      filter: ""
     };
-  }
 
-  componentWillUnmount() {
-    this.state.subscription.Contacts.stop();
+    if(Session.get("contactstatusfilter")===undefined){
+      Session.set("contactstatusfilter",this.state.statuses);
+    }
+
+
   }
 
   newContact(event){
@@ -34,7 +35,9 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     // this.state.subscription.Contacts.stop();
     // this.state.subscription.Contacts = Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value);
     //this.setState({subscription: {Contacts: Meteor.subscribe("allContacts", this.refs.filter.value, this.refs.sort.value)}});
-    this.setState({filter: this.refs.filter.value});
+    let text = this.refs.filter.value;
+    text = text.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+    this.setState({filter: text});
 	}
 
   changeSort(){
@@ -66,7 +69,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
      this.contacts().forEach(function(contact){
        //console.log(contact);
        var dataString = "";
-       dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
+       dataString += contact.name + "," + contact.emails[0].address + "," + contact.phone  + ",";
        dataString += contact.newsletter ? "Yes":"No";
        dataString += ",";
        dataString += contact.howhear ? contact.howhear:"";
@@ -95,97 +98,103 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
   contacts(){
-    if(this.state.filter == "All"){
-      return Contacts.find({},{sort: {name: 1}}).fetch();
+    // if(this.state.filter == "All"){
+    //   return Contacts.find({},{sort: {name: 1}}).fetch();
+    // }
+    // return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
+    // if(this.state.filter!=""){
+    //   return Contacts.find({name: { $regex : this.state.filter} },{sort: {name: 1}}).fetch();
+    // }
+    // else{
+    //   return Contacts.find({},{sort: {name: 1}}).fetch();
+    // }{$regex:this.state.textfilter, $options : 'i'}
+    var query= {status: {$in: Session.get("contactstatusfilter")}};
+    if(this.state.filter!=""){
+      query.name={ $regex : this.state.filter, $options : 'i'};
     }
-    return Contacts.find({status: this.state.filter},{sort: {name: 1}}).fetch();
+    return Meteor.users.find(query,{sort: {name: 1}}).fetch();
+  }
 
+  select(id){
+    this.setState({selected: id});
+  }
+
+  handleCheck(id){
+    var array = Session.get("contactstatusfilter");
+    console.log(array);
+    if(array.includes(id)){
+        array.splice(array.indexOf(id), 1);
+    }else{
+        array.push(id);
+    }
+    Session.set("contactstatusfilter", array);
+    // var state = {};
+    // state[id]=!this.state[id];
+    // this.setState(state);
+  }
+
+  unselect(){
+    //this.setState({selected: ""});
+    Session.set("conselected","");
   }
 
 
-	render() {
-    if(!checkPermission("contacts")){
-      return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
-    }
-    document.title="Ivy - Contact Dashboard";
-    var status;
-    var perm = checkPermission("ticket");
-		return (
-      <div>
-        <div className="row">
-          <div className="col-sm-3 col-lg-2">
-            <nav className="navbar navbar-default navbar-fixed-side">
-                <div className="btn-group btn-group-justified" role="group" aria-label="...">
-                  <div className="btn-group" role="group">
-                    <button className="btn btn-primary"
-                      onClick={this.newContact.bind(this)}>New</button>
-                  </div>
-                </div>
-            </nav>
-          </div>
-          <div className="col-sm-9 col-lg-10">
-            <h2>All Contacts</h2>
 
-            <div className="panel panel-default">
-              <div className="panel-body">
-                <div className="col-md-4">
-                  <label>Filter: <select ref="filter" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-          					<option value={"All"}>All</option>
-                      <option value="Crowd">Crowd</option>
-                      <option value="Visitor">Visitor</option>
-                      <option value="Member">Member</option>
-                      <option value="Server">Server</option>
-                      <option value="Leader">Leader</option>
-                      <option value="Multiplier">Multiplier</option>
-          				</select></label>
-                  <label>Sort: <select ref="sort" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-            					<option value={"Name"}>Name</option>
-            					<option value={"Status"}>Status</option>
-            				{/*}	<option value={"Status"}>Status</option> */}
-            				</select></label>
-                  <div className="form-group">
-                    <a href="#"  onClick={this.export.bind(this)} ><button className="btn btn-primary">Export to Excel (CSV)</button></a>
-                  </div>
-                </div>
-                <div className="col-md-8">
-                  <p>Count: {this.contacts().length}</p>
-                  <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>
-                </div>
+
+	render() {
+    let perm = this.props.perm;
+    let statuses = Session.get("contactstatusfilter");
+		return (
+      <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
+            <div className="row">
+              <div className="col s12 m7 l7">
+                <p>Status Filter:
+                {this.state.statuses.map((status)=>{
+                  return <Checkbox key={status}
+                                    label={status}
+                                    onChange={this.handleCheck.bind(this, status)}
+                                    checked={statuses.includes(status)} />
+                })}
+              </p>
               </div>
-              <table className="table table-hover table-responsive">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Newsletter</th>
-                    <th>Funnel Status</th>
-                    {perm?<th>Ticket</th>:""}
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.contacts().map( (contact, i) => {
-                    //console.log(i);
-                    if(this.refs.sort){
-                      if(this.refs.sort.value == "Status"){
-                        if(contact.member != status){
-                          //console.log("Does not equal.");
-                          //console.log(status);
-                          status = contact.member;
-                          //console.log(status);
-                          i--;
-                          return <tr key={status}><td colspan={5}>{status ? "Members":""}</td></tr>
-                        }
-                      }
-                    }
-                    return <ContactSingle key={contact._id} contact={contact} perm={perm} parent={this}/>
-                  })}
-                </tbody>
-              </table>
+              <div className="input-field col s12 m5 l5">
+                <input ref="filter" onChange={this.changeFilter.bind(this)} type="text" className="validate" />
+                <label htmlFor="icon_prefix">Search</label>
+              </div>
             </div>
+            <div className="divider"></div>
+                {/*}
+                      <p>Count: {this.contacts().length}</p>
+                      <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
+                <div className="row">
+                {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
+                  return <ContactSingle key={contact._id} row={false} contact={contact}
+                    selected={Session.get("conselected")==contact._id} perm={perm}
+                    select={this.select.bind(this)} parent={this}/>
+                }):
+                <table className="bordered highlight" >
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Newsletter</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.contacts().map( (contact)=>{
+                      return <ContactSingle key={contact._id} row={true} contact={contact}
+                        selected={Session.get("conselected")==contact._id} perm={perm}
+                        select={this.select.bind(this)} parent={this}/>
+                    })}
+                  </tbody>
+                </table>
+                }
+                </div>
           </div>
-        </div>
-      </div>
+
+
   )
 	}
 }

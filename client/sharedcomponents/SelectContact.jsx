@@ -106,6 +106,20 @@ shouldComponentUpdate(nextProps, nextState){
     // });
   }
 
+  onSuggestionsFetchRequested({ value }){
+    this.setState({
+      suggestions: getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested(){
+    // Autosuggest will call this function every time you need to clear suggestions.
+    this.setState({
+      suggestions: []
+    });
+  };
+
+
 
   onSuggestionsUpdateRequested({ value }) {
 
@@ -122,31 +136,37 @@ shouldComponentUpdate(nextProps, nextState){
       value,
       onChange: this.onChange
     };
+    console.log("rendering:");
     if(this.props.id){
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
                      onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                      />
+
+
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                      getSuggestionValue={getSuggestionValue}
-
                      onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                      focusInputOnSuggestionClick={false}
                      shouldRenderSuggestions={shouldRenderSuggestions}
                      renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+                     inputProps={inputProps}
+                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                      />
       );
     }
 

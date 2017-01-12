@@ -1,0 +1,38 @@
+.banner {
+    background-image: url("/images/light-bl.svg"), url("/images/light-br.svg");
+    background-position: bottom left, bottom right;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 25rem, 25rem;
+    color: white;
+    cursor: default;
+    text-align: center;
+    height: auto;
+}
+.inner {
+  display: inline-block;
+  background-color: #fff;
+  height: auto;
+  width: 100%;
+  max-width: 550px;
+  margin: 4rem 0;
+  padding: 3rem;
+  .borders{
+    display: inline-block;
+    border-top: 2px solid #7c8081;
+    border-bottom: 2px solid #7c8081;
+    img {
+      margin: 10px 0;
+    }
+  }
+  p {
+    text-transform: uppercase;
+    color: #7c8081;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    font-size: 1.1em;
+  }
+}
+.parallax > img {
+  display: block;
+  transform: translate3d(-50%, 360px, 0px);
+}

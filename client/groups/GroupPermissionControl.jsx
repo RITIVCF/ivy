@@ -7,6 +7,8 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 
   }
 
+	
+
 	getPermissions(group){
 		if(group){
 			return PagePermissions.find({groups: this.props.group._id}).fetch();
@@ -27,17 +29,12 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 	render() {
 
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-
-				</div>
-				<div className="panel-body">
 					<div className="row">
-						<div className="col-md-5">
+						<div className="col md5">
 							<p>Available Permissions</p>
 							<select
-								className="form-control"
 								multiple
+								className="browser-default"
 								size="10"
 								ref="pages" >
 								{this.getPermissions(false).map((perm)=>{
@@ -45,7 +42,7 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 								})}
 							</select>
 						</div>
-						<div className="col-md-2">
+						<div className="col md2">
 							<div className="row">
 								<button onClick={this.add.bind(this)} className="btn">{"=>"}</button>
 							</div>
@@ -53,11 +50,11 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 								<button onClick={this.remove.bind(this)} className="btn">{"<="}</button>
 							</div>
 						</div>
-						<div className="col-md-5">
+						<div className="col md5">
 							<p>{this.props.group.name+"'s"} Permissions</p>
 							<select
+								className="browser-default"
 								multiple
-								className="form-control"
 								size="10"
 								ref="grouppages" >
 								{this.getPermissions(true).map((perm)=>{
@@ -66,8 +63,6 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 							</select>
 						</div>
 					</div>
-				</div>
-			</div>
 		)
 	}
 }
