@@ -109,6 +109,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     //   return Contacts.find({},{sort: {name: 1}}).fetch();
     // }{$regex:this.state.textfilter, $options : 'i'}
     var query= {status: {$in: Session.get("contactstatusfilter")}};
+    query.deleted = {$ne: true};
     if(this.state.filter!=""){
       query.name={ $regex : this.state.filter, $options : 'i'};
     }

@@ -6,7 +6,10 @@ SyncedCron.add({
     return parser.recur().on("23:59:59").time();
   },
   job: function() {
-    var result = Contacts.aggregate([{$group: {_id: "$status", count: {$sum: 1}}}]);
+    var result = Meteor.users.aggregate([
+      {"$match": {deleted: {$ne: true}}},
+      {$group: {_id: "$status", count: {$sum: 1}}}
+    ]);
     var rst ={};
     result.forEach((status)=>{
       rst[status._id] = status.count;

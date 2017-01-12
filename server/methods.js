@@ -137,7 +137,10 @@ Meteor.methods({
     /* CREATE A LOG OF ALL DELETED Meteor.users FOR HISTORY'S SAKE */
   },
   currentFunnel(){
-    var result = Meteor.users.aggregate({$group: {_id: "$status", count: {$sum: 1}}});
+    var result = Meteor.users.aggregate([
+      {"$match": {deleted: {$ne: true}}},
+      {$group: {_id: "$status", count: {$sum: 1}}}
+    ]);
     var rst = {};
     var max = 0;//var cnts = [];
     var max2 = 0;
