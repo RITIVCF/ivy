@@ -69,7 +69,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
      this.contacts().forEach(function(contact){
        //console.log(contact);
        var dataString = "";
-       dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
+       dataString += contact.name + "," + contact.emails[0].address + "," + contact.phone  + ",";
        dataString += contact.newsletter ? "Yes":"No";
        dataString += ",";
        dataString += contact.howhear ? contact.howhear:"";

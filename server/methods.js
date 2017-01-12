@@ -221,7 +221,7 @@ Meteor.methods({
       var contactid=contact._id;
       delete contact._id;
       var uid = Accounts.createUser(contact);
-      Contacts.update({_id: contactid},{$set: {user:true}});
+      //Contacts.update({_id: contactid},{$set: {user:true}});
       Meteor.users.update({_id: uid},{$set: {contact: contactid}});
       //===========  Event update attendance ids
     Events.update(
@@ -244,12 +244,14 @@ Meteor.methods({
     );
     //===============
     });
+    var retval;
     //
     //     USER UPDATE SECTION
     var userContacts = Contacts.find({user: true}).fetch();
     userContacts.forEach((contact)=>{
       console.log("Contact");
       console.log(contact);
+
       var contactid = contact._id;
       delete contact._id;
       Meteor.users.update({contact: contactid}, {$set: contact});
@@ -257,8 +259,21 @@ Meteor.methods({
       console.log(
         Meteor.users.findOne({contact: contactid})
         );
+        console.log("contactid: ",contactid);
       var user = Meteor.users.findOne({contact: contactid});
         //===========  Event update attendance ids
+        if(user.name=="Bobby Picciotti"){
+          var events =Events.find({_id: "4ZCcw5oneKYwCjmLo", "attendees._id":contactid},{name: 1, attendees: 1}).fetch();
+          events.forEach((event)=>{
+            console.log("Event Name": event.name);
+            event.attendees.forEach((attendee)=>{
+              console.log(attendee);
+            })
+          });
+        }
+        if(user.name=="Bobby Picciotti"){
+          console.log("Updating attendance");
+        }
       Events.update(
         {"attendees._id":contactid}, // where cid is an attendee
         {$set:
@@ -266,6 +281,21 @@ Meteor.methods({
         },
         {multi: true}
       );
+      Events.update(
+        {"attendees._id":contactid}, // where cid is an attendee
+        {$pull:
+          {attendees: {_id: contactid}}   // pull any duplicates
+        },
+        {multi: true}
+      );
+      if(user.name=="Bobby Picciotti"){
+        events.forEach((event)=>{
+          console.log("Event Name": event.name);
+          event.attendees.forEach((attendee)=>{
+            console.log(attendee);
+          })
+        });
+      }
       //===============
       Churches.update(
         {contacts: contactid},
@@ -288,11 +318,78 @@ Meteor.methods({
       "tickets_infobar":true,
       "calendar_view":"month",
       "events_infobar":true,
+      "groups_view": "Team",
       "churches_view":"Tile",
       "churches_infobar":true
       }
     }}, {multi: true});
 
+
+
+
+    // OPtions
+    var requesttypes = Options.findOne("requesttypes").vals;
+    console.log("Request Types: ", requesttypes);
+    var newtypes = [];
+    requesttypes.forEach((type)=>{
+        var typobj = {label:type,gid: "admin"};
+        console.log(typobj);
+        newtypes.push(typobj);
+    });
+    console.log("New types", newtypes);
+    Options.update("requesttypes",{$set: {vals: newtypes}});
+
+    var eventtags = Options.findOne("eventtags").vals;
+    console.log("Event Tags: ", eventtags);
+    var colors = ["#FF0","#0FF","#0F0","#F0F","#00F","#F00"];
+    var cnt = 0;
+    var newtags = [];
+    eventtags.forEach((tag)=>{
+      var tagobj = {tag: tag, color: colors[cnt]};
+      console.log("New tag: ", tagobj);
+      newtags.push(tagobj);
+      cnt+=1;
+    });
+    console.log("New Tags: ",newtags);
+    Options.update("eventtags", {$set: {vals: newtags}});
+
+    //Email Template Initialization
+    Emails.insert({
+      _id: "newsletter",
+      title: "Newsletter",
+      to: {users: [],groups:[],emails:[]},
+      from: "ivcf@rit.edu",
+      subject: "IVCF Chapter Newsletter",
+      content: "",
+      isTemplate: true
+    });
+
+    //Page Permissions
+    PagePermissions.insert({
+      "_id" : "emails",
+      "groups" : ["admin"],
+      "pagename" : "View/Edit Emails"
+    });
+    PagePermissions.insert({
+      "_id" : "ivrep",
+      "groups" : [ "" ],
+      "pagename" : "IV Official"
+    });
+
+    //Event Workpad changes
+    var events = Events.find().fetch();
+    events.forEach((event)=>{
+      var newworkpad = [
+          {
+            "name" : "Pad 1",
+            "content" : event.workpad,
+            "lock" : false
+          }
+        ]
+      Events.update({_id: event._id},{$set: {workpad: newworkpad}});
+    });
+
+    return retval;
 
 
   }

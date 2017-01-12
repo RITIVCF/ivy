@@ -20,7 +20,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 	}
 
 	merge(){
-		Meteor.call("migrateDatabase", function(error){
+		/*Meteor.call("migrateDatabase", function(error){
 			if(error){
 				console.log("Error:");
 				console.log(error);
@@ -28,7 +28,7 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 			else{
 				console.log("success");
 			}
-		});
+		});*/
 	}
 
 	getContactGroupDefault(){
@@ -115,13 +115,13 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 						</div>
 					</div>
 				</div>
-				{checkPermission("removecontact")?
+				{/*checkPermission("removecontact")?
 				<div className="row">
 					<div className="col s6">
 						<p>Perform User & Contact Merge</p>
 						<a className="btn flat" onClick={this.merge.bind(this)}>Merge</a>
 					</div>
-				</div>:""}
+				</div>:""*/}
 			</div>
 		)
 	}

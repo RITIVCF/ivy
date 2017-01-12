@@ -86,6 +86,9 @@ export default class EmailSummaryPanel extends TrackerReact(React.Component){
     if(checkPermission("ivrep")){
       emails.push("ivcf@rit.edu");
     }
+    if(checkPermission("sysadmin")){
+      emails.push("ivy@rit.edu");
+    }
     return emails;
   }
 

@@ -27,6 +27,10 @@ SyncedCron.add({
   }
 });
 
+function testThis(){
+  console.log("Testing");
+}
+
 function getMyGroupsIDs(){
   var grps = Groups.find({users: this.userId}).fetch();
   console.log(grps);

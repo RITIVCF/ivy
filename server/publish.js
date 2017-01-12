@@ -155,7 +155,7 @@ Meteor.publish("MyGroups", function(){
 });
 
 Meteor.publish("SGs", function(){
-  return Groups.find({sg:true});
+  return Groups.find({type: "Small Group"});
 });
 
 Meteor.publish("MySG", function(){
@@ -295,6 +295,21 @@ Meteor.publish("allContacts", function(filtr, srt){
   }
   return Meteor.users.find(selector, options);
 });
+
+Meteor.publish("publicContacts", function(){
+  // This publish is for the public submittedby
+  var selector = {deleted: {$ne: true}};
+  var options = {
+    fields: {
+      name: 1,
+      emails: 1,
+      phone: 1,
+      createdAt: 1
+    },
+    sort: {name: 1}
+  };
+  return Meteor.users.find(selector, options);
+})
 
 Meteor.publish("contactNames", function(){
   return [

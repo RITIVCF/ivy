@@ -20,27 +20,13 @@ import Event from './Event.jsx';
 
 
 export default class ContactProfile extends TrackerReact(React.Component){
-  /*constructor(props) {
+  constructor(props) {
     super(props);
-    if(typeof props.cid === 'undefined'){
-      this.state = {
-        subscription: {
-          Ethnicities: Meteor.subscribe("allEthnicities"),
-          contact: Meteor.subscribe("contactSelf", Meteor.userId())
-        }
-      }
-    }
-    else{
-      this.state = {
-        subscription: {
-          Ethnicities: Meteor.subscribe("allEthnicities"),
-          user: Meteor.subscribe("userSelf", this.props.cid)
-          }
-        };
-
+    this.state = {
+      numevents: 3
     }
   }
-
+  /*
   componentWillUnmount() {
     this.state.subscription.Ethnicities.stop();
     this.state.subscription.user.stop();
@@ -87,7 +73,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
     else{
       var id = Meteor.userId();
     }
-    return Events.find({"attendees._id":id}, {sort:{start:-1}}).fetch();
+    return Events.find({"attendees._id":id}, {sort:{start:-1},limit: this.state.numevents}).fetch();
   }
 
 

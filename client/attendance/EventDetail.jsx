@@ -56,6 +56,8 @@ export default class EventDetail extends TrackerReact(React.Component) {
 			//attendee[this.state.filter])
 			//if(this.state.sort=="Name"){
 				this.props.ev.attendees.sort(function(a, b) {
+					console.log("a",a);
+					console.log("b", b);
 				  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
 				  var nameB = b.name.toUpperCase(); // ignore upper and lowercase
 				  if (nameA < nameB) {
