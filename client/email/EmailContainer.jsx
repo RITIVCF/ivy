@@ -24,7 +24,7 @@ export default class EmailContainer extends TrackerReact(React.Component){
   render() {
     return (
       <div className="col s12">
-        <EmailContent />
+        <EmailContent emid={this.props.emid} />
       </div>
     )
   }

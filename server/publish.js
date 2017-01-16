@@ -512,6 +512,9 @@ Meteor.publish("myEmails", function(){
   return Emails.find({uid: this.userId});
 });
 
+Meteor.publish("oneEmail", function(emid) {
+  return Emails.find({_id: emid});
+});
 //***************************************
 
 Meteor.publish("allCounters", function(){
