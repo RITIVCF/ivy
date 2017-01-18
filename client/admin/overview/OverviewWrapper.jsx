@@ -31,7 +31,15 @@ export default class OverviewWrapper extends TrackerReact(React.Component) {
 			return <LoaderCircle />
 		}
 		return (
-				<OverviewPage />
+			<div className="row">
+				<div className="col s12">
+					<div className="card">
+						<div className="card-content">
+							<OverviewPage />
+						</div>
+					</div>
+				</div>
+			</div>
 		)
 	}
 }

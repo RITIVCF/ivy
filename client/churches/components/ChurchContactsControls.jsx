@@ -60,7 +60,7 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
   	}*/
     return(
       <div>
-        <div className="panel-heading"><h4>Church Contacts</h4></div>
+        <h4>Church Contacts</h4>
         <p>Choose a name from the list to add person</p>
         <SelectUser
           parent={this}
@@ -68,10 +68,21 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
           initialValue={""}
           updateUser={this.addContact.bind(this)}
           ref="contact"  />
-        <div className="row">
-          {this.getContactsInfo().map((contact)=>{
-            return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
-          })}
+        <div className="card">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.getContactsInfo().map((contact)=>{
+                return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
+              })}
+            </tbody>
+          </table>
         </div>
 
       </div>

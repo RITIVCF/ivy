@@ -98,9 +98,19 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     if(SiteOptions.ready()){
       return (<div>
       <MainBox
-        content={<div>
-          <LegendFilter />
-          <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
+        content={<div className="row">
+            <div className="col s12">
+              <div className="card">
+                <div className="card-content">
+                  <LegendFilter />
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-content">
+                  <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
+                </div>
+              </div>
+            </div>
           </div>}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.events_infobar}

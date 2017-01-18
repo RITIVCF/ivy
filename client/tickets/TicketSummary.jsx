@@ -128,13 +128,10 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     var types = Session.get("tickettypefilter");
     //console.log(this.props.sub);
 		return (
-      <div className="row" onClick={this.unselect.bind(this)}>
-          <div className="col s12">
-          {/*}  <div className="row">
-                <a onClick={this.newTicket.bind(this)}
-                  className="waves-effect waves-light btn right">New Ticket</a>
-            </div> */}
-            <div className="">
+      <div onClick={this.unselect.bind(this)}>
+        <div className="card" onClick={this.stopPropa.bind(this)}>
+          <div className="card-content">
+            <div className="row">
               <div className="input-field col s12 m6">
                 <select ref="filter" className="browser-default" value={Session.get("ticketfilter")}
                   onChange={this.filterChange.bind(this)}>
@@ -143,13 +140,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                     <option value={""}>All Active Tickets</option>
                   </select>
               </div>
-              {/*<div className="input-field col s12 m3">
-                <select ref="typefilter" className="browser-default" value={Session.get("tickettypefilter")}
-                  onChange={this.filterTypeChange.bind(this)}>
-                    Use a multiple select thing for this
-                  </select>
-
-              </div>*/}
               <div className="input-field col s4 m2">
                 <select ref="textfilter" className="browser-default" value={Session.get("tickettextfilter")}
                   onChange={this.textFilterChange.bind(this)}>
@@ -160,16 +150,14 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                     check the functions to mke sure the session variable is set
                     correctly.  AM I MAYBE CHANGING OUT THE INPUT TYPE TO select
                     FOR SOME OF THESE CHOICES?  I WOULD LIKE TO*/}
-                  </select>
-
-
+                </select>
               </div>
               <div className="input-field col s8 m4">
                 <input ref="filter" onChange={this.changeTextFilter.bind(this)} type="text" className="validate" />
                 <label htmlFor="icon_prefix">Search</label>
               </div>
             </div>
-            <div className="" onClick={this.stopPropa.bind(this)}>
+            <div className="row">
               <div className="col s12">
                 <p>Type Filter:
                 <input type="checkbox" id="contacttype" checked={types.includes("Contact")} onChange={this.handleCheck.bind(this,"Contact")} />
@@ -183,38 +171,38 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                 </p>
               </div>
             </div>
-
-
-            <div className="divider"></div><br/>
-              <table className="bordered highlight responsive-table">
-                <thead>
-                  <tr>
-                    <th>Ticket ID</th>
-                    <th>Subject</th>
-                    <th>Customer</th>
-                    <th>Ticket Type</th>
-                    <th>Request Type</th>
-                    <th>Assigned User</th>
-                    <th>Assigned Group</th>
-                    <th>Status</th>
-                    <th>Last Updated</th>
-                  </tr>
-                </thead>
-                {!this.props.sub ? <tbody></tbody>:
-                <tbody>
-                  {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
-                      return <TicketRow key={ticket._id} tkt={ticket}
-                        selected={Session.get("ticselected")==ticket._id}
-                        select={this.select.bind(this)} parent={this} />
-                  })}
-                </tbody>}
-              </table>
-
-            </div>
-            {(this.props.sub) ?
-            <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
-            }
           </div>
+        </div>
+        <div className="card">
+            <table className="bordered highlight responsive-table">
+              <thead>
+                <tr>
+                  <th>Ticket ID</th>
+                  <th>Subject</th>
+                  <th>Customer</th>
+                  <th>Ticket Type</th>
+                  <th>Request Type</th>
+                  <th>Assigned User</th>
+                  <th>Assigned Group</th>
+                  <th>Status</th>
+                  <th>Last Updated</th>
+                </tr>
+              </thead>
+              {!this.props.sub ? <tbody></tbody>:
+              <tbody>
+                {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
+                    return <TicketRow key={ticket._id} tkt={ticket}
+                      selected={Session.get("ticselected")==ticket._id}
+                      select={this.select.bind(this)} parent={this} />
+                })}
+              </tbody>}
+            </table>
+        </div>
+
+        {(this.props.sub) ?
+        <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
+        }
+    </div>
   )
 	}
 }

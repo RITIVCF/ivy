@@ -165,6 +165,18 @@ export default class SelectTime extends TrackerReact(React.Component) {
     });
   }
 
+  onSuggestionsFetchRequested({ value }){
+    this.setState({
+      suggestions: getSuggestions(value)
+    });
+  }; 
+
+  onSuggestionsClearRequested(){
+    this.setState({
+      suggestions: []
+    });
+  };
+
   render() {
 
     const { value, suggestions } = this.state;
@@ -179,6 +191,8 @@ export default class SelectTime extends TrackerReact(React.Component) {
                    onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
                    getSuggestionValue={getSuggestionValue}
                    focusFirstSuggestion={true}
+                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                   onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                    onSuggestionSelected={this.onSuggestionSelected.bind(this)}
                    focusInputOnSuggestionClick={false}
                    shouldRenderSuggestions={shouldRenderSuggestions}
