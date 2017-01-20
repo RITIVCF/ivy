@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Chart from 'chart.js'
-import noUiSlider from '../../styles/js/nouislider.js';
+//import noUiSlider from '../../styles/js/nouislider.js';
 
 export default class FunnelTime extends TrackerReact(React.Component) {
 	constructor(){
@@ -131,7 +131,7 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 
-					Historical 
+					Historical
 					<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
 						style={{float: "right"}}>cached</i>
