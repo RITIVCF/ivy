@@ -9,14 +9,21 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 
 		this.state = {
 			mounted: false,
-			start: "",
-			end: ""
+			colors: {
+				crowd: '#DECF3F',
+				visitor: '#FAA43A',
+				member: '#B276B2',
+				server: '#60BD68',
+				leader: '#5DA5DA',
+				multiplier: '#F15854'
+			}
 		}
 
 	}
 
 	componentDidMount(){
 		console.log("did mount");
+		let thiz = this;
 		Meteor.call("funnelTime", this.refs.date.value, function(error, result){
 			console.log(result);
 			historicalChart = new Chart($(historicalchart), {
@@ -25,26 +32,32 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 					labels: result.timestamp,
 					datasets: [{
 							label: "Crowd",
+							backgroundColor: thiz.state.colors.crowd,
 							data: result.crowd
 						},
 						{
 							label: "Visitor",
+							backgroundColor: thiz.state.colors.visitor,
 							data: result.visitor
 						},
 						{
 							label: "Member",
+							backgroundColor: thiz.state.colors.member,
 							data: result.member
 						},
 						{
 							label: "Server",
+							backgroundColor: thiz.state.colors.server,
 							data: result.server
 						},
 						{
 							label: "Leader",
+							backgroundColor: thiz.state.colors.leader,
 							data: result.leader
 						},
 						{
 							label: "Multiplier",
+							backgroundColor: thiz.state.colors.multiplier,
 							data: result.multiplier
 						}
 					]
@@ -90,32 +103,39 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 
 
 	refresh(){
+		let thiz = this;
 		Meteor.call("funnelTime", this.refs.date.value, function(error, result){
 			historicalChart.data.labels = result.timestamp;
 			historicalChart.options.scales.yAxes[0].ticks.max = result.max;
 			historicalChart.options.scales.yAxes[0].ticks.min = result.min;
 			historicalChart.data.datasets[0]= {
 				label: "Crowd",
+				backgroundColor: thiz.state.colors.crowd,
 				data: result.crowd
 			};
 			historicalChart.data.datasets[1]= {
 				label: "Visitor",
+				backgroundColor: thiz.state.colors.visitor,
 				data: result.visitor
 			};
 			historicalChart.data.datasets[2]= {
 				label: "Member",
+				backgroundColor: thiz.state.colors.member,
 				data: result.member
 			};
 			historicalChart.data.datasets[3]= {
 				label: "Server",
+				backgroundColor: thiz.state.colors.server,
 				data: result.server
 			};
 			historicalChart.data.datasets[4]= {
 				label: "Leader",
+				backgroundColor: thiz.state.colors.leader,
 				data: result.leader
 			};
 			historicalChart.data.datasets[5]= {
 				label: "Multiplier",
+				backgroundColor: thiz.state.colors.multiplier,
 				data: result.multiplier
 			};
 			historicalChart.update();

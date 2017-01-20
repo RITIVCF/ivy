@@ -22,11 +22,13 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 				data: {
 					labels: ["Visitor", "Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
-						label: "Counts",
+						//label: "Counts",
+						backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
 						data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
 	    	options: {
+					legend: false,
 	        scales: {
 	            yAxes: [{
 	                ticks: {
