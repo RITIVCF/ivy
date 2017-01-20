@@ -14,6 +14,10 @@ export default class MyTickets extends TrackerReact(React.Component) {
 
 	}
 
+	componentWillUnmount(){
+		this.state.subscription.tickets.stop();
+	}
+
 	getMeTickets(){
 		return Tickets.find({assigneduser: Meteor.userId()}).fetch();
 	}
@@ -37,7 +41,7 @@ export default class MyTickets extends TrackerReact(React.Component) {
 		return (
 			<div className="card">
 				<div className="card-content">
-					<span className="card-title">My Tickets & Workorders</span>
+					<span className="card-title">My To-Dos</span>
 					<p>Assigned to Me:</p>
 						<ul className="collection">
 							{this.state.subscription.tickets.ready()?this.getMeTickets().length!=0?this.getMeTickets().map((t)=>{

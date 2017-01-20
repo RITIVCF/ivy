@@ -62,10 +62,14 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					Funnel Status - Limited | <b>Total:</b> {this.state.ttl}
+					Limited | <b>Total:</b> {this.state.ttl}
+					<i onClick={this.refresh.bind(this)}
+						className="material-icons unselectable"
+						style={{float: "right"}}>cached</i>
 				</div>
 				<div className="panel-body">
-					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
+					{/*}<button  className="btn waves-effect waves-light"></button>*/}
+
 					<canvas id="funnelchart2" width="400" height="400"></canvas>
 				</div>
 			</div>

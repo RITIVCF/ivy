@@ -61,8 +61,13 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	render() {
 		return (
 			<div>
-					Funnel Status - Current | <b>Total:</b> {this.state.ttl} <br/>
-				<button onClick={this.refresh.bind(this)} className="btn waves-effect waves-light">Refresh</button>
+					Current | <b>Total:</b> {this.state.ttl}
+					<i onClick={this.refresh.bind(this)}
+						className="material-icons unselectable"
+						style={{float: "right"}}>cached</i>
+				{/*}<button  className="btn waves-effect waves-light"></button>*/}
+
+
 					<canvas id="funnelchart" width="400" height="400"></canvas>
 			</div>
 		)

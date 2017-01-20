@@ -15,7 +15,7 @@ export default class Attendee extends TrackerReact(React.Component) {
       return;
     }
     //console.log("go");
-    FlowRouter.go("/contacts/"+this.props.contact._id);
+    FlowRouter.go("/people/"+this.props.contact._id);
   }
 
 

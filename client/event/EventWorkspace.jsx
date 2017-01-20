@@ -41,9 +41,9 @@ export default class EventWorkspace extends TrackerReact(React.Component) {
 							<div className="card-content">
 								<EventDescription ev={ev} perm={perm} />
 								<EventWorkpad ev={ev} perm={perm} />
-								<RequestWrapper eid={ev._id} parent={this} perm={perm} />
 							</div>
 						</div>
+						<RequestWrapper eid={ev._id} parent={this} perm={perm} />
 					</div>
 				</div>
 		)

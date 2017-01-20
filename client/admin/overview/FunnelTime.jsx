@@ -1,13 +1,16 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Chart from 'chart.js'
+import noUiSlider from '../../styles/js/nouislider.js';
 
 export default class FunnelTime extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
 		this.state = {
-			mounted: false
+			mounted: false,
+			start: "",
+			end: ""
 		}
 
 	}
@@ -60,17 +63,28 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	    }
 			});
 		});
-		$( "#slider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 500,
-      values: [ 75, 300 ],
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-      }
-    });
-    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+		/*var dateSlider = $("#daterange")[0];
+		console.log(dateSlider);
+	  noUiSlider.create(dateSlider, {
+	   start: [new moment().subtract(1,"week")._d.getTime(),new Date().getTime()],
+	   connect: true,
+	   step: 24 * 60 * 60 * 1000,
+	   range: {
+	     'min': new Date('2017').getTime(),
+	     'max': new Date().getTime()
+	   },
+	   format:{
+			 	to: function(value){
+					return ""//new moment(value).format('dddd Do MMM YYYY')
+				},
+				from: function(value){
+					return ""//new moment(value).format('dddd Do MMM YYYY')
+				}
+			}
+	  });
+		dateSlider.noUiSlider.on('update', function( values, handle ) {
+			console.log(handle);
+		});*/
 
 	}
 
@@ -116,26 +130,32 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 		// }
 		return (
 			<div className="panel panel-default">
-				<div className="panel-heading">
-					Funnel Status - Historical
-				</div>
-				<div className="panel-body">
-					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
-					<label>Date Range</label>
-					<select ref="date">
-					  <option value="0" >All time</option>
-					  <option value="180" >Past 180 Days</option>
-					  <option value="90" >Past 90 Days</option>
-						<option value="60" >Past 60 Days</option>
-						<option value="30" >Past 30 Days</option>
-						<option value="15" >Past 15 Days</option>
-						<option value="2" >Past 2 Days</option>
+
+					Historical 
+					<i onClick={this.refresh.bind(this)}
+						className="material-icons unselectable"
+						style={{float: "right"}}>cached</i>
+
+					{/*}<button  className="btn waves-effect waves-light"></button>
+						<label>Date Range</label>
+							<div id="daterange" />
+						<label>Start: </label><p id="from">{this.state.start}</p>
+						<label>End: </label><p id="to">{this.state.end}</p>
+				      {/*}<input type="range" id="daterange" min="0" max="100" />*/}
+
+					<select className="browser-default" ref="date" defaultValue="30" onChange={this.refresh.bind(this)}>
 						<option value="1" >Past 1 Days</option>
+						<option value="2" >Past 2 Days</option>
+						<option value="15" >Past 15 Days</option>
+						<option value="30" >Past 30 Days</option>
+						<option value="60" >Past 60 Days</option>
+						<option value="90" >Past 90 Days</option>
+						<option value="180" >Past 180 Days</option>
+						<option value="360" >Past 360 Days</option>
+						<option value="0" >All time</option>
 					</select>
-					<input type="text" id="amount" readOnly style={{border:0, color:"#f6931f", fontWeight:"bold"}} />
-					{/*}<div id="slider-range"></div>*/}
 					<canvas id="historicalchart" width="400" height="400"></canvas>
-				</div>
+
 			</div>
 		)
 	}

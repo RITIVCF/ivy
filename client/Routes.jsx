@@ -169,7 +169,7 @@ FlowRouter.route('/profile',{
 	}
 });
 
-FlowRouter.route('/contacts/:cid',{
+FlowRouter.route('/people/:cid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "People",
@@ -178,7 +178,7 @@ FlowRouter.route('/contacts/:cid',{
 	}
 });
 
-FlowRouter.route('/contacts', {
+FlowRouter.route('/people', {
 	action(){
 		mount(MainLayout, {
 			header: "People",
