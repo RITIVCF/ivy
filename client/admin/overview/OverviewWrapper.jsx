@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import OverviewPage from './OverviewPage.jsx';
+import NoPerm	from '../../NoPerm.jsx';
 import LoaderCircle from '../../LoaderCircle.jsx';
 
 export default class OverviewWrapper extends TrackerReact(React.Component) {
@@ -25,21 +26,22 @@ export default class OverviewWrapper extends TrackerReact(React.Component) {
 
 	render() {
 		if(!checkPermission("admin")){
-			return <div>Sorry you don't have permission to view this page. Please see the leadership team to get access.</div>
+			return <NoPerm />
 		}
 		if(!this.state.subscription.Funnel.ready()){
 			return <LoaderCircle />
 		}
 		return (
-			<div className="row">
-				<div className="col s12">
-					<div className="card">
-						<div className="card-content">
-							<OverviewPage />
-						</div>
-					</div>
+			<OverviewPage />
+		)
+		/*}<div className="row">
+			<div className="col s12">
+				<div className="card">
+					<div className="card-content">*/
+
+					/*}</div>
 				</div>
 			</div>
-		)
+		</div>*/
 	}
 }

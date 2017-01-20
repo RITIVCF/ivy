@@ -19,7 +19,7 @@ export default class EventDateControls extends TrackerReact(React.Component) {
     }
   }
 
-  componentShouldUpdate(nextProps, nextState){
+  shouldComponentUpdate(nextProps, nextState){
     if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
       return false
     }else{

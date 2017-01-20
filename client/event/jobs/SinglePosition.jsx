@@ -30,7 +30,9 @@ export default class SinglePosition extends Component {
 		if(job.isRequest){
 			return (
 				<li className="collection-item avatar">
-					<img src="/images/accepted.png" alt="" className="circle"/>
+					{job.status=="Pending"&&<img src="/icons/pending.png" alt="" className="circle"/>}
+					{job.status=="Accepted"&&<img src="/icons/check.png" alt="" className="circle"/>}
+					{job.status=="Declined"&&<img src="/icons/decline.png" alt="" className="circle"/>}
 					<span className="title"><b>{job.job}</b></span>
 					<p>{this.getUser().name}<br/><a className="secondary-content" onClick={this.remove.bind(this)}><i className="material-icons">close</i></a>
 					{this.props.job.status}

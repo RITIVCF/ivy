@@ -22,11 +22,13 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 				data: {
 					labels: ["Visitor", "Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
-						label: "Counts",
+						//label: "Counts",
+						backgroundColor: ['#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
 						data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
 	    	options: {
+					legend: false,
 	        scales: {
 	            yAxes: [{
 	                ticks: {
@@ -62,10 +64,14 @@ export default class FunnelChartLimited extends TrackerReact(React.Component) {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					Funnel Status - Limited | <b>Total:</b> {this.state.ttl}
+					Limited | <b>Total:</b> {this.state.ttl}
+					<i onClick={this.refresh.bind(this)}
+						className="material-icons unselectable"
+						style={{float: "right"}}>cached</i>
 				</div>
 				<div className="panel-body">
-					<button onClick={this.refresh.bind(this)} className="btn btn-success">Refresh</button>
+					{/*}<button  className="btn waves-effect waves-light"></button>*/}
+
 					<canvas id="funnelchart2" width="400" height="400"></canvas>
 				</div>
 			</div>
