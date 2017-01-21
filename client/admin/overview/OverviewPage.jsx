@@ -24,19 +24,11 @@ export default class OverviewPage extends TrackerReact(React.Component) {
 						<div className="col s12 m6">
 							<div className="card">
 								<div className="card-content">
-									<FunnelChart ref="funnelchart" />
-								</div>
-							</div>
-						</div>
-						<div className="col s12 m6">
-							<div className="card">
-								<div className="card-content">
+									{/*}<FunnelChart ref="funnelchart" />*/}
 									<FunnelChartLimited />
 								</div>
 							</div>
 						</div>
-					</div>
-					<div className="row">
 						<div className="col s12 m6">
 							<div className="card">
 								<div className="card-content">
@@ -45,6 +37,15 @@ export default class OverviewPage extends TrackerReact(React.Component) {
 							</div>
 						</div>
 					</div>
+					{/*}<div className="row">
+						<div className="col s12 m6">
+							<div className="card">
+								<div className="card-content">
+
+								</div>
+							</div>
+						</div>
+					</div>*/}
 				</div>
 				<div className="col s12 l6">
 					<div className="col s12">
