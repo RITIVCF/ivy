@@ -126,6 +126,24 @@ Meteor.publish("pastEvents", function(lim){
   });
 })
 
+Meteor.publish("debriefs", function(num){
+  return Events.find(
+    {debrief: {$exists: true}},
+    {sort: {start: -1},limit: num}
+  );
+});
+
+Meteor.publish("needDebrief", function(){
+  return Events.find({
+    start: {$lte: new Date()},
+    debrief: {$exists: false}
+  });
+});
+
+Meteor.publish("thisDebrief", function(eid){
+  return Events.find({_id: eid});
+});
+
 Meteor.publish("oneEvent", function(eid){
   return Events.findOne(eid);
 });

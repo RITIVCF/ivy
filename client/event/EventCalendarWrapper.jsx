@@ -63,6 +63,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
   getSubHeader(){
     var viewtitle = $('#calendar').fullCalendar('getView').title;
+    let view = Meteor.user().preferences.calendar_view;
     return <div>
 
       <ul className="center calcenter">
@@ -71,10 +72,11 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       <li onClick={this.nextCal.bind(this)}><a><i className="material-icons black-text">skip_next</i></a></li>
       </ul>
       <ul className="right">
+        <li><a href="/events/debrief"><i className="material-icons black-text">subject</i></a></li>
       <li><a className="dropdown-button" data-activates="caldrop">
-      {Session.get("calendarview")=="month" ? <i className="material-icons black-text">today</i> :
-        Session.get("calendarview")=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
-        Session.get("calendarview")=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
+      {view=="month" ? <i className="material-icons black-text">today</i> :
+        view=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
+        view=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
       </a></li>
       <li><a>|</a></li>
       <li onClick={this.toggleInfoBar.bind(this)}><a>
@@ -85,9 +87,9 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       <li><a onClick={this.openHelp.bind(this)}><i className="material-icons black-text">live_help</i></a></li>
       </ul>
     <ul id="caldrop" className="dropdown-content">
-      <li onClick={this.monthView.bind(this)}><a><i className={Session.get("calendarview")=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>
-      <li onClick={this.weekView.bind(this)}><a><i className={Session.get("calendarview")=="agendaWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_week</i></a></li>
-      <li onClick={this.listView.bind(this)}><a><i className={Session.get("calendarview")=="listWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_list</i></a></li>
+      <li onClick={this.monthView.bind(this)}><a><i className={view=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>
+      <li onClick={this.weekView.bind(this)}><a><i className={view=="agendaWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_week</i></a></li>
+      <li onClick={this.listView.bind(this)}><a><i className={view=="listWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_list</i></a></li>
     </ul>
   </div>
   }
