@@ -11,8 +11,8 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			mounted: false,
 			colors: {
 				crowd: '#DECF3F',
-				visitor: '#FAA43A',
-				member: '#B276B2',
+				visitor: '#B276B2',
+				member: '#FAA43A',
 				server: '#60BD68',
 				leader: '#5DA5DA',
 				multiplier: '#F15854'
