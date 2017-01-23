@@ -59,9 +59,9 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 		return (
 			<div>
 					Current | <b>Total:</b> {this.state.ttl}
-					<i onClick={this.refresh.bind(this)}
+					{/*}<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
-						style={{float: "right"}}>cached</i>
+						style={{float: "right"}}>cached</i>*/}
 					<table>
 						<thead>
 						{/*}	<tr><th colSpan="2">Counts</th></tr>*/}

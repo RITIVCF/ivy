@@ -556,6 +556,12 @@ Meteor.publish("myEmails", function(){
 
 //***************************************
 
+// *******    Debrief   ************
+Meteor.publish("myDebriefDrafts", function(){
+  return Debriefs.find({uid: this.userId});
+});
+// *********************************
+
 Meteor.publish("allCounters", function(){
   return Counters.find();
 });

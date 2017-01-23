@@ -152,9 +152,9 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			<div className="panel panel-default">
 
 					Historical
-					<i onClick={this.refresh.bind(this)}
+					{/*}<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
-						style={{float: "right"}}>cached</i>
+						style={{float: "right"}}>cached</i>*/}
 
 					{/*}<button  className="btn waves-effect waves-light"></button>
 						<label>Date Range</label>

@@ -11,12 +11,14 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 
     this.state = {
       subscription: {
+				drafts: Meteor.subscribe("myDebriefDrafts"),
        debrief: Meteor.subscribe("thisDebrief", props.eid)
       }
 		};
   }
 
 	componentWillUnmount() {
+		this.state.subscription.drafts.stop();
     this.state.subscription.debrief.stop();
   }
 
@@ -25,7 +27,7 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		if(!this.state.subscription.debrief.ready()){
+		if(!(this.state.subscription.drafts.ready()&&this.state.subscription.debrief.ready())){
 			return <LoaderCircle />
 		}
 		if(!checkPermission("events")){
