@@ -11,8 +11,8 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			mounted: false,
 			colors: {
 				crowd: '#DECF3F',
-				visitor: '#FAA43A',
-				member: '#B276B2',
+				visitor: '#B276B2',
+				member: '#FAA43A',
 				server: '#60BD68',
 				leader: '#5DA5DA',
 				multiplier: '#F15854'
@@ -152,9 +152,9 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 			<div className="panel panel-default">
 
 					Historical
-					<i onClick={this.refresh.bind(this)}
+					{/*}<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
-						style={{float: "right"}}>cached</i>
+						style={{float: "right"}}>cached</i>*/}
 
 					{/*}<button  className="btn waves-effect waves-light"></button>
 						<label>Date Range</label>

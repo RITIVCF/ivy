@@ -187,7 +187,7 @@ Meteor.methods({
     if(numdays!="0"){
       //  console.log("Numdays: "+numdays);
       //  console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
-        var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+2, "days")._d}}).fetch();
+        var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+1, "days")._d}}).fetch();
     }
     else{
         var result = FunnelHistory.find().fetch();
@@ -420,5 +420,6 @@ Meteor.methods({
 
 
   }
+
 
 })

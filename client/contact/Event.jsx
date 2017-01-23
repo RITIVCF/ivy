@@ -19,9 +19,10 @@ export default class Event extends Component {
     return(
       <li className="collection-item" id={checkPermission("attendance")?"showhim":""} onDoubleClick={this.go.bind(this)}>
         {event.name}
+        {checkPermission("attendance")&&
         <a   onClick={this.go.bind(this)}
             className="btn waves-effect waves-light right"
-            id={checkPermission("attendance")?"showme":""}>View</a>
+            id={checkPermission("attendance")?"showme":""}>View</a>}
         <br/>
         {new moment(event.start.toISOString()).format("DD MMM @ h:mmA")}
       </li>

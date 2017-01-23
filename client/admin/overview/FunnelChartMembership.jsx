@@ -14,17 +14,16 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 	}
 
 	componentDidMount(){
-		console.log("did mount");
 		thiz2 = this;
 		Meteor.call("currentFunnelMembership", function(error, result){
 			membershipFunnel = new Chart($("#membershipFunnel"), {
 				type: "bar",
 				data: {
-					labels: ["Visitor", "Member", "Server", "Leader", "Multiplier"],
+					labels: ["Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
 						//label: "Counts",
-						backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
-						data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
+						backgroundColor: ['#FAA43A', '#60BD68','#5DA5DA', '#F15854'],
+						data: [result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
 	    	options: {
@@ -50,11 +49,18 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 	}
 
 	refresh(){
+		var thiz= this;
 		Meteor.call("currentFunnelMembership", function(error, result){
 			membershipFunnel.data.datasets[0]= {
 				label: "Counts",
-				data: [result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
+				backgroundColor: ['#FAA43A', '#60BD68','#5DA5DA', '#F15854'],
+				data: [result.Member, result.Server, result.Leader, result.Multiplier]
 			};
+			var total = parseInt(result.Member?result.Member:0)+
+									parseInt(result.Server?result.Server:0)+
+									parseInt(result.Leader?result.Leader:0)+
+									parseInt(result.Multiplier?result.Multiplier:0);
+				thiz.setState({ttl: total});
 			membershipFunnel.update();
 		});
 	}
@@ -65,9 +71,9 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 			<div className="panel panel-default">
 				<div className="panel-heading">
 					Membership | <b>Total:</b> {this.state.ttl}
-					<i onClick={this.refresh.bind(this)}
+					{/*}<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
-						style={{float: "right"}}>cached</i>
+						style={{float: "right"}}>cached</i>*/}
 				</div>
 				<div className="panel-body">
 					{/*}<button  className="btn waves-effect waves-light"></button>*/}

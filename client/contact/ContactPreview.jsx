@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PreviewEvent from './components/PreviewEvent.jsx';
-import FunnelChart from '../admin/overview/FunnelChart.jsx';
+import FunnelTable from '../admin/overview/FunnelTable.jsx';
 import FunnelChartLimited from '../admin/overview/FunnelChartLimited.jsx';
 import FunnelChartMembership from '../admin/overview/FunnelChartMembership.jsx';
 
@@ -48,9 +48,11 @@ export default class ContactPreview extends Component {
         <div>
           <h4>Summary</h4>
 
-          {checkPermission("admin")?<ul><FunnelChart />
-        <FunnelChartLimited  />
-        <FunnelChartMembership /></ul>:<ul><p>Total:{this.contactsCount()}</p></ul>}
+          {checkPermission("admin")?<ul>
+            <FunnelChartLimited  />
+            <FunnelChartMembership />
+            <FunnelTable />
+          </ul>:<ul><p>Total:{this.contactsCount()}</p></ul>}
         </div>
       )
     }
