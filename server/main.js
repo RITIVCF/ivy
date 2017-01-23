@@ -138,5 +138,4 @@ SyncedCron.add({
       console.log(user.name, " end.");
     });
   }
-  }
 });
