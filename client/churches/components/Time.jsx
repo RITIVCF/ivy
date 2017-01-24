@@ -12,36 +12,49 @@ export default class Time extends Component {
 
   }
 
+  componentDidUpdate(){
+    $("select").material_select();
+  }
+
   edit(event){
-    event.preventDefault();
-    //console.log("Begin edit.");
+    console.log("Begin edit.");
     this.setState({
       editting: true
     });
   }
 
   closeedit(event){
-    event.preventDefault();
-    Meteor.call("updateChurchTime", this.props.ch._id,
-     this.props.time.day,
-     this.props.time.time,
-     this.refs.day.value,
-     this.refs.time.state.value);
+    event.stopPropagation();
+    var day = this.refs.day.value;
+    var time = this.refs.time.state.value;
+    $("select").material_select('destroy');
+    if((day==this.props.time.day)&&(time==this.props.time.time)){
+      this.setState({
+        editting: false
+      });
+    }
+    else{
+      Meteor.call("updateChurchTime", this.props.ch._id,
+       this.props.time.day,
+       this.props.time.time,
+       day,
+       time);
+    }
+
     //console.log(this.refs.time.state.value);
-    this.setState({
-      editting: false
-    });
+
   }
 
   close(event){
-    event.preventDefault();
+    event.stopPropagation();
     this.setState({
       editting: false
     });
+    $("select").material_select('destroy');
   }
 
   remove(event){
-    event.preventDefault();
+    event.stopPropagation();
     Meteor.call("removeChurchTime", this.props.ch._id, this.props.time.day, this.props.time.time);
   }
 
@@ -63,12 +76,9 @@ export default class Time extends Component {
       options.push({name: time, value: time});
     });
     return(
-      <div className="col s12 m6 l4">
-        <div className="card-panel left">
-      {this.state.editting==true ? // No form so no submit on *Enter*
-        <form>
-          {/*}<input type="hidden" ref="id" value={this.props.address._id} />*/}
-          <select ref="day" value={this.props.time.day} onChange={this.handleDayChange}>
+      <tr onClick={this.edit.bind(this)}>
+        <td>{this.state.editting?
+          <select ref="day" defaultValue={this.props.time.day}>
             <option value={"Sunday"}>Sunday</option>
             <option value={"Monday"}>Monday</option>
             <option value={"Tuesday"}>Tuesday</option>
@@ -76,30 +86,19 @@ export default class Time extends Component {
             <option value={"Thursday"}>Thursday</option>
             <option value={"Friday"}>Friday</option>
             <option value={"Saturday"}>Saturday</option>
-          </select>
-          {/*}<select ref="time" value={this.props.time.time}  onChange={this.handleDayChange.bind)this}>
-            {Meteor.settings.public.times.map( (time)=>{
-              return <SelectOption key={time} value={time} displayvalue={time} />
-            })}
-          </select>
-          <SelectSearch options={options}
-            value={this.props.time.time}
-            ref="time"
-            placeholder={this.props.time.time} />  */}
-          <SelectTime ref="time"  initialValue={this.props.time.time}
-             />
+          </select>:this.props.time.day}</td>
+        <td>{this.state.editting?
+          <SelectTime ref="time"  initialValue={this.props.time.time} />
+            :this.props.time.time}</td>
+          <td>{this.state.editting?<span>
           <button onClick={this.closeedit.bind(this)}>Save</button>
-          <button onClick={this.close.bind(this)}>Close</button>
-        </form>
-        :
-        <div onClick={this.edit.bind(this)}>
-          <div>{this.props.time.day}, {this.props.time.time}</div>
-        </div>
-      }
-      <a onClick={this.remove.bind(this)}
-         className="waves-effect waves-blue btn">X</a>
-      </div>
-    </div>
+          <button onClick={this.close.bind(this)}>Close</button></span>
+          :<i onClick={this.remove.bind(this)}
+             className="material-icons">close</i>}</td>
+
+
+
+    </tr>
     )
   }
 }

@@ -56,18 +56,15 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 		return (
       <div className="row"  onClick={this.unselect.bind(this)}>
         <div className="col s12">
-          <div className="row">
-            <div className="col s12 m8 l8">
+          <div className="card">
+            <div className="card-content">
               <form onSubmit={this.createNew.bind(this)}>
                 <label htmlFor="icon_prefix">New Church Name</label>
                   <input ref="name"  type="text" />
               </form>
             </div>
-            <div className="input-field col s12 m4 l4">
-
-            </div>
           </div>
-          <div className="divider"></div>
+          
           <div className="row">
             {this.churches().map( (church)=>{
                 return <ChurchSingle key={church._id} church={church} selected={Session.get("chselected")==church._id} parent={this} />

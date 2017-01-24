@@ -8,19 +8,27 @@ export default class Contact extends Component {
 
 
   render(){
-    return(
-      <div className="col s12 m6 l4">
-        <div className="card-panel left">
-          <div className="card-content">
-            <span className="card-title">{this.props.contact.name}</span>
-            <p>{this.props.contact.emails[0].address}</p>
-          </div>
-          <div className="card-action">
-              <a className="waves-effect waves-light btn red"
-                onClick={this.remove.bind(this)}>Remove</a>
-            </div>
-        </div>
-      </div>
+    let contact = this.props.contact;
+    return (
+      <tr>
+        <td>{contact.name}</td>
+        <td>{contact.emails[0].address}</td>
+        <td><i className="material-icons">close</i></td>
+      </tr>
     )
+    // return(
+    //   <div className="col s12 m6 l4">
+    //     <div className="card-panel left">
+    //       <div className="card-content">
+    //         <span className="card-title">{this.props.contact.name}</span>
+    //         <p>{this.props.contact.emails[0].address}</p>
+    //       </div>
+    //       <div className="card-action">
+    //           <a className="waves-effect waves-light btn red"
+    //             onClick={this.remove.bind(this)}>Remove</a>
+    //         </div>
+    //     </div>
+    //   </div>
+    // )
   }
 }

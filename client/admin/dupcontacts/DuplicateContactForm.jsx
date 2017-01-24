@@ -90,11 +90,13 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 		let show = (this.getContacts().length>1)||this.state.showanyway;
 		return (
 
-					<div className="">
-						<div className="">
+					<div className="row">
+						<div className="col s12">
 
 						{show?
-						<div className="">
+						<div>
+							<div className="card">
+								<div className="card-content">
 							<div className="row">
 								<div className="col s12">
 									<h1>Please read carefully before continuing:</h1>
@@ -118,8 +120,7 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 											{this.getContacts().map((contact)=>{
 												return <Contact key={contact._id} contact={contact} />
 											})}
-										</select><br/>
-									{this.state.deleteId ? <ContactDetails cid={this.state.deleteId} ref="deletecontact" /> : ""}
+										</select>
 								</div>
 								<div className="col s12 m6">
 										<label>Choose contact card to merge into:</label>
@@ -127,22 +128,30 @@ export default class DuplicateContactForm extends TrackerReact(React.Component) 
 											{this.getContacts().map((contact)=>{
 												return <Contact key={contact._id} contact={contact} />
 											})}
-										</select><br/>
-									{this.state.mergeId ? <ContactDetails cid={this.state.mergeId} mergec={true} /> : ""}
+										</select>
 								</div>
 							</div>
-							<br/>
-							<div className="row">
-								<div className="col-md-12">
-									{((this.state.deleteId&&this.state.mergeId)&&(this.state.deleteId!=this.state.mergeId))&&
-									<button onClick={this.performDelete.bind(this)} className="btn btn-primary">Merge & Delete</button>}
-								</div>
+							{((this.state.deleteId&&this.state.mergeId)&&(this.state.deleteId!=this.state.mergeId))&&
+							<button onClick={this.performDelete.bind(this)} className="btn btn-primary">Merge & Delete</button>}
+						</div>
+					</div>
+							<div className="col s12 m6">
+								{this.state.deleteId ? <ContactDetails cid={this.state.deleteId} ref="deletecontact" /> : ""}
 							</div>
+							<div className="col s12 m6">
+								{this.state.mergeId ? <ContactDetails cid={this.state.mergeId} mergec={true} /> : ""}
 							</div>
+						</div>
 						:
 						<div className="row">
-							<div className="col s12"><p>Congrats! There are no duplicate contacts we can detect automatically.</p>
-							<a className="btn" onClick={this.showAnyway.bind(this)}>Show Anyway</a></div>
+							<div className="col s12">
+								<div className="card">
+									<div className="card-content">
+										<p>Congrats! There are no duplicate contacts we can detect automatically.</p>
+									<a className="btn" onClick={this.showAnyway.bind(this)}>Show Anyway</a>
+									</div>
+								</div>
+							</div>
 						</div>}
 						</div>
 					</div>

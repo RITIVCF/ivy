@@ -108,8 +108,8 @@ export default class SideBar extends TrackerReact(React.Component) {
 							</a>
 						</li>}
 					{checkPermission("contacts")?
-						<li className={FlowRouter.current().path.substring(0,9)=="/contacts"?"active":""}>
-							<a className="waves-effect collapsible-header" href="/contacts">
+						<li className={FlowRouter.current().path.substring(0,9)=="/people"?"active":""}>
+							<a className="waves-effect collapsible-header" href="/people">
 								<span className="nav-icon">
 									<i className="material-icons">supervisor_account</i>
 								</span>

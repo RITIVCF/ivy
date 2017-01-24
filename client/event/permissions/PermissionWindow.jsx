@@ -23,7 +23,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
       $('.modal').modal();
     }
 
-    componentShouldUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState){
       if(this.props.ev.permUser==nextProps.permUser&&
         this.props.ev.permGroup==nextProps.permGroup&&
         this.props.ev.owner==nextProps.owner){
@@ -236,11 +236,11 @@ export default class PermissionWindow extends TrackerReact(React.Component)
                       </tr>
                     </thead>
                     <tbody>
-                      {event.permGroup.map( (perm)=>{
-                        return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"groups"} />
+                      {event.permGroup.map( (perm,i)=>{
+                        return <Permission key={perm.id+"group"+i} perm={perm} eid={this.props.ev._id} type={"groups"} />
                       })}
-                      {event.permUser.map( (perm)=>{
-                        return <Permission key={perm.id} perm={perm} eid={this.props.ev._id} type={"users"} />
+                      {event.permUser.map( (perm,i)=>{
+                        return <Permission key={perm.id+"user"+i} perm={perm} eid={this.props.ev._id} type={"users"} />
                       })}
                     </tbody>
                   </table>

@@ -48,7 +48,7 @@ export default class MySchedule extends TrackerReact(React.Component) {
 				jobs.push(job);
 			});
 		});
-		console.log(jobs);
+		//console.log(jobs);
 		return jobs;
 	}
 

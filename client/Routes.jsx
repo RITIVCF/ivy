@@ -7,9 +7,33 @@ import {FormLayout} from './layouts/FormLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
 //Wrappers
+// ****    Error Page  ********
 import ErrorPage from './layouts/ErrorPage.jsx';
+// ****************************
+
+// *****    Dashboard *********
 import DashboardWrapper from './Dashboard.jsx';
+// ****************************
+
+// ***** People  **************
 import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
+import ContactWrapper from './contact/ContactWrapper.jsx';
+// ****************************
+
+// ****  Events   *********
+import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
+import EventsWrapper from './event/EventsWrapper.jsx';
+import EventOld from './event/EventOld.jsx';
+import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
+import EventCalendarSub from './event/EventCalendarSub.jsx';
+import SigninWrapper from './event/forms/SignInWrapper.jsx';
+import RSVPWrapper from './event/forms/RSVP.jsx';
+// ****   Debriefs  *******
+import EventsDebriefWrapper from './event/debrief/EventsDebriefWrapper.jsx';
+import EventsDebriefsWrapper from './event/debrief/EventsDebriefsWrapper.jsx';
+// ************************
+
+// *****  Sign in & Account  **********
 import UserProfileWrapper from './user/UserProfileWrapper.jsx';
 import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
@@ -17,29 +41,33 @@ import SelectContactWrapper from './user/SelectContactWrapper.jsx';
 import ForgotPassword from './user/ForgotPassword.jsx';
 import NewContactWrapper from './user/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
+// ************************************
+
 import EthnicityWrapper from './ethnicity/EthnicityWrapper.jsx';
-import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
-import EventsWrapper from './event/EventsWrapper.jsx';
-import EventOld from './event/EventOld.jsx';
-import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
-import EventCalendarSub from './event/EventCalendarSub.jsx';
+
 import MemberWrapper from './member/MemberWrapper.jsx';
-import SigninWrapper from './event/forms/SignInWrapper.jsx';
-import RSVPWrapper from './event/forms/RSVP.jsx';
+
+// *****   Churches   ********
 import ChurchesWrapper from './churches/ChurchesWrapper.jsx';
 import ChurchesWorkspace from './churches/ChurchesWorkspace.jsx';
 import ChurchesOld from './churches/ChurchesOld.jsx';
-//import SmallGroupsSummary from './sgroups/SmallGroupsSummary.jsx';
+// ***************************
+
+// ****    My SG  *********
 import MySmallGroupWrapper from './sgroups/MySmallGroupWrapper.jsx';
-//import SmallGroupsWorkspace from './sgroups/SmallGroupsWorkspace.jsx';
-//import SmallGroupsOld from './sgroups/SmallGroupsOld.jsx';
+// ************************
+
+// ****    Attendance   *******
 import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
 import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
+// ****************************
+
+// ****    Tickets     ********
 import TicketWrapper from './tickets/TicketWrapper.jsx';
 import EditTicketWrapper from './tickets/EditTicketWrapper.jsx';
-import ContactWrapper from './contact/ContactWrapper.jsx';
-//import ContactGroupsWrapper from './groups/ContactGroupsWrapper.jsx';
-import GroupsWrapper from './groups/GroupsWrapper.jsx';
+// ****************************
+
+// ****    Admin     **********
 import AdminDashboard from './admin/AdminDashboard.jsx';
 import PagePermissionsWrapper from './admin/pages/PagePermissionsWrapper.jsx';
 import SiteSettingsWrapper from './admin/options/SiteSettingsWrapper.jsx';
@@ -47,9 +75,16 @@ import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 import OverviewWrapper from './admin/overview/OverviewWrapper.jsx';
+//*****************************
+
+// ****   Groups   ********
+import GroupsWrapper from './groups/GroupsWrapper.jsx';
+// ************************
+
+// ****  Email  ***************
 import EmailWrapper from './email/EmailWrapper.jsx';
 import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
-
+// ****************************
 
 
 function signInForceCheck(context) {
@@ -169,7 +204,7 @@ FlowRouter.route('/profile',{
 	}
 });
 
-FlowRouter.route('/contacts/:cid',{
+FlowRouter.route('/people/:cid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "People",
@@ -178,7 +213,7 @@ FlowRouter.route('/contacts/:cid',{
 	}
 });
 
-FlowRouter.route('/contacts', {
+FlowRouter.route('/people', {
 	action(){
 		mount(MainLayout, {
 			header: "People",
@@ -263,6 +298,26 @@ FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
 		FlowRouter.go("/");
 	}
 });
+
+FlowRouter.route('/events/debrief',{
+	action(params) {
+		mount(MainLayout, {
+			header: "Event Debriefs",
+			content: (<EventsDebriefsWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/events/debrief/:eid',{
+	action(params) {
+		mount(MainLayout, {
+			header: "Event Debrief",
+			content: (<EventsDebriefWrapper eid={params.eid} />)
+		})
+	}
+});
+
+
 
 // FlowRouter.route('/events/old',{
 // 	action() {

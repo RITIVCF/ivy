@@ -163,7 +163,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 						<table style={{outline: "solid 2px"}}>
 							<thead>
 								<tr>
-									<th colspan="2">Attendees</th>
+									<th colSpan="2"><span style={{textAlign:"center"}}>Attendees</span></th>
 								</tr>
 							</thead>
 							<tbody>

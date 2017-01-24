@@ -32,7 +32,7 @@ export default class ContactSingle extends Component {
   }
 
   go(){
-    FlowRouter.go("/contacts/"+this.props.contact._id);
+    FlowRouter.go("/people/"+this.props.contact._id);
   }
   render() {
     // This area needs styled, so however we need to do it to style

@@ -111,6 +111,7 @@ export default class Permission extends Component
                       <td>
 
                     <input checked={this.props.perm.edit}
+                      readOnly={true}
                       className="with-gap"
                       type="radio" name={this.props.perm.id}
                       id={this.props.perm.id+"_edit"}
@@ -135,6 +136,7 @@ export default class Permission extends Component
                         <td>
 
                     <input checked={!this.props.perm.edit}
+                      readOnly={true}
                       className="with-gap"
                       type="radio" name={this.props.perm.id}
                       id={this.props.perm.id+"_view"}

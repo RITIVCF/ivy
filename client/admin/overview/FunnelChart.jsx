@@ -22,10 +22,12 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 					labels: ["Crowd", "Visitor", "Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
 						label: "Counts",
+						backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
 						data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
 	    	options: {
+					legend: false,
 	        scales: {
 	            yAxes: [{
 	                ticks: {
@@ -50,7 +52,8 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	refresh(){
 		Meteor.call("currentFunnel", function(error, result){
 			snapshotChart.data.datasets[0]= {
-				label: "Counts",
+				//label: "Counts",
+				backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
 				data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 			};
 			snapshotChart.update();
@@ -61,8 +64,13 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	render() {
 		return (
 			<div>
-					Funnel Status - Current | <b>Total:</b> {this.state.ttl} <br/>
-				<button onClick={this.refresh.bind(this)} className="btn waves-effect waves-light">Refresh</button>
+					Current | <b>Total:</b> {this.state.ttl}
+					<i onClick={this.refresh.bind(this)}
+						className="material-icons unselectable"
+						style={{float: "right"}}>cached</i>
+				{/*}<button  className="btn waves-effect waves-light"></button>*/}
+
+
 					<canvas id="funnelchart" width="400" height="400"></canvas>
 			</div>
 		)

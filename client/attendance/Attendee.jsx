@@ -15,7 +15,7 @@ export default class Attendee extends TrackerReact(React.Component) {
       return;
     }
     //console.log("go");
-    FlowRouter.go("/contacts/"+this.props.contact._id);
+    FlowRouter.go("/people/"+this.props.contact._id);
   }
 
 
@@ -57,7 +57,11 @@ export default class Attendee extends TrackerReact(React.Component) {
         <td>{this.props.contact.more?"Yes":""}</td>
         <td>{this.props.contact.howhear?this.props.contact.howhear:""}</td>
         {checkPermission("tickets") ?
-        <td>{!!ticket ? this.props.contact.firsttime||(status!="success") ? <a  className="btn flat" onClick={this.viewTicket.bind(this)}>View</a>:"":""}</td>:""}
+        <td>{!!ticket ? 
+            this.props.contact.firsttime||(status!="success") ?
+            <a  className="btn flat" onClick={this.viewTicket.bind(this)}>View</a>
+            :""
+          :""}</td>:""}
       </tr>
     )
   }

@@ -21,9 +21,10 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     //   Session.set("calendarview",Options.findOne("calendarview").val);
     // }
     if(!Session.get("calendardate")){
-      Session.set("calendardate", moment()._d);
+      Session.set("calendardate", moment()._d.toISOString());
     }
-    console.log(Session.get("calendardate"));
+    console.log("Moment: ",moment()._d);
+    console.log("Initialization: ", Session.get("calendardate"));
     if(!Session.get("calendartagfilter")){
       var result = Options.findOne("eventtags").vals;
       var tags = [];
@@ -59,6 +60,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
   componentDidMount(){
     var thiz = this;
+    console.log(Session.get("calendardate"));
     $("#calendar").fullCalendar({
       events: [],
       header: false,
@@ -70,10 +72,12 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
         thiz.props.settitle();
+        //After Update Tue Nov 29 2016 23:00:00 GMT-0500 (Eastern Standard Time)
         //Session.set("calendarview", view.name);
         Meteor.call("setCalendarView", view.name);
-        Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d );
-        console.log($(calendar).fullCalendar( 'getDate' )._d);
+        console.log("Before update", Session.get("calendardate"));
+        Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
+        console.log("After Update",$(calendar).fullCalendar( 'getDate' )._d.toISOString() );
         var height = $('#mainbox > div').height();
         $('#calendar').fullCalendar('option','height', height);
       },

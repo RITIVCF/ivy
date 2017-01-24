@@ -126,6 +126,24 @@ Meteor.publish("pastEvents", function(lim){
   });
 })
 
+Meteor.publish("debriefs", function(num){
+  return Events.find(
+    {debrief: {$exists: true}},
+    {sort: {start: -1},limit: num}
+  );
+});
+
+Meteor.publish("needDebrief", function(){
+  return Events.find({
+    start: {$lte: new Date()},
+    debrief: {$exists: false}
+  });
+});
+
+Meteor.publish("thisDebrief", function(eid){
+  return Events.find({_id: eid});
+});
+
 Meteor.publish("oneEvent", function(eid){
   return Events.findOne(eid);
 });
@@ -389,7 +407,8 @@ Meteor.publish("userSelf", function(){
     gradterm: 1,
     curryear: 1,
     member: 1,
-    memberAt: 1
+    memberAt: 1,
+    deleted: 1
      }
   };
   return Meteor.users.find(selector, options);
@@ -536,6 +555,12 @@ Meteor.publish("myEmails", function(){
 });
 
 //***************************************
+
+// *******    Debrief   ************
+Meteor.publish("myDebriefDrafts", function(){
+  return Debriefs.find({uid: this.userId});
+});
+// *********************************
 
 Meteor.publish("allCounters", function(){
   return Counters.find();

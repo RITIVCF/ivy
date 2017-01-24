@@ -109,6 +109,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     //   return Contacts.find({},{sort: {name: 1}}).fetch();
     // }{$regex:this.state.textfilter, $options : 'i'}
     var query= {status: {$in: Session.get("contactstatusfilter")}};
+    query.deleted = {$ne: true};
     if(this.state.filter!=""){
       query.name={ $regex : this.state.filter, $options : 'i'};
     }
@@ -146,23 +147,28 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     let statuses = Session.get("contactstatusfilter");
 		return (
       <div className="row" onClick={this.unselect.bind(this)} style={{height: "100%"}}>
+        <div className="card">
+          <div className="card-content">
             <div className="row">
               <div className="col s12 m7 l7">
-                <p>Status Filter:
-                {this.state.statuses.map((status)=>{
-                  return <Checkbox key={status}
-                                    label={status}
-                                    onChange={this.handleCheck.bind(this, status)}
-                                    checked={statuses.includes(status)} />
-                })}
-              </p>
-              </div>
+
+                    <p>Status Filter:
+                    {this.state.statuses.map((status)=>{
+                      return <Checkbox key={status}
+                                        label={status}
+                                        onChange={this.handleCheck.bind(this, status)}
+                                        checked={statuses.includes(status)} />
+                    })}
+                  </p>
+                  </div>
               <div className="input-field col s12 m5 l5">
                 <input ref="filter" onChange={this.changeFilter.bind(this)} type="text" className="validate" />
                 <label htmlFor="icon_prefix">Search</label>
               </div>
             </div>
-            <div className="divider"></div>
+          </div>
+        </div>
+
                 {/*}
                       <p>Count: {this.contacts().length}</p>
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
@@ -172,24 +178,26 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                     selected={Session.get("conselected")==contact._id} perm={perm}
                     select={this.select.bind(this)} parent={this}/>
                 }):
-                <table className="bordered highlight" >
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Newsletter</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.contacts().map( (contact)=>{
-                      return <ContactSingle key={contact._id} row={true} contact={contact}
-                        selected={Session.get("conselected")==contact._id} perm={perm}
-                        select={this.select.bind(this)} parent={this}/>
-                    })}
-                  </tbody>
-                </table>
+                <div className="card">
+                    <table className="bordered highlight" >
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Newsletter</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.contacts().map( (contact)=>{
+                          return <ContactSingle key={contact._id} row={true} contact={contact}
+                            selected={Session.get("conselected")==contact._id} perm={perm}
+                            select={this.select.bind(this)} parent={this}/>
+                        })}
+                      </tbody>
+                    </table>
+                </div>
                 }
                 </div>
           </div>

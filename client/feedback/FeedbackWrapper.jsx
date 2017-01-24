@@ -1,6 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import FeedbackSummary from './FeedbackSummary.jsx';
+import LoaderCircle from '../LoaderCircle';
+import NoPerm from '../NoPerm';
 
 export default class FeedbackWrapper extends TrackerReact(React.Component) {
   constructor() {
@@ -22,14 +24,16 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
 
 	render() {
     document.title="Ivy - Feedback";
+    if(!this.state.subscription.Contacts.ready()){
+      return <LoaderCircle />
+    }
+    if(!checkPermission("feedback")){
+      return <NoPerm />
+    }
 		return (
       <div className="row">
   			<div className="col s12">
-          {checkPermission("feedback")?<div>
-            {this.state.subscription.Contacts.ready()?
-              <FeedbackSummary />:""
-            }
-                </div>:"Sorry. You do not have permission to access this area. Please see leadership for access."}
+            <FeedbackSummary />
       </div>
     </div>
     )
