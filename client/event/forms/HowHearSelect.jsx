@@ -20,8 +20,36 @@ export default class HowHearSelect extends TrackerReact(React.Component){
     }
   }
 
+  componentWillUpdate(){
+    var thiz = this;
+    $('li').on("click", function(event){
+      if(event.target.innerHTML=="Other"){
+        thiz.setState({other: true});
+      }else{
+        thiz.setState({other: false});
+      }
+      console.log("li click");
+      console.log(event.target.innerHTML);
+      //if()
+      //thiz.setState({other: })
+    });
+  }
+
   componentDidMount(){
+    var thiz = this;
+
     $('select').material_select();
+    $('li').on("click", function(event){
+      if(event.target.innerHTML=="Other"){
+        thiz.setState({other: true});
+      }else{
+        thiz.setState({other: false});
+      }
+      console.log("li click");
+      console.log(event.target.innerHTML);
+      //if()
+      //thiz.setState({other: })
+    });
   }
 
   getOptions(){

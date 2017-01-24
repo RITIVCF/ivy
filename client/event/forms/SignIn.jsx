@@ -18,8 +18,7 @@ export default class SignIn extends TrackerReact(React.Component){
     $("#submit-circle").animate({
       'width': '+=2000px',
       'height': '+=2000px',
-      'margin': '-=1000px',
-      'line-height': '+=2000px'
+      'margin': '-=1000px'
     }, 500);
     var counter = 5;
     setInterval(function() {
@@ -32,8 +31,7 @@ export default class SignIn extends TrackerReact(React.Component){
         $("#submit-circle").animate({
           'width': '-=2000px',
           'height': '-=2000px',
-          'margin': '+=1000px',
-          'line-height': '-=2000px'
+          'margin': '+=1000px'
         }, 500);
         $('#sign-in-button').html("<i class='material-icons'>send</i>");
         clearInterval(counter);
@@ -47,9 +45,37 @@ export default class SignIn extends TrackerReact(React.Component){
     this.refs.publicForm.submit();
   }
 
+  circleGrow(){
+    $("#submit-circle").animate({
+      'width': '+=2000px',
+      'height': '+=2000px',
+      'margin': '-=1000px'
+    }, 500);
+    setTimeout(function() {
+      $('#welcome-message').fadeIn();
+    }, 550);
+    var counter = 5;
+    setInterval(function() {
+      counter--;
+      if (counter >= 0) {
+        $('#sign-in-button').html(counter);
+      }
+      // Display 'counter' wherever you want to display it.
+      if (counter === 0) {
+        $('#welcome-message').fadeOut();
+        $("#submit-circle").animate({
+          'width': '-=2000px',
+          'height': '-=2000px',
+          'margin': '+=1000px'
+        }, 500);
+        $('#sign-in-button').html("<i class='material-icons'>send</i>");
+        clearInterval(counter);
+      }
+    }, 1000);
+  }
+
   submit(event){
     event.preventDefault();
-
 
     var thiz = this;
     console.log(this.state);
@@ -77,6 +103,13 @@ export default class SignIn extends TrackerReact(React.Component){
         this.refs.major.value,
         howhear,
         function(error, uid){
+          if(error){
+            console.log(error);
+            //window.alert("Email already exists. Please enter .");
+            Materialize.toast("Email already exists. Please enter another email "
+              +" address or choose your contact.", 6000);
+            return;
+          }
           Meteor.call("addAttendanceTicket",
             "New Contact: "+ name,
             "New Contact at event: "+ evname,
@@ -93,13 +126,14 @@ export default class SignIn extends TrackerReact(React.Component){
               more,
               howhear,
               tktId);
+              Meteor.call("setUserTicket", uid, tktId);
               thiz.timer();
             });
             if(newsletter){
               Meteor.call("updateNewsletter", uid, true);
             }
         });
-
+      this.circleGrow();
     }
     else{
       Meteor.call("createAttendanceRecord",
@@ -108,11 +142,13 @@ export default class SignIn extends TrackerReact(React.Component){
       "",
       "",
       "");
-      thiz.timer();
+      this.circleGrow();
+      this.timer();
       // if(this.refs.newsletter){
       //   Meteor.call("updateNewsletter", this.state.contact._id, true);
       // }
     }
+    //this.unset();
     //this.props.parent.setState({id: this.props.parent.state.id + 1});
   //   this.forceUpdate();
   //   this.refs.email.value="";
@@ -130,13 +166,14 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   timer(){
-    this.setState({submitted: true});
+    //this.setState({submitted: true});
     var thiz = this;
     setTimeout(function(){
-      thiz.setState({submitted: false});
-      thiz.setState({user: false});
-      thiz.setState({new: true});
-    }, 3000);
+      thiz.unset();
+      // thiz.setState({submitted: false});
+      // thiz.setState({user: false});
+      // thiz.setState({new: true});
+    }, 3500);
   }
 
 
@@ -196,12 +233,14 @@ export default class SignIn extends TrackerReact(React.Component){
     this.refs.major.disabled = false;
     this.refs.howhear.refs.howhear.value ="";
     this.refs.howhear.refs.howhear.disabled = false;
+    this.refs.howhear.setState({other: false});
     this.refs.newsletter.checked = false;
     this.refs.newsletter.disabled = false;
     this.refs.learnmore.checked = false;
     this.refs.learnmore.disabled = false;
     $('select').material_select();
     Materialize.updateTextFields();
+
     // this.refs.phone.value="";
     // this.refs.newsletter.checked=false;
     // this.refs.major.value="";
@@ -251,14 +290,17 @@ export default class SignIn extends TrackerReact(React.Component){
                   <input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
                   <label htmlFor="more">I would like to learn more about IV</label>
 
-                  <a onClick={this.circle.bind(this)}>expand</a>
+                  {/*}<a onClick={this.circle.bind(this)}>expand</a>*/}
 
                   <button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
-                    <div className="welcome-message">Welcome!!</div>
                     <span id="sign-in-button">
                      <i className="material-icons">send</i>
                     </span>
                   </button>
+                  <div id="welcome-message">
+                    <h1>Welcome to {this.props.ev.name}!</h1>
+                    <h2>Thank you for signing in!</h2>
+                  </div>
                   <div className="clear-fix"></div>
               </form>
             </div>
