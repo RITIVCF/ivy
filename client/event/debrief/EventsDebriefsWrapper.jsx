@@ -31,6 +31,17 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 		this.setState({debriefs: Meteor.subscribe("debriefs", num+10)});
 	}
 
+	getSubheader(){
+		return (
+			<ul>
+				{checkPermission("admin")&&
+				<li>
+					<a href="/events/debrief/edit"><i className="material-icons black-text">edit</i></a>
+				</li>}
+			</ul>
+		)
+	}
+
 
 	render() {
 		if(!(this.state.subscription.drafts.ready()&&this.state.subscription.debriefs.ready()&&this.state.subscription.needDebrief.ready())){
@@ -46,7 +57,7 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 							<DebriefSummary />
 						</div>
           </div>}
-        subheader={<ul/>}
+        subheader={this.getSubheader()}
         showinfobar={Meteor.user().preferences.debriefs_infobar}
         infobar={<div/>}
         />

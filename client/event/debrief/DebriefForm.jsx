@@ -14,9 +14,9 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 		if(debriefs.length==1){
 			var debrief = debriefs[0];
 			this.state = {
-				notes: debrief.notes,
-				"0":debrief.questions["0"],
-				"1":debrief.questions["1"]
+				notes: debrief.notes//,
+				//"0":debrief.questions["0"],
+				//"1":debrief.questions["1"]
 			};
 		}
 		else{
@@ -41,8 +41,8 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 	submit(event){
 		event.preventDefault();
     var thiz = this;
-		console.log("0: ", this.refs["0"].state.selected);
-		console.log("1: ", this.refs["1"].state.selected);
+		//console.log("0: ", this.refs["0"].state.selected);
+		//console.log("1: ", this.refs["1"].state.selected);
 		console.log("Notes: ", tinymce.get("notespad").getContent());
     Meteor.call("submitDebriefDraft", thiz.props.ev._id, function(error){
       if(error){
@@ -88,22 +88,27 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-			<div className="row">
-				<form onSubmit={this.submit.bind(this)}>
-					<div className="col s12">
-						<Rating eid={this.props.ev._id} rid={"0"} ref="0" defaultValue={this.state["0"]}
-							title="How would you rate this event as a succes?"  subtitle="(1=Not very succesful, 5=Very Successful)" />
-            <Rating eid={this.props.ev._id} rid={"1"} ref="1" defaultValue={this.state["1"]}
-							title="How would you rate the amount of joy from this event?"  subtitle="(1=Little, 5=Much)" />
-					</div>
-					<div className="col s12">
-						<label>Notes</label>
-						<textarea id={"notespad"} />
-					</div>
-					<div className="col s12">
-						<button className="btn" >Submit</button>
-					</div>
-				</form>
+			<div>
+        <div className="row">
+          <div className="col s12">
+            <label>Notes</label>
+            <textarea id={"notespad"} />
+          </div>
+        </div>
+        <div className="row">
+          <form onSubmit={this.submit.bind(this)}>
+  				{/*}	<div className="col s12">
+  						<Rating eid={this.props.ev._id} rid={"0"} ref="0" defaultValue={this.state["0"]}
+  							title="How would you rate this event as a succes?"  subtitle="(1=Not very succesful, 5=Very Successful)" />
+              <Rating eid={this.props.ev._id} rid={"1"} ref="1" defaultValue={this.state["1"]}
+  							title="How would you rate the amount of joy from this event?"  subtitle="(1=Little, 5=Much)" />
+  					</div>*/}
+  					<div className="col s12">
+  						<button className="btn" >Submit</button>
+  					</div>
+  				</form>
+        </div>
+
 		  </div>
 		)
 	}
