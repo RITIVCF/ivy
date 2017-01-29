@@ -71,7 +71,7 @@ Meteor.methods({
       + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id
       + "'><button>View Ticket</button></a><br/><br/>"
       // insert html for ticket info here
-      + "- Ivy"
+      + "- Ivy Information System"
     });
   },
   getDuplicateContacts(){
