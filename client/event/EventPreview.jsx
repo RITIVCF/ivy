@@ -59,6 +59,12 @@ export default class EventPreview extends TrackerReact(React.Component) {
       }
     }
 
+  
+    console.log("Debrief: ", !this.props.event.debrief);
+    console.log("Perm: ", checkPermission("admin")||this.props.event.owner==Meteor.userId());
+    console.log("Published: ", this.props.event.published);
+    console.log("Start: ", this.props.event.start < new Date());
+
 
     var perms = checkEventPermission(this.props.event);
     var isformopen = (this.props.event.start < new moment(new Date).add(2,"hours"));
@@ -88,9 +94,12 @@ export default class EventPreview extends TrackerReact(React.Component) {
               className="waves-effect waves-light btn">Open Form</a>
             :<div></div>
           }
-          {!this.props.event.debrief&&
+          {((!this.props.event.debrief)
+            &&(checkPermission("admin")||this.props.event.owner==Meteor.userId())
+            &&(this.props.event.published)
+            &&(this.props.event.start < new Date()))?
             <a href={"events/debrief/edit/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
-              className="waves-effect waves-light btn">Debrief</a>
+              className="waves-effect waves-light btn">Debrief</a>:false
           }
         </div>
       </div>
