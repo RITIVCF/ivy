@@ -73,17 +73,24 @@ export default class EventPreview extends TrackerReact(React.Component) {
         </div>
         <div>
           {(perms.edit||perms.view)?
-            <a href={"/events/workspace/"+this.props.event._id} className="waves-effect waves-light btn">
+            <a href={"/events/workspace/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
+              className="waves-effect waves-light btn">
               {perms.edit?"Edit Event":"View Event"}
             </a>
             :<div></div>
           }
           {checkPermission('attendance')&&(this.props.event.published)&&isformopen?
-          <a href={"/attendance/event/"+this.props.event._id} className="waves-effect waves-light btn">View Attendance</a>
+          <a href={"/attendance/event/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
+            className="waves-effect waves-light btn">View Attendance</a>
           :<div></div>}
           {(this.props.event.published)&&isformopen?
-            <a href={"/forms/signin/" + this.props.event._id} className="waves-effect waves-light btn">Open Form</a>
+            <a href={"/forms/signin/" + this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
+              className="waves-effect waves-light btn">Open Form</a>
             :<div></div>
+          }
+          {!this.props.event.debrief&&
+            <a href={"events/debrief/edit/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
+              className="waves-effect waves-light btn">Debrief</a>
           }
         </div>
       </div>

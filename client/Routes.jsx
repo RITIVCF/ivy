@@ -31,6 +31,7 @@ import RSVPWrapper from './event/forms/RSVP.jsx';
 // ****   Debriefs  *******
 import EventsDebriefWrapper from './event/debrief/EventsDebriefWrapper.jsx';
 import EventsDebriefsWrapper from './event/debrief/EventsDebriefsWrapper.jsx';
+import DebriefCreationWrapper from './event/debrief/DebriefCreationWrapper.jsx';
 // ************************
 
 // *****  Sign in & Account  **********
@@ -308,11 +309,20 @@ FlowRouter.route('/events/debrief',{
 	}
 });
 
-FlowRouter.route('/events/debrief/:eid',{
+FlowRouter.route('/events/debrief/edit/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Debrief",
 			content: (<EventsDebriefWrapper eid={params.eid} />)
+		})
+	}
+});
+
+FlowRouter.route('/events/debrief/edit',{
+	action(){
+		mount(MainLayout, {
+			header: "Set Debrief Questions",
+			content: (<DebriefCreationWrapper />)
 		})
 	}
 });

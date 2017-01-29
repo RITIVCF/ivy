@@ -38,6 +38,14 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 			return(
 				<div className="card">
 					<div className="card-content">
+						<span className="card-title">{ev.name}</span>
+						<div className="row">
+							<div className="col s12">
+								<p>{moment(ev.start.toISOString()).format("DD MMM YYYY")}
+									{/*}<a className="btn right" onClick={this.openModal.bind(this)}>Edit</a>*/}
+								</p>
+							</div>
+						</div>
 						<DebriefForm ev={ev} />
 					</div>
 				</div>

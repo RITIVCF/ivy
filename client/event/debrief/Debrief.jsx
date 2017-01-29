@@ -48,12 +48,12 @@ export default class Debrief extends TrackerReact(React.Component) {
 							</p>
 						</div>
 					</div>
-					<div className="row">
+					{/*}<div className="row">
 						<div className="col s12 m6">
 							<p>Question 1:<br/>{ev.debrief.questions["0"]}</p>
 							<p>Question 2:<br/>{ev.debrief.questions["1"]}</p>
 						</div>
-					</div>
+					</div>*/}
 					<div className="row">
 						<div className="col s12">
 							<label>Notes</label>
