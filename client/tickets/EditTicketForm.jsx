@@ -212,7 +212,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       label="Assigned User"
                       unset={this.unset.bind(this)}
                       initialValue={this.getUser(this.props.ticket.assigneduser)}
-                      updateContact={this.updateAssignedU.bind(this)}
+                      updateUser={this.updateAssignedU.bind(this)}
                       ref="assigneduser" aria-describedby="assignme"/>
                     {/*}<button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>*/}
                     <label>Status:</label>
