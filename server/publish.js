@@ -318,6 +318,39 @@ Meteor.publish("allContacts", function(filtr, srt){
   return Meteor.users.find(selector, options);
 });
 
+Meteor.publish("oldContacts", function(filtr, srt){
+  var selector = {deleted: true};
+
+  var options = {
+      fields: {
+        name: 1,
+        addresses: 1,
+        contact: 1,
+        email: 1,
+        emails: 1,
+        phone: 1,
+        major: 1,
+        newsletter: 1,
+        gender: 1,
+        affiliations: 1,
+        communitylife: 1,
+        ticket: 1,
+        intl: 1,
+        howhear: 1,
+        ethn: 1,
+        ethnicity: 1,
+        gradterm: 1,
+        curryear: 1,
+        member: 1,
+        status: 1,
+        user: 1,
+        createdAt: 1
+      },
+      sort: {name: 1}
+    };
+  return Meteor.users.find(selector, options);
+});
+
 Meteor.publish("publicContacts", function(){
   // This publish is for the public submittedby
   var selector = {deleted: {$ne: true}};
