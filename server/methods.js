@@ -46,8 +46,8 @@ Meteor.methods({
     var emails = [];
     users.forEach(function(contact){
       //var contact = Meteor.users.findOne(user.contact);
-      console.log("pushing: "+contact.email[0].address);
-      emails.push(contact.email[0].address);
+      console.log("pushing: "+contact.emails[0].address);
+      emails.push(contact.emails[0].address);
     });
     console.log("emails:");
     console.log(emails);

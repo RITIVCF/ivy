@@ -12,6 +12,7 @@ document.title="Ivy";
 //Meteor.subscribe("allUsers");
 
 Meteor.subscribe("allContacts");
+Meteor.subscribe("oldContacts");
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
 Meteor.subscribe("allGroups");
