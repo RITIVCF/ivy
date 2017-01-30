@@ -12,8 +12,15 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 
   submit(event){
     event.preventDefault();
-    Accounts.forgotPassword({email: event.target.email.value});
-    this.setState({submitted: true});
+    var thiz = this;
+    Accounts.forgotPassword({email: event.target.email.value}, function(error){
+      if(error){
+        window.alert(error+"\n\nCannot find email. Please enter the email in the system.");
+      }
+      else{
+        thiz.setState({submitted: true});
+      }
+    });
 
   }
 
@@ -22,8 +29,8 @@ export default class LoginWrapper extends TrackerReact(React.Component){
     if(this.state.submitted){
       return (
         <div id="card" className="card">
-          <div className="front">
-            <h1>Forgot Password</h1>
+          <div className="card-content">
+            <span className="card-title">Forgot Password</span>
             <p>Check your email for a link to reset your password.</p>
           </div>
         </div>
@@ -31,14 +38,14 @@ export default class LoginWrapper extends TrackerReact(React.Component){
     }
     return (
       <div id="card" className="card">
-        <div className="front">
-          <h1>Forgot Password</h1>
+        <div className="card-content">
+          <span className="card-title">Forgot Password</span>
           <p>Please enter your email below.</p>
           <form className="publicForm" onSubmit={this.submit.bind(this)}>
             <label>Email</label> <br />
             <input type="text" name="email"/>
 
-            <input type="submit" value="Send" />
+            <input type="submit" value="Send" className="btn" />
           </form>
         </div>
       </div>
