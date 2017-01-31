@@ -193,6 +193,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
                   <SelectUser
                       parent={this}
                       id={"owner"}
+                      label="Event Leader"
                       unset={this.unset.bind(this)}
                       updateUser={this.changeOwner.bind(this)}
                       initialValue={owner.name}

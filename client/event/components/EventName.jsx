@@ -26,8 +26,9 @@ export default class EventName extends Component {
   updateName(event){
 		event.preventDefault();
 		//console.log("Name: "+this.refs.name);
-		Meteor.call("updateEventName", this.props.eid, this.refs.name.value);
+		Meteor.call("updateEventName", this.props.ev._id, this.refs.name.value);
 		//this.state.value = this.refs.name;
+    this.toggle();
 	}
 
   handleNameChange(event){ // need one of these for each component
@@ -69,21 +70,21 @@ export default class EventName extends Component {
 
 
   render(){
+    let editstate = this.state.editstate;
     if(!this.state.editstate){
-      return <span onClick={this.toggle.bind(this)} className="card-title">{this.state.name}</span>
+      return <span className="card-title">{this.state.name}
+        {this.props.perm&&<i className="tiny material-icons black-text" onClick={this.toggle.bind(this)}>edit</i>}
+      </span>
     }
     return(
-      <div className="form-group">
-        <label>Name</label>
+      <form onSubmit={this.updateName.bind(this)}>
         <input type="text"
-          className="form-control"
           ref="name"
-          value={this.state.name}
-          onBlur={this.toggle.bind(this)}
-          disabled={this.state.namelock||!this.props.perm}
-          onChange={this.handleNameChange.bind(this)}
+          defaultValue={this.state.name}
            />
-      </div>
+           <input type="submit" className="btn" value="Save" />
+         <button type="button" onClick={this.toggle.bind(this)} className="btn">Cancel</button>
+       </form>
     )
   }
 }

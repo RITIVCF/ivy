@@ -11,6 +11,7 @@ export default class Tab extends Component {
 
   editName(){
     //this.setState({editting: !this.state.editting});
+
   }
 
   handleNameChange(){
@@ -22,7 +23,10 @@ export default class Tab extends Component {
   }
 
   update(){
-    Meteor.call("changeTabName", this.props.eid, this.props.tab, this.refs.tab.value);
+    var newtabname = prompt("Please enter new tab name: ");
+    console.log(newtabname);
+    Meteor.call("changeTabName", this.props.eid, this.props.tab.name, newtabname);
+    //Meteor.call("changeTabName", this.props.eid, this.props.tab, this.refs.tab.value);
     this.setState({editting: false});
   }
 
@@ -34,7 +38,7 @@ export default class Tab extends Component {
       )
     }
     return(
-      <li onDoubleClick={this.editName.bind(this)} className="tab">
+      <li onDoubleClick={this.update.bind(this)} className="tab">
         <a onClick={this.prevDef.bind(this)} href={"#"+this.props.tab.name.replace(" ","")} >{tab.name}</a>
       </li>
     )
