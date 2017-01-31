@@ -38,6 +38,9 @@ export default class GroupsSingle extends Component {
   }
 
   getLeader(){
+    if(this.props.group.leader==""){
+      return "";
+    }
     var leader = Meteor.users.findOne(this.props.group.leader);
     console.log(leader);
     if(!leader){

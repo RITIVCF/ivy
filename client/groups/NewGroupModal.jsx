@@ -36,7 +36,14 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
 
   create(){
     // you can grab the page perm ids from 'this.state.groupperms' array
-    var id = this.props.type=="Team"||this.props.type=="Small Group"?this.state.leader._id:"";
+    console.log("Type: ", this.props.type);
+    console.log("Leader: ", this.state.leader);
+    if(this.props.type=="Team"||this.props.type=="Small Group"){
+      var id = this.state.leader._id?this.state.leader._id:"";
+    }
+    else{
+      var id= "";
+    }
 
     Meteor.call("addGroup",
       this.refs.name.value,
@@ -61,7 +68,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
     console.log("Name Value: ", this.refs.name.value);
     console.log(this.props.type);
     if(this.refs.name.value==""){
-      this.setState({createdisabled: true});
+          this.setState({createdisabled: true});
     }
     else{
       this.setState({createdisabled: false});
@@ -133,10 +140,11 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
       <div id="newgroupmodal" className="modal modal-fixed-footer">
         <div className="modal-content">
           <div className="row">
-            <div className="col s12 m6 l4">
-              <input type="text"
-                ref="name" placeholder="New name"
+            <div className="input-field col s12 m6 l4">
+              <input type="text" id="newgroupnameinput"
+                ref="name"
                 onChange={this.check.bind(this)} />
+              <label htmlFor="newgroupnameinput">New Name*</label>
             </div>
           </div>
           <div className="row">
@@ -165,10 +173,11 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
           {(this.props.type=="Small Group"||this.props.type=="Team")&&
             <div className="row">
               <div className="col s8">
-                <p>Set leader:</p>
+                {/*}<p>Set leader:*</p>*/}
                 <SelectUser
                   initialValue={this.state.leader.name}
                   id="leaderselect"
+                  label="Set Leader:*"
                   keepName={true}
                   unset={this.unsetLeader.bind(this)}
         					updateUser={this.setLeader.bind(this)}
