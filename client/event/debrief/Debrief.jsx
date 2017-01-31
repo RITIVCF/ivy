@@ -9,7 +9,7 @@ export default class Debrief extends TrackerReact(React.Component) {
     super(props);
 
     this.state = {
-
+			edit: false
 		};
   }
 
@@ -19,6 +19,11 @@ export default class Debrief extends TrackerReact(React.Component) {
 
 	componentWillUnmount(){
 		tinymce.remove();
+	}
+
+	componentWillUpdate(nextProps){
+		console.log("Is updating: ", nextProps.ev.debrief.notes);
+		tinymce.get("notespad").setContent(nextProps.ev.debrief.notes);
 	}
 
 	componentDidMount(){
@@ -35,8 +40,25 @@ export default class Debrief extends TrackerReact(React.Component) {
 		tinymce.get("notespad").setMode("readonly");
 	}
 
+	edit(){
+		this.setState({edit: true});
+		tinymce.get("notespad").setMode();
+	}
+
+	save(){
+		Meteor.call("updateEventDebrief", this.props.ev._id, tinymce.get("notespad").getContent());
+		this.setState({edit: false});
+		tinymce.get("notespad").setMode("readonly");
+	}
+
+	cancel(){
+		this.setState({edit: false});
+		tinymce.get("notespad").setMode("readonly");
+	}
+
 	render() {
 		let ev = this.props.ev;
+		let edit = this.state.edit;
 		return (
 			<div className="card">
 				<div className="card-content">
@@ -58,7 +80,13 @@ export default class Debrief extends TrackerReact(React.Component) {
 						<div className="col s12">
 							<label>Notes</label>
 							<textarea id="notespad"/>
-							{/*}<p style={{whiteSpace: "pre-line",outline:"grey solid 1px"}}>{ev.debrief.notes}</p>*/}
+						</div>
+					</div>
+					<div className="row">
+						<div className="col s12">
+							{!edit&&<a className="btn" onClick={this.edit.bind(this)}>Edit</a>}
+							{edit&&<a className="btn" style={{marginRight:"5px"}} onClick={this.save.bind(this)}>Save</a>}
+							{edit&&<a className="btn" onClick={this.cancel.bind(this)}>Cancel</a>}
 						</div>
 					</div>
 				</div>
