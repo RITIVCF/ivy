@@ -15,7 +15,8 @@ import EventEVR from './components/EventEVR.jsx';
 import EventReserved from './components/EventReserved.jsx';
 
 
-export default class WorkspacePanel extends TrackerReact(React.Component) {
+//export default class WorkspacePanel extends TrackerReact(React.Component) {
+export default class WorkspacePanel extends React.Component {
 	constructor(props) {
     super(props);
 
@@ -57,7 +58,7 @@ export default class WorkspacePanel extends TrackerReact(React.Component) {
 
 
 				<EventDateControls eid={ev._id} start={ev.start} end={ev.end} perm={perm} />
-
+				<div className="divider"/>
 				<EventLocation ev={ev} perm={perm} />
 				<EventEVR ev={ev} perm={perm} />
 				<EventReserved ev={ev} perm={perm} />

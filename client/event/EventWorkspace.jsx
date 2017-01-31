@@ -8,7 +8,8 @@ import InfoBar from '../InfoBar.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 
 
-export default class EventWorkspace extends TrackerReact(React.Component) {
+//export default class EventWorkspace extends TrackerReact(React.Component) {
+export default class EventWorkspace extends React.Component {
 	constructor(props) {
     super(props);
 

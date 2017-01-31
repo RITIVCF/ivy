@@ -41,6 +41,15 @@ export default class Pad extends Component {
         'undo redo | styleselect | bold italic underline strikethrough subscript superscript'+
         ' | bullist numlist | alignleft aligncenter alignright alignjustify | indent outdent | link | removeformat'],
 			setup : function(editor) {
+        editor.on('change', function(e) {
+            //console.log(tinymce.activeEditor);
+            thiz.setState({editting: true});
+            //console.log('key event', e);
+						updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
+				    ////console.log(this);
+				    setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
+            //
+        });
 				editor.on('keyup', function(e) {
             //console.log(tinymce.activeEditor);
             thiz.setState({editting: true});
