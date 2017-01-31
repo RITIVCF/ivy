@@ -5,6 +5,7 @@ import EventWorkspace from './EventWorkspace.jsx';
 import MainBox from '../MainBox.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 
 
 //Options = new Mongo.Collection("options");
@@ -21,23 +22,24 @@ getUserGroupPermission = function(){
 export default class EventWorkspaceWrapper extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
-
+		var thiz = this;
     this.state = {
       subscription: {
-        Event: Meteor.subscribe("thisEvent", props.eid),
+        Event: Meteor.subscribe("thisEvent", props.eid, function(){thiz.setState({ready: true})}),
 				tickets: Meteor.subscribe("eventTickets", props.eid),
-				users: Meteor.subscribe("allUsers"),
+				//users: Meteor.subscribe("allUsers"),
 				contacts: Meteor.subscribe("allContacts"),
 			//	options: Meteor.subscribe("allOptions")
 		},
-		groups: getUserGroupPermission()
+		groups: getUserGroupPermission(),
+		ready: false
     };
   }
 
   componentWillUnmount() {
     this.state.subscription.Event.stop();
 		this.state.subscription.tickets.stop();
-		this.state.subscription.users.stop();
+		//this.state.subscription.users.stop();
 		this.state.subscription.contacts.stop();
 	//	this.state.subscription.options.stop();
   }
@@ -66,11 +68,11 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 	render() {
-		if(!this.state.subscription.Event.ready()){
+		if(!this.state.ready){
 			return (<LoaderCircle />);
 		}
 		if(!checkPermission('events')){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+			return <NoPerm />
 		}
 	let ev = this.getEvent();
 

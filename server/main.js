@@ -86,8 +86,8 @@ SyncedCron.add({
       });
       eventsPerInterval.push(events);
   		//endDate.setDate(endDate.getDate() - intervl);
-      console.log("endDate: ", endDate);
-      console.log("startDate: ", startDate);
+      // console.log("endDate: ", endDate);
+      // console.log("startDate: ", startDate);
       endDate = startDate;//new moment(endDate.toISOString()).subtract(intervl,"days")._d
       //console.log("New endDate: ", endDate);
   	}
@@ -96,7 +96,7 @@ SyncedCron.add({
     //for (var i in Meteor.users.find({deleted: {$ne: true}}).fetch()) {
     Meteor.users.find({deleted: {$ne: true}}).fetch().map((user)=>{
       var uid = user._id;
-      console.log(uid, user.name);
+      //console.log(uid, user.name);
       // console.log("Is Leader: ", Groups.find({leader: uid}).fetch());
       //if (uid in mults) {
       if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
@@ -116,7 +116,7 @@ SyncedCron.add({
   			var count = 0;
         //console.log(eventsPerInterval);
         eventsPerInterval.forEach((intvl)=>{
-          console.log(intvl);
+        //  console.log(intvl);
           if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
             count++
           }
@@ -135,7 +135,7 @@ SyncedCron.add({
           Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
         }
       }
-      console.log(user.name, " end.");
+    //  console.log(user.name, " end.");
     });
   }
 });

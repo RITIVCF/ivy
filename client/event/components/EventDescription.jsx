@@ -18,6 +18,7 @@ export default class EventDescription extends Component {
   constructor(props){
     super(props);
     this.state={
+      modal: false,
       description: props.ev.description,
       descriptionlock: props.ev.descriptionlock,
       editting: false
@@ -44,33 +45,49 @@ export default class EventDescription extends Component {
     return true;
   }
 
+  componentDidRender(){
+    Materialize.updateInputFields();
+  }
+
   getEvent(){
 		////console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}
 
+  edit(){
+    //React.render(<DescriptionModal eid={this.props.eid} />, this.refs.modal);
+    this.setState({edit: true})
+  }
+
+  close(){
+    event.preventDefault();
+    this.setState({edit: false});
+  }
+
+  submit(event){
+		event.preventDefault();
+    console.log("Submitting...", this.refs.description.value);
+		Meteor.call("updateEventDescription", this.props.ev._id, this.refs.description.value);
+    this.setState({edit: false});
+	}
+
 
   render(){
-  /*  let ev = this.getEvent();
-
-  	if(!ev){
-  		return (<div>Loading...</div>);
-  	}
-  	var description = ev.description;
-    */
+    let edit = this.state.edit;
     return(
-      <div>
-        <label htmlFor="description">Description</label>
-        <textarea ref="description"
-          name="description"
-          className="browser-default"
-          style={{width: "100%", maxWidth: "100%", minHeight: "100px"}}
-          rows="5"
-          value={this.state.description}
-          onChange={this.handleDescriptionChange.bind(this)}
-          disabled={this.state.descriptionlock||!this.props.perm}
-          />
+      <div className="row">
+        <label>Description</label>{(this.props.perm&&!edit)&&<i className="tiny material-icons" onClick={this.edit.bind(this)}>edit</i>}
+          {edit?<form onSubmit={this.submit.bind(this)}>
+            <div className="input-field col s12">
+              <textarea ref="description"
+                id="description"
+                className="materialize-textarea"
+                defaultValue={this.state.description}
+                />
+            </div><input type="submit" className="btn" value="Save" />
+          <button type="button" onClick={this.close.bind(this)} className="btn">Cancel</button>
+        </form>:<p>{this.props.ev.description}</p>}
       </div>
     )
   }

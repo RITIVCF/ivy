@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import TinyMCETest from '../../tinyMCETest.jsx';
 import Tab from './Tab.jsx';
 import Pad from './Pad.jsx';
 
@@ -69,8 +68,9 @@ export default class EventWorkpad extends Component {
         console.log(error);
         return;
       }
+      //console.log("new Tab: ", result);
       $('ul.tabs').tabs();
-      $('ul.tabs').tabs('select_tab', result);
+      $('ul.tabs').tabs('select_tab', "NewSheet");
     });
   }
 
@@ -92,19 +92,20 @@ export default class EventWorkpad extends Component {
   	}
   	var workpad = ev.workpad;
     */
+    let workpads = this.getWorkpads();
     return(
       <div className="row">
         <label>Workspace</label>
-          <div className="col s12">
+          {/*}<div className="col s12">
             <ul className="tabs">
-              {this.getWorkpads().map((tab)=>{
-                return <Tab key={tab.name} tab={tab} eid={this.props.eid} />
+              {workpads.map((tab)=>{
+                return <Tab key={tab.name} tab={tab} eid={this.props.ev._id} />
               })}
-              {this.props.perm?<li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>:""}
+              {/*this.props.perm&&<li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>\}
             </ul>
-          </div>
+          </div>*/}
 
-        {this.getWorkpads().map((pad)=>{
+        {workpads.map((pad)=>{
           return <Pad key={pad.name} eid={this.props.ev._id} pad={pad} editperm={this.props.perm} />
         })}
 

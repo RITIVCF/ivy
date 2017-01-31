@@ -4,61 +4,100 @@ import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
 
-
-export default class EventDateControls extends TrackerReact(React.Component) {
+// export default class EventDateControls extends TrackerReact(React.Component) {
+export default class EventDateControls extends React.Component {
   constructor(props){
     super(props);
     momentLocalizer(moment);
     this.state = {
       start: props.start,
       end: props.end,
-      startdate: new moment(props.start).format("YYYY-MM-DD"),
-      starttime: new moment(props.start).format("HH:mm"),
-      enddate: new moment(props.end).format("YYYY-MM-DD"),
-      endtime: new moment(props.end).format("HH:mm")
+      editstart: false,
+      editend: false
     }
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
-      return false
-    }else{
-      return true;
-    }
+    // console.log("Prop start: ", this.props.start);
+    // console.log("Next Prop start: ", nextProps.start);
+    // console.log("Prop end: ", this.props.end);
+    // console.log("Next prop end: ", nextProps.end);
+    // console.log("Starts equal? ", this.props.start==nextProps.start);
+    // console.log("Ends equal ", this.props.end==nextProps.end);
+    // if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
+    //   console.log("should not update");
+    //   return false
+    // }else{
+    //   console.log("updating");
+    //   return true;
+    // }
+    return true;
+  }
+
+  handleStartChange(value){
+    this.setState({start: value});
+  }
+
+  handleEndChange(value){
+    this.setState({end: value});
   }
 
   updateStartDate(event){
-    Meteor.call("updateEventStart", this.props.eid, event);
-    console.log("Starttime: ", event);
-    var difference = new moment(this.props.end) - new moment(this.props.start);
-    Meteor.call("updateEventEnd", this.props.eid, new moment(event).add(moment.duration(difference))._d);
+    event.preventDefault();
+    Meteor.call("updateEventStart", this.props.eid, this.state.start);
+    console.log("Starttime: ", this.state.start);
+    var difference = new moment(this.state.end) - new moment(this.state.start);
+    Meteor.call("updateEventEnd", this.props.eid, new moment(this.props.end).add(moment.duration(difference))._d);
+    this.toggleStart();
 	}
 
 	updateEndDate(event){
-    Meteor.call("updateEventEnd", this.props.eid, event);
-    if(this.refs.start.props.value > event){
-      var difference = new moment(this.props.end) - new moment(this.props.start);
-      Meteor.call("updateEventStart", this.props.eid, new moment(event).subtract(moment.duration(difference))._d);
+    event.preventDefault();
+    Meteor.call("updateEventEnd", this.props.eid, this.state.end);
+    if(this.state.start > this.state.end){
+      var difference = new moment(this.state.end) - new moment(this.state.start);
+      Meteor.call("updateEventStart", this.props.eid, new moment(this.props.start).subtract(moment.duration(difference))._d);
     }
+    this.toggleEnd();
 	}
 
+  toggleStart(){
+    this.setState({editstart: !this.state.editstart});
+  }
+
+  toggleEnd(){
+    this.setState({editend: !this.state.editend});
+  }
+
   render(){
-    var startdate = new moment(this.props.start).format("YYYY-MM-DD");
-  	var starttime = new moment(this.props.start).format("HH:mm");
-  	var enddate = new moment(this.props.end).format("YYYY-MM-DD");
-  	var endtime = new moment(this.props.end).format("HH:mm");
+    var startdate = new moment(this.props.start).format("ddd Do MMM YYYY");
+  	var starttime = new moment(this.props.start).format("h:mm A");
+  	var enddate = new moment(this.props.end).format("ddd Do MMM YYYY");
+  	var endtime = new moment(this.props.end).format("h:mm A");
+    let editstart = this.state.editstart;
+    let editend = this.state.editend;
     return (
       <div>
-      <label>Start</label>
-      <DateTimePicker ref="start"
-        value={this.props.start}
-        disabled={!this.props.perm}
-        onChange={this.updateStartDate.bind(this)} />
-      <label>End</label>
-      <DateTimePicker ref="end"
-        value={this.props.end}
-        disabled={!this.props.perm}
-        onChange={this.updateEndDate.bind(this)} />
+      <label>Start</label>{(this.props.perm&&!editstart)&&<i className="tiny material-icons" onClick={this.toggleStart.bind(this)}>edit</i>}
+      {!editstart?<p style={{marginTop:"0px"}}>{startdate} {starttime}</p>:
+      <form onSubmit={this.updateStartDate.bind(this)}>
+        <DateTimePicker ref="start"
+          defaultValue={this.state.start}
+          onChange={this.handleStartChange.bind(this)}
+          />
+        <input type="submit" value="Save" className="btn" />
+        <button type="button" onClick={this.toggleStart.bind(this)} className="btn">Close</button>
+      </form>}
+      <label>End</label>{(this.props.perm&&!editend)&&<i className="tiny material-icons" onClick={this.toggleEnd.bind(this)}>edit</i>}
+      {!editend?<p style={{marginTop:"0px"}}>{enddate} {endtime}</p>:
+        <form onSubmit={this.updateEndDate.bind(this)}>
+          <DateTimePicker ref="end"
+            defaultValue={this.state.end}
+            onChange={this.handleEndChange.bind(this)}
+            />
+          <input type="submit" value="Save" className="btn" />
+          <button type="button" onClick={this.toggleEnd.bind(this)} className="btn">Close</button>
+        </form>}
       </div>
     )
   }
