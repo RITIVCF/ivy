@@ -51,7 +51,10 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		this.refs.reoccuringOverlay.openOverlay();
 	}
 
-
+	request(event){
+		event.preventDefault();
+		Meteor.call("eventRequestPerm", this.props.eid);
+	}
 
 
 	getEvent(){
@@ -79,7 +82,13 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	document.title = "Ivy - "+ ev.name;
 	var perms = checkEventPermission(ev);
 	if(!perms.view){
-		return(<p>You do not have permission to view this event's workspace.</p>)
+		return(<div className="center-align" style={{paddingTop:"50px"}}>
+			<div className="card-panel">
+				<div className="card-content">
+					<p>You do not have permission to view this event's workspace. Click <a href="" onClick={this.request.bind(this)}>here</a> to request permission to help with this event.</p>
+				</div>
+			</div>
+		</div>)
 	}
 
 		return (

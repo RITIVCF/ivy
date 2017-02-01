@@ -12,7 +12,7 @@ import SideBarMobile from './SideBarMobile.jsx'
 export const ErrorLayout = ({content}) => (
 	<div>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-				<Header header={"Error..."}/>
+				<Header header={"Not Found..."}/>
 				<SideBar />
 				<SideBarMobile />
       	<main>

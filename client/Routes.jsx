@@ -300,6 +300,31 @@ FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
 	}
 });
 
+FlowRouter.route("/events/workspace/:vore/:eid/:uid",{
+	action(params) {
+		//let ev = Events.findOne(params.eid);
+		Meteor.call("getEvent", params.eid, function(error,result){
+			if(result){
+				let ev = result;
+				console.log("Event: ", ev);
+				if(Meteor.userId()==ev.owner){
+					Meteor.call("addEventUserPerm",params.eid,params.uid);
+					console.log("Added perm");
+					if(params.vore=="edit"){
+						console.log("Add edit perm");
+						Meteor.call("updateEventUserPerm", params.eid, params.uid, true );
+					}
+					console.log("Perms added, go to dahsboard");
+					FlowRouter.go("/");
+				}else{
+					FlowRouter.go("/event/workspace/"+params.vore+"/"+params.eid+"/"+params.uid);
+				}
+			}
+		});
+
+	}
+});
+
 FlowRouter.route('/events/debrief',{
 	action(params) {
 		mount(MainLayout, {
