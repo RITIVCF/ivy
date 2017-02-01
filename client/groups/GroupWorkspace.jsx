@@ -54,6 +54,9 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 	}
 
 	getLeader(){
+		if(this.props.group.leader==""){
+			return "";
+		}
 		return Meteor.users.findOne(this.props.group.leader).name;
 	}
 

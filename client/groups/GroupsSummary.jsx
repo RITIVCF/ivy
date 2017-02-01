@@ -69,7 +69,7 @@ export default class GroupsSummary extends TrackerReact(React.Component) {
               style={{width: "100%"}} onClick={this.openNew.bind(this)}>
               <div className="card-content">
                 <span className="card-title">Add New</span>
-
+                <p>&nbsp;</p>
               </div>
             </div>
           </div>

@@ -62,7 +62,8 @@ export default class NewContactForm extends Component {
             <h1>New Contact</h1>
             <form className="publicForm" onSubmit={this.submit.bind(this)}>
               <div className="input-field">
-                <input ref="name" id="nm" required placeholder="Name" />
+                <input type="text" ref="name" id="nm" required />
+                <label htmlFor="nm">Name</label>
               </div>
               <div className="input-field">
                 <input ref="email"  id="email" type="email" required />
