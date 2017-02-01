@@ -38,6 +38,9 @@ export default class GroupsSingle extends Component {
   }
 
   getLeader(){
+    if(this.props.group.leader==""){
+      return "";
+    }
     var leader = Meteor.users.findOne(this.props.group.leader);
     console.log(leader);
     if(!leader){
@@ -49,15 +52,17 @@ export default class GroupsSingle extends Component {
   }
 
   render() {
+    let isSG = this.props.group.type=="Small Group"||this.props.group.type=="Team";
     return (
       <div className="col s12 m6 l4">
         <div className={this.props.selected?"card left hoverable addBorderToCard":"card left"}
           style={{width: "100%"}} onClick={this.edit.bind(this)}>
           <div className="card-content">
             <span className="card-title">{this.props.group.name}</span>
-            {this.props.group.type=="Small Group"?
+            <p>{isSG&&<b>Leader:</b>}&nbsp;{isSG&&this.getLeader()}</p>
+            {/*?
               <p><b>Leader:</b> {this.getLeader()}</p>:""
-            }
+            }*/}
             {/*}<p>
               {this.getMembers().map((member)=>{
                 return member.name;
