@@ -30,6 +30,10 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
     //$(React.findDOMNode(this.refs.type)).on('change',this.check.bind(this));
   }
 
+  delete(){
+    Meteor.call("removeGroup",this.props.group._id);
+  }
+
   open(){
     $("#editgroupmodal"+this.props.group._id).appendTo("body").modal("open");
   }
@@ -116,6 +120,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
         </div>
         <div className="modal-footer">{/*buttons top to bottom go right to left */}
           <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+          <a onClick={this.delete.bind(this)} className="modal-action modal-close waves-effect waves-green btn red">Remove</a>
         </div>
       </div>
     )
