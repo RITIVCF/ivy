@@ -31,30 +31,32 @@ export default class GroupName extends TrackerReact(React.Component) {
 
 	changeName(event){
 		event.preventDefault();
-		this.setState({name: event.target.value});
+		this.setState({name: this.refs.name.value});
 		var thiz = this;
-		grpUpdateName(this, event.target.value);
+		grpUpdateName(this, this.refs.name.value);
+		this.setState({edittingName: false});
 	}
 
 	toggleName(event){
 		event.preventDefault()
-		if(!this.props.group._id=="admin"){
+		//if(!this.props.group._id=="admin"){
 				this.setState({edittingName: !this.state.edittingName});
-		}
+		//}
 	}
 
 	render() {
-
+		console.log("Test: ", (!this.state.edittingName&&this.props.group._id!="admin"));
 		return (
 		<div>
-			{!this.state.edittingName ? <h1 onClick={this.toggleName.bind(this)}>{this.props.group.name}</h1>
+			{!this.state.edittingName ? <h2>{this.props.group.name}{(!this.state.edittingName&&this.props.group._id!="admin")&&<i className="tiny material-icons black-text" onClick={this.toggleName.bind(this)}>edit</i>}</h2>
 		:<input
 					type="text"
-					value={this.state.name}
-					onChange={this.changeName.bind(this)}
-					onBlur={this.toggleName.bind(this)}
+					ref="name"
+					defaultValue={this.props.group.name}
 				/>
-			}
+		}
+			{this.state.edittingName&&<a className="btn" style={{marginRight:"5px"}} onClick={this.changeName.bind(this)}>Save</a>}
+			{this.state.edittingName&&<a className="btn" onClick={this.toggleName.bind(this)}>Cancel</a>}
 		</div>
 		)
 	}
