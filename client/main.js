@@ -20,17 +20,23 @@ Meteor.subscribe("allCounters");
 SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 
-checkPermission = function(id){
-	if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
-		return true;
-	}
-	var grps = Groups.find({users: Meteor.userId()}).fetch();
+checkPermission = function(){
+	// if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
+	// 	return true;
+	// }
 	var ids = [];
+	console.log(arguments);
+	console.log(arguments[0]);
+	for (i = 0; i < arguments.length; i++) {
+  	ids.push(arguments[i]);
+  }
+	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var gids = [];
 	grps.forEach(function(group){
-		ids.push(group._id);
+		gids.push(group._id);
 	});
 
-	return PagePermissions.find({_id:id,groups: {$in: ids}}).fetch().length>0;
+	return PagePermissions.find({_id: {$in: ids },groups: {$in: gids}}).fetch().length>0;
 }
 
 
