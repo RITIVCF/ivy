@@ -1,10 +1,12 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../MainBox.jsx';
-import TicketSummary from './TicketSummary.jsx';
-import TicketPreview from './TicketPreview.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
+
+import TicketSummary from './TicketSummary.jsx';
+import TicketPreview from './TicketPreview.jsx';
+import NewTicketWindow from './NewTicketWindow.jsx';
 
 export default class TicketWrapper extends TrackerReact(React.Component) {
   constructor() {
@@ -40,16 +42,21 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
   //  this.state.subscription.events.ready();
   }
 
+  openNew(){
+    this.refs.newticketwindow.open();
+  }
+
   toggleView(){
     Meteor.call("toggleTicketsInfoBar");
   }
 
   getSubHeader(){
     return <ul className="right">
-      {Meteor.user().preferences.tickets_infobar?
-        <li onClick={this.toggleView.bind(this)}><a><i className="material-icons black-text">info</i></a></li>
-        :<li onClick={this.toggleView.bind(this)}>
-          <a><i className="material-icons black-text">info_outline</i></a></li>}
+      <li onClick={this.openNew.bind(this)}><a><i className="material-icons black-text">add</i></a></li>
+      <li onClick={this.toggleView.bind(this)}><a><i className="material-icons black-text">
+        {Meteor.user().preferences.tickets_infobar?"info":"info_outline"}
+        </i></a></li>
+
     </ul>
   }
 
@@ -71,6 +78,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
         content={<div className="row">
             <div className="col s12">
                   <TicketSummary sub={subsready} />
+                  <NewTicketWindow ref="newticketwindow" />
             </div>
           </div>}
         subheader={this.getSubHeader()}

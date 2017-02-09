@@ -3,6 +3,11 @@ import React, {Component} from 'react';
 
 
 export default class ContactBio extends Component {
+
+  componentDidMount(){
+    $('textarea').trigger('autoresize');  
+  }
+
   updateBio(event){  // Need one of these for each component
     event.preventDefault();
     var text= this.refs.bio.value.trim();
@@ -41,7 +46,7 @@ export default class ContactBio extends Component {
             onChange={this.handleBioChange}
             value={this.props.contact.bio}
           />
-      
+
     )
   }
 }

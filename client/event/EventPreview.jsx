@@ -59,7 +59,7 @@ export default class EventPreview extends TrackerReact(React.Component) {
       }
     }
 
-  
+
     console.log("Debrief: ", !this.props.event.debrief);
     console.log("Perm: ", checkPermission("admin")||this.props.event.owner==Meteor.userId());
     console.log("Published: ", this.props.event.published);
@@ -69,6 +69,16 @@ export default class EventPreview extends TrackerReact(React.Component) {
     var perms = checkEventPermission(this.props.event);
     var isformopen = (this.props.event.start < new moment(new Date).add(2,"hours"));
     //console.log(perms);
+    var leader = Meteor.users.findOne(this.props.event.owner);
+    if(!this.props.event.name){
+      return(
+        <div>
+          <p>Leader: {leader.name}<br/>{leader.emails[0].address}</p>
+          <p>Date: {dateString}</p>
+          <p>Time: {timeString}</p>
+        </div>
+      )
+    }
     return (
       <div>
         <div>

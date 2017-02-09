@@ -6,8 +6,23 @@ export default class NewEventModal extends TrackerReact(React.Component) {
     super();
 
     this.state = {
+      start: new moment(),
       createdisabled: false
     }
+  }
+
+  componentDidMount(){
+    $('.modal').modal();
+  }
+
+  open(){
+    $('#neweventmodal').appendTo("body").modal('open');
+    //$('#newname').focus();
+    this.refs.newname.focus();
+  }
+
+  setStart(start){
+    this.setState({start: start});
   }
 
   createNew(go){
@@ -44,11 +59,15 @@ export default class NewEventModal extends TrackerReact(React.Component) {
     return (
       <div id="neweventmodal" className="modal bottom-sheet">
         <div className="modal-content">
-          <div className="input-field col s12">
-            <input ref="newname" id="newname" type="text" onChange={this.checkValue.bind(this)} defaultValue={"New Event"} />
-            <label htmlFor="icon_prefix">New Event Name</label>
+          <div className="row">
+            <div className="input-field col s12">
+              <input ref="newname" id="newname" type="text" onChange={this.checkValue.bind(this)} defaultValue={"New Event"} />
+              <label htmlFor="icon_prefix">New Event Name</label>
+            </div>
+            <div className="col s12">
+              <p>Start: {this.state.start.format("Do MMM h:mmA")}</p>
+            </div>
           </div>
-          <p id="neweventmodalstart"></p>
         </div>
         <div className="modal-footer">
           <a onClick={this.createNew.bind(this,false)} ref="createevent"

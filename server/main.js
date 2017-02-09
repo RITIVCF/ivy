@@ -64,7 +64,7 @@ SyncedCron.add({
   job: function() {
     var intervl = 7; //In days
   	var period = 4; //In intervls
-    var percentage = .5; //In decimal form
+    var threshold = 2; //Integer # of intervals
     var endDate = new Date();
     var startDate = new Date();
   	//startDate.setDate(startDate.getDate() - period);
@@ -75,13 +75,19 @@ SyncedCron.add({
       var events = [];
       startDate = new moment(endDate.toISOString()).subtract(intervl,"days")._d;
   		//eventsPerInterval[(c+1)] = Events.find({
-      Events.find({
+      var eventsFound = Events.find({
   			start:{
   				$gte : startDate,//startDate.setDate(startDate.getDate() - intervl),
   				$lt : endDate
   			},
         published: true
-  		}).fetch().forEach((event)=>{
+  		}).fetch();
+      if(eventsFound.length==0){
+        endDate = startDate;
+        c--;
+        continue;
+      }
+      eventsFound.forEach((event)=>{
         events.push(event._id);
       });
       eventsPerInterval.push(events);
@@ -127,7 +133,7 @@ SyncedCron.add({
   			// 		count++;
   			// 	}
   			// }
-        if (count/period >= percentage) {
+        if (count>=threshold) {
           // console.log(user.name, " Is visitor");
           Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
         } else {
