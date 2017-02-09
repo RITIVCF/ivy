@@ -7,6 +7,7 @@ export default class ButtonDelete extends Component {
     if(result == true){
       //console.log("you clicked 'yes'.");
       Meteor.call('deleteEvent',this.props.eid);
+      Session.set("evselected","");
       location.assign("/events");
     }
     else{

@@ -15,7 +15,7 @@ import ContactGender from './components/ContactGender.jsx';
 import ContactGradTerm from './components/ContactGradTerm.jsx';
 import ContactCurrYear from './components/ContactCurrYear.jsx';
 import MemberForm from '../member/MemberForm.jsx';
-import NewAddressModal from './NewAddressModal.jsx';
+//import NewAddressModal from './NewAddressModal.jsx';
 import Event from './Event.jsx';
 
 
@@ -23,7 +23,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
     this.state = {
-      numevents: 3
+      viewallevents: false
     }
   }
   /*
@@ -66,6 +66,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
     Meteor.call('updateEthnicity', ethn);
   }
 
+  viewAllEvents(){
+    this.setState({viewallevents: true});
+  }
+
   getEvents(){
     if(this.props.cid){
       var id = this.props.cid;
@@ -73,7 +77,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
     else{
       var id = Meteor.userId();
     }
-    return Events.find({"attendees._id":id}, {sort:{start:-1},limit: this.state.numevents}).fetch();
+    var options = {sort:{start:-1}};
+    if(!this.state.viewallevents){
+      options.limit = 3;
+    }
+    console.log("Options: ",options);
+    return Events.find({"attendees._id":id}, options).fetch();
   }
 
 
@@ -82,9 +91,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
     $("#memberform").appendTo("body").modal("open");
   }
 
-  getEvents(){
-    return Events.find({},{sort:{start:-1}}).fetch();
-  }
+  // getEvents(){
+  //   return Events.find({},{sort:{start:-1}}).fetch();
+  // }
 
 
   remove(){
@@ -197,7 +206,6 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <AddressForm contact={contact} disabled={disable} addresses={contact.addresses} />:""}
             </div>
           </div>
-          <NewAddressModal />
         </div>
         <div className="col s12 m6 l6">
           {contact ?
@@ -238,6 +246,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
                   return <Event key={event._id} event={event} />
                 })}
               </ul>
+              {!this.state.viewallevents&&<a onClick={this.viewAllEvents.bind(this)} className="btn">View All</a>}
             </div>
           </div>
         </div>

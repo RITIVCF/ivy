@@ -43,12 +43,17 @@ export default class Pad extends Component {
 			setup : function(editor) {
         editor.on('change', function(e) {
             //console.log(tinymce.activeEditor);
-            thiz.setState({editting: true});
-            //console.log('key event', e);
-						updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
-				    ////console.log(this);
-				    setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
-            //
+            try{
+              thiz.setState({editting: true});
+              //console.log('key event', e);
+              updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
+              ////console.log(this);
+              setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
+              //
+            }catch (err){
+              console.log(err);
+            }
+
         });
 				editor.on('keyup', function(e) {
             //console.log(tinymce.activeEditor);

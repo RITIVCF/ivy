@@ -168,10 +168,10 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                   <div className="col s12">
                   {this.props.ticket.type != "Contact"&&
                   <SelectUser parent={this}
-                    id={"customer"}
+                    id="customer"
                     label="Ticket for"
                     unset={this.unset.bind(this)}
-                    updateContact={this.updateCust.bind(this)}
+                    updateUser={this.updateCust.bind(this)}
                     initialValue={this.getUser(this.props.ticket.customer)}
                     ref="cust"  />}
 
@@ -201,14 +201,14 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
                      <SelectTeam
                				parent={this}
-               				id={"assignedgroup"}
+               				id="assignedgroup"
                				unset={this.unset.bind(this)}
                				updateContact={this.updateAssignedG.bind(this)}
                				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
-               				ref={"assignedgroup"}
+               				ref="assignedgroup"
                				/>
                     <SelectUser parent={this}
-                      id={"assigneduser"}
+                      id="assigneduser"
                       label="Assigned User"
                       unset={this.unset.bind(this)}
                       initialValue={this.getUser(this.props.ticket.assigneduser)}

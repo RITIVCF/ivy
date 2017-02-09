@@ -84,9 +84,9 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       defaultDate: Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
         //FlowRouter.go("/attendance/event/"+calEvent._id);
-        if(!calEvent.name){
-          return;
-        }
+        // if(!calEvent.name){
+        //   return;
+        // }
         //Session.set("infobar",true);
         Meteor.call("openEventInfoBar");
         Session.set("evselected",calEvent._id);
@@ -119,6 +119,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
       },
       dayClick: function(date, jsEvent, view) {
+        if(!checkPermission("events")){return;}
         var timestamp = new moment(date._d);
         if(view.name=="month"){
             date.add(20,"hours");
@@ -127,12 +128,14 @@ export default class EventCalendar extends TrackerReact(React.Component) {
           date.add(5, "hours");
         }
         newevent = {start: date};
-        $('#neweventmodalstart')[0].innerHTML="Start: "+ date.subtract(5,"hours").format("Do MMM h:mmA"); $('.modal').modal();
+      //  $('#neweventmodalstart')[0].innerHTML="Start: "+ date.subtract(5,"hours").format("Do MMM h:mmA");
+        thiz.refs.newevmodal.setStart(date.subtract(5,"hours"));
+        //$('.modal').modal();
         date.add(5,"hours");
         //console.log($('#neweventmodalstart'));
         //console.log(newevent);
-        $('#neweventmodal').appendTo("body").modal('open');
-        $('#newname').focus();
+        thiz.refs.newevmodal.open();
+
 
 
         //$(calendar).fullCalendar( 'renderEvent', {title: "", start: date._d, end: end._d});
@@ -318,7 +321,7 @@ var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{
         {this.getUnPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}*/}
-        <NewEventModal />
+        {checkPermission("events")&&<NewEventModal ref="newevmodal" />}
       </div>
     );
   }

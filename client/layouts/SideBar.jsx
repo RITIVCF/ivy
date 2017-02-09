@@ -18,10 +18,10 @@ export default class SideBar extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		/*$(".dropdown-button").dropdown({
+		$(".dropdown-button").dropdown({
 			alignment: 'right',
 			beloworigin: true
-		});*/
+		});
 	}
 
 	componentDidUpdate(){
