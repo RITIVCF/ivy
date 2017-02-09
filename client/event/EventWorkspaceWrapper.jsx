@@ -32,7 +32,8 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 			//	options: Meteor.subscribe("allOptions")
 		},
 		groups: getUserGroupPermission(),
-		ready: false
+		ready: false,
+		submitted: false
     };
   }
 
@@ -51,7 +52,19 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		this.refs.reoccuringOverlay.openOverlay();
 	}
 
+	request(event){
+		event.preventDefault();
+		var thiz = this;
+		Meteor.call("eventRequestPerm", this.props.eid, function(error){
+			if(error){
+				window.alert(error);
+				console.log(error);
+			}else{
+				thiz.setState({submitted: true});
+			}
 
+		});
+	}
 
 
 	getEvent(){
@@ -79,7 +92,14 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	document.title = "Ivy - "+ ev.name;
 	var perms = checkEventPermission(ev);
 	if(!perms.view){
-		return(<p>You do not have permission to view this event's workspace.</p>)
+		return(<div className="center-align" style={{paddingTop:"50px"}}>
+			<div className="card-panel">
+				<div className="card-content">
+					{!this.state.submitted?<p>You do not have permission to view this event's workspace. Click <a href="" onClick={this.request.bind(this)}>here</a> to request permission to help with this event.</p>:<p>Submitted.</p>}
+
+				</div>
+			</div>
+		</div>)
 	}
 
 		return (

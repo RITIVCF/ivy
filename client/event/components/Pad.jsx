@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 
 var updWorkpad = _.throttle(
   function(eid, pad, value)
-  {console.log("updWorkpad", value);
+  {//console.log("updWorkpad", value);
     Meteor.call("updateEventWorkpad", eid, pad, value);
     Meteor.call("EventWorkpadLock", eid, pad, true);
   },500);
 
 var setWorkPadFalse = _.debounce(function(thiz, pad, eid){
-  console.log("set false",thiz.state.editting);
+  //console.log("set false",thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventWorkpadLock", eid, pad, false);
 }, 1000);
@@ -24,11 +24,11 @@ export default class Pad extends Component {
   componentDidMount(){
     var thiz = this;
     var id = "#"+this.props.pad.name.replace(" ","");
-    console.log("Ref",this.refs[this.props.pad.name]);
-    console.log("#"+this.props.pad.name.replace(" ",""));
-    console.log(id);
-    console.log($(id));
-    console.log(this);
+    // console.log("Ref",this.refs[this.props.pad.name]);
+    // console.log("#"+this.props.pad.name.replace(" ",""));
+    // console.log(id);
+    // console.log($(id));
+    // console.log(this);
     tinymce.init({
 			//selector: "#mytextarea",
       selector: "#"+this.props.pad.name.replace(" ","")+"pad",
@@ -96,7 +96,7 @@ export default class Pad extends Component {
       }
     	});
     }
-    console.log("DidUpdate");
+    //console.log("DidUpdate");
 
   }
 
