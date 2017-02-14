@@ -83,6 +83,9 @@ export default class SignIn extends TrackerReact(React.Component){
     var user = this.state.user;
     var evname = this.props.ev.name;
     var name = this.refs.user.state.value.trim();
+    var email = this.refs.email.value.trim();
+    var phone = this.refs.phone.value.trim();
+    var major = this.refs.major.value.trim();
     if(this.state.new){
         var newsletter = this.refs.newsletter.checked;
         var more = this.refs.learnmore.checked;
@@ -98,9 +101,9 @@ export default class SignIn extends TrackerReact(React.Component){
 
       var id = Meteor.call("createNewUser",
         name,
-        this.refs.email.value,
-        this.refs.phone.value,
-        this.refs.major.value,
+        email,
+        phone,
+        major,
         howhear,
         function(error, uid){
           if(error){
@@ -110,9 +113,10 @@ export default class SignIn extends TrackerReact(React.Component){
               +" address or choose your contact.", 6000);
             return;
           }
+          var desc = evname+"\n"+name+"\n"+email+"\n"+phone+"\n"+howhear;
           Meteor.call("addAttendanceTicket",
             "New Contact: "+ name,
-            "New Contact at event: "+ evname,
+            desc,
             "","", uid,
             eid,
             function(errr, tktId){
