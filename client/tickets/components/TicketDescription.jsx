@@ -24,6 +24,10 @@ export default class TicketDescription extends Component {
     }
   }
 
+  componentDidMount(){
+    $('textarea').trigger('autoresize');  
+  }
+
   handleDescriptionChange(event){ // need one of these for each component
     this.setState({description:event.target.value});
     // console.log("Event.target.value");

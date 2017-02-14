@@ -132,6 +132,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     //console.log(user);
     Meteor.call("updateTicketCustomer", this.props.ticket._id, user._id);
   }
+
   unset(){
 
   }
@@ -166,14 +167,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                 </div>
                 <div className="row">
                   <div className="col s12">
-                  {this.props.ticket.type != "Contact"&&
-                  <SelectUser parent={this}
-                    id="customer"
-                    label="Ticket for"
-                    unset={this.unset.bind(this)}
-                    updateUser={this.updateCust.bind(this)}
-                    initialValue={this.getUser(this.props.ticket.customer)}
-                    ref="cust"  />}
+                    {/*this.props.ticket.type != "Contact"&&**/}
+                    <SelectUser parent={this}
+                      id="customer"
+                      label="Ticket for"
+                      unset={this.unset.bind(this)}
+                      updateUser={this.updateCust.bind(this)}
+                      initialValue={this.getUser(this.props.ticket.customer)}
+                      ref="cust"  />
+                    {(checkPermission("contacts")&&this.props.ticket.customer)&&<a href={"/people/"+this.props.ticket.customer} className="">View Customer</a>}
 
                     <TicketSubject parent={this} ticket={this.props.ticket} />
                     <TicketDescription parent={this} ticket={this.props.ticket} />
