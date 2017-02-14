@@ -88,7 +88,7 @@ Meteor.publish("otherUnpublishedEvents", function(){
 	//console.log(ids);
   //console.log(checkPermission("events", this.userId));
   //if(perm){
-  var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1}};
+  var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1,owner: 1}};
   if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
 	}
@@ -324,6 +324,7 @@ Meteor.publish("oldContacts", function(filtr, srt){
   var options = {
       fields: {
         name: 1,
+        deleted: 1,
         addresses: 1,
         contact: 1,
         email: 1,
@@ -351,8 +352,9 @@ Meteor.publish("oldContacts", function(filtr, srt){
   return Meteor.users.find(selector, options);
 });
 
-Meteor.publish("publicContacts", function(){
+Meteor.publish("publicContacts", function(num){
   // This publish is for the public submittedby
+
   var selector = {deleted: {$ne: true}};
   var options = {
     fields: {

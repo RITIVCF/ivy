@@ -16,7 +16,7 @@ export default class ErrorPage extends TrackerReact(React.Component) {
 		document.title="Ivy";
 		return (
 		<div>
-			<h1>ERROR</h1>
+			<h1>Not Found</h1>
 				<p>Aw darn. It happened again. It seems whatever you were looking for doesn't
 					exist. Sorry about that! We're trying to get the sneaky gremlins out of the system.
 					They keep taking our pages. I wonder where they keep them...?

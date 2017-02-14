@@ -46,7 +46,7 @@ export default class NewRequestModal extends TrackerReact(React.Component) {
     Materialize.updateTextFields();
     $('select').material_select('destroy');
     $('select').material_select();
-    Materialize.toast("Submission succesful.", 4000);
+    Materialize.toast("Submission successful.", 4000);
   }
 
   render() {

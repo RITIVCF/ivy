@@ -14,8 +14,9 @@ export default class AddressForm extends Component {
   addAddress(){
     //Meteor.call('addMailingAddress');
     //Meteor.call('addMailingAddress', this.props.contact._id);
-    console.log($('#newaddressmodal'));
-    $('#newaddressmodal').modal('open');
+    // console.log($('#newaddressmodal'));
+    // $('#newaddressmodal').modal('open');
+    this.refs.modal.open();
   }
 
   render(){
@@ -31,7 +32,7 @@ export default class AddressForm extends Component {
   				return <Address key={address.line1} disabled={this.props.disabled} contact={this.props.contact} address={address} />
   			})}
       </ul>
-      {/*<NewAddressModal />*/}
+      <NewAddressModal ref="modal" contact={this.props.contact} />
     </div>
   )
   }

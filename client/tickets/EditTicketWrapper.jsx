@@ -41,16 +41,16 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Ticket ";
+    document.title="Ivy - Ticket";
+    if(!this.checkSubscriptions()){
+      return (<LoaderCircle />)
+    }
     if(!checkPermission("tickets")){
 			return <NoPerm />
 		}
     var ticket = Tickets.findOne(this.props.tid);
     if(ticket){
         document.title="Ivy - "+ ticket.subject;
-    }
-    if(!this.checkSubscriptions()){
-      return (<LoaderCircle />)
     }
 		return (
       <div>

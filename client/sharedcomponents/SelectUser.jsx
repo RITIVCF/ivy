@@ -56,8 +56,8 @@ const shouldRenderSuggestions = value => {
 
 const inputComponent = inputProps => {
   return <div className="input-field select-dropdown">
-    <input id="name" {...inputProps} required />
-    <label htmlFor="name">{inputProps.label}</label>
+    <input {...inputProps} required />
+    <label htmlFor={inputProps.id}>{inputProps.label}</label>
   </div>
 }
 
@@ -179,10 +179,11 @@ shouldComponentUpdate(nextProps, nextState){
       value,
       onChange: this.onChange,
       className:"autocomplete-content dropdown-content",
-      onBlur: this.onBlur
+      onBlur: this.onBlur,
+      id: this.props.id
     };
     //console.log("ID PROP:",this.props.id);
-    if(this.props.id){
+    //if(this.props.id){
       //console.log("PROP IS TRUE");
       return (
         <Autosuggest id={this.props.id}
@@ -199,7 +200,7 @@ shouldComponentUpdate(nextProps, nextState){
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />
       );
-    }
+    /*}
     else{
       return (
         <Autosuggest suggestions={suggestions}
@@ -215,7 +216,7 @@ shouldComponentUpdate(nextProps, nextState){
                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />
       );
-    }
+    }*/
 
   }
 }

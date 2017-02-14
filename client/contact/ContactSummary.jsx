@@ -10,7 +10,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
     this.state = {
       statuses: ["Crowd","Visitor","Member","Server","Leader","Multiplier"],
-      filter: ""
+      filter: "",
+      num: 10
     };
 
     if(Session.get("contactstatusfilter")===undefined){
@@ -18,6 +19,26 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     }
 
 
+  }
+
+  componentDidMount(){
+    var thiz = this;
+    $("#mainbox").scroll(function() {
+      console.log("---------------------------------------------");
+      console.log("Window-height: ", $(window).height());
+      console.log("Mainbox-scrollTop: ", $("#mainbox").scrollTop());
+      console.log("Document-height: ", $(document).height());
+      console.log("Mainbox-height: ", $("#mainbox").height());
+      console.log("scrollbox-scrollTop: ", $("#scrollbox").scrollTop());
+      console.log("scrollbox-height: ", $("#scrollbox").height());
+      var scrollboxHeight = $("#scrollbox").height();
+      var mainboxscrollTop = $("#mainbox").scrollTop();
+      console.log("(scrollbox-height)-(mainbox-scrollTop)", parseInt(scrollboxHeight)-parseInt(mainboxscrollTop));
+      if((scrollboxHeight-mainboxscrollTop) < $("#mainbox").height()) {
+        thiz.setState({num: thiz.state.num+20});
+      }
+
+    });
   }
 
   newContact(event){
@@ -110,10 +131,12 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     // }{$regex:this.state.textfilter, $options : 'i'}
     var query= {status: {$in: Session.get("contactstatusfilter")}};
     query.deleted = {$ne: true};
+    let options = {sort: {name: 1}, limit: this.state.num};
     if(this.state.filter!=""){
       query.name={ $regex : this.state.filter, $options : 'i'};
     }
-    return Meteor.users.find(query,{sort: {name: 1}}).fetch();
+
+    return Meteor.users.find(query,options).fetch();
   }
 
   select(id){
@@ -172,7 +195,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                 {/*}
                       <p>Count: {this.contacts().length}</p>
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
-                <div className="row">
+                <div className="row" id="scrollbox">
                 {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
                   return <ContactSingle key={contact._id} row={false} contact={contact}
                     selected={Session.get("conselected")==contact._id} perm={perm}
