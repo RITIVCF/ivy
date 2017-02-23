@@ -36,6 +36,11 @@ export default class WorkspacePanel extends React.Component {
 		this.refs.permwindow.open();
 	}
 
+	getLeader(){
+		var user = Meteor.users.findOne(this.props.ev.owner);
+		return user?user.name:"-";
+	}
+
 	openDelete(){
 		event.preventDefault();
 		//this.refs.deleteOverlay.openOverlay();
@@ -76,7 +81,7 @@ export default class WorkspacePanel extends React.Component {
 				</div>
 					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
 					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
-					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:false}
+					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}
 			</div>
 		)
 	}

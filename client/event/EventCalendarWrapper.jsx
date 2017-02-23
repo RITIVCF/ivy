@@ -105,10 +105,6 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
               <div className="card">
                 <div className="card-content">
                   <LegendFilter />
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-content">
                   <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
                 </div>
               </div>

@@ -48,7 +48,7 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 				{nobrief.length!=0&&
 					<div className="card">
 						<div className="card-content"  >
-							<span className="card-title">Needs Debriefing</span>
+							<span className="card-title">Pending Debrief</span>
 							<a className="unselectable right"	onClick={this.showHide.bind(this)}>{this.state.show?"hide":"show"}</a>
 						</div>
 						{this.state.show&&

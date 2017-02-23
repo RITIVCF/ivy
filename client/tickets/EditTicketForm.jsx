@@ -221,7 +221,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     <select className="browser-default"
                       ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
                       {this.getStatuses().map( (type) =>{
-                        return <option key={type} value={type} >{type}</option>
+                        return <option key={type} value={type} className="circle">{type}</option>
                       })}
                     </select>
                   </div>
@@ -280,3 +280,18 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   )
 	}
 }
+
+/*
+<li class=""><span style="
+    flex: 1;
+" class="ticket-open"></span><span style="flex: 500;">Open</span>
+</li><li class=""><span style="
+    flex: 1;
+" class="ticket-pending"></span><span style="flex: 500;">Pending</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-pending"></span><span style="flex: 500;">In Progress</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-open"></span><span style="flex: 500;">Cancelled</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-closed"></span><span style="flex: 500;">Closed</span></li>
+*/

@@ -199,7 +199,7 @@ FlowRouter.route('/admin/overview', {
 FlowRouter.route('/profile',{
 	action() {
 		mount(MainLayout, {
-			header: "My Account",
+			header: "My Profile",
 			content: (<UserProfileWrapper />)
 		})
 	}
