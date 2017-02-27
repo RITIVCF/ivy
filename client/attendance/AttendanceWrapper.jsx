@@ -3,6 +3,8 @@ import { Tracker } from 'meteor/tracker';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import AttendanceSummary from './AttendanceSummary.jsx';
 import EventDetail from './EventDetail.jsx';
+import LoaderCircle from '../LoaderCircle.jsx';
+import NoPerm from '../NoPerm.jsx';
 //import EventSingle from './EventSingle.jsx';
 
 // Instead of event "types" it needs to be event "tags"
@@ -52,9 +54,11 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 
 	render() {
     //document.title= "Ivy - Attendance Dashboard";
+    if(!this.subsReady()){
+      return <LoaderCircle />
+    }
     if(!checkPermission("attendance")){
-      console.log("false");
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+			return <NoPerm />
 		}
     console.log("true");
     document.title = "Ivy - Attendance Dashboard";

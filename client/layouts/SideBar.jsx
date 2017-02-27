@@ -22,6 +22,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 			alignment: 'right',
 			beloworigin: true
 		});
+		$('.collapsible').collapsible();
 	}
 
 	componentDidUpdate(){
