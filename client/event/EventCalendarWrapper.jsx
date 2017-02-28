@@ -72,19 +72,19 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       <li onClick={this.nextCal.bind(this)}><a><i className="material-icons black-text">skip_next</i></a></li>
       </ul>
       <ul className="right">
-        <li><a href="/events/debrief"><i className="material-icons black-text">subject</i></a></li>
-      <li><a className="dropdown-button" data-activates="caldrop">
+        <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>
+      <li><a className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
       {view=="month" ? <i className="material-icons black-text">today</i> :
         view=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
         view=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
       </a></li>
       <li><a>|</a></li>
-      <li onClick={this.toggleInfoBar.bind(this)}><a>
+      <li onClick={this.toggleInfoBar.bind(this)}><a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Show/Hide Infobar">
         <i className="material-icons black-text">
           {Meteor.user().preferences.events_infobar?"info":"info_outline"}
         </i>
       </a></li>
-      <li><a onClick={this.openHelp.bind(this)}><i className="material-icons black-text">live_help</i></a></li>
+    <li><a onClick={this.openHelp.bind(this)} className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Help"><i className="material-icons black-text">live_help</i></a></li>
       </ul>
     <ul id="caldrop" className="dropdown-content">
       <li onClick={this.monthView.bind(this)}><a><i className={view=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>

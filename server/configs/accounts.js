@@ -50,6 +50,8 @@ import { Accounts } from 'meteor/accounts-base';
     FlowRouter.go("/signup/"+token);
   };
 
+  
+
   Accounts.emailTemplates.sitename = "Ivy";
   Accounts.emailTemplates.from = "Ivy <no-reply@ivy.rit.edu>";
   Accounts.emailTemplates.enrollAccount.subject = function(user){

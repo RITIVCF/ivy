@@ -19,7 +19,7 @@ visibility:hidden;
 #showhim:hover #showme{
 visibility: visible;
 }
-
+/*
 #overlay
 {
     position: fixed;
@@ -245,7 +245,7 @@ body {
 
 .react-autosuggest__input:focus {
   outline: none;
-}*/
+}
 
 .react-autosuggest__suggestions-container {
   position: absolute;
@@ -262,7 +262,7 @@ body {
   border-radius: 0 !important;
   font-size: 1.5rem !important;
   background-color: #fff;
-  z-index: 2;
+  z-index: 999;
 }
 
 .react-autosuggest__suggestion {
@@ -274,3 +274,5 @@ body {
   background-color: #1a3d6d;
   color: #FCB816;
 }
+*/
+ 

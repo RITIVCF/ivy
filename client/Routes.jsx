@@ -93,7 +93,7 @@ function signInForceCheck(context) {
 	if(context.path.substring(0,6)!="/login"
 		&&context.path.substring(0,7)!="/signup"
 		&&context.path!="/newcontact"
-		&&context.path!="/forgotpassword"
+		&&context.path.substring(0,15)!="/forgotpassword"
 	){
 		if(!Meteor.userId()){
 			FlowRouter.go("/login?r="+context.path);
@@ -101,11 +101,16 @@ function signInForceCheck(context) {
 	}
 }
 
+function removeTooltips(){
+	$('.tooltipped').tooltip('remove');
+}
+
 function subscribeContactSelf(){
 	Meteor.subscribe("contact");
 }
 
 FlowRouter.triggers.enter([signInForceCheck]);
+FlowRouter.triggers.exit([removeTooltips]);
 
 FlowRouter.route('/',{
 	action() {
@@ -524,6 +529,14 @@ FlowRouter.route('/changepassword', {
 		mount(MainLayout, {
 			header: "My Account",
 			content: (<ChangePassword />)
+		})
+	}
+});
+
+FlowRouter.route('/forgotpassword/:token', {
+	action(params) {
+		mount(FormLayout, {
+			content: (<ForgotPassword token={params.token} />)
 		})
 	}
 });

@@ -91,9 +91,22 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   updateStatus(){
     var update = true;
-    if(this.refs.status.value=="Closed"||this.refs.status.value=="Canceled"){
-      if(!window.confirm("Are you sure?")){
+    if(this.refs.status.value=="Cancelled"){
+      var value = window.prompt("Please give a reason for cancellation...");
+      console.log("Cancel value: ", value);
+      if(!value){
         update = false;
+      }
+      else{
+        Meteor.call("addTicketNote", this.props.ticket._id, value);
+      }
+    }
+    if(this.refs.status.value=="Closed"){
+      var value = window.prompt("Please provide closing remarks, why this ticket can be closed...");
+      if(!value){
+        update = false;
+      }else{
+        Meteor.call("addTicketNote", this.props.ticket._id, value);
       }
     }
     if(update){
@@ -137,9 +150,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   }
 
+  getActivities(){
+    return this.props.ticket.activities.sort((a,b)=>{
+      return b.createdAt-a.createdAt;
+    });
+  }
+
 
 	render() {
-    var activities = this.props.ticket.activities.reverse();
+    var activities = this.getActivities();//this.props.ticket.activities.reverse();
 		return (
       <div className="row">
         <div className="col s12">
@@ -257,8 +276,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       </tr>
                     </thead>
                     <tbody>
-                      {activities.map( (activity) =>{
-                        return <Activity key={activity.createdAt} activity={activity} />
+                      {activities.map( (activity, i) =>{
+                        return <Activity key={i} activity={activity} />
                       })}
                     </tbody>
                   </table>

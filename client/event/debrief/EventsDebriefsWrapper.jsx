@@ -25,6 +25,10 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
     this.state.subscription.debriefs.stop();
   }
 
+	componentDidUpdate(){
+		$('.tooltipped').tooltip({delay: 50});
+	}
+
 	seeMore(){
 		let num = this.state.num;
 		this.setState({num: num+10});
@@ -36,7 +40,7 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 			<ul>
 				{checkPermission("admin")&&
 				<li>
-					<a href="/events/debrief/edit"><i className="material-icons black-text">edit</i></a>
+					<a href="/events/debrief/edit" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set Default Questions"><i className="material-icons black-text">edit</i></a>
 				</li>}
 			</ul>
 		)

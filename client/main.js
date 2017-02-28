@@ -45,6 +45,10 @@ Accounts.onEnrollmentLink(function(token,done){
   FlowRouter.go("/signup/"+token);
 });
 
+Accounts.onResetPasswordLink(function(token, done){
+	FlowRouter.go("/forgotpassword/"+token);
+});
+
 if ($) {
   Vel = $.Velocity;
 }
