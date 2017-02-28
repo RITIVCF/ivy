@@ -59,7 +59,7 @@
 .select-dropdown {
   z-index: 10;
   > input {
-    background-color: #fff !important;
+    //background-color: #fff !important;
   }
 }
 
@@ -140,41 +140,54 @@
     font-size: 2em;
     color: #7c8081;
   }
-  .react-autosuggest__container {
-    position: relative;
-    margin: 0 0 20px 0;
-  }
   .react-autosuggest__suggestions-container {
-    box-sizing: border-box;
-    position: absolute;
-    top: 2.8em;
-    margin: 0;
-    margin-top: -3px;
-    padding: 0;
-    list-style-type: none;
-    border: 2px #1a3d6d solid;
-    color: #1a3d6d;
-    display: block;
-    text-decoration: none;
-    width: 100%;
-    outline: 0 !important;
-    border-radius: 0 !important;
+    //z-index: 2 !important;
     font-size: 1.5em !important;
-    background-color: #fff;
-    z-index: 2;
-    ul {
-      margin: 0;
-    }
   }
-  .react-autosuggest__input {
+
+}
+
+.react-autosuggest__container {
+  position: relative;
+  margin: 0 0 20px 0;
+}
+.react-autosuggest__suggestions-container {
+  box-sizing: border-box;
+  position: absolute;
+  top: 2.8em;
+  margin: 0;
+  //margin-top: 1px;
+  margin-top: 5px;
+  padding: 0;
+  list-style-type: none;
+  color: #1a3d6d;
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+  ul {
     margin: 0;
   }
-  .react-autosuggest__suggestion {
-    cursor: pointer;
-    padding: 0.5em 0.4em;
-  }
-  .react-autosuggest__suggestion--focused {
-    background-color: #1a3d6d;
-    color: #FCB816;
+}
+.react-autosuggest__input {
+  margin: 0 !important;
+}
+.react-autosuggest__suggestion {
+  cursor: pointer;
+  padding: 0.5em 0.4em;
+  font-weight: bold;
+}
+.react-autosuggest__suggestion--focused {
+  background-color: #eeeeee;
+  //background-color: #1a3d6d;
+//  color: #FCB816;
+}
+.react-autosuggest__container--open{
+  .react-autosuggest__suggestions-container {
+    //border: 1px #1a3d6d solid;
   }
 }

@@ -7,7 +7,7 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 
   }
 
-	
+
 
 	getPermissions(group){
 		if(group){
@@ -30,7 +30,7 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 
 		return (
 					<div className="row">
-						<div className="col md5">
+						<div className="col m5">
 							<p>Available Permissions</p>
 							<select
 								multiple
@@ -42,15 +42,16 @@ export default class GroupPermissionControl extends TrackerReact(React.Component
 								})}
 							</select>
 						</div>
-						<div className="col md2">
+						<div className="col m2">
+							<p>&nbsp;</p>
 							<div className="row">
-								<button onClick={this.add.bind(this)} className="btn">{"=>"}</button>
+								<button onClick={this.add.bind(this)} className="btn-flat">{"=>"}</button>
 							</div>
 							<div className="row">
-								<button onClick={this.remove.bind(this)} className="btn">{"<="}</button>
+								<button onClick={this.remove.bind(this)} className="btn-flat">{"<="}</button>
 							</div>
 						</div>
-						<div className="col md5">
+						<div className="col m5">
 							<p>{this.props.group.name+"'s"} Permissions</p>
 							<select
 								className="browser-default"

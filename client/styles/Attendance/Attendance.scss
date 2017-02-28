@@ -1,0 +1,52 @@
+// .ticket-closed {
+//   background-color: #dff0d8;
+// }
+//
+// .ticket-open {
+//   background-color: #f2dede;
+// }
+//
+// .ticket-pending {
+//   background-color: #fbf2c3;
+// }
+
+
+
+// .ticket-closed {
+//   //outline: #dff0d8 solid 1px;
+// }
+//
+// .ticket-open {
+//   //outline: #f2dede solid 1px;
+// }
+//
+// .ticket-pending {
+//   //outline: #fbf2c3 solid 1px;
+// }
+
+.ticket-closed {
+  background: green;
+//  background: repeating-linear-gradient(   45deg,   green,   green 10px,   #5fb15f 10px,  #5fb15f 20px );
+}
+
+.ticket-open {
+  background: red;
+//  background: repeating-linear-gradient(   45deg,   red,   red 10px,   #fb8888 10px,  #fb8888 20px );
+}
+
+.ticket-pending {
+  background: gold;
+//  background: repeating-linear-gradient(   45deg,   gold,   gold 10px,   #fbe364 10px,  #fbe364 20px );
+}
+
+.unassignedpending {
+  background: repeating-linear-gradient(   45deg,   gold,   gold 10px,   #fbe364 10px,  #fbe364 20px );
+}
+
+.unassignedclosed {
+  background: repeating-linear-gradient(   45deg,   green,   green 10px,   #5fb15f 10px,  #5fb15f 20px );
+}
+
+.unassignedopen {
+  background: repeating-linear-gradient(   45deg,   red,   red 10px,   #fb8888 10px,  #fb8888 20px );
+}

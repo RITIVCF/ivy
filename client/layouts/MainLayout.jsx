@@ -3,7 +3,8 @@ import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
 //import NavBar from './NavBar.jsx';
 import Header from './Header.jsx';
 import SideBar from './SideBar.jsx';
-import SideBarMobile from './SideBarMobile.jsx'
+import SideBarMobile from './SideBarMobile.jsx';
+import Footer from './Footer.jsx';
 
 
 // <nav className="navbar navbar-default nabar-cls-top" role="navigation" style={margin-bottom: "0"} >
@@ -20,8 +21,7 @@ export var MainLayout = ({header, content}) => (   // export const MainLayout
       	<main>
 					{content}
 				</main>
-				<footer>
-				</footer>
+				{/*}<Footer />*/}
 	</div>
 )
 
