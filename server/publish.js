@@ -553,7 +553,7 @@ Meteor.publish("MyTickets", function(){
 });
 
 Meteor.publish("allTicketStatus", function(){
-  return Tickets.find({},{fields:{status: 1}});
+  return Tickets.find({},{fields:{status: 1, assigneduser: 1}});
 });
 
 Meteor.publish("thisTicket", function(tid){

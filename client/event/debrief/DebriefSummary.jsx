@@ -48,11 +48,12 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 				{nobrief.length!=0&&
 					<div className="card">
 						<div className="card-content"  >
-							<span className="card-title">Needs Debriefing</span>
-							<a className="unselectable right"	onClick={this.showHide.bind(this)}>{this.state.show?"hide":"show"}</a>
+							<span className="card-title">Pending Debrief</span>
+							<a className="btn-flat right"	onClick={this.showHide.bind(this)}>
+								<i className="material-icons">{this.state.show?"expand_less":"expand_more"}</i></a>
 						</div>
 						{this.state.show&&
-						<table >
+						<table className="responsive-table">
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -69,10 +70,9 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 						</table>}
 					</div>
 				}
-				<div className="card">
-				</div>
-				<div className="card">
-					{/*Search tools: type filter, name search*/}
+
+				{/*}<div className="card">
+					{/*Search tools: type filter, name search
 					<div className="card-content">
 						<div className="row">
 							<div className="col s12 m6">
@@ -84,9 +84,20 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>*/}
 				<div className="card">
-					<table>
+					<div className="card-content">
+						<div className="row">
+							<div className="col s12 m6">
+
+							</div>
+							<div className="input-field col s12 m6">
+								<input type="text" id="search" onChange={this.handleSearchChange.bind(this)} />
+								<label htmlFor="search">Search Name</label>
+							</div>
+						</div>
+					</div>
+					<table className="responsive-table">
 						<thead>
 							<tr>
 								<th>Name</th>

@@ -10,6 +10,10 @@ export default class Attendee extends TrackerReact(React.Component) {
     return Contacts.findOne(this.props.contact._id);
   }*/
 
+  componentWillUnmount(){
+    $('.tooltipped').tooltip('remove');
+  }
+
   go(){
     if(!checkPermission("contacts")){
       return;
@@ -27,6 +31,11 @@ export default class Attendee extends TrackerReact(React.Component) {
     FlowRouter.go("/tickets/"+this.props.contact.ticket);
   }
 
+  getTicketAssignedUser(ticket){
+    var user = Meteor.users.findOne(ticket.assigneduser);
+    return user?user.name:"Not Assigned";
+  }
+
   render() {
     //console.log(this.props.contact);
     // This area needs styled, so however we need to do it to style
@@ -39,17 +48,33 @@ export default class Attendee extends TrackerReact(React.Component) {
     if(ticket){
       //console.log(ticket.status);
       if(ticket.status == "Closed"){
-        status = "success";
+        //status = "material-icons green-text";
+        status = "ticket-closed";
+        if(!ticket.assigneduser){
+          status += " unassignedclosed";
+        }
       }
       else if(ticket.status == "Pending"||ticket.status=="In Progress"){
-        status = "warning";
+        //status = "material-icons gold-text";
+        status = "ticket-pending";
+        if(!ticket.assigneduser){
+          status += " unassignedpending";
+        }
       }
       else {
-        status = "danger";
+        //status = "material-icons red-text";
+        status = "ticket-open";
+        if(!ticket.assigneduser){
+          status += " unassignedopen";
+        }
       }
     }
     return (
-      <tr onDoubleClick={this.go.bind(this)}  className={status}>
+      <tr onDoubleClick={this.go.bind(this)} >
+        {checkPermission("tickets") &&
+        <td style={{textAlign: "center"}} className={status}>
+          {/*!!ticket && <i className={status}>stop</i>*/}
+        </td>}
         <td>{this.props.contact.name}</td>
         <td>{this.props.contact.emails[0].address}</td>
         <td>{this.props.contact.phone}</td>
@@ -57,9 +82,9 @@ export default class Attendee extends TrackerReact(React.Component) {
         <td>{this.props.contact.more?"Yes":""}</td>
         <td>{this.props.contact.howhear?this.props.contact.howhear:""}</td>
         {checkPermission("tickets") ?
-        <td>{!!ticket ? 
-            this.props.contact.firsttime||(status!="success") ?
-            <a  className="btn flat" onClick={this.viewTicket.bind(this)}>View</a>
+        <td>{!!ticket ?
+            this.props.contact.firsttime||(ticket.status!="Closed") ?
+            <a  className="btn-flat tooltipped" data-position="left" data-delay="50" data-tooltip={this.getTicketAssignedUser(ticket)} onClick={this.viewTicket.bind(this)}>View</a>
             :""
           :""}</td>:""}
       </tr>

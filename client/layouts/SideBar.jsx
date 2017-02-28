@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
-
+import Footer from './Footer.jsx';
 
 export default class SideBar extends TrackerReact(React.Component) {
 	constructor(){
@@ -22,6 +22,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 			alignment: 'right',
 			beloworigin: true
 		});
+		$('.collapsible').collapsible();
 	}
 
 	componentDidUpdate(){
@@ -179,6 +180,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 					</a>
 				</li>
 		</ul>
+		<Footer />
 	</div>
 
 		)

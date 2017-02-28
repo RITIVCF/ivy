@@ -7,8 +7,8 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
     this.state = {
       subscription: {
-        Event: Meteor.subscribe("Event", props.eid),
-        Contacts: Meteor.subscribe("allContacts")
+        Event: Meteor.subscribe("Event", props.eid)/*,
+        Contacts: Meteor.subscribe("allContacts")*/
       },
       id: 1
     };
@@ -16,7 +16,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
   componentWillUnmount(){
     this.state.subscription.Event.stop();
-    this.state.subscription.Contacts.stop();
+    //this.state.subscription.Contacts.stop();
   }
 
   getEvent(){
@@ -33,9 +33,9 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     //let tempcontacts = this.getContacts();
     //let contacts = this.getContacts();
     //if(!tempcontacts){
-    if(!this.state.subscription.Contacts.ready()){
-      return(<div></div>)
-    }
+    // if(!this.state.subscription.Contacts.ready()){
+    //   return(<div></div>)
+    // }
     //tempcontacts.forEach(function(contact){
       //contacts.push({"name":contact.name+" "+contact.email,"value":contact._id});  for Select Search
     //});

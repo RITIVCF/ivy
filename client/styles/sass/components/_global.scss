@@ -345,9 +345,14 @@ ul.staggered-list li {
 
 // Footer
 footer.page-footer {
+  position: absolute;;
+  bottom: 60px;
+  left: 0px;
+  width: 240px;
   margin-top: 20px;
-  padding-top: 20px;
-  background-color: $footer-bg-color;
+  //padding-top: 20px;
+  background-color: #1a237e;
+  z-index: 999;
 
   .footer-copyright {
     overflow: hidden;
@@ -407,7 +412,7 @@ td, th{
   display: table-cell;
   text-align: left;
   vertical-align: middle;
-  border-radius: 2px;
+  //border-radius: 2px;  interrupted blue highlighting for selecting rows
 }
 
 // Responsive Table

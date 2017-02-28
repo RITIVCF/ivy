@@ -185,6 +185,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 				<table className={checkPermission("contacts")?"highlight":""}>
 					<thead>
 						<tr>
+							<th></th>
 							<th>Name</th>
 							<th>Email</th>
 							<th>Phone</th>

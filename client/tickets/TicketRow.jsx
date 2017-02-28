@@ -42,9 +42,33 @@ export default class TicketRow extends Component {
   }
 
   render() {
+    var status="";
+    let ticket = this.props.tkt;
+    if(ticket.status == "Closed"){
+      //status = "material-icons green-text";
+      status = "ticket-closed";
+      if(!ticket.assigneduser){
+        status += " unassignedclosed";
+      }
+    }
+    else if(ticket.status == "Pending"||ticket.status=="In Progress"){
+      //status = "material-icons gold-text";
+      status = "ticket-pending";
+      if(!ticket.assigneduser){
+        status += " unassignedpending";
+      }
+    }
+    else {
+      //status = "material-icons red-text";
+      status = "ticket-open";
+      if(!ticket.assigneduser){
+        status += " unassignedopen";
+      }
+    }
     return (
       <tr className={this.props.selected?"blue white-text":""}
         onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
+        <td className={status}></td>
         <td>{this.props.tkt.ticketnum}</td>
         <td>{this.props.tkt.subject}</td>
         <td>{this.getCust().name}</td>

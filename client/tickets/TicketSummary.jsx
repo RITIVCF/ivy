@@ -88,7 +88,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     }
     query.type = {$in: Session.get("tickettypefilter")};
     console.log(query);
-    return Tickets.find(query).fetch();
+    return Tickets.find(query, {sort: {ticketnum: 1}}).fetch();
   }
 
   getSelected(){
@@ -177,6 +177,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
             <table className="bordered highlight responsive-table">
               <thead>
                 <tr>
+                  <th></th>
                   <th>Ticket ID</th>
                   <th>Subject</th>
                   <th>Customer</th>

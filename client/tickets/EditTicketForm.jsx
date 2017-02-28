@@ -91,9 +91,22 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   updateStatus(){
     var update = true;
-    if(this.refs.status.value=="Closed"||this.refs.status.value=="Canceled"){
-      if(!window.confirm("Are you sure?")){
+    if(this.refs.status.value=="Cancelled"){
+      var value = window.prompt("Please give a reason for cancellation...");
+      console.log("Cancel value: ", value);
+      if(!value){
         update = false;
+      }
+      else{
+        Meteor.call("addTicketNote", this.props.ticket._id, value);
+      }
+    }
+    if(this.refs.status.value=="Closed"){
+      var value = window.prompt("Please provide closing remarks, why this ticket can be closed...");
+      if(!value){
+        update = false;
+      }else{
+        Meteor.call("addTicketNote", this.props.ticket._id, value);
       }
     }
     if(update){
@@ -137,9 +150,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   }
 
+  getActivities(){
+    return this.props.ticket.activities.sort((a,b)=>{
+      return b.createdAt-a.createdAt;
+    });
+  }
+
 
 	render() {
-    var activities = this.props.ticket.activities.reverse();
+    var activities = this.getActivities();//this.props.ticket.activities.reverse();
 		return (
       <div className="row">
         <div className="col s12">
@@ -221,7 +240,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     <select className="browser-default"
                       ref="status" value={this.state.status} onChange={this.updateStatus.bind(this)} >
                       {this.getStatuses().map( (type) =>{
-                        return <option key={type} value={type} >{type}</option>
+                        return <option key={type} value={type} className="circle">{type}</option>
                       })}
                     </select>
                   </div>
@@ -257,8 +276,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       </tr>
                     </thead>
                     <tbody>
-                      {activities.map( (activity) =>{
-                        return <Activity key={activity.createdAt} activity={activity} />
+                      {activities.map( (activity, i) =>{
+                        return <Activity key={i} activity={activity} />
                       })}
                     </tbody>
                   </table>
@@ -280,3 +299,18 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   )
 	}
 }
+
+/*
+<li class=""><span style="
+    flex: 1;
+" class="ticket-open"></span><span style="flex: 500;">Open</span>
+</li><li class=""><span style="
+    flex: 1;
+" class="ticket-pending"></span><span style="flex: 500;">Pending</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-pending"></span><span style="flex: 500;">In Progress</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-open"></span><span style="flex: 500;">Cancelled</span></li><li class=""><span style="
+    flex: 1;
+" class="ticket-closed"></span><span style="flex: 500;">Closed</span></li>
+*/

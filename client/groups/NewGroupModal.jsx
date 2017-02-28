@@ -148,26 +148,30 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
             </div>
           </div>
           <div className="row">
-            <div className="col s12">
+            <div className="col s12 m5">
               <p>Group Permissions</p>
-              <div className="col s12 m5">
-                <select multiple ref="availableperms" className="browser-default">
-                  {this.getAvailablePerms().map((perm)=>{
-                    return <option key={perm._id} value={perm._id}>{perm.pagename}</option>
-                  })}
-                </select>
+              <select multiple ref="availableperms" className="browser-default">
+                {this.getAvailablePerms().map((perm)=>{
+                  return <option key={perm._id} value={perm._id}>{perm.pagename}</option>
+                })}
+              </select>
+            </div>
+            <div className="col s12 m2">
+              <p>&nbsp;</p>
+              <div className="row">
+                <a className="btn-flat" onClick={this.addPerm.bind(this)}>{"=>"}</a>
               </div>
-              <div className="col s12 m1">
-                <a className="btn" onClick={this.addPerm.bind(this)}>=></a>
-                <a className="btn" onClick={this.removePerm.bind(this)}>{"<="}</a>
+              <div className="row">
+                <a className="btn-flat" onClick={this.removePerm.bind(this)}>{"<="}</a>
               </div>
-              <div className="col s12 m5">
-                <select multiple ref="groupperms" className="browser-default">
-                  {this.getGroupPerms().map((perm)=>{
-                    return <option key={perm._id} value={perm._id}>{perm.pagename}</option>
-                  })}
-                </select>
-              </div>
+            </div>
+            <div className="col s12 m5">
+              <p>New Group Permissions</p>
+              <select multiple ref="groupperms" className="browser-default">
+                {this.getGroupPerms().map((perm)=>{
+                  return <option key={perm._id} value={perm._id}>{perm.pagename}</option>
+                })}
+              </select>
             </div>
           </div>
           {(this.props.type=="Small Group"||this.props.type=="Team")&&
