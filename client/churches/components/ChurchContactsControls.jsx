@@ -60,12 +60,13 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
   	}*/
     return(
       <div>
-        <h4>Church Contacts</h4>
-        <p>Choose a name from the list to add person</p>
+        {/*}<h4>Church Contacts</h4>
+      <p>Choose a name from the list to add person</p>*/}
         <SelectUser
           parent={this}
           unset={this.unset.bind(this)}
           initialValue={""}
+          label="Add Contact"
           updateUser={this.addContact.bind(this)}
           ref="contact"  />
         <div className="card">

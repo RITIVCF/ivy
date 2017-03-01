@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ButtonActive from './components/ButtonActive.jsx';
-import ChurchWorkspace from './ChurchesWorkspace.jsx';
+import ChurchesWorkspace from './ChurchesWorkspace.jsx';
 
 export default class ChurchSingle extends Component {
   constructor() {
@@ -10,9 +10,14 @@ export default class ChurchSingle extends Component {
     // };
   }
 
-  edit(event){
+  select(event){
     event.stopPropagation();
     Session.set("chselected",this.props.church._id);
+  }
+
+  edit(event){
+    event.stopPropagation();
+    this.refs.modal.open();
   }
 
   render() {
@@ -26,7 +31,8 @@ export default class ChurchSingle extends Component {
                         this.props.church.active?
                         "card left"
                         :"card grey left"}
-          onClick={this.edit.bind(this)}>
+          onClick={this.select.bind(this)} onDoubleClick={this.edit.bind(this)} >
+
           <div className="card-image">
             <img
               src={"/images/defaultChurch.png"} style={{width: "100%"}} />
@@ -36,6 +42,7 @@ export default class ChurchSingle extends Component {
             {/*}<p className="truncate">{this.props.church.url}</p>*/}
           </div>
         </div>
+        <ChurchesWorkspace ch={this.props.church} ref="modal" />
       </div>
     )
   }

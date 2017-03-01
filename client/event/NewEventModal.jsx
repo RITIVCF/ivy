@@ -78,6 +78,7 @@ export default class NewEventModal extends TrackerReact(React.Component) {
             className={this.state.createdisabled?"modal-action modal-close waves-effect waves-green btn-flat disabled":
               "modal-action modal-close waves-effect waves-green btn-flat"}>Edit Event
           </a>
+          <a className="modal-action modal-close waves-effect waves-light btn-flat" >Cancel</a>
         </div>
       </div>
     )

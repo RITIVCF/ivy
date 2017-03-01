@@ -13,57 +13,50 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
     super();
 
     this.state = {
-      subscription: {
-        Churches: Meteor.subscribe("allChurches"),
-				contacts: Meteor.subscribe("allContacts")
-      },
+
 			contact: false
     };
   }
 
   componentWillUnmount() {
-    this.state.subscription.Churches.stop();
-		this.state.subscription.contacts.stop();
+
   }
 
+	componentDidMount(){
+		$('.modal').modal();
+	}
 
-	getChurch(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
-		return Churches.findOne(this.props.cid);
+	open(){
+		$("#"+this.props.ch._id).appendTo("body").modal("open");
+	}
+
+	preventPropo(event){
+		event.stopPropagation();
 	}
 
 	render() {
 		let ch = this.props.ch; //this.getChurch();
 
-		if(!ch){
-			return (
-				<h5>Churches</h5>);
-		}
-
 		return (
-		<div>
-			<div className="row">
-				<h5>{ch.name}</h5>
-				<div className="col s12 m6 l6">
-					<ButtonActive ch={ch} />
+		<div id={ch._id} className="modal modal-fixed-footer" onClick={this.preventPropo.bind(this)}>
+			<div className="modal-content">
+				<div className="row">
+					<ChurchName ch={ch}  />
 				</div>
-				<div className="col s12 m4 l3">
-					<ButtonDelete ch={ch} />
+				<div className="row">
+					<ChurchURL ch={ch} />
 				</div>
+
+
+				<ChurchTimes ch={ch} />
+				<ChurchContactsControls ch={ch} />
+			</div>
+			<div className="modal-footer">
+				<a className="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
+				<ButtonActive ch={ch} />
+				<ButtonDelete ch={ch} />
 			</div>
 
-
-			<div className="row">
-				<ChurchName ch={ch} />
-			</div>
-			<div className="row">
-				<ChurchURL ch={ch} />
-			</div>
-
-
-			<ChurchTimes ch={ch} />
-			<ChurchContactsControls ch={ch} />
 		</div>
 		)
 	}
