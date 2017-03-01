@@ -42,7 +42,7 @@ export default class ChurchesPreview extends TrackerReact(React.Component) {
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >URL:</p>
-					<a href={"http://"+ch.url}>{ch.url}</a>
+					<a href={"http://"+ch.url}  target="_blank">{ch.url}</a>
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >Times:</p>
