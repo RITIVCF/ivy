@@ -48,7 +48,7 @@ export default class NewChurchModal extends TrackerReact(React.Component) {
             </div>
           </div>
           <div className="modal-footer">
-            <a type="submit" disabled={this.state.disabled} className="modal-action modal-close waves-effect waves-light btn-flat">Create</a>
+            <button type="submit" disabled={this.state.disabled} className="modal-action modal-close waves-effect waves-light btn-flat">Create</button>
             <a className="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
           </div>
         </form>
