@@ -12,38 +12,13 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
   }
 
-  createNew(event){
-    event.preventDefault();
-    //console.log(event);
-    //console.log(this);
-    //creates a new event and opens event details in event workspace
-    //console.log("This button creates a new church");
-    /*Meteor.call('addBlankChurch', function(error, result){
-      if(error){
-        console.log(error.reason);
-        return;
-      }
-      console.log("Church ID: " + result);
-      console.log(this);
-      location.assign("/churches/workspace/"+result);
-      //this.Session.set("eventId",result);
-      //location.assign("/events");
-
-      //this.props.parent.state.eventId = result;
-      //setID(result);
-    });
-    */
-    Meteor.call('addChurch', this.refs.name.value);
-    this.refs.name.value="";
-  }
-
 
   churches(){
-    // pulls upcoming, published events
-    return Churches.find({},{sort: {active: -1}}).fetch();
+    return Churches.find({active: true},{sort: {active: -1}}).fetch();
   }
 
   oldchurches(){
+    console.log("All inactive churches", Churches.find({active: false}).fetch());
     return Churches.find({active: false}).fetch();
   }
 
@@ -53,20 +28,19 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
 
 	render() {
+    let active = this.churches();
+    let inactive = this.oldchurches();
 		return (
       <div className="row"  onClick={this.unselect.bind(this)}>
         <div className="col s12">
-          <div className="card">
-            <div className="card-content">
-              <form onSubmit={this.createNew.bind(this)}>
-                <label htmlFor="icon_prefix">New Church Name</label>
-                  <input ref="name"  type="text" />
-              </form>
-            </div>
-          </div>
-          
           <div className="row">
-            {this.churches().map( (church)=>{
+            {active.map( (church)=>{
+                return <ChurchSingle key={church._id} church={church} selected={Session.get("chselected")==church._id} parent={this} />
+            })}
+          </div>
+          {inactive.length>0&&<div className="divider"></div>}
+          <div className="row">
+            {inactive.map( (church)=>{
                 return <ChurchSingle key={church._id} church={church} selected={Session.get("chselected")==church._id} parent={this} />
             })}
           </div>

@@ -185,7 +185,7 @@ Meteor.publish("MySG", function(){
 });
 
 Meteor.publish("allChurches", function(){
-  return Churches.find();
+  return Churches.find({deleted: false});
 });
 
 Meteor.publish("activeChurches", function(){

@@ -1,12 +1,16 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import ChurchesSummary from './ChurchesSummary.jsx';
-import ChurchWorkspace from './ChurchesWorkspace.jsx';
 import InfoBar from '../InfoBar.jsx';
 import SubHeader from '../layouts/SubHeader.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
 import MainBox from '../MainBox.jsx';
+
+import ChurchesSummary from './ChurchesSummary.jsx';
+import ChurchWorkspace from './ChurchesWorkspace.jsx';
+import NewChurchModal from './NewChurchModal.jsx';
+import ChurchPreview from './ChurchPreview.jsx';
+
 
 // Instead of event "types" it needs to be event "tags"
 //Events = new Mongo.Collection("events");
@@ -36,17 +40,20 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
     Meteor.call("toggleChurchesInfoBar");
   }
 
-  getSubHeader(){
-    return <ul className="right">
-      {/*Meteor.user().preferences.churches_view=="Tile"?
-        <li className="active" onClick={this.toggleView.bind(this)} ><a className="waves-effect waves-light">
-          <i className="material-icons black-text">view_module</i></a></li>
-        :<li className="active" onClick={this.toggleView.bind(this)}><a className="waves-effect waves-light">
-        <i  className="material-icons black-text">view_list</i></a></li>*/}
+  openNew(){
+    this.refs.modal.open();
+  }
 
+  getSubHeader(){
+    var left = <ul className="left" key={1} >
+      <li onClick={this.openNew.bind(this)}><a>
+        <i className="material-icons black-text">add</i></a></li>
+    </ul>;
+    var right = <ul className="right" key={2} >
       <li onClick={this.toggleInfoBar.bind(this)}><a>
         <i className="material-icons black-text">{Meteor.user().preferences.churches_infobar?"info":"info_outline"}</i></a></li>
     </ul>
+    return [left,right]
   }
 
 
@@ -60,10 +67,11 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
 		}
 		return (
       <MainBox
-        content={<ChurchesSummary />}
+        content={[<ChurchesSummary key={1} />,
+          <NewChurchModal ref="modal" key={2} />]}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.churches_infobar}
-        infobar={<ChurchWorkspace ch={Churches.findOne(Session.get("chselected"))} />}
+        infobar={<ChurchPreview ch={Churches.findOne(Session.get("chselected"))} />}
         />
   )
 	}
