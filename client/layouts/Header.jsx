@@ -25,6 +25,11 @@ export default class Header extends TrackerReact(React.Component) {
 		$('.collapsible').collapsible();
 	}
 
+	goBack(){
+		console.log("Going back");
+		window.history.back(); 
+	}
+
 	getContact(){
 		//console.log(Meteor.user());
 
@@ -44,6 +49,9 @@ export default class Header extends TrackerReact(React.Component) {
 			<header>
 				<nav className="z-depth-1">
 					<div className="nav-wrapper row indigo darken-4">
+						<ul className="left">
+							<li><a onClick={this.goBack.bind(this)}><i className="material-icons">arrow_back</i></a></li>
+						</ul>
 						<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
 						<a href="/" className="brand-logo">{/*Ivy &nbsp; |&nbsp; */}{this.props.header}</a>
 						<ul className="right hide-on-med-and-down">

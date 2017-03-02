@@ -32,6 +32,9 @@ export default class Attendee extends TrackerReact(React.Component) {
   }
 
   getTicketAssignedUser(ticket){
+    if(Meteor.userId()==ticket.assigneduser){
+      return "Me";
+    }
     var user = Meteor.users.findOne(ticket.assigneduser);
     return user?user.name:"Not Assigned";
   }
@@ -84,7 +87,7 @@ export default class Attendee extends TrackerReact(React.Component) {
         {checkPermission("tickets") ?
         <td>{!!ticket ?
             this.props.contact.firsttime||(ticket.status!="Closed") ?
-            <a  className="btn-flat tooltipped" data-position="left" data-delay="50" data-tooltip={this.getTicketAssignedUser(ticket)} onClick={this.viewTicket.bind(this)}>View</a>
+            <a  className={ticket.assigneduser==Meteor.userId()?"btn tooltipped":"btn-flat tooltipped"} data-position="left" data-delay="50" data-tooltip={this.getTicketAssignedUser(ticket)} onClick={this.viewTicket.bind(this)}>View</a>
             :""
           :""}</td>:""}
       </tr>

@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {Tracker} from 'meteor/tracker';
 import ContactProfile from './ContactProfile.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
-
+import NoPerm from '../NoPerm.jsx';
 
 
 export default class ContactProfileWrapper extends TrackerReact(React.Component) {
@@ -96,12 +96,12 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 			return(<LoaderCircle />)
 		}
 		if(!checkPermission("contacts")){
-			return <div>Sorry. It looks like you don't have permission to view this page. Please check with your leadership team to get access.</div>
+			return <NoPerm />
 		}
 
 		return (
 		<div className="container" >
-			<ContactProfile cid={this.props.cid} parent={this} subscriptions={this.state.subscription} />
+			<ContactProfile cid={this.props.cid} parent={this} subscriptions={this.state.subscription} modal={true} />
 		</div>
 		)
 	}

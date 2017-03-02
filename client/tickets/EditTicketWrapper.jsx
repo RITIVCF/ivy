@@ -53,8 +53,14 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
         document.title="Ivy - "+ ticket.subject;
     }
 		return (
-      <div>
-        {ticket ? <EditTicketForm ref="ticketform" ticket={ticket} /> : <div></div>}
+      <div className="row">
+        <div className="col s12">
+        <div className="card">
+          <div className="card-content">
+            {ticket ? <EditTicketForm ref="ticketform" ticket={ticket} modal={true} /> : <div></div>}
+          </div>
+        </div>
+        </div>
       </div>
   )
 	}

@@ -25,8 +25,8 @@ checkPermission = function(){
 	// 	return true;
 	// }
 	var ids = [];
-	console.log(arguments);
-	console.log(arguments[0]);
+	//console.log(arguments);
+	//console.log(arguments[0]);
 	for (i = 0; i < arguments.length; i++) {
   	ids.push(arguments[i]);
   }
