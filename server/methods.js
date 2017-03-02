@@ -15,7 +15,7 @@ Meteor.methods({
     this.unblock();
 
     Email.send({
-      to: contact.email[0].address,
+      to: contact.emails[0].address,
       from: "Ivy Information System",
       subject: "New Event Service Request: " + event.name + " - " +pos,
       text: "<p>Dear "+ contact.name + "</p><p>You have been requested to serve in the position of "
@@ -64,7 +64,7 @@ Meteor.methods({
     var ticket = Tickets.findOne(tid);
     var contact = Meteor.users.findOne(uid);
     Email.send({
-      to: contact.email[0].address,
+      to: contact.emails[0].address,
       from: "Ivy Information System",
       subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
       html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
