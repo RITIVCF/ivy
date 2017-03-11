@@ -63,8 +63,9 @@ export default class SideBar extends TrackerReact(React.Component) {
 
 
 	render(){
-		return(<div className="hide-scroll z-depth-1">
-		<ul className="side-nav z-depth-1 fixed" >
+		return(
+		<div className="hide-scroll z-depth-1 hide-on-med-and-down">
+		<ul id="side-nav" className="side-nav z-depth-1 fixed" >
 					<li className={FlowRouter.current().path=="/"?"active":""}>
 						<a href="/" className="waves-effect collapsible-header">
 							<span className="nav-icon">
