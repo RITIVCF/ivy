@@ -10,12 +10,12 @@ import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
 //Contacts = new Mongo.Collection('contacts');
 
 export default class EmailWorkspaceWrapper extends TrackerReact(React.Component){
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       subscription: {
-        email: Meteor.subscribe("myEmails")
+        email: Meteor.subscribe("oneEmail", props.emid)
       }
     };
 
@@ -49,7 +49,7 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
     return (
       <MainBox
-        content={<EmailContainer />}
+        content={<EmailContainer emid={this.props.emid} />}
         subheader={this.getSubHeader()}
         showinfobar={true}
         infobar={<EmailWorkspacePanel />}

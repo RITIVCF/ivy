@@ -589,6 +589,9 @@ Meteor.publish("myEmails", function(){
   return Emails.find({$or:[{uid: this.userId},{isTemplate: true}]});
 });
 
+Meteor.publish("oneEmail", function(emid) {
+  return Emails.find({_id: emid});
+});
 //***************************************
 
 // *******    Debrief   ************
