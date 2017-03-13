@@ -18,38 +18,48 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		$(".dropdown-button").dropdown();
+		//$(".dropdown-button").dropdown();
 		$("#nav-mobile").appendTo('body');
 		$(".button-collapse").sideNav({
 			draggable: true,
 			closeOnClick: true
 		});
-	}
-
-	componentDidUpdate(){
-		$(".dropdown-button").dropdown();
 		$('.collapsible').collapsible();
 	}
 
-	getContact(){
-		return Meteor.user()?Meteor.user().name:"";
+	componentDidUpdate(){
+		//$(".dropdown-button").dropdown();
+		$('.collapsible').collapsible();
+	}
+
+	getUserName(){
+		return Meteor.user()&&Meteor.user().name;
+	}
+
+	getUserEmail(){
+		return Meteor.user()&&Meteor.user().emails[0].address;
+	}
+
+	goToProfile(){
+		FlowRouter.go("/profile");
 	}
 
 	render(){
 		return(
 
 		<ul id="nav-mobile" className="side-nav">
-			<li>
-				<div className="userView">
+			<li onClick={this.goToProfile.bind(this)}>
+				<div className="userView" style={{padding:"16px 16px 0"}}>
 		      <div className="background">
 		        <img src="images/defaultEvent.png" />
 		      </div>
-		      <a href="#!user"><img className="circle" src="images/defaultPic.png" /></a>
-		      <a href="#!name"><span className="white-text name">{this.getContact()}</span></a>
+		      <a href="/profile"><img className="circle" src="images/defaultPic.png" /></a>
+		      <a href="/profile"><span className="white-text name">{this.getUserName()}</span></a>
+					<a href="/profile"><span className="white-text email">{this.getUserEmail()}</span></a>
 		    </div>
 			</li>
 			<li className={FlowRouter.current().path=="/"?"active":""}>
-						<a href="/" className="waves-effect collapsible-header">
+						<a href="/" className="waves-effect">
 							<span className="nav-icon">
 								<i className="material-icons">dashboard</i>
 							</span>
@@ -58,7 +68,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 					</li>
 					{/*Groups.find({$or:[{leader: Meteor.userId()},{users: Meteor.userId()}], type:"Small Group"}).fetch().length>0&&
 					<li className={FlowRouter.current().path=="/mysg"?"active":""}>
-						<a href="/mysg" className="waves-effect collapsible-header">
+						<a href="/mysg" className="waves-effect">
 							<span className="nav-icon">
 								<i className="material-icons">forum</i>
 							</span>
@@ -67,7 +77,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 					</li>*/}
 					{/*checkPermission("events")?*/}
 						<li className={FlowRouter.current().path.substring(0,7)=="/events"?"active":""}>
-							<a className="waves-effect collapsible-header" href="/events">
+							<a className="waves-effect" href="/events">
 								<span className="nav-icon">
 									<i className="material-icons">today</i>
 								</span>
@@ -76,7 +86,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 						</li>{/*}:""*/}
 					{checkPermission("tickets")?
 						<li className={FlowRouter.current().path.substring(0,8)=="/tickets"?"active":""}>
-							<a className="waves-effect collapsible-header" href="/tickets">
+							<a className="waves-effect" href="/tickets">
 								<span className="nav-icon">
 									<i className="material-icons">receipt</i>
 								</span>
@@ -85,7 +95,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 						</li>:""}
 						{checkPermission("emails")&&
 							<li className={FlowRouter.current().path.substring(0,7)=="/emails"&&"active"}>
-								<a className="waves-effect collapsible-header" href="/emails">
+								<a className="waves-effect" href="/emails">
 									<span className="nav-icon">
 										<i className="material-icons">email</i>
 									</span>
@@ -94,7 +104,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 							</li>}
 					{checkPermission("contacts")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/people"?"active":""}>
-							<a className="waves-effect collapsible-header" href="/people">
+							<a className="waves-effect" href="/people">
 								<span className="nav-icon">
 									<i className="material-icons">supervisor_account</i>
 								</span>
@@ -103,7 +113,7 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 						</li>:""}
 					{checkPermission("churches")?
 						<li className={FlowRouter.current().path.substring(0,9)=="/churches"?"active":""}>
-							<a className="waves-effect collapsible-header" href="/churches">
+							<a className="waves-effect" href="/churches">
 								<span className="nav-icon">
 									<i className="material-icons">store</i>
 								</span>
@@ -156,6 +166,12 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 				</ul>
 			</li>
 		}
+		<li>
+			<a href="/changepassword">Change Password</a>
+		</li>
+		<li>
+			<SignInButtonWrapper />
+		</li>
 		</ul>
 
 		)

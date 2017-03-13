@@ -33,6 +33,7 @@ export default class Debrief extends TrackerReact(React.Component) {
       height: 300,
 			elementpath: false,
 			menubar: false,
+			browser_spellcheck: true,
       toolbar: false
 
   	});
