@@ -18,18 +18,18 @@ export default class SideBar extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		$(".dropdown-button").dropdown({
-			alignment: 'right',
-			beloworigin: true
-		});
+		// $(".dropdown-button").dropdown({
+		// 	alignment: 'right',
+		// 	beloworigin: true
+		// });
 		$('.collapsible').collapsible();
 	}
 
 	componentDidUpdate(){
-		$(".dropdown-button").dropdown({
-			alignment: 'right',
-			belowOrigin: true
-		});
+		// $(".dropdown-button").dropdown({
+		// 	alignment: 'right',
+		// 	belowOrigin: true
+		// });
 		$('.collapsible').collapsible();
 	}
 

@@ -17,12 +17,21 @@ export default class Header extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		$(".dropdown-button").dropdown();
+		$("#userprofilebutton").dropdown();
+		$("#userprofilebuttonmobile").dropdown({
+			constrainWidth: false,
+			alignment: "right"
+		});
+
 	}
 
 	componentDidUpdate(){
-		$(".dropdown-button").dropdown();
-		$('.collapsible').collapsible();
+		// $("#userprofilebutton").dropdown();
+		// $("#userprofilebuttonmobile").dropdown({
+		// 	constrainWidth: false,
+		// 	alignLeft: false
+		// });
+
 	}
 
 	getContact(){
@@ -47,10 +56,13 @@ export default class Header extends TrackerReact(React.Component) {
 						<a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
 						<a href="/" className="brand-logo">{/*Ivy &nbsp; |&nbsp; */}{this.props.header}</a>
 						<ul className="right hide-on-med-and-down">
-						{/*}<li><a href="#!"><i className="material-icons">search</i></a></li>*/}
-							<li><a href="mobile.html"></a></li>
-						<li><a className="dropdown-button" data-activates="userdrop">{this.getContact()}<i className="material-icons right">more_vert</i></a></li>
-					</ul>
+							{/*}<li><a href="#!"><i className="material-icons">search</i></a></li>*/}
+								<li><a href="mobile.html"></a></li>
+							<li><a id="userprofilebutton" className="dropdown-button" data-activates="userdrop">{this.getContact()}<i className="material-icons right">more_vert</i></a></li>
+						</ul>
+						{/*}<ul className="right hide-on-large-only">
+							<li><a id="userprofilebuttonmobile" className="dropdown-button" data-activates="userdropmobile"><i className="material-icons right">account_box</i></a></li>
+						</ul>*/}
 					</div>
 					<ul id="userdrop" className="dropdown-content">
 						<li>
@@ -63,6 +75,17 @@ export default class Header extends TrackerReact(React.Component) {
 							<SignInButtonWrapper />
 						</li>
 					</ul>
+					{/*}<ul id="userdropmobile" className="dropdown-content">
+						<li>
+							<a href="/profile">My Profile</a>
+						</li>
+						<li>
+							<a href="/changepassword">Change Password</a>
+						</li>
+						<li>
+							<SignInButtonWrapper />
+						</li>
+					</ul>*/}
 				</nav>
 			</header>
 

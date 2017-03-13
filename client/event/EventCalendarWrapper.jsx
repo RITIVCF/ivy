@@ -28,6 +28,10 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     this.state.subscription.UnpublishedEvents.stop();
   }
 
+  componentDidUpdate(){
+    $(".dropdown-button").dropdown();
+  }
+
   openHelp(){
       this.refs.eventhelp.open();
       //$("#helpmodal").modal("open");
@@ -73,7 +77,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
       </ul>
       <ul className="right">
         <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>
-      <li><a className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
+      <li><a id="eventdropdownbutton" className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
       {view=="month" ? <i className="material-icons black-text">today</i> :
         view=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
         view=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }

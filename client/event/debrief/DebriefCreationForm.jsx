@@ -25,6 +25,7 @@ export default class DebriefCreationForm extends TrackerReact(React.Component) {
       toolbar: [ ' paste copy cut | fontselect fontsizeselect',
         'undo redo | styleselect | bold italic underline strikethrough subscript superscript'+
         ' | bullist numlist | alignleft aligncenter alignright alignjustify | indent outdent | link | removeformat'],
+			browser_spellcheck: true,
 			setup : function(editor) {
         //console.log("State in Setup: ",state);
         //editor.setContent(state.notes);

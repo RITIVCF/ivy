@@ -45,6 +45,15 @@
     line-height: $sidenav-item-height;
 
     &.active { /*background-color: rgba(0,0,0,.05);*/ }
+    i {
+      width: 2rem;
+      font-size: 1.6rem;
+      line-height: inherit;
+      display: block;
+      float: left;
+      text-align: center;
+      margin-right: 1rem;
+    }
 
     // this changes the color to the
     // IV gold color
@@ -89,6 +98,7 @@
     width: $sidenav-item-height / 2;
     color: rgba(0,0,0,.54);
   }
+
 
   .divider {
     margin: ($sidenav-padding / 2) 0 0 0;
