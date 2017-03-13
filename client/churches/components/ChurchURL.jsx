@@ -3,6 +3,10 @@ import React, {Component} from 'react';
 
 
 export default class ChurchURL extends Component {
+
+  componentDidMount(){
+    Materialize.updateTextFields();
+  }
   updateURL(event){
 		event.preventDefault();
 		Meteor.call("updateChurchURL", this.props.ch._id, this.refs.url.value);
@@ -16,14 +20,14 @@ export default class ChurchURL extends Component {
 
   render(){
     return(
-      <div className="form-group">
-        <label>URL</label>
+      <div className="input-field">
         <input type="text"
           ref="url"
-          className="form-control"
-          value={this.props.ch.url}
+          id="url"
+          defaultValue={this.props.ch.url}
           onBlur={this.updateURL.bind(this)}
           onChange={this.handleURLChange} />
+        <label htmlFor="url" >URL</label>
       </div>
     )
   }

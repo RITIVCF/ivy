@@ -1,11 +1,11 @@
-ul.side-nav {
+ul#side-nav {
   width: 270px;
   height: 100%;
-  padding-top: 64px;
+  position: relative !important;
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-top: 64px;
   padding-bottom: 100px;
-  position: relative !important;
 }
 
 .hide-scroll {

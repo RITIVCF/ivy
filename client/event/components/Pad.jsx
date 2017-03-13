@@ -31,6 +31,7 @@ export default class Pad extends Component {
     // console.log(this);
     tinymce.init({
 			//selector: "#mytextarea",
+
       selector: "#"+this.props.pad.name.replace(" ","")+"pad",
       theme: "modern",
       height: 300,
@@ -40,6 +41,7 @@ export default class Pad extends Component {
       toolbar: [ ' paste copy cut | fontselect fontsizeselect',
         'undo redo | styleselect | bold italic underline strikethrough subscript superscript'+
         ' | bullist numlist | alignleft aligncenter alignright alignjustify | indent outdent | link | removeformat'],
+      browser_spellcheck: true,
 			setup : function(editor) {
         editor.on('change', function(e) {
             //console.log(tinymce.activeEditor);

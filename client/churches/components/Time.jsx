@@ -94,7 +94,7 @@ export default class Time extends Component {
           <button onClick={this.closeedit.bind(this)}>Save</button>
           <button onClick={this.close.bind(this)}>Close</button></span>
           :<i onClick={this.remove.bind(this)}
-             className="material-icons">close</i>}</td>
+             className="material-icons right">close</i>}</td>
 
 
 

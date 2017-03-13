@@ -202,7 +202,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                     select={this.select.bind(this)} parent={this}/>
                 }):
                 <div className="card">
-                    <table className="bordered highlight" >
+                    <table className="bordered highlight responsive-table" >
                       <thead>
                         <tr>
                           <th>Name</th>

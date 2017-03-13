@@ -12,28 +12,24 @@ export default class ButtonActive extends Component {
 	}
 
   render(){
-    return(
-      <div>
-      {this.props.ch.active ?
-        <button
-          onClick={this.toggleActiveChurch.bind(this)}
-          type="button"
-          ref="togglePublish"
-          className="waves-effect waves-light btn"
-          value={true} >
-          Retire
-        </button>
-        :
-        <button
-          ref="togglePublish"
-          type="button"
-          onClick={this.toggleActiveChurch.bind(this)}
-          className="waves-effect waves-light btn"
-          value={false} >
-          Activate
-        </button>
-      }
-    </div>
-    )
+    if(this.props.ch.active){
+      return (<a
+        onClick={this.toggleActiveChurch.bind(this)}
+        type="button"
+        ref="togglePublish"
+        className="waves-effect waves-light btn-flat"
+        value={true} >
+        Retire
+      </a>)
+    }else{
+      return(<a
+        ref="togglePublish"
+        type="button"
+        onClick={this.toggleActiveChurch.bind(this)}
+        className="waves-effect waves-light btn"
+        value={false} >
+        Activate
+      </a>)
+    }
   }
 }

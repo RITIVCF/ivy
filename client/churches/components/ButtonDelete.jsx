@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class ButtonDelete extends Component {
   deleteChurch(event){
     event.preventDefault();
-    var result = window.confirm("Are you sure you want to delete church? *This action cannot be undone.*");
+    var result = window.confirm("Are you sure you want to delete church?");
     if(result == true){
       //console.log("you clicked 'yes'.");
       $("#"+this.props.ch._id).modal('close');
@@ -17,7 +17,7 @@ export default class ButtonDelete extends Component {
 
   render(){
     return (
-      <button className="waves-effect waves-light btn red" onClick={this.deleteChurch.bind(this)}>Delete</button>
+      <a className="modal-action modal-close waves-effect waves-light btn red" onClick={this.deleteChurch.bind(this)}>Delete</a>
     )
   }
 }

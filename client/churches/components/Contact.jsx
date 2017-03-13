@@ -13,7 +13,7 @@ export default class Contact extends Component {
       <tr>
         <td>{contact.name}</td>
         <td>{contact.emails[0].address}</td>
-        <td><i className="material-icons">close</i></td>
+        <td><i className="material-icons right">close</i></td>
       </tr>
     )
     // return(
