@@ -3,7 +3,7 @@ SyncedCron.add({
   name: 'CalculateFunnel',
   schedule: function(parser) {
     // parser is a later.parse object
-    return parser.recur().on("23:59:59").time();
+    return parser.recur().on("04:00:00").time();
   },
   job: function() {
     var result = Meteor.users.aggregate([
@@ -18,7 +18,7 @@ SyncedCron.add({
     FunnelHistory.insert(rst);
   }
 });
-SyncedCron.add({
+/*SyncedCron.add({
   name: 'BackupContactsAttendance',
   schedule: function(parser) {
     // parser is a later.parse object
@@ -28,7 +28,7 @@ SyncedCron.add({
     ContactsBackup.insert({contacts:Meteor.users.find().fetch(), timestamp: new Date()});
     EventsAttendanceBackup.insert({events: Events.find({},{name: 1, start: 1, attendees: 1}).fetch(), timestamp: new Date()});
   }
-});
+});*/
 
 function testThis(){
   console.log("Testing");
@@ -59,7 +59,7 @@ SyncedCron.add({
   name: 'updateFunnel',
   schedule: function(parser) {
     // parser is a later.parse object
-    return parser.recur().on("00:02:00").time();
+    return parser.recur().on("03:55:00").time();
   },
   job: function() {
     var intervl = 7; //In days
