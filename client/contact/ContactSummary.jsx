@@ -197,6 +197,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
                 <div className="row" id="scrollbox">
                 {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
+                  contact = new Contact(contact);
                   return <ContactSingle key={contact._id} row={false} contact={contact}
                     selected={Session.get("conselected")==contact._id} perm={perm}
                     select={this.select.bind(this)} parent={this}/>
@@ -214,6 +215,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       </thead>
                       <tbody>
                         {this.contacts().map( (contact)=>{
+                          contact = new Contact(contact);
                           return <ContactSingle key={contact._id} row={true} contact={contact}
                             selected={Session.get("conselected")==contact._id} perm={perm}
                             select={this.select.bind(this)} parent={this}/>

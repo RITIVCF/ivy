@@ -1,3 +1,4 @@
+//console.log(new Contact(Meteor.users.findOne(this.userId)));
 SyncedCron.start();
 SyncedCron.add({
   name: 'CalculateFunnel',

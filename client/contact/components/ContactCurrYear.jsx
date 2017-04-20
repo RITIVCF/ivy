@@ -13,7 +13,7 @@ export default class ContactCurrYear extends TrackerReact(React.Component) {
 		event.preventDefault();
     this.setState({value: event.target.value});
     //console.log(event.target.value);
-    Meteor.call("updateCurrYear", this.props.contact._id, event.target.value);
+    this.props.contact.setCurrentYearLevel(event.target.value.trim());
 	}
 
 

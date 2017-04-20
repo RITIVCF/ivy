@@ -10,15 +10,15 @@ Meteor.methods({
       Accounts.sendResetPasswordEmail(uid);
   },
   sendEventServiceRequest(uid,eid,pos){
-    var contact = Meteor.users.findOne(uid);
+    var contact = new Contact(Meteor.users.findOne(uid));
     var event = Events.findOne(eid);
     this.unblock();
 
     Email.send({
-      to: contact.emails[0].address,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Event Service Request: " + event.name + " - " +pos,
-      text: "<p>Dear "+ contact.name + "</p><p>You have been requested to serve in the position of "
+      text: "<p>Dear "+ contact.getName() + "</p><p>You have been requested to serve in the position of "
       + pos + " for the event " + event.name + " on " + moment(event.start).format("Do MMM YY") + " at "
       + moment(event.start).format("HH:mmA")
       + ". You can view this request on the Ivy events page: "
@@ -29,10 +29,10 @@ Meteor.methods({
   },
   contactEmailConfirmation(contact){
     Email.send({
-      to: contact.email,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "Account Creation Confirmation Email",
-      text: "<p>Dear "+ contact.name + "</p><br/><p>Please follow the link below to continue creating your account. "
+      text: "<p>Dear "+ contact.getName() + "</p><br/><p>Please follow the link below to continue creating your account. "
       + "<a href='"+process.env.ROOT_URL+"/signup/'"+ contact._id +">Sign up Here</a>\n\n"
       + "- Ivy"
     });
@@ -46,8 +46,9 @@ Meteor.methods({
     var emails = [];
     users.forEach(function(contact){
       //var contact = Meteor.users.findOne(user.contact);
-      console.log("pushing: "+contact.emails[0].address);
-      emails.push(contact.emails[0].address);
+      contact = new Contact(contact);
+      console.log("pushing: "+contact.getEmail());
+      emails.push(contact.getEmail());
     });
     console.log("emails:");
     console.log(emails);
@@ -62,12 +63,12 @@ Meteor.methods({
   },
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
-    var contact = Meteor.users.findOne(uid);
+    var contact = new Contact(Meteor.users.findOne(uid));
     Email.send({
-      to: contact.emails[0].address,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
-      html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
+      html: "<p>Dear "+ contact.getName() + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
       + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id
       + "'><button>View Ticket</button></a><br/><br/>"
       // insert html for ticket info here

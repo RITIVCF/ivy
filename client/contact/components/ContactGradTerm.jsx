@@ -13,7 +13,7 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
 		event.preventDefault();
     this.setState({value: event.target.value});
     //console.log(event.target.value);
-    Meteor.call("updateGradTerm", this.props.contact._id, event.target.value);
+    this.props.contact.setGradTerm(event.target.value.trim());
 	}
 
   getGradTerms(){
@@ -21,9 +21,6 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
   }
 
   render() {
-    if(!this.props.contact.gradterm){
-  		return (<div></div>);
-  	}
     return (
       <div >
       <label htmlFor="gradterm">Expected Grad Term:</label>
@@ -31,7 +28,7 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
       <select
         id="gradterm"
         className="browser-default"
-        value={this.props.contact.gradterm}
+        value={this.props.contact.getGradTerm()}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>
           {this.getGradTerms().map( (term)=>{

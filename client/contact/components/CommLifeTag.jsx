@@ -11,7 +11,12 @@ export default class CommLifetag extends TrackerReact(React.Component){
   addRemove(event){
     console.log(event.target.value);
     console.log(this.refs[this.props.tag].checked);
-    Meteor.call("updateCommLifeTag", this.props.contact._id, this.props.tag, this.props.checked);
+    if(this.refs[this.props.tag].checked){
+      this.props.contact.addCommunityLifeTag(this.props.tag);
+    }
+    else{
+      this.props.contact.removeCommunityLifeTag(this.props.tag);
+    }
   }
 
 
