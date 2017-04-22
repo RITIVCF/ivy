@@ -3,7 +3,8 @@ import React, {Component} from 'react';
 export default class Contact extends Component {
   remove(event){
     event.preventDefault();
-    Meteor.call("removeChurchContact", this.props.ch._id, this.props.contact._id);
+    this.props.ch.removeContact(this.props.contact._id);
+    
   }
 
 
@@ -11,8 +12,8 @@ export default class Contact extends Component {
     let contact = this.props.contact;
     return (
       <tr>
-        <td>{contact.name}</td>
-        <td>{contact.emails[0].address}</td>
+        <td>{contact.getName()}</td>
+        <td>{contact.getEmail()}</td>
         <td><i className="material-icons right">close</i></td>
       </tr>
     )

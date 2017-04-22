@@ -25,10 +25,10 @@ export default class ChurchSingle extends Component {
     return (
       <div className="col s12 m6 l4">
         <div className={this.props.selected?
-                        this.props.church.active?
+                        this.props.church.isActive()?
                         "card left addBorderToCard":"card left grey addBorderToCard"
                         :
-                        this.props.church.active?
+                        this.props.church.isActive()?
                         "card left"
                         :"card grey left"}
           onClick={this.select.bind(this)} onDoubleClick={this.edit.bind(this)} >
@@ -38,7 +38,7 @@ export default class ChurchSingle extends Component {
               src={"/images/defaultChurch.png"} style={{width: "100%"}} />
           </div>
           <div className="card-content">
-            <span className="card-title">{this.props.church.name}</span>
+            <span className="card-title">{this.props.church.getName()}</span>
             {/*}<p className="truncate">{this.props.church.url}</p>*/}
           </div>
         </div>

@@ -9,7 +9,7 @@ export default class ChurchURL extends Component {
   }
   updateURL(event){
 		event.preventDefault();
-		Meteor.call("updateChurchURL", this.props.ch._id, this.refs.url.value);
+		this.props.ch.setURL(this.refs.url.value.trim());
 		//this.state.value = this.refs.description;
 	}
 

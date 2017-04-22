@@ -55,11 +55,22 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		//var attendees = this.state.ev.attendees.filter(attendee =>
 			//attendee[this.state.filter])
 			//if(this.state.sort=="Name"){
-				this.props.ev.attendees.sort(function(a, b) {
+			console.debug(this.props.ev.attendees);
+			let attendees = [];
+			this.props.ev.attendees.forEach((attendee)=>{
+				contact = new Contact(Meteor.users.findOne(attendee._id));
+				for(var key in attendee){
+					contact[key] = attendee[key];
+				}
+				attendees.push(contact);
+			})
+
+				attendees.sort(function(a, b) {
+
 					console.log("a",a);
 					console.log("b", b);
-				  var nameA = a.name.toUpperCase(); // ignore upper and lowercase
-				  var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+				  var nameA = a.getName().toUpperCase(); // ignore upper and lowercase
+				  var nameB = b.getName().toUpperCase(); // ignore upper and lowercase
 				  if (nameA < nameB) {
 				    return -1;
 				  }
@@ -72,21 +83,21 @@ export default class EventDetail extends TrackerReact(React.Component) {
 			});
 	//	}
 			if(this.state.sort=="First Time"){
-					this.props.ev.attendees.sort(function(x, y) {
+					attendees.sort(function(x, y) {
 					    //return (x.firsttime === y.firsttime)? 0 : x.firsttime? -1 : 1;
 							return y.firsttime-x.firsttime;
 					});
 		}
 
-		//console.log(this.props.ev.attendees);
+		//console.log(attendees);
 
 		if(this.state.filter=="Yes"){
-			return this.props.ev.attendees.filter(attendee => attendee.firsttime == true);
+			return attendees.filter(attendee => attendee.firsttime == true);
 		}
 		if(this.state.filter=="No"){
-			return this.props.ev.attendees.filter(attendee => attendee.firsttime == false);
+			return attendees.filter(attendee => attendee.firsttime == false);
 		}
-		return this.props.ev.attendees;
+		return attendees;
 	}
 
 	getCountNew(){
@@ -197,7 +208,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 						</tr>
 					</thead>
 					<tbody>
-						{!ev ? "" : this.getAttendees().map( (contact)=>{
+						{this.getAttendees().map( (contact)=>{
 								return <Attendee key={contact._id} contact={contact} />
 						})}
 					</tbody>
