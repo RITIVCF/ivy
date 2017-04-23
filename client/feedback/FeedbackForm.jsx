@@ -13,24 +13,32 @@ export default class FeedbackForm extends TrackerReact(React.Component) {
 
 	submit(event){
 		event.preventDefault();
-		if(this.refs.feedback.value==""){
+		let subject = this.refs.subject.value.trim();
+		let feedback = this.refs.feedback.value.trim();
+		let type = this.refs.type.value;
+		if(subject==""){
+			Materialize.toast("Please enter a subject.", 4000);
+			return;
+		}
+		if(feedback==""){
 			Materialize.toast("Please enter feedback.", 4000);
 			return;
 		}
-		if(this.refs.type.value==""){
+		if(type==""){
 			Materialize.toast("Please select a type from the list.", 4000);
 			return;
 		}
 		var thiz = this;
-		Meteor.call("submitFeedback", this.refs.feedback.value, this.refs.type.value,function(error){
+		Meteor.call("submitFeedback", subject, feedback, type,function(error){
 			if(error){
 				Materialize.toast('Oops! Looks like something went wrong. Try again later. If the problem persists, '
 					+ 'contact support.', 4000);
 			}
 			else {
 					Materialize.toast('Success! Your feedback was successfully submitted. Thanks for letting us know!', 4000);
-				thiz.refs.feedback.value="";
-				thiz.refs.type.value="";
+					thiz.refs.subject.value="";
+					thiz.refs.feedback.value="";
+					thiz.refs.type.value="";
 			}
 		});
 
@@ -45,6 +53,10 @@ export default class FeedbackForm extends TrackerReact(React.Component) {
 					<form onSubmit={this.submit.bind(this)}>
 						<p>If you have any thoughts, comments, or issues, please submit them
 						below.<br/>Thank you! - RIT IVCF Web Development Team</p>
+					<div className="input-field col s12">
+							<input type="text" ref="subject" id="feedbacksubj" />
+							<label htmlFor="feedbacksubj">Subject</label>
+						</div>
 						<div className="input-field col s12">
 							<textarea
 								ref="feedback"

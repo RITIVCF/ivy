@@ -10,9 +10,21 @@ export default class ContactEmail extends Component {
   updateEmail(event){
     event.preventDefault();
     var text = this.refs.email.value.trim();
-    Meteor.call('updateEmail', this.props.contact._id, text);
-    console.log(text);
-    this.state.value = text;
+    if(this.props.contact.emails[0].address==text){
+      return;
+    }
+    var thiz = this;
+    Meteor.call('updateUserEmail', this.props.contact._id, this.props.contact.emails[0].address, text, (error)=>{
+      if(error){
+        console.debug(error)
+        window.alert("Email Already exists.")
+
+      }
+      // else{
+      //   thiz.state.value = text;
+      // }
+    });
+    //console.log(text);
   }
 
   getContact(){
@@ -32,12 +44,11 @@ export default class ContactEmail extends Component {
     */
     {/*this.props.disabled*/}
     return(
-      <div className="form-group" >
+      <div>
         <label>Email</label>
           <input type="text"
             ref="email"
-            className="form-control"
-            disabled={true}
+            disabled={this.props.contact.emails[0].verified}
             onBlur={this.updateEmail.bind(this)}
             onChange={this.handleEmailChange}
             value={this.props.contact.emails[0].address}
