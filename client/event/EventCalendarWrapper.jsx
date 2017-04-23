@@ -71,9 +71,9 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     return <div>
 
       <ul className="center calcenter">
-      <li onClick={this.prevCal.bind(this)}><a><i className="material-icons black-text">skip_previous</i></a></li>
-      <h1>{this.state.viewtitle}</h1>
-      <li onClick={this.nextCal.bind(this)}><a><i className="material-icons black-text">skip_next</i></a></li>
+      <li onClick={this.prevCal.bind(this)} id="mob-date-left-li"><a id="mob-date-left"><i className="material-icons black-text">skip_previous</i></a></li>
+      <li id="mob-date-center"><h1>{this.state.viewtitle}</h1></li>
+      <li onClick={this.nextCal.bind(this)} id="mob-date-right-li"><a id="mob-date-right"><i className="material-icons black-text">skip_next</i></a></li>
       </ul>
       <ul className="right hide-on-small-only">
         <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>

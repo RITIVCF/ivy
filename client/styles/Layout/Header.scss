@@ -10,3 +10,21 @@ nav {
 html{
   overflow: hidden;
 }
+
+
+@media only screen and (max-width: 992px) {
+  #page-title {
+    position: relative;
+    float: left;
+    left: 0;
+    transform: none;
+  }
+  #mobile-padding-2 {
+    padding: 0 10px 0 0;
+    margin: 0;
+  }
+  #mobile-padding-1 {
+    margin: 0 5px;
+    padding: 0;
+  }
+}
