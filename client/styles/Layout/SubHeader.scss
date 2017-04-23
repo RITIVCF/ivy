@@ -11,5 +11,37 @@
     font-size: 30px;
     line-height: 64px;
     margin: 0 20px;
+    @media only screen and (max-width: 992px) {
+      font-size: 15px;
+      margin: 0;
+      text-align: center;
+      line-height: 56px;
+    }
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .calcenter {
+    height: 56px;
+  }
+  #mob-date-left {
+    padding: 0 5px;
+  }
+  #mob-date-right {
+    float: right;
+    padding: 0 5px;
+  }
+  #mob-date-left-li {
+    float: left;
+  }
+  #mob-date-right-li {
+    float: right;
+  }
+  #mob-date-center {
+    display: inline-block;
+    float: none;
+  }
+  main {
+    top: 56px;
   }
 }
