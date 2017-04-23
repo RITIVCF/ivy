@@ -26,9 +26,9 @@
     right: 0;
     height: 100%;
     background-color: #fcfcfc;
-    margin-top: 63px;
+    //margin-top: 63px;
     width: 400px;
-    z-index: 0;
+    z-index: 998;
     position: fixed;
     transform: translateX(105%);
     left: auto;
@@ -213,13 +213,27 @@
 }
 
 
+.side-nav li.active > a {
+  > .nav-icon {
+    color: #1a3d6d;
+  }
+  > .nav-label {
+    color: #1a3d6d;
+  }
+}
+
 .side-nav .collapsible-body > ul:not(.collapsible) > li.active,
 .side-nav.fixed .collapsible-body > ul:not(.collapsible) > li.active {
+  > a > i.material-icons {
   //background-color: $primary-color;
-  background-color: #FCB816;
-  a {
-    color: $sidenav-bg-color;
+    color: #1a3d6d;
   }
+  > a > .nav-label {
+    color: #1a3d6d;
+  }
+  /*a {
+    color: $sidenav-bg-color;
+  }*/
 }
 
 

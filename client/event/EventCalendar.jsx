@@ -61,10 +61,17 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   componentDidMount(){
     var thiz = this;
     console.log(Session.get("calendardate"));
+    var mq = window.matchMedia( "only screen and (max-width: 992px)" );
+    var calView = "listWeek";
+    if (mq.matches) {
+      calView = "listWeek";
+    } else {
+      calView = Meteor.user().preferences.calendar_view;
+    }
     $("#calendar").fullCalendar({
       events: [],
       header: false,
-      defaultView: Meteor.user().preferences.calendar_view,
+      defaultView: calView,
       firstDay: 1,
       fixedWeekCount: false,
       theme: false,
@@ -88,7 +95,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         //   return;
         // }
         //Session.set("infobar",true);
-        Meteor.call("openEventInfoBar");
+
+        var mq = window.matchMedia( "only screen and (max-width: 992px)" );
+
+        if (mq.matches) {
+          $('#fake-button').sideNav('show');
+        } else {
+          Meteor.call("openEventInfoBar");
+        }
+
         Session.set("evselected",calEvent._id);
         //$('.modal').modal();
         //console.log(calEvent._id);
