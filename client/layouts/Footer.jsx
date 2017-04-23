@@ -28,7 +28,7 @@ export default class Footer extends TrackerReact(React.Component) {
 			<footer className="page-footer">
 				<div className="footer-copyright">
 	        <div className="container">
-	        &nbsp;{"Ivy v1.0.6"}{/*find way of doing version number with settings or something here*/}
+	        &nbsp;{"Ivy v1.0.7"}{/*find way of doing version number with settings or something here*/}
 	        <a className="grey-text text-lighten-4 right" target="_blank" href="http://ivcf.rit.edu">ivcf.rit.edu</a>
 	        </div>
 	      </div>

@@ -40,6 +40,11 @@
   background-position: bottom left, bottom right;
   background-repeat: no-repeat, no-repeat;
   background-size: 30rem, 30rem;
+  @media only screen and (max-width: 992px) {
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 #form-back:before {
@@ -69,6 +74,12 @@
   width: 100%;
   max-width: 500px;
   overflow: hidden;
+  @media only screen and (max-width: 992px) {
+    overflow-y: auto;
+    height: 100vh;
+    margin: 0;
+    padding: 10px;
+  }
 }
 
 .publicForm {
@@ -144,7 +155,11 @@
     //z-index: 2 !important;
     font-size: 1.5em !important;
   }
-
+  @media only screen and (max-width: 992px) {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .react-autosuggest__container {
