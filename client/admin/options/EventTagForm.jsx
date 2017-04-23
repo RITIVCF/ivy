@@ -23,8 +23,8 @@ export default class EventTagForm extends TrackerReact(React.Component) {
 		return (
 			<div className="card">
 				<div className="card-content">
-					<span className="card-title">Event Tags</span>
-					<p>Choose a color to represent each event tag.</p>
+					<span className="card-title">Event Types</span>
+					<p>Choose a color to represent each event type.</p>
 				{/*}	<form onSubmit={this.newTag.bind(this)}>
 						<label htmlFor="tag">New Event Tag</label>
 						<input type="text" ref="tag" name="tag" />

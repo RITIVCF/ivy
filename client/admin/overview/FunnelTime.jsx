@@ -72,7 +72,10 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	                    beginAtZero:true
 	                }
 	            }]
-	        }
+	        },
+					legend: {
+              onClick: (e) => e.stopPropagation()
+          }
 	    }
 			});
 		});

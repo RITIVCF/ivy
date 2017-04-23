@@ -515,12 +515,18 @@ Meteor.publish("allUsersEverything", function(){
 
 /* Ticket Functions */
 Meteor.publish("allActiveTickets", function(){
-  const selector = {
+  const selector = Groups.find({_id:"admin",users: this.userId}).fetch().length==1?{
     $and: [
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}}
     ]
-    }
+  }:{
+    $and: [
+      {status: {$ne: "Closed"}},
+      {status: {$ne: "Canceled"}},
+      {type: {$ne: "Feedback"}}
+    ]
+  }
   return Tickets.find(selector,{sort:{ticketnum: 1}});
 });
 

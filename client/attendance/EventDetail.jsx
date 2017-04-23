@@ -27,7 +27,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		 this.getAttendees().forEach(function(contact){
 			 //console.log(contact);
 			 var dataString = "";
-			 dataString += contact.name + "," + contact.email + "," + contact.phone  + ",";
+			 dataString += contact.name + "," + contact.emails[0].address + "," + contact.phone  + ",";
 			 dataString += contact.firsttime ? "Yes":"No";
 			 dataString += ",";
 			 dataString += contact.more ? "Yes":"No";
@@ -91,7 +91,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 	getCountNew(){
 		var count = 0;
-		for(i=0;i<this.props.ev.attendees.length;i++){
+		for(i=0;i < this.props.ev.attendees.length;i++){
 			//console.log(this.props.ev.attendees[i]);
 			if(this.props.ev.attendees[i].firsttime){
 				count += 1;
@@ -182,7 +182,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 
 			</div>
-				<table className={checkPermission("contacts")?"highlight":""}>
+				<table className={checkPermission("contacts")?"highlight responsive-table":"responsive-table"}>
 					<thead>
 						<tr>
 							<th></th>

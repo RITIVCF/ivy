@@ -265,34 +265,44 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
-      let tags = Options.findOne("eventtags").vals;
-
-var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
+      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
 
       //var events = Events.find({published: false}).fetch();
-      events.forEach((event)=>{
-        event.editable=(!event.name)?false:true;
-        event.title=event.name?event.name:"";
-        if(event.tags) {
-          var newcolors = [];
-          event.tags.forEach((tagname)=>{
-            var color = tags.filter(tag => tag.tag == tagname)[0].color;
-            newcolors.push(color);
-          });
-          event.tags=newcolors;
-        } else {
-          event.tags = [];
-        }
-        //event.title=event.name;
-      })
-      return events;
+
+      return this.addTagToUnPublishedEvents(events);
     }
     else{
-      return []
+
+      var events = Events.find({
+        $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
+        published: false,
+        $or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
+      }).fetch();
+      return this.addTagToUnPublishedEvents(events);
     }
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
-
   }
+
+  addTagToUnPublishedEvents(events){
+    let tags = Options.findOne("eventtags").vals;
+    events.forEach((event)=>{
+      event.editable=(!event.name)?false:true;
+      event.title=event.name?event.name:"";
+      if(event.tags) {
+        var newcolors = [];
+        event.tags.forEach((tagname)=>{
+          var color = tags.filter(tag => tag.tag == tagname)[0].color;
+          newcolors.push(color);
+        });
+        event.tags=newcolors;
+      } else {
+        event.tags = [];
+      }
+    });
+    return events;
+  }
+
+
 
   refresh(){
     $(calendar).fullCalendar( 'removeEvents');
