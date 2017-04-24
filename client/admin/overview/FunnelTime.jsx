@@ -10,6 +10,7 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 		this.state = {
 			mounted: false,
 			colors: {
+				contact: '#999',
 				crowd: '#DECF3F',
 				visitor: '#B276B2',
 				member: '#FAA43A',
@@ -30,7 +31,13 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 				type: "line",
 				data: {
 					labels: result.timestamp,
-					datasets: [{
+					datasets: [
+						{
+							label: "Contact",
+							backgroundColor: thiz.state.colors.contact,
+							data: result.contact
+						},
+						{
 							label: "Crowd",
 							backgroundColor: thiz.state.colors.crowd,
 							data: result.crowd

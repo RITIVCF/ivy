@@ -8,6 +8,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 		this.state = {
 			reset:{
+				Contact: "-",
 				Crowd: "-",
 				Visitor: "-",
 				Member: "-",
@@ -16,6 +17,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 				Multiplier: "-"
 			},
 			counts: {
+				Contact: "-",
 				Crowd: "-",
 				Visitor: "-",
 				Member: "-",
@@ -32,7 +34,8 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 		thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
 			thiz.setState({counts: result});
-			var total = parseInt(result.Crowd?result.Crowd:0)+
+			var total = parseInt(result.Contact?result.Contact:0)+
+									parseInt(result.Crowd?result.Crowd:0)+
 									parseInt(result.Visitor?result.Visitor:0)+
 									parseInt(result.Member?result.Member:0)+
 									parseInt(result.Server?result.Server:0)+
@@ -49,7 +52,15 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 		this.setState({counts: this.state.reset});
 		var thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
-			thiz.setState({counts: result})
+			thiz.setState({counts: result});
+			var total = parseInt(result.Contact?result.Contact:0)+
+									parseInt(result.Crowd?result.Crowd:0)+
+									parseInt(result.Visitor?result.Visitor:0)+
+									parseInt(result.Member?result.Member:0)+
+									parseInt(result.Server?result.Server:0)+
+									parseInt(result.Leader?result.Leader:0)+
+									parseInt(result.Multiplier?result.Multiplier:0);
+			thiz.setState({ttl: total});
 		});
 	}
 
@@ -67,6 +78,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 						{/*}	<tr><th colSpan="2">Counts</th></tr>*/}
 						</thead>
 						<tbody>
+							<tr><td>{"Contact"}</td><td>{cnts.Contact}</td></tr>
 							<tr><td>{"Crowd"}</td><td>{cnts.Crowd}</td></tr>
 							<tr><td>{"Visitor"}</td><td>{cnts.Visitor}</td></tr>
 							<tr><td>{"Member"}</td><td>{cnts.Member}</td></tr>

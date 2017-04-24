@@ -136,9 +136,14 @@ SyncedCron.add({
         if (count>=threshold) {
           // console.log(user.name, " Is visitor");
           Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
-        } else {
+        }
+        else if ((count >= 1)&&(count<threshold)){
           // console.log(user.name, " Is crowd");
           Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
+        }
+        else {
+          // console.log(user.name, " Is crowd");
+          Meteor.users.update({_id : uid}, {$set : {status : "Contact"}});
         }
       }
     //  console.log(user.name, " end.");
