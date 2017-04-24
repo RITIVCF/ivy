@@ -31,7 +31,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		thiz = this;
+		let thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
 			thiz.setState({counts: result});
 			var total = parseInt(result.Contact?result.Contact:0)+
@@ -50,7 +50,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 	refresh(){
 		this.setState({counts: this.state.reset});
-		var thiz = this;
+		let thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
 			thiz.setState({counts: result});
 			var total = parseInt(result.Contact?result.Contact:0)+

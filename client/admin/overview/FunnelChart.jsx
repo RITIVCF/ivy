@@ -78,7 +78,6 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 
 	render() {
-		console.debug("Chart total: ", this.state.ttl);
 		return (
 			<div>
 					Current | <b>Total:</b> {this.state.ttl}

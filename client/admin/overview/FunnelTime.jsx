@@ -23,10 +23,8 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	}
 
 	componentDidMount(){
-		console.log("did mount");
 		let thiz = this;
 		Meteor.call("funnelTime", this.refs.date.value, function(error, result){
-			console.log(result);
 			historicalChart = new Chart($(historicalchart), {
 				type: "line",
 				data: {
