@@ -53,9 +53,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 									parseInt(result.Server?result.Server:0)+
 									parseInt(result.Leader?result.Leader:0)+
 									parseInt(result.Multiplier?result.Multiplier:0);
-				console.log(total);
-				console.log(result);
-				thiz.setState({ttl: total}, function(){console.debug("I set it!")});
+				thiz.setState({ttl: total});
 		});
 		//this.setState({mounted: true});
 	}
