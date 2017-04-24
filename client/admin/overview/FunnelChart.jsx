@@ -8,13 +8,22 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 
 		this.state = {
 			ttl: "",
-			mounted: false
+			mounted: false,
+			colors: {
+				contact: '#999',
+				crowd: '#DECF3F',
+				visitor: '#B276B2',
+				member: '#FAA43A',
+				server: '#60BD68',
+				leader: '#5DA5DA',
+				multiplier: '#F15854'
+			}
 		};
 	}
 
 	componentDidMount(){
-		console.log("did mount");
-		thiz = this;
+		let colors = this.state.colors;
+		let thiz = this;
 		Meteor.call("currentFunnel", function(error, result){
 			snapshotChart = new Chart($(funnelchart), {
 				type: "bar",
@@ -22,7 +31,7 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 					labels: ["Crowd", "Visitor", "Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
 						label: "Counts",
-						backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
+						backgroundColor: [colors.crowd, colors.visitor, colors.member, colors.server, colors.leader, colors.multiplier],
 						data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
@@ -31,43 +40,53 @@ export default class FunnelChart extends TrackerReact(React.Component) {
 	        scales: {
 	            yAxes: [{
 	                ticks: {
-											max: ((result.max + 2)) < 50?(result.max+2):(result.max+5),
+											// max: ((result.max + 2)) < 50?(result.max+2):(result.max+5),
 	                    beginAtZero:true
 	                }
 	            }]
 	        }
 	    }
 			});
-			var total = parseInt(result.Crowd)+
-									parseInt(result.Visitor)+
-									parseInt(result.Member)+
-									parseInt(result.Server)+
-									parseInt(result.Leader)+
-									parseInt(result.Multiplier);
-				thiz.setState({ttl: total});
+			var total = parseInt(result.Crowd?result.Crowd:0)+
+									parseInt(result.Visitor?result.Visitor:0)+
+									parseInt(result.Member?result.Member:0)+
+									parseInt(result.Server?result.Server:0)+
+									parseInt(result.Leader?result.Leader:0)+
+									parseInt(result.Multiplier?result.Multiplier:0);
+				console.log(total);
+				console.log(result);
+				thiz.setState({ttl: total}, function(){console.debug("I set it!")});
 		});
-		this.setState({mounted: true});
+		//this.setState({mounted: true});
 	}
 
 	refresh(){
 		Meteor.call("currentFunnel", function(error, result){
 			snapshotChart.data.datasets[0]= {
-				//label: "Counts",
-				backgroundColor: ['#DECF3F', '#FAA43A', '#B276B2', '#60BD68','#5DA5DA', '#F15854'],
+				label: "Counts",
+				backgroundColor: [colors.crowd, colors.visitor, colors.member, colors.server, colors.leader, colors.multiplier],
 				data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 			};
+			var total = parseInt(result.Crowd?result.Crowd:0)+
+									parseInt(result.Visitor?result.Visitor:0)+
+									parseInt(result.Member?result.Member:0)+
+									parseInt(result.Server?result.Server:0)+
+									parseInt(result.Leader?result.Leader:0)+
+									parseInt(result.Multiplier?result.Multiplier:0);
+				thiz.setState({ttl: total});
 			snapshotChart.update();
 		});
 	}
 
 
 	render() {
+		console.debug("Chart total: ", this.state.ttl);
 		return (
 			<div>
 					Current | <b>Total:</b> {this.state.ttl}
-					<i onClick={this.refresh.bind(this)}
+					{/*}<i onClick={this.refresh.bind(this)}
 						className="material-icons unselectable"
-						style={{float: "right"}}>cached</i>
+						style={{float: "right"}}>cached</i>*/}
 				{/*}<button  className="btn waves-effect waves-light"></button>*/}
 
 
