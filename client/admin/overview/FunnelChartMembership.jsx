@@ -8,13 +8,23 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 
 		this.state = {
 			ttl: "",
-			mounted: false
+			mounted: false,
+			colors: {
+				contact: '#999',
+				crowd: '#DECF3F',
+				visitor: '#B276B2',
+				member: '#FAA43A',
+				server: '#60BD68',
+				leader: '#5DA5DA',
+				multiplier: '#F15854'
+			}
 		}
 
 	}
 
 	componentDidMount(){
-		thiz2 = this;
+		let thiz = this;
+		let colors = this.state.colors;
 		Meteor.call("currentFunnelMembership", function(error, result){
 			membershipFunnel = new Chart($("#membershipFunnel"), {
 				type: "bar",
@@ -22,7 +32,7 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 					labels: ["Member", "Server", "Leader", "Multiplier"],
 					datasets: [{
 						//label: "Counts",
-						backgroundColor: ['#FAA43A', '#60BD68','#5DA5DA', '#F15854'],
+						backgroundColor: [colors.member, colors.server, colors.leader, colors.multiplier],
 						data: [result.Member, result.Server, result.Leader, result.Multiplier]
 					}]
 				},
@@ -43,17 +53,18 @@ export default class FunnelChartMembership extends TrackerReact(React.Component)
 									parseInt(result.Server?result.Server:0)+
 									parseInt(result.Leader?result.Leader:0)+
 									parseInt(result.Multiplier?result.Multiplier:0);
-				thiz2.setState({ttl: total});
+				thiz.setState({ttl: total});
 		});
 		this.setState({mounted: true});
 	}
 
 	refresh(){
-		var thiz= this;
+		let thiz= this;
+		let colors = this.state.colors;
 		Meteor.call("currentFunnelMembership", function(error, result){
 			membershipFunnel.data.datasets[0]= {
 				label: "Counts",
-				backgroundColor: ['#FAA43A', '#60BD68','#5DA5DA', '#F15854'],
+				backgroundColor: [colors.member, colors.server, colors.leader, colors.multiplier],
 				data: [result.Member, result.Server, result.Leader, result.Multiplier]
 			};
 			var total = parseInt(result.Member?result.Member:0)+
