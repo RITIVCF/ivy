@@ -126,6 +126,7 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
 	render() {
     var types = Session.get("tickettypefilter");
+    let isAdmin = Groups.find({_id:"admin",users: Meteor.userId()}).fetch().length==1;
     //console.log(this.props.sub);
 		return (
       <div onClick={this.unselect.bind(this)}>
@@ -166,6 +167,8 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
                   <label htmlFor="requesttype">Event Request</label>
                 <input type="checkbox" id="prayertype"  checked={types.includes("Prayer")}  onChange={this.handleCheck.bind(this,"Prayer")} />
                   <label htmlFor="prayertype" >Prayer Request</label>
+                {isAdmin&&<input type="checkbox" id="feedbacktype"   checked={types.includes("Feedback")}   onChange={this.handleCheck.bind(this,"Feedback")} />}
+                  {isAdmin&&<label htmlFor="feedbacktype"  >Feedback</label>}
                 <input type="checkbox" id="othertype"   checked={types.includes("Other")}   onChange={this.handleCheck.bind(this,"Other")} />
                   <label htmlFor="othertype"  >Other</label>
                 </p>

@@ -147,7 +147,7 @@ shouldComponentUpdate(nextProps, nextState){
 
     const { value, suggestions } = this.state;
     const inputProps = {
-      placeholder: '+Tag',
+      placeholder: '+Type',
       value,
       onChange: this.onChange
     };

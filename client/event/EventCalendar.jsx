@@ -61,10 +61,17 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   componentDidMount(){
     var thiz = this;
     console.log(Session.get("calendardate"));
+    var mq = window.matchMedia( "only screen and (max-width: 992px)" );
+    var calView = "listWeek";
+    if (mq.matches) {
+      calView = "listWeek";
+    } else {
+      calView = Meteor.user().preferences.calendar_view;
+    }
     $("#calendar").fullCalendar({
       events: [],
       header: false,
-      defaultView: Meteor.user().preferences.calendar_view,
+      defaultView: calView,
       firstDay: 1,
       fixedWeekCount: false,
       theme: false,
@@ -88,7 +95,15 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         //   return;
         // }
         //Session.set("infobar",true);
-        Meteor.call("openEventInfoBar");
+
+        var mq = window.matchMedia( "only screen and (max-width: 992px)" );
+
+        if (mq.matches) {
+          $('#fake-button').sideNav('show');
+        } else {
+          Meteor.call("openEventInfoBar");
+        }
+
         Session.set("evselected",calEvent._id);
         //$('.modal').modal();
         //console.log(calEvent._id);
@@ -250,34 +265,44 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
-      let tags = Options.findOne("eventtags").vals;
-
-var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
+      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
 
       //var events = Events.find({published: false}).fetch();
-      events.forEach((event)=>{
-        event.editable=(!event.name)?false:true;
-        event.title=event.name?event.name:"";
-        if(event.tags) {
-          var newcolors = [];
-          event.tags.forEach((tagname)=>{
-            var color = tags.filter(tag => tag.tag == tagname)[0].color;
-            newcolors.push(color);
-          });
-          event.tags=newcolors;
-        } else {
-          event.tags = [];
-        }
-        //event.title=event.name;
-      })
-      return events;
+
+      return this.addTagToUnPublishedEvents(events);
     }
     else{
-      return []
+
+      var events = Events.find({
+        $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
+        published: false,
+        $or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
+      }).fetch();
+      return this.addTagToUnPublishedEvents(events);
     }
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
-
   }
+
+  addTagToUnPublishedEvents(events){
+    let tags = Options.findOne("eventtags").vals;
+    events.forEach((event)=>{
+      event.editable=(!event.name)?false:true;
+      event.title=event.name?event.name:"";
+      if(event.tags) {
+        var newcolors = [];
+        event.tags.forEach((tagname)=>{
+          var color = tags.filter(tag => tag.tag == tagname)[0].color;
+          newcolors.push(color);
+        });
+        event.tags=newcolors;
+      } else {
+        event.tags = [];
+      }
+    });
+    return events;
+  }
+
+
 
   refresh(){
     $(calendar).fullCalendar( 'removeEvents');

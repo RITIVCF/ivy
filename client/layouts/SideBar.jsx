@@ -172,7 +172,7 @@ export default class SideBar extends TrackerReact(React.Component) {
 				</ul>
 			</li>
 				}
-				<li className="">
+				<li id="toggleCollapse">
 					<a className="waves-effect collapsible-header" onClick={this.toggleCollapse.bind(this)}>
 						<span className="nav-icon">
 							<i id="nav-collapse-button" className="material-icons">play_circle_filled</i>

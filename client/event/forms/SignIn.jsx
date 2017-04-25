@@ -136,6 +136,9 @@ export default class SignIn extends TrackerReact(React.Component){
             if(newsletter){
               Meteor.call("updateNewsletter", uid, true);
             }
+            if(more){
+              Meteor.call("addLearnMoreTicket", uid);
+            }
         });
       this.circleGrow();
     }

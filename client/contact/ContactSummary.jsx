@@ -9,7 +9,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     super();
 
     this.state = {
-      statuses: ["Crowd","Visitor","Member","Server","Leader","Multiplier"],
+      statuses: ["Contact", "Crowd","Visitor","Member","Server","Leader","Multiplier"],
       filter: "",
       num: 10
     };
