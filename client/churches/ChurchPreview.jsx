@@ -17,7 +17,7 @@ export default class ChurchesPreview extends TrackerReact(React.Component) {
 	render() {
 		let ch = this.props.ch; //this.getChurch();
 
-		if(!ch){
+		if(!ch._id){
 			return (
 				<div className="row">
 					<div className="col s12">
@@ -34,19 +34,19 @@ export default class ChurchesPreview extends TrackerReact(React.Component) {
 					<p style={{fontWeight: "bold"}} >Active:</p>
 				</div>
 				<div className="col s6">
-					<p>{ch.active?"Yes":"No"}</p>
+					<p>{ch.isActive()?"Yes":"No"}</p>
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >Name:</p>
-					<p>{ch.name}</p>
+					<p>{ch.getName()}</p>
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >URL:</p>
-					<a href={"http://"+ch.url}  target="_blank">{ch.url}</a>
+					<a href={"http://"+ch.getURL()}  target="_blank">{ch.getURL()}</a>
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >Times:</p>
-					{ch.times.map((time,i)=>{
+					{ch.getTimes().map((time,i)=>{
 						return <div key={i} className="col s12 card">
 							<div className="card-content">
 								<p>{time.day} @ {time.time}</p>
@@ -56,11 +56,14 @@ export default class ChurchesPreview extends TrackerReact(React.Component) {
 				</div>
 				<div className="col s12">
 					<p style={{fontWeight: "bold"}} >Contacts:</p>
-					{ch.contacts.map((contact)=>{
-						return <div key={contact} className="col s12 card">
+					{console.debug(ch)}
+					{console.debug(ch.getContacts())}
+					{ch.getContacts().map((contact)=>{
+						contact = new Contact(Meteor.users.findOne(contact));
+						return <div key={contact._id} className="col s12 card">
 							<div className="card-content">
-								{Meteor.users.findOne(contact).name}<br/>
-								{Meteor.users.findOne(contact).emails[0].address}
+								{contact.getName()}<br/>
+								{contact.getEmail()}
 							</div>
 						</div>
 					})}

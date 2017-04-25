@@ -20,7 +20,8 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
     // console.log(contact);
     // console.log(this.props.ch._id);
     var chid = this.props.ch._id;
-    Meteor.call("addChurchContact",this.props.ch._id, contact._id);
+    this.props.ch.addContact(contact._id);
+    
     contact.component.state.value='';
     contact.component.forceUpdate();
 	}

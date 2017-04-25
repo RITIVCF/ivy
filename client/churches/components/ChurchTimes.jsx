@@ -11,15 +11,12 @@ export default class ChurchTimes extends Component {
 
   add(){
     //Meteor.call('addMailingAddress');
-    Meteor.call('addChurchTime', this.props.ch._id);
+    this.props.ch.addTime();
   }
 
 
 
   render(){
-    if(!this.props.ch.times){
-      return(<div>Loading...</div>)
-    }
     return (
     <div>
       <a className="waves-effect waves-light btn-flat"
@@ -34,8 +31,8 @@ export default class ChurchTimes extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.ch.times.map( (time,i)=>{
-      				return <Time key={time.day+time.time+i} ch={this.props.ch} time={time} />
+            {this.props.ch.getTimes().map( (time,i)=>{
+      				return <Time key={time.day+time.time+i} ch={this.props.ch} time={time} i={i} />
       			})}
           </tbody>
         </table>

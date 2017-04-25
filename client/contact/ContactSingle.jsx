@@ -12,10 +12,6 @@ export default class ContactSingle extends Component {
     FlowRouter.go("/tickets/"+this.props.contact.ticket);
   }
 
-  changeStatus(){
-    Meteor.call("updateStatus", this.props.contact, this.refs.status.value);
-  }
-
   openDropdown(event){
     event.stopPropagation();
   }
@@ -34,21 +30,21 @@ export default class ContactSingle extends Component {
   go(){
     FlowRouter.go("/people/"+this.props.contact._id);
   }
+
   render() {
-    // This area needs styled, so however we need to do it to style
-    // it correctly. Review Alex's mock ups and Jeanie's drawings.-->
+    let contact = this.props.contact;
     if(this.props.row){
       return (
         <tr className={this.props.selected?"blue white-text":""}
           onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
-          <td>{this.props.contact.name}</td>
-          <td>{this.props.contact.emails[0].address}</td>
-          <td>{this.props.contact.phone}</td>
-          <td>{this.props.contact.newsletter?"Yes":"No"}</td>
+          <td>{contact.getName()}</td>
+          <td>{contact.getEmail()}</td>
+          <td>{contact.getPhone()}</td>
+          <td>{contact.getNewsletter()?"Yes":"No"}</td>
           <td>{false ? <select
               ref="status"
               className="browser-default black-text"
-              value={this.props.contact.status}
+              value={contact.getStatus()}
               onClick={this.openDropdown.bind(this)}
               onChange={this.changeStatus.bind(this)} >
             <option value="Crowd">Crowd</option>
@@ -57,7 +53,7 @@ export default class ContactSingle extends Component {
             <option value="Server">Server</option>
             <option value="Leader">Leader</option>
             <option value="Multiplier">Multiplier</option>
-          </select> : this.props.contact.status}</td>
+          </select> : contact.getStatus()}</td>
         </tr>
       )
     }
@@ -69,10 +65,10 @@ export default class ContactSingle extends Component {
           <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
         </div>
         <div className="card-content">
-          <span className="card-title">{this.props.contact.name}</span>
-        <p className="truncate">{this.props.contact.emails[0].address}</p>
-        <p>{this.props.contact.status}</p>
-        {/*<p>{this.props.contact.status //this.props.contact.member ? "Member":"Contact"}</p> */}
+          <span className="card-title">{contact.getName()}</span>
+        <p className="truncate">{contact.getEmail()}</p>
+        <p>{contact.getStatus()}</p>
+        {/*<p>{contact.status //contact.member ? "Member":"Contact"}</p> */}
 
         {this.props.perm?<p>
           <button className="btn"  onClick={this.viewTicket.bind(this)}>View Ticket</button>
