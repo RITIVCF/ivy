@@ -48,3 +48,4 @@ percolate:synced-cron
 hb5:meteor-freewall
 ulfschneider:tinycolorpick
 static-html #So that it grabs the <head> tag from index.html
+meteorhacks:npm
