@@ -1,5 +1,4 @@
 calculateFunnelStatus = function(uid){
-	console.log("<<calculateFunnelStatus>>");
   var threshold = getThreshold(); //Integer # of intervals
   let status = "Contact";
   let user = Meteor.users.findOne(uid);
@@ -23,8 +22,8 @@ calculateFunnelStatus = function(uid){
   // Uses event attendance
   else {
     var count = getIntervalCounts(uid);
-		console.log("Interval Countst: ", count);
-		console.log("Threshold: ", threshold);
+
+
     if (count>=threshold) {
       status = "Visitor";
     }
@@ -42,13 +41,11 @@ calculateFunnelStatus = function(uid){
 }
 
 getUserStatus = function(uid){
-	console.log("<<getUserStatus>>");
 	let funnelObj = Funnel.find({uid: uid}, {sort: {timestamp: -1}, limit: 1}).fetch()[0];
 	return funnelObj ? funnelObj.status : false;
 }
 
 saveStatusChange = function(uid, status){
-	console.log("<<saveStatusChange>>");
   // If current status
   let currStatus = getUserStatus(uid);
 
@@ -70,7 +67,6 @@ insertAndUpdateStatus = function(uid, status){
 }
 
 getIntervals = function(){
-	console.log("<<getIntervals>>");
 	let options = getCalculationOptions();
 	var intervalLength = options.interval; //In days
   var period = options.period; //In intervalLengths
@@ -81,7 +77,7 @@ getIntervals = function(){
 
   for( var i=0; i < period; i++ ){
     // Move start date back
-    var startDate = subtractMinutes(endDate, intervalLength);
+    var startDate = subtractDays(endDate, intervalLength);
 
 
     // Get count of events in this interval
@@ -106,14 +102,13 @@ getIntervals = function(){
       endDate: endDate
     };
     intervals.push(interval);
-		console.log("Interval "+i+": ", interval);
+
     endDate = startDate;
   }
 	return intervals;
 }
 
 getIntervalCounts = function(uid){
-	console.log("<<getIntervalCounts>>");
   let intervals = getIntervals();
   var count = 0;
   intervals.forEach((intvl)=>{
@@ -125,7 +120,6 @@ getIntervalCounts = function(uid){
 }
 
 getNumberOfValidIntervals = function(numOfIntervals){
-	console.log("<<getNumberOfValidIntervals>>");
 	// Valid means there is at least one event in this intvl
 	let intervalLength = getInterval();
   var endDate = new Date();
@@ -136,9 +130,8 @@ getNumberOfValidIntervals = function(numOfIntervals){
 
   for( var i=0; i < numOfIntervals; i++ ){
     // Move start date back
-    startDate = subtractMinutes(endDate, intervalLength);
-		console.log("Interval " + i + " start: ", startDate);
-		console.log("Interval " + i + " end: ", endDate);
+    startDate = subtractDays(endDate, intervalLength);
+
     // are there events in this interval?
     numOfEventsInInterval = Events.find({
 			start:{
@@ -147,9 +140,8 @@ getNumberOfValidIntervals = function(numOfIntervals){
 			},
       published: true,
 		}, {name: 1}).count();
-		console.log("Number of events in interval "+ i +": ", numOfEventsInInterval);
+
     if(numOfEventsInInterval > 0){
-			console.log("Number of events in interval is greater than 0. Increase number of valid intervals.");
       count++;
     }
 		endDate = startDate;
@@ -158,7 +150,6 @@ getNumberOfValidIntervals = function(numOfIntervals){
 }
 
 setupStatusJobs = function(uid){
-	console.log("<<setupStatusJobs>>");
   let job = getJobCollectionJobByUserId(uid);
 	let threshold = getThreshold();
 
@@ -180,21 +171,18 @@ populateFunnel = function(){
 }
 
 getCalculationOptions = function(){
-	console.log("<<getCalculationOptions>>");
 	return Options.findOne("funnelcalculation");
 }
 
 getThreshold = function(){
-	console.log("<<getThreshold>>");
 	return getCalculationOptions().threshold;
 }
 
 getPeriod = function(){
-	console.log("<<getPeriod>>");
+
 	return getCalculationOptions().period;
 }
 
 getInterval = function(){
-	console.log("<<getInterval>>");
 	return getCalculationOptions().interval;
 }

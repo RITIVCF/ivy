@@ -14,7 +14,6 @@ Meteor.methods({
   ///       howhear str,
   ///       learnmore  bool
   handleEventSignIn(signin){
-		console.log("<<handleEventSignIn>>");
     // If not new, sign in and skip
     if(!signin.new){
       addAttendanceRecord(signin);
@@ -68,7 +67,6 @@ Meteor.methods({
   ///       first bool,
   ///       learnmore bool
   addAttendanceRecord = function(record){
-		console.log("<<addAttendanceRecord>>");
     if(!Events.findOne({"attendees._id": record.uid, _id: record.eid})){
       Events.update(record.eid,
         {$addToSet: {"attendees":

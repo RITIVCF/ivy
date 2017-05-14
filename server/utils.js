@@ -5,7 +5,7 @@ ivyDate = function ivyDate() {
 /*******     Subtract Time    **********/
 subtractTime = function(date, number, timeUnit){
 	if(!timeUnit){
-		timeUnit = "minutes";
+		timeUnit = "days";
 	}
 	return new moment(date.toISOString()).subtract(number, timeUnit)._d;
 }
