@@ -135,7 +135,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     if(this.state.filter!=""){
       query.name={ $regex : this.state.filter, $options : 'i'};
     }
-
+		Funnel.find().fetch();
     return Meteor.users.find(query,options).fetch();
   }
 
