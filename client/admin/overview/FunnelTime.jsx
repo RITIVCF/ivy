@@ -30,11 +30,15 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 				data: {
 					labels: result.timestamp,
 					datasets: [
-						{
-							label: "Contact",
-							backgroundColor: thiz.state.colors.contact,
-							data: result.contact
-						},
+						// Alex - v1.0.11 - 4/30/17
+						// Do we want 'Contact' status on the history chart?
+						// or do we wait for better data visualization
+						// choices? I think that would be better
+						// {
+						// 	label: "Contact",
+						// 	backgroundColor: thiz.state.colors.contact,
+						// 	data: result.contact
+						// },
 						{
 							label: "Crowd",
 							backgroundColor: thiz.state.colors.crowd,

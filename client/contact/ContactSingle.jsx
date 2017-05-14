@@ -40,20 +40,8 @@ export default class ContactSingle extends Component {
           <td>{contact.getName()}</td>
           <td>{contact.getEmail()}</td>
           <td>{contact.getPhone()}</td>
-          <td>{contact.getNewsletter()?"Yes":"No"}</td>
-          <td>{false ? <select
-              ref="status"
-              className="browser-default black-text"
-              value={contact.getStatus()}
-              onClick={this.openDropdown.bind(this)}
-              onChange={this.changeStatus.bind(this)} >
-            <option value="Crowd">Crowd</option>
-            <option value="Visitor">Visitor</option>
-            <option value="Member">Member</option>
-            <option value="Server">Server</option>
-            <option value="Leader">Leader</option>
-            <option value="Multiplier">Multiplier</option>
-          </select> : contact.getStatus()}</td>
+          <td>{contact.isSignedUpForNewsletter()}</td>
+          <td>{contact.getStatus()}</td>
         </tr>
       )
     }

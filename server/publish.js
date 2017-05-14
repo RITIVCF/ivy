@@ -619,6 +619,12 @@ Meteor.publish("publicOptions", function(){
   ]});
 });
 
+Meteor.publish("currentFunnel", function(){
+  ReactiveAggregate(this, Funnel, [
+    {$sort: {date: -1}},
+    {$group: {_id: "$uid", status: {$last: "$status"}}}]);
+});
+
 Meteor.publish("funnelHistory", function(){
   return  FunnelHistory.find();
 })
