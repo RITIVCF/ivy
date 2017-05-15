@@ -12,14 +12,11 @@ export default class ContactGender extends TrackerReact(React.Component) {
 		event.preventDefault();
     this.setState({value: event.target.value});
     //console.log(event.target.value);
-    Meteor.call("updateGender", this.props.contact._id, event.target.value);
+    this.props.contact.setGender(event.target.value.trim());
 	}
 
 
   render() {
-    if(!this.props.contact.gender){
-      return(<div></div>)
-    }
     return (
       <div >
         <label htmlFor="gender">Sex (Gender):</label>
@@ -27,7 +24,7 @@ export default class ContactGender extends TrackerReact(React.Component) {
         ref="gender"
         id="gender"
         className="browser-default"
-        value={this.props.contact.gender}
+        value={this.props.contact.getGender()}
         disabled={this.props.disabled}
         onChange={this.update.bind(this)}>
           <option value={"na"}>Not Specified</option>

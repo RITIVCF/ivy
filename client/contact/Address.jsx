@@ -85,7 +85,7 @@ export default class Address extends Component {
       </form>
       :
       <div onClick={this.edit.bind(this)}>
-        {this.props.disabled ? <div></div>:
+        {!this.props.disabled&&
         <a className="btn right" id="showme" onClick={this.remove.bind(this)}>Remove</a>}
         <div>{this.props.address.line1}</div>
         <div>{this.props.address.line2}</div>

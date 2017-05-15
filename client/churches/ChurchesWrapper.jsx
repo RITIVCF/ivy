@@ -71,7 +71,7 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
           <NewChurchModal ref="modal" key={2} />]}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.churches_infobar}
-        infobar={<ChurchPreview ch={Churches.findOne(Session.get("chselected"))} />}
+        infobar={<ChurchPreview ch={new Church(Churches.findOne(Session.get("chselected")))} />}
         />
   )
 	}

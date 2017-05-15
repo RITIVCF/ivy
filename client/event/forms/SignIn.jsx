@@ -76,111 +76,50 @@ export default class SignIn extends TrackerReact(React.Component){
 
   submit(event){
     event.preventDefault();
-
-    var thiz = this;
-    console.log(this.state);
-    var eid = this.props.ev._id;
-    var user = this.state.user;
-    var evname = this.props.ev.name;
-    var name = this.refs.user.state.value.trim();
-    var email = this.refs.email.value.trim();
-    var phone = this.refs.phone.value.trim();
-    var major = this.refs.major.value.trim();
+    let signInObj = {
+      eid: this.props.ev._id,
+      uid: this.state.user._id,
+      new: !this.state.user, // If not user, new is true
+      name: this.refs.user.state.value.trim(),
+      email: this.refs.email.value.trim(),
+      phone: this.refs.phone.value.trim(),
+      major: this.refs.major.value.trim()
+    };
     if(this.state.new){
-        var newsletter = this.refs.newsletter.checked;
-        var more = this.refs.learnmore.checked;
+        signInObj.newsletter = this.refs.newsletter.checked;
+        signInObj.learnmore = this.refs.learnmore.checked;
         if(this.refs.howhear.state.other){
-          var howhear = this.refs.howhear.refs.other.value;
+          signInObj.howhear = this.refs.howhear.refs.other.value;
         }
         else{
-          var howhear = this.refs.howhear.refs.howhear.value;
+          signInObj.howhear = this.refs.howhear.refs.howhear.value;
         }
     }
 
-    if( !user ){
+    Meteor.call("handleEventSignIn", signInObj, function(error){
+      if(error){
+        console.log("Handle signin error: ", error);
+        window.alert("Oops. Something went wrong. Please try again.");
+      }
+    });
 
-      var id = Meteor.call("createNewUser",
-        name,
-        email,
-        phone,
-        major,
-        howhear,
-        function(error, uid){
-          if(error){
-            console.log(error);
-            //window.alert("Email already exists. Please enter .");
-            Materialize.toast("Email already exists. Please enter another email "
-              +" address or choose your contact.", 6000);
-            return;
-          }
-          var desc = evname+"\n"+name+"\n"+email+"\n"+phone+"\n"+howhear;
-          Meteor.call("addAttendanceTicket",
-            "New Contact: "+ name,
-            desc,
-            "","", uid,
-            eid,
-            function(errr, tktId){
-              if(errr){
-                //console.log(errr.reason);
-                return;
-              }
-              Meteor.call("createAttendanceRecord",
-              eid, uid,
-              true,
-              more,
-              howhear,
-              tktId);
-              Meteor.call("setUserTicket", uid, tktId);
-              thiz.timer();
-            });
-            if(newsletter){
-              Meteor.call("updateNewsletter", uid, true);
-            }
-            if(more){
-              Meteor.call("addLearnMoreTicket", uid);
-            }
-        });
-      this.circleGrow();
-    }
-    else{
-      Meteor.call("createAttendanceRecord",
-      this.props.ev._id,this.state.user._id,
-      false,
-      "",
-      "",
-      "");
-      this.circleGrow();
-      this.timer();
-      // if(this.refs.newsletter){
-      //   Meteor.call("updateNewsletter", this.state.contact._id, true);
-      // }
-    }
-    //this.unset();
-    //this.props.parent.setState({id: this.props.parent.state.id + 1});
-  //   this.forceUpdate();
-  //   this.refs.email.value="";
-  //   if(this.state.new){
-  //     this.refs.phone.value="";
-  //     this.refs.newsletter.checked=false;
-  //     this.refs.major.value="";
-  //   }
-  //
-  //   //this.state.new=false;
-  //   this.setState({new: true});
-  //   this.refs.user.state.value='';
-  //   this.refs.user.forceUpdate();
-  // //  this.refs.user.focus();
+    this.circleGrow();
+    this.timer();
+    this.disableEnableFields();
   }
 
   timer(){
-    //this.setState({submitted: true});
-    var thiz = this;
-    setTimeout(function(){
-      thiz.unset();
-      // thiz.setState({submitted: false});
-      // thiz.setState({user: false});
-      // thiz.setState({new: true});
+    Meteor.setTimeout(()=>{
+      this.unset();
+      this.disableEnableFields();
     }, 3500);
+  }
+
+  // Only disables name field for now
+  disableEnableFields(){
+    this.refs.user.setState({disabled: !this.refs.user.state.disabled}, ()=>{
+      this.refs.user.focus();
+    });
   }
 
 

@@ -21,21 +21,15 @@ export default class NewAddressModal extends TrackerReact(React.Component) {
 
   createNew(event){
     event.preventDefault();
-    Meteor.call('addMailingAddress',
-      this.props.contact._id,
+    this.props.contact.addAddress(
       this.refs.line1.value.trim(),
       this.refs.line2.value.trim(),
       this.refs.line3.value.trim(),
       this.refs.city.value.trim(),
       this.refs.state.value.trim(),
-      this.refs.zip.value.trim(),
-      function(error, result){
-      if(error){
-        console.log(error.reason);
-        return;
-      }
-      $('#newaddressmodal').modal('close');
-    });
+      this.refs.zip.value.trim()
+    );
+    $('#newaddressmodal').modal('close');
     this.refs.line1.value="";
     this.refs.line2.value="";
     this.refs.line3.value="";
@@ -97,6 +91,7 @@ export default class NewAddressModal extends TrackerReact(React.Component) {
             className={this.state.createdisabled?"modal-action waves-effect waves-green btn-flat disabled":
               "modal-action waves-effect waves-green btn-flat"}>Create
           </a>
+          <a className="modal-action modal-close waves-effect waves-light btn-flat">Cancel</a>
         </div>
       </div>
     )

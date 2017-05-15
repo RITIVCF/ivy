@@ -25,8 +25,8 @@ export default class Time extends Component {
 
   closeedit(event){
     event.stopPropagation();
-    var day = this.refs.day.value;
-    var time = this.refs.time.state.value;
+    var day = this.refs.day.value.trim();
+    var time = this.refs.time.state.value.trim();
     $("select").material_select('destroy');
     if((day==this.props.time.day)&&(time==this.props.time.time)){
       this.setState({
@@ -34,11 +34,7 @@ export default class Time extends Component {
       });
     }
     else{
-      Meteor.call("updateChurchTime", this.props.ch._id,
-       this.props.time.day,
-       this.props.time.time,
-       day,
-       time);
+      this.props.ch.updateTime(this.props.i, day, time)
     }
 
     //console.log(this.refs.time.state.value);
@@ -55,7 +51,8 @@ export default class Time extends Component {
 
   remove(event){
     event.stopPropagation();
-    Meteor.call("removeChurchTime", this.props.ch._id, this.props.time.day, this.props.time.time);
+    this.props.ch.removeTime(this.props.time.day, this.props.time.time);
+
   }
 
   handleDayChange(event){

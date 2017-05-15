@@ -6,13 +6,13 @@ export default class ButtonActive extends Component {
 
   toggleActiveChurch(event){
 		event.preventDefault();
-    $("#"+this.props.ch._id).modal('close');
-		Meteor.call("toggleActiveChurch", this.props.ch._id, this.props.ch.active);
+    this.props.parent.close();
+		this.props.ch.toggleActive();
 		//console.log(this);
 	}
 
   render(){
-    if(this.props.ch.active){
+    if(this.props.ch.isActive()){
       return (<a
         onClick={this.toggleActiveChurch.bind(this)}
         type="button"

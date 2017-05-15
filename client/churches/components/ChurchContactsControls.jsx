@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import Contact from './Contact.jsx';
+import ChurchContact from './ChurchContact.jsx';
 import SelectOption from '../../sharedcomponents/SelectOption.jsx';
 import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 
@@ -20,7 +20,8 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
     // console.log(contact);
     // console.log(this.props.ch._id);
     var chid = this.props.ch._id;
-    Meteor.call("addChurchContact",this.props.ch._id, contact._id);
+    this.props.ch.addContact(contact._id);
+
     contact.component.state.value='';
     contact.component.forceUpdate();
 	}
@@ -80,7 +81,8 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
             </thead>
             <tbody>
               {this.getContactsInfo().map((contact)=>{
-                return <Contact key={contact._id} ch={this.props.ch} contact={contact} />
+								contact = new Contact(contact);
+                return <ChurchContact key={contact._id} ch={this.props.ch} contact={contact} />
               })}
             </tbody>
           </table>

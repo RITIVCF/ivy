@@ -9,7 +9,7 @@ export default class AffiliationsTag extends TrackerReact(React.Component){
 	}
 
   addRemove(event){
-    Meteor.call("updateAffiliationsTag", this.props.contact._id, this.props.tag, this.props.checked);
+    this.props.contact.setAffiliation(this.props.tag, this.props.checked);
   }
 
 

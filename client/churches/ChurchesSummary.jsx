@@ -13,13 +13,12 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
   }
 
 
-  churches(){
-    return Churches.find({active: true},{sort: {active: -1}}).fetch();
-  }
-
-  oldchurches(){
-    console.log("All inactive churches", Churches.find({active: false}).fetch());
-    return Churches.find({active: false}).fetch();
+  churches(isActive){
+    let churches = [];
+    Churches.find({active: isActive},{sort: {active: -1}}).fetch().forEach((church)=>{
+      churches.push(new Church(church));
+    });
+    return churches;
   }
 
   unselect(){
@@ -28,8 +27,8 @@ export default class ChurchesSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    let active = this.churches();
-    let inactive = this.oldchurches();
+    let active = this.churches(true);
+    let inactive = this.churches(false);
 		return (
       <div className="row"  onClick={this.unselect.bind(this)}>
         <div className="col s12">
