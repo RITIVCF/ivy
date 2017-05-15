@@ -19,6 +19,7 @@ Meteor.subscribe("allGroups");
 Meteor.subscribe("allCounters");
 SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
+Meteor.subscribe("currentFunnel");
 
 checkPermission = function(){
 	// if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
