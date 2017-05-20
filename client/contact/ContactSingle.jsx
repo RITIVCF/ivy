@@ -34,7 +34,7 @@ export default class ContactSingle extends Component {
   render() {
     let contact = this.props.contact;
     if(this.props.row){
-      return (
+      return ( {/*Dynamically build the columns based on an array of {dataValue:"", headerText: ""} objects */}
         <tr className={this.props.selected?"blue white-text":""}
           onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
           <td>{contact.getName()}</td>
