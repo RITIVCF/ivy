@@ -46,7 +46,7 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 								</p>
 							</div>
 						</div>
-						<DebriefForm ev={ev} />
+						<DebriefForm eid={this.props.eid} /> 
 					</div>
 				</div>
 			)

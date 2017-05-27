@@ -1,21 +1,15 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Rating from './Rating.jsx';
+import Debrief from '../../../lib/classes/Debrief.js';
 
 export default class DebriefForm extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
-		var debriefs = Debriefs.find({eid: props.ev._id, uid: Meteor.userId()}).fetch();
-		if(debriefs.length==1){
-			var debrief = debriefs[0];
-			this.state = {
-				notes: debrief.notes
-			};
-		}
-		else{
 
-		}
-    console.log(this.state.notes);
+		this.state = {
+		//	debrief: new Debrief(props.eid)
+		};
 
   }
 
@@ -24,12 +18,12 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 
 
 	save(){
-
+		this.state.debrief.saveDraft();
 	}
 
 	submit(event){
 		event.preventDefault();
-
+		this.state.debrief.submit();
 	}
 
 	componentDidMount(){
@@ -38,10 +32,14 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 
 
 	render() {
+		let debrief = new Debrief(this.props.eid);
+		if(!debrief){
+			return false;
+		}
 		return (
       <div className="row">
         <form onSubmit={this.submit.bind(this)}>
-
+					{debrief._id}
 					<div className="col s12">
 						<button className="btn" >Submit</button>
 					</div>
