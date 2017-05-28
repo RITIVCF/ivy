@@ -96,7 +96,7 @@ export default class EventPreview extends TrackerReact(React.Component) {
             :<div></div>
           }
           {checkPermission('attendance')&&(this.props.event.published)&&isformopen?
-          <a href={"/attendance/event/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
+          <a href={"events/attendance/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
             className="waves-effect waves-light btn">View Attendance</a>
           :<div></div>}
           {(this.props.event.published)&&isformopen?

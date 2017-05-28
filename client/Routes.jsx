@@ -112,7 +112,14 @@ function subscribeContactSelf(){
 FlowRouter.triggers.enter([signInForceCheck]);
 FlowRouter.triggers.exit([removeTooltips]);
 
-FlowRouter.route('/',{
+
+let dashboardRoute = FlowRouter.group({
+	prefix: "/",
+	name: "dashboard"
+})
+
+dashboardRoute.route('/',{
+	name: "dashboard",
 	action() {
 		mount(MainLayout, {
 			header: "Dashboard",
@@ -121,87 +128,7 @@ FlowRouter.route('/',{
 	}
 });
 
-// FlowRouter.route('/groups', {
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<ContactGroupsWrapper />)
-// 		})
-// 	}
-// });
-
-FlowRouter.route('/admin', {
-	action() {
-		mount(MainLayout, {
-			header: "Administration",
-			content: (<AdminDashboard />)
-		})
-	}
-});
-
-FlowRouter.route('/admin/groups', {
-	action() {
-		mount(MainLayout, {
-			header: "Structures",
-			content: (<GroupsWrapper />)
-		})
-	}
-});
-
-FlowRouter.route('/admin/pages', {
-	action() {
-		mount(MainLayout, {
-			header: "Administration",
-			content: <PagePermissionsWrapper />
-		})
-	}
-});
-
-FlowRouter.route('/admin/settings', {
-	action() {
-		mount(MainLayout, {
-			header: "Site Settings",
-			content: <SiteSettingsWrapper />
-		})
-	}
-});
-
-FlowRouter.route('/admin/users', {
-	action() {
-		mount(MainLayout, {
-			header: "Users",
-			content: <UserManagementWrapper />
-		})
-	}
-});
-
-FlowRouter.route('/admin/users/:uid', {
-	action(params) {
-		mount(MainLayout, {
-			header: "Administration",
-			content: <UserManagementWrapper uid={params.uid} />
-		})
-	}
-});
-
-FlowRouter.route('/admin/duplicatecontacts', {
-	action() {
-		mount(MainLayout, {
-			header: "Duplicate Contacts",
-			content: <DuplicateContactWrapper />
-		})
-	}
-});
-
-FlowRouter.route('/admin/overview', {
-	action() {
-		mount(MainLayout, {
-			header: "Chapter Overview",
-			content: <OverviewWrapper />
-		})
-	}
-});
-
-FlowRouter.route('/profile',{
+dashboardRoute.route('/profile',{
 	action() {
 		mount(MainLayout, {
 			header: "My Profile",
@@ -210,7 +137,122 @@ FlowRouter.route('/profile',{
 	}
 });
 
-FlowRouter.route('/people/:cid',{
+//**** Admin Routes  *********
+
+let adminRoutes = FlowRouter.group({
+	prefix: "/admin",
+	name: "admin"
+})
+
+adminRoutes.route('/', {
+	action() {
+		mount(MainLayout, {
+			header: "Administration",
+			content: (<AdminDashboard />)
+		})
+	}
+});
+
+ //****************************************
+	let structuresRoutes = adminRoutes.group({
+		prefix: "/structures",
+		name: "structures"
+	});
+
+	structuresRoutes.route('/', {
+		name: "structures",
+		action() {
+			mount(MainLayout, {
+				header: "Structures",
+				content: (<GroupsWrapper />)
+			})
+		}
+	});
+	//****************************************
+	//****************************************
+	let pagePermissionsRoutes = adminRoutes.group({
+		prefix: "/pages",
+		name: "pagepermissions"
+	});
+
+	pagePermissionsRoutes.route('/', {
+		name: "pagepermissions",
+		action() {
+			mount(MainLayout, {
+				header: "Administration",
+				content: <PagePermissionsWrapper />
+			})
+		}
+	});
+	//****************************************
+	//****************************************
+	let settingRoutes = adminRoutes.group({
+		prefix: "/settings",
+		name: "settings"
+	});
+
+	settingRoutes.route('/', {
+		name: "settings",
+		action() {
+			mount(MainLayout, {
+				header: "Site Settings",
+				content: <SiteSettingsWrapper />
+			})
+		}
+	});
+	//****************************************
+	//****************************************
+	let duplicateContactsRoutes = adminRoutes.group({
+		prefix: "/duplicatecontacts",
+		name: "duplicatecontacts"
+	});
+
+	duplicateContactsRoutes.route('/', {
+		name: "duplicatecontacts",
+		action() {
+			mount(MainLayout, {
+				header: "Duplicate Contacts",
+				content: <DuplicateContactWrapper />
+			})
+		}
+	});
+	//****************************************
+	//****************************************
+	let overviewRoutes = adminRoutes.group({
+		prefix: "/overview",
+		name: "overview"
+	});
+
+	overviewRoutes.route('/', {
+		name: "overview",
+		action() {
+			mount(MainLayout, {
+				header: "Chapter Overview",
+				content: <OverviewWrapper />
+			})
+		}
+	});
+	//****************************************
+
+// *********   ./ Admin Routes     ***********
+// ***********   People Routes   *************
+
+let peopleRoutes = FlowRouter.group({
+	prefix: "/people",
+	name: "people"
+});
+
+peopleRoutes.route('/', {
+	name: "people",
+	action(){
+		mount(MainLayout, {
+			header: "People",
+			content: (<ContactWrapper />)
+		})
+	}
+});
+
+peopleRoutes.route('/:cid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "People",
@@ -219,14 +261,9 @@ FlowRouter.route('/people/:cid',{
 	}
 });
 
-FlowRouter.route('/people', {
-	action(){
-		mount(MainLayout, {
-			header: "People",
-			content: (<ContactWrapper />)
-		})
-	}
-});
+//********** ./ People Routes ***********
+
+
 
 FlowRouter.route('/forms/contacts/new', {
 	action(){
@@ -253,7 +290,14 @@ FlowRouter.route('/mysg', {
 	}
 });
 
-FlowRouter.route('/events', {
+// ***********   Events Routes   **********
+let eventsRoutes = FlowRouter.group({
+	prefix: "/events",
+	name: "events"
+});
+
+eventsRoutes.route('/', {
+	name: "events",
 	action() {
 		mount(MainLayout, {
 			header: "Events",
@@ -262,15 +306,7 @@ FlowRouter.route('/events', {
 	}
 });
 
-// FlowRouter.route('/attendance',{
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<AttendanceSummary />)
-// 		})
-// 	}
-// });
-
-FlowRouter.route('/attendance/event/:eid',{
+eventsRoutes.route('/attendance/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Attendance",
@@ -280,7 +316,8 @@ FlowRouter.route('/attendance/event/:eid',{
 });
 
 
-FlowRouter.route('/events/workspace/:eid',{
+eventsRoutes.route('/workspace/:eid',{
+	name: "workspace",
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Workspace",
@@ -289,7 +326,7 @@ FlowRouter.route('/events/workspace/:eid',{
 	}
 });
 
-FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
+eventsRoutes.route('/servicerequests/:aord/:eid/:jid',{
 	action(params) {
 		if(params.aord=="accept"){
 			Meteor.call("acceptJobRequest", params.eid, params.jid);
@@ -305,7 +342,7 @@ FlowRouter.route('/events/servicerequests/:aord/:eid/:jid',{
 	}
 });
 
-FlowRouter.route("/events/workspace/:vore/:eid/:uid",{
+eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	action(params) {
 		//let ev = Events.findOne(params.eid);
 		Meteor.call("getEvent", params.eid, function(error,result){
@@ -330,7 +367,7 @@ FlowRouter.route("/events/workspace/:vore/:eid/:uid",{
 	}
 });
 
-FlowRouter.route('/events/debrief',{
+eventsRoutes.route('/debrief',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Debriefs",
@@ -339,7 +376,7 @@ FlowRouter.route('/events/debrief',{
 	}
 });
 
-FlowRouter.route('/events/debrief/edit/:eid',{
+eventsRoutes.route('/debrief/edit/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Debrief",
@@ -348,7 +385,7 @@ FlowRouter.route('/events/debrief/edit/:eid',{
 	}
 });
 
-FlowRouter.route('/events/debrief/edit',{
+eventsRoutes.route('/debrief/edit',{
 	action(){
 		mount(MainLayout, {
 			header: "Set Debrief Questions",
@@ -357,17 +394,17 @@ FlowRouter.route('/events/debrief/edit',{
 	}
 });
 
+// *******   ./ Events Routes  *************
 
+// *******    Tickets Routes   **************
 
-// FlowRouter.route('/events/old',{
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<EventOld />)
-// 		})
-// 	}
-// });
+let ticketsRoutes = FlowRouter.group({
+	prefix: "/tickets",
+	name: "tickets"
+});
 
-FlowRouter.route('/tickets',{
+ticketsRoutes.route('/',{
+	name: "tickets",
 	action() {
 		mount(MainLayout, {
 			header: "Tickets",
@@ -376,7 +413,7 @@ FlowRouter.route('/tickets',{
 	}
 });
 
-FlowRouter.route('/tickets/:tid',{
+ticketsRoutes.route('/:tid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Tickets",
@@ -385,7 +422,16 @@ FlowRouter.route('/tickets/:tid',{
 	}
 });
 
-FlowRouter.route('/churches',{
+// ****** ./ Tickets Routes    *************
+
+// *******  Churches Routes  ****************
+let churchesRoutes = FlowRouter.group({
+	prefix: "/churches",
+	name: "churches"
+});
+
+churchesRoutes.route('/',{
+	name:"churches",
 	action() {
 		mount(MainLayout, {
 			header: "Churches",
@@ -394,7 +440,17 @@ FlowRouter.route('/churches',{
 	}
 });
 
-FlowRouter.route('/emails',{
+// *******  ./ Churches Routes  *************
+
+// *******  Emails Routes   *****************
+
+let emailsRoutes = FlowRouter.group({
+	prefix: "/emails",
+	name: "emails"
+});
+
+emailsRoutes.route('/',{
+	name: "emails",
 	action(){
 		mount(MainLayout, {
 			header: "Emails",
@@ -403,7 +459,8 @@ FlowRouter.route('/emails',{
 	}
 });
 
-FlowRouter.route('/emails/workspace/:emid',{
+emailsRoutes.route('/workspace/:emid',{
+	name: "emailworkspace",
 	action(params){
 		mount(MainLayout, {
 			header: "Email Workspace",
@@ -412,45 +469,7 @@ FlowRouter.route('/emails/workspace/:emid',{
 	}
 });
 
-// FlowRouter.route('/churches/workspace/:cid',{
-// 	action(params) {
-// 		mount(MainLayout, {
-// 			content: (<ChurchesWorkspace cid={params.cid} />)
-// 		})
-// 	}
-// });
-
-// FlowRouter.route('/churches/old',{
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<ChurchesOld />)
-// 		})
-// 	}
-// });
-
-// FlowRouter.route('/sg',{
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<SmallGroupsSummary />)
-// 		})
-// 	}
-// });
-//
-// FlowRouter.route('/sg/workspace/:gid',{
-// 	action(params) {
-// 		mount(MainLayout, {
-// 			content: (<SmallGroupsWorkspace gid={params.gid} />)
-// 		})
-// 	}
-// });
-//
-// FlowRouter.route('/sg/old',{
-// 	action() {
-// 		mount(MainLayout, {
-// 			content: (<SmallGRoupsOld />)
-// 		})
-// 	}
-// });
+// *******  ./ Emails Routes  **********
 
 
 FlowRouter.route('/forms/member', {
@@ -472,6 +491,7 @@ FlowRouter.route('/forms/contact', {
 });
 
 FlowRouter.route('/forms/signin/:eid', {
+	name: "signinform",
 	action(params) {
 		mount(FormLayout, {
 				content: (<SigninWrapper eid={params.eid} />)
@@ -481,6 +501,7 @@ FlowRouter.route('/forms/signin/:eid', {
 });
 
 FlowRouter.route('/forms/rsvp/:eid', {
+	name: "rsvpform",
 	action(params) {
 		mount(FormLayout, {
 				content: (<RSVPWrapper eid={params.eid} />)
@@ -488,15 +509,6 @@ FlowRouter.route('/forms/rsvp/:eid', {
 		)
 	}
 });
-
-// FlowRouter.route('/ethnicity', {
-// 	action() {
-// 		mount(MainLayout, {
-// 				content: (<EthnicityWrapper />)
-// 			}
-// 		)
-// 	}
-// });
 
 FlowRouter.route('/login', {
 	action(params, queryParams) {
