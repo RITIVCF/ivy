@@ -376,11 +376,22 @@ eventsRoutes.route('/debrief',{
 	}
 });
 
-eventsRoutes.route('/debrief/edit/:eid',{
+
+eventsRoutes.route('/debrief/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Debrief",
 			content: (<EventsDebriefWrapper eid={params.eid} />)
+		})
+	}
+});
+
+
+eventsRoutes.route('/debrief/edit/:eid',
+	action(params) {
+		mount(MainLayout, {
+			header: "Edit Event Debrief",
+			content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
 		})
 	}
 });

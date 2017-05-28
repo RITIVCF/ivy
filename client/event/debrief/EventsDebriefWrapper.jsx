@@ -34,7 +34,7 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 			return <NoPerm />
 		}
 		let ev = this.Event();
-		if(!ev.debrief){
+		if(this.props.edit){
 			return(
 				<div className="card">
 					<div className="card-content">
@@ -46,7 +46,7 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 								</p>
 							</div>
 						</div>
-						<DebriefForm ev={ev} />
+						<DebriefForm eid={this.props.eid} />
 					</div>
 				</div>
 			)

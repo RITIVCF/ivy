@@ -164,8 +164,11 @@ setupStatusJobs = function(uid){
 
 }
 
-populateFunnel = function(){
-  Meteor.users.find().fetch().forEach((user)=>{
+populateFunnel = function(excludeIds){
+	if(!excludeIds){
+		excludeIds = []; 
+	}
+  Meteor.users.find({_id: {$nin: excludeIds}}).fetch().forEach((user)=>{
     Funnel.insert({uid: user._id, status: user.status, timestamp: new Date()});
   });
 }

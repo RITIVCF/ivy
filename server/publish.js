@@ -601,6 +601,10 @@ Meteor.publish("myEmails", function(){
 Meteor.publish("myDebriefDrafts", function(){
   return Debriefs.find({uid: this.userId});
 });
+
+Meteor.publish("allDebriefQuestions", function(){
+	return DebriefQuestions.find({deleted: false});
+});
 // *********************************
 
 Meteor.publish("allCounters", function(){
