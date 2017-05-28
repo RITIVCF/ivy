@@ -3,7 +3,7 @@ Meteor.methods({
 		let event = Events.findOne(evid);
 		console.log(event);
 		console.log(" ");
-		let questions = DebriefQuestions.find({"types.tag": event.tags}).fetch();
+		let questions = DebriefQuestions.find({"types": {$in: event.tags}},{fields: {text:1, commentOpen: 1}}).fetch();
 		console.log(questions);
     Debriefs.insert({
       questions: questions,

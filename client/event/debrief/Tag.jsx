@@ -11,7 +11,7 @@ export default class Tag extends Component {
 		let tag = this.props.tag;
     return (
 			<div className="chip">
-		    {tag.tag}
+		    {tag}
 		    <i className="close material-icons" onClick={this.removeTag.bind(this)}>close</i>
 		  </div>
     )

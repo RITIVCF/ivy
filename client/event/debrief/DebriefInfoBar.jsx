@@ -21,12 +21,12 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
 	}
 
 	addTag(tag){
-		Meteor.call("addDebriefQuestionTag", this.props.qid, tag);
+		Meteor.call("addDebriefQuestionTag", this.props.qid, tag.tag);
 	}
 
 	changeCommentOpenClosed(){
 		let question = this.getQuestion();
-		Meteor.call("setDebriefQuestionCommentOpenClosed", this.props.qid, question.commentOpen); 
+		Meteor.call("setDebriefQuestionCommentOpenClosed", this.props.qid, question.commentOpen);
 	}
 
 	deleteQuestion(){

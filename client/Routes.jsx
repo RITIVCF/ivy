@@ -339,11 +339,20 @@ FlowRouter.route('/events/debrief',{
 	}
 });
 
-FlowRouter.route('/events/debrief/edit/:eid',{
+FlowRouter.route('/events/debrief/:eid',{
 	action(params) {
 		mount(MainLayout, {
 			header: "Event Debrief",
 			content: (<EventsDebriefWrapper eid={params.eid} />)
+		})
+	}
+});
+
+FlowRouter.route('/events/debrief/edit/:eid',{
+	action(params) {
+		mount(MainLayout, {
+			header: "Edit Event Debrief",
+			content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
 		})
 	}
 });

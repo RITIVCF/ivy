@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import NoPerm from '../../NoPerm.jsx';
 import LoaderCircle from '../../LoaderCircle.jsx';
+import Response from './Response.jsx';
 
 export default class Debrief extends TrackerReact(React.Component) {
 	constructor(props) {
@@ -40,14 +41,14 @@ export default class Debrief extends TrackerReact(React.Component) {
 					<span className="card-title">{ev.name}</span>
 					<div className="row">
 						<div className="col s12">
-
+							{ev.debrief.questions.map((response, i)=>{
+								return <Response key={i} response={response} />
+							})}
 						</div>
 					</div>
 					<div className="row">
 						<div className="col s12">
-							{!edit&&<a className="btn" onClick={this.edit.bind(this)}>Edit</a>}
-							{edit&&<a className="btn" style={{marginRight:"5px"}} onClick={this.save.bind(this)}>Save</a>}
-							{edit&&<a className="btn" onClick={this.cancel.bind(this)}>Cancel</a>}
+							<a className="btn" >Edit</a>
 						</div>
 					</div>
 				</div>
