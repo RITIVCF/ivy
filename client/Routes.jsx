@@ -387,7 +387,7 @@ eventsRoutes.route('/debrief/:eid',{
 });
 
 
-eventsRoutes.route('/debrief/edit/:eid',
+eventsRoutes.route('/debrief/edit/:eid', {
 	action(params) {
 		mount(MainLayout, {
 			header: "Edit Event Debrief",
