@@ -34,7 +34,7 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 	}
 
 	NoBrief(){
-		return Events.find({debrief: {$exists: false}}).fetch();
+		return Events.find({debrief: {$exists: false}},{sort: {start: -1}}).fetch();
 	}
 
 	showHide(){
