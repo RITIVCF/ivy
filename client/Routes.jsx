@@ -83,8 +83,8 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ************************
 
 // ****  Email  ***************
-import EmailWrapper from './email/EmailWrapper.jsx';
-import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
+import EmailWrapper from './email/summary/EmailWrapper.jsx';
+import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
 // ****************************
 
 

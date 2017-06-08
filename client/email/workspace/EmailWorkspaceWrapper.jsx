@@ -1,9 +1,9 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import MainBox from '../MainBox.jsx';
-import EmailContainer from './EmailContainer.jsx'
-import LoaderCircle from '../LoaderCircle.jsx';
-import NoPerm from '../NoPerm.jsx';
+import MainBox from '../../MainBox.jsx';
+import EmailContainer from '../components/EmailContainer.jsx'
+import LoaderCircle from '../../LoaderCircle.jsx';
+import NoPerm from '../../NoPerm.jsx';
 
 import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
 
