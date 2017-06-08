@@ -22,6 +22,10 @@ export default class EmailSummary extends TrackerReact(React.Component){
 		Session.set("selectedEmail", this.props.email._id);
 	}
 
+	open(){
+		FlowRouter.go("/emails/workspace/"+this.props.email._id);
+	}
+
 	getTemplate(){
 		return Emails.findOne(this.props.email.template).title;
 	}
@@ -77,7 +81,7 @@ export default class EmailSummary extends TrackerReact(React.Component){
 
 	isSelected(){
 		if(this.props.isSelected){
-			return "blue white-text";
+			return " blue white-text";
 		}
 		return "";
 	}
@@ -86,10 +90,18 @@ export default class EmailSummary extends TrackerReact(React.Component){
 		this.select();
 	}
 
+	handleDoubleClick(){
+		if(!this.props.email.sent){
+			this.open();
+		}
+	}
+
 	render() {
 		let email = this.props.email;
 		return (
-			<li className={"collection-item trunc-cell"+this.isSelected()} onClick={this.handleClick.bind(this)}>
+			<li className={"collection-item trunc-cell"+this.isSelected()}
+				onClick={this.handleClick.bind(this)}
+				onDoubleClick={this.handleDoubleClick.bind(this)} >
 				<span style={{width: "20%", display: "inline-block"}}>{email.subject}</span>
 				<span style={{width: "30%", display: "inline-block"}}>{this.getTo()}</span>
 				<span style={{width: "15%", display: "inline-block"}}>{email.from}</span>
