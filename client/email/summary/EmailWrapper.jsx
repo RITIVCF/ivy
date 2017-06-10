@@ -60,8 +60,9 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     return (
       <MainBox
         content={[
-					<EmailSummary />,
+					<EmailSummary key={0} />,
 					<Modal
+						key={1}
 						id={"NewEmailFormModal"}
 						ref="modal"
 						content={<NewEmailForm />}
