@@ -1,7 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../../MainBox.jsx';
-import EmailContainer from '../components/EmailContainer.jsx'
+import EmailWorkspace from './EmailWorkspace.jsx'
 import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
 
@@ -26,17 +26,9 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
     this.state.subscription.email.stop();
   }
 
-  toggleInfoBar(){
-
-  }
-
-  getSubHeader(){
-    return <ul className="right">
-      <li onClick={this.toggleInfoBar.bind(this)}><a>
-        <i className="material-icons black-text">add</i></a>
-      </li>
-    </ul>
-  }
+	getEmail(){
+		return Emails.findOne(this.props.emid);
+	}
 
   render() {
     if(!this.state.subscription.email.ready()){
@@ -46,13 +38,14 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
       return <NoPerm />
     }
     document.title="Ivy - Email Workspace";
+		let email = this.getEmail();
 
     return (
       <MainBox
-        content={<EmailContainer />}
-        subheader={this.getSubHeader()}
+        content={<EmailWorkspace email={email} />}
+        subheader={false}
         showinfobar={true}
-        infobar={<EmailWorkspacePanel />}
+        infobar={<EmailWorkspacePanel emid={this.props.emid} />}
         />
     )
   }
