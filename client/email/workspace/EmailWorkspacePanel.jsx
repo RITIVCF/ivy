@@ -8,7 +8,7 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
     super(props);
 
 		let email = this.getEmail(props.emid);
-
+    console.log(email);
     this.state = {
       modules: email.modules,
 			activeModule: 0

@@ -1,12 +1,12 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+
 import EmailHeader from './EmailHeader.jsx';
 import EmailBody from './EmailBody.jsx';
 import EmailFooter from './EmailFooter.jsx';
 
 export default class EmailContainer {
   constructor(){
-    super();
 
     this.EmailHeader = new EmailHeader();
     this.EmailBody = new EmailBody();
@@ -18,7 +18,7 @@ export default class EmailContainer {
     return "title";
   }
 
-  render() {
+  renderHTML() {
 
     return (
       `<!DOCTYPE html>
