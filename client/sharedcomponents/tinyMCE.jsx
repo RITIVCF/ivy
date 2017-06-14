@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
-export default class tinyMCE extends React.Component {
+export default class TinyMCE extends TrackerReact(React.Component) {
   constructor(props){
     super(props);
 
   }
 
-	handleChange(change){
-		this.props.onChange(content);
+	handleChange(content){
+		this.props.onChange(this.props.id, content);
 	}
 
-  componentDidMount(){
-		let id = this.props.id;
+	initializeTinyMCE(id){
 		tinymce.init({
 			selector: "#"+id,
 			theme: "modern",
@@ -23,7 +22,7 @@ export default class tinyMCE extends React.Component {
 			toolbar: ['bold italic underline strikethrough subscript superscript emoveformat'],
 			browser_spellcheck: true,
 			setup : (editor) => {
-				editor.on('change', function(e) {
+				editor.on('change', (e) => {
 						try{
 							this.handleChange(tinymce.get(id).getContent());
 						}catch (err){
@@ -31,7 +30,7 @@ export default class tinyMCE extends React.Component {
 						}
 
 				});
-				editor.on('keyup', function(e) {
+				editor.on('keyup', (e) => {
 					try{
 						this.handleChange(tinymce.get(id).getContent());
 					}catch (err){
@@ -41,10 +40,32 @@ export default class tinyMCE extends React.Component {
 		}
 		});
 		tinymce.get(id).setContent(this.props.content);
+	}
+
+	removeTinyMCE(id){
+		tinymce.EditorManager.execCommand('mceRemoveEditor', true, id);
+	}
+
+  componentDidMount(){
+		this.initializeTinyMCE(this.props.id);
   }
 
-	componentWillUpdate(nextProps){
+	componentWillUnmount(){
+		this.removeTinyMCE(this.props.id);
+	}
 
+	componentWillUpdate(nextProps){
+		if(nextProps.id != this.props.id){
+			// Switching modules
+			this.removeTinyMCE(this.props.id);
+		}
+	}
+
+	componentDidUpdate(prevProps){
+		if(prevProps.id != this.props.id){
+			// Switching Modules
+			this.initializeTinyMCE(this.props.id);
+		}
 	}
 
 	render() {

@@ -57,16 +57,18 @@ Meteor.methods({
     });
   },
 	addModule(emid, type){
+		console.log("emid: ", emid);
+		console.log("Type: ", type);
 		Emails.update(
 			{_id: emid},
-			{$addToSet: {
+			{$push: {
 				modules: newModule(type)
 			}
 		});
 	},
 	removeModule(emid, module){
 		Emails.update(
-			{_id: emid}, 
+			{_id: emid},
 			{$pull: {
 				modules: module
 			}
@@ -79,12 +81,22 @@ Meteor.methods({
 				modules: modules
 			}
 		});
+	},
+	setModuleDesc(emid, i, desc){
+		let update = {};
+		update["modules."+i+".desc"] = desc;
+
+		Emails.update(
+			{_id: emid},
+			{$set: update}
+		);
+
 	}
 });
 
 
 let newModule = function( type ) {
-	if(!Options.findOne({_id: "emailtypes", "vals.userAccessible": type})){
+	if(!Options.findOne({_id: "emailtypes", "vals.value": type})){
 		Meteor.throw("Incorrect type");
 	}
 	let module = {

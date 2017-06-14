@@ -45,7 +45,7 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
         content={<EmailWorkspace email={email} />}
         subheader={false}
         showinfobar={true}
-        infobar={<EmailWorkspacePanel emid={this.props.emid} />}
+        infobar={<EmailWorkspacePanel email={email} />}
         />
     )
   }
