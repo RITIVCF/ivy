@@ -5,6 +5,7 @@ import SelectTeam from '../sharedcomponents/SelectTeam.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
+import ContactProfile from '../contact/ContactProfile.jsx';
 
 export default class EditTicketForm extends TrackerReact(React.Component) {
   constructor(props) {
@@ -19,6 +20,11 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   componentDidMount(){
     Materialize.updateTextFields();
     $('select').material_select();
+    $('.modal').modal();
+  }
+
+  openProfile(){
+    $('#profilemodal').appendTo("body").modal("open");
   }
 
   getUser(id){
@@ -161,10 +167,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     var activities = this.getActivities();//this.props.ticket.activities.reverse();
     let isAdmin = Groups.find({_id:"admin",users: Meteor.userId()}).fetch().length==1;
 		return (
-      <div className="row">
-        <div className="col s12">
-        <div className="card">
-          <div className="card-content">
+
             <div className="row">
               <div className="col s12 m6">
                 <div className="col s4">
@@ -195,7 +198,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       updateUser={this.updateCust.bind(this)}
                       initialValue={this.getUser(this.props.ticket.customer)}
                       ref="cust"  />
-                    {(checkPermission("contacts")&&this.props.ticket.customer)&&<a href={"/people/"+this.props.ticket.customer} className="">View Customer</a>}
+                    {/*(checkPermission("contacts")&&this.props.ticket.customer)&&<a href={"/people/"+this.props.ticket.customer} className="">View Customer</a>*/}
+                    {(checkPermission("contacts")&&this.props.ticket.customer&&this.props.modal)&&<a onClick={this.openProfile.bind(this)} className="" style={{cursor: "pointer"}}>View Customer</a>}
 
                     <TicketSubject parent={this} ticket={this.props.ticket} />
                     <TicketDescription parent={this} ticket={this.props.ticket} />
@@ -262,8 +266,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       <p>Event:</p>
                     </div>
                     <div className="col s8">
-                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:
-                      <a href={"/attendance/event/"+this.props.ticket.eid}>{this.getEventName()}</a>}
+                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:<p>
+                      <a href={"/attendance/event/"+this.props.ticket.eid} className="modal-close">{this.getEventName()}</a></p>}
                     </div>
                   </div>
                 }
@@ -293,11 +297,18 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                 </div>
                 <a className="waves-effect waves-light btn" disabled={this.state.notedisable} onClick={this.addNote.bind(this)} >Add Note</a>
               </div>
+              {console.log("Edit ticket form: ",this.props.modal?"Show Modal":"Do not show modal.")}
+              {(this.props.modal&&this.props.ticket.customer)&&<div id="profilemodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
+                <div className="modal-content">
+                  <ContactProfile cid={this.props.ticket.customer} modal={false} />
+                </div>
+                <div className="modal-footer">
+                  <a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
+                  <a className="btn modal-action modal-close" href={"/people/"+this.props.ticket.customer}>Open Profile Page</a>
+                </div>
+              </div>}
             </div>
-          </div>
-        </div>
-        </div>
-      </div>
+
   )
 	}
 }
