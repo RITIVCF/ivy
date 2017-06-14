@@ -78,9 +78,9 @@ export default class Attendee extends TrackerReact(React.Component) {
         <td style={{textAlign: "center"}} className={status}>
           {/*!!ticket && <i className={status}>stop</i>*/}
         </td>}
-        <td>{this.props.contact.name}</td>
-        <td>{this.props.contact.emails[0].address}</td>
-        <td>{this.props.contact.phone}</td>
+        <td>{this.props.contact.getName()}</td>
+        <td>{this.props.contact.getEmail()}</td>
+        <td>{this.props.contact.getPhone()}</td>
         <td>{this.props.contact.firsttime ? "Yes":""}</td>
         <td>{this.props.contact.more?"Yes":""}</td>
         <td>{this.props.contact.howhear?this.props.contact.howhear:""}</td>

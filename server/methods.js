@@ -10,15 +10,15 @@ Meteor.methods({
       Accounts.sendResetPasswordEmail(uid);
   },
   sendEventServiceRequest(uid,eid,pos){
-    var contact = Meteor.users.findOne(uid);
+    var contact = new Contact(Meteor.users.findOne(uid));
     var event = Events.findOne(eid);
     this.unblock();
 
     Email.send({
-      to: contact.email[0].address,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Event Service Request: " + event.name + " - " +pos,
-      text: "<p>Dear "+ contact.name + "</p><p>You have been requested to serve in the position of "
+      text: "<p>Dear "+ contact.getName() + "</p><p>You have been requested to serve in the position of "
       + pos + " for the event " + event.name + " on " + moment(event.start).format("Do MMM YY") + " at "
       + moment(event.start).format("HH:mmA")
       + ". You can view this request on the Ivy events page: "
@@ -29,10 +29,10 @@ Meteor.methods({
   },
   contactEmailConfirmation(contact){
     Email.send({
-      to: contact.email,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "Account Creation Confirmation Email",
-      text: "<p>Dear "+ contact.name + "</p><br/><p>Please follow the link below to continue creating your account. "
+      text: "<p>Dear "+ contact.getName() + "</p><br/><p>Please follow the link below to continue creating your account. "
       + "<a href='"+process.env.ROOT_URL+"/signup/'"+ contact._id +">Sign up Here</a>\n\n"
       + "- Ivy"
     });
@@ -46,8 +46,9 @@ Meteor.methods({
     var emails = [];
     users.forEach(function(contact){
       //var contact = Meteor.users.findOne(user.contact);
-      console.log("pushing: "+contact.emails[0].address);
-      emails.push(contact.emails[0].address);
+      contact = new Contact(contact);
+      console.log("pushing: "+contact.getEmail());
+      emails.push(contact.getEmail());
     });
     console.log("emails:");
     console.log(emails);
@@ -62,12 +63,12 @@ Meteor.methods({
   },
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
-    var contact = Meteor.users.findOne(uid);
+    var contact = new Contact(Meteor.users.findOne(uid));
     Email.send({
-      to: contact.email[0].address,
+      to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
-      html: "<p>Dear "+ contact.name + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
+      html: "<p>Dear "+ contact.getName() + "</p><br/><p>A new ticket has been assigned to you.</p><p>Subject: "+ticket.subject+"</p>"
       + "<p>Description: "+ticket.description+"</p>"+"<a href='"+process.env.ROOT_URL+"tickets/"+ticket._id
       + "'><button>View Ticket</button></a><br/><br/>"
       // insert html for ticket info here
@@ -236,6 +237,90 @@ Meteor.methods({
   },
   testCreation(){
     console.log(Accounts.createUser({email: "testemail@email.com"}));
+  },
+  updateContactFunnelStatus(uid){
+    var intervl = 7; //In days
+    var period = 4; //In intervls
+    var threshold = 2; //Integer # of intervals
+    var endDate = new Date();
+    var startDate = new Date();
+    //startDate.setDate(startDate.getDate() - period);
+    startDate = new moment(startDate.toISOString()).subtract(intervl,"days")._d
+    //var eventsPerInterval = {};
+    var eventsPerInterval = [];
+    for (var c = 0; c < period; c++) { //Sets up an object with key:number of intervals ago, and value:a list of events that went on in that interval.
+      var events = [];
+      startDate = new moment(endDate.toISOString()).subtract(intervl,"days")._d;
+      //eventsPerInterval[(c+1)] = Events.find({
+      var eventsFound = Events.find({
+        start:{
+          $gte : startDate,//startDate.setDate(startDate.getDate() - intervl),
+          $lt : endDate
+        },
+        published: true
+      }).fetch();
+      if(eventsFound.length==0){
+        endDate = startDate;
+        c--;
+        continue;
+      }
+      eventsFound.forEach((event)=>{
+        events.push(event._id);
+      });
+      eventsPerInterval.push(events);
+      //endDate.setDate(endDate.getDate() - intervl);
+      // console.log("endDate: ", endDate);
+      // console.log("startDate: ", startDate);
+      endDate = startDate;//new moment(endDate.toISOString()).subtract(intervl,"days")._d
+      //console.log("New endDate: ", endDate);
+    }
+    var mults = Groups.findOne("multipliers").users;
+    //console.log("Users: ", Meteor.users.find({deleted: {$ne: true}}).fetch());
+    //for (var i in Meteor.users.find({deleted: {$ne: true}}).fetch()) {
+    //Meteor.users.find({deleted: {$ne: true}}).fetch().map((user)=>{
+    let user = Meteor.users.findOne(uid);
+      //var uid = user._id;
+      //console.log(uid, user.name);
+      // console.log("Is Leader: ", Groups.find({leader: uid}).fetch());
+      //if (uid in mults) {
+      if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
+        // console.log(user.name, " Is multiplier");
+        Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
+      } else if (Groups.find({leader : uid}).fetch().length > 0) {
+        // console.log(user.name, " Is leader");
+        Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
+      } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
+        //console.log(user.name, " Is server");
+        Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
+      } else if (user.member) {
+        // console.log(user.name, " Is member");
+        Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
+      } else {
+        // console.log(user.name, " Is visitor or crowd");
+        var count = 0;
+        //console.log(eventsPerInterval);
+        eventsPerInterval.forEach((intvl)=>{
+        //  console.log(intvl);
+          if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
+            count++
+          }
+        });
+
+        // for (var ls in eventsPerInterval) {
+        // 	if (ls.find({attendees : uid}).fetch().length > 0) {
+        // 		count++;
+        // 	}
+        // }
+        if (count>=threshold) {
+          // console.log(user.name, " Is visitor");
+          Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
+        } else {
+          // console.log(user.name, " Is crowd");
+          Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
+        }
+      }
+    //  console.log(user.name, " end.");
+  //   });
   },
   migrateDatabase(){
     //var userMeteor.users = Meteor.users.find({user: true}).fetch();

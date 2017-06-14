@@ -165,6 +165,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
 	render() {
     var activities = this.getActivities();//this.props.ticket.activities.reverse();
+    let isAdmin = Groups.find({_id:"admin",users: Meteor.userId()}).fetch().length==1;
 		return (
 
             <div className="row">
@@ -210,6 +211,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                         {this.getTypes().map( (type) =>{
                           return <option key={type} value={type} >{type}</option>
                         })}
+                        {isAdmin&&<option value="Feedback">Feedback</option>}
                       </select>
                     </div>
                     {this.props.ticket.type == "Event Request" && <div>

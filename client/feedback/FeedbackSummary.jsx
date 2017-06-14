@@ -23,20 +23,22 @@ export default class FeedbackSummary extends TrackerReact(React.Component) {
 	render() {
 		return (
       <div>
-        <div className="card">
+        {/*}<div className="car">
           <div className="card-content">
             <h4>Working on these</h4>
           </div>
-        </div>
+        </div>*/}
+        <h4>Working on these</h4>
           {this.workingOn().length>0?this.workingOn().map((feedback)=>{
             return <FeedbackSingle key={feedback._id}
               feedback={feedback} />
           }):<div className="card"><div className="card-content"><p>No currently working feedback.</p></div></div>}
-        <div className="card">
+        {/*}<div className="card">
           <div className="card-content">
             <h4>The Rest</h4>
           </div>
-        </div>
+        </div>*/}
+        <h4>The Rest</h4>
           {this.theRest().length>0?this.theRest().map((feedback)=>{
             return <FeedbackSingle key={feedback._id}
               feedback={feedback} />

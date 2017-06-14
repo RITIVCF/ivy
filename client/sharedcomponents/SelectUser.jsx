@@ -78,6 +78,7 @@ export default class SelectUser extends React.Component {
     unCreated = props.unCreated;
 
       this.state = {
+        disabled: false,
         value: '',
         suggestions: getSuggestions('')
       };
@@ -170,13 +171,17 @@ shouldComponentUpdate(nextProps, nextState){
     });
   }
 
-
+  focus(){
+    // Brings focus to this control
+    document.getElementById(this.props.id).focus();
+  }
 
   render() {
     const { value, suggestions } = this.state;
     const inputProps = {
       label: this.props.label?this.props.label:"Name",
       value,
+      disabled: this.state.disabled,
       onChange: this.onChange,
       className:"autocomplete-content dropdown-content",
       onBlur: this.onBlur,

@@ -515,12 +515,18 @@ Meteor.publish("allUsersEverything", function(){
 
 /* Ticket Functions */
 Meteor.publish("allActiveTickets", function(){
-  const selector = {
+  const selector = Groups.find({_id:"admin",users: this.userId}).fetch().length==1?{
     $and: [
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}}
     ]
-    }
+  }:{
+    $and: [
+      {status: {$ne: "Closed"}},
+      {status: {$ne: "Canceled"}},
+      {type: {$ne: "Feedback"}}
+    ]
+  }
   return Tickets.find(selector,{sort:{ticketnum: 1}});
 });
 
@@ -595,6 +601,10 @@ Meteor.publish("myEmails", function(){
 Meteor.publish("myDebriefDrafts", function(){
   return Debriefs.find({uid: this.userId});
 });
+
+Meteor.publish("allDebriefQuestions", function(){
+	return DebriefQuestions.find({deleted: false});
+});
 // *********************************
 
 Meteor.publish("allCounters", function(){
@@ -611,6 +621,12 @@ Meteor.publish("publicOptions", function(){
     {_id: "ethnicities"},
     {_id: "ticketcontact"}
   ]});
+});
+
+Meteor.publish("currentFunnel", function(){
+  ReactiveAggregate(this, Funnel, [
+    {$sort: {date: -1}},
+    {$group: {_id: "$uid", status: {$last: "$status"}}}]);
 });
 
 Meteor.publish("funnelHistory", function(){

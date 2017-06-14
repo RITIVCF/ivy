@@ -9,7 +9,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     super();
 
     this.state = {
-      statuses: ["Crowd","Visitor","Member","Server","Leader","Multiplier"],
+      statuses: ["Contact", "Crowd","Visitor","Member","Server","Leader","Multiplier"],
       filter: "",
       num: 10
     };
@@ -135,7 +135,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
     if(this.state.filter!=""){
       query.name={ $regex : this.state.filter, $options : 'i'};
     }
-
+		Funnel.find().fetch();
     return Meteor.users.find(query,options).fetch();
   }
 
@@ -197,12 +197,13 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       <p>{!this.state.subscription.Contacts.ready()?"Loading...":""}</p>*/}
                 <div className="row" id="scrollbox">
                 {Meteor.user().preferences.contacts_view=="Tile"?this.contacts().map( (contact, i) => {
+                  contact = new Contact(contact);
                   return <ContactSingle key={contact._id} row={false} contact={contact}
                     selected={Session.get("conselected")==contact._id} perm={perm}
                     select={this.select.bind(this)} parent={this}/>
                 }):
                 <div className="card">
-                    <table className="bordered highlight" >
+                    <table className="bordered highlight responsive-table" >
                       <thead>
                         <tr>
                           <th>Name</th>
@@ -214,6 +215,7 @@ export default class ContactSummary extends TrackerReact(React.Component) {
                       </thead>
                       <tbody>
                         {this.contacts().map( (contact)=>{
+                          contact = new Contact(contact);
                           return <ContactSingle key={contact._id} row={true} contact={contact}
                             selected={Session.get("conselected")==contact._id} perm={perm}
                             select={this.select.bind(this)} parent={this}/>

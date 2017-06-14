@@ -28,8 +28,13 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     this.state.subscription.UnpublishedEvents.stop();
   }
 
+
   componentDidMount(){
     $('.dropdown-button').dropdown();
+  }
+
+  componentDidUpdate(){
+    $(".dropdown-button").dropdown();
   }
 
   openHelp(){
@@ -71,26 +76,26 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     return <div>
 
       <ul className="center calcenter">
-      <li onClick={this.prevCal.bind(this)}><a><i className="material-icons black-text">skip_previous</i></a></li>
-      <h1>{this.state.viewtitle}</h1>
-      <li onClick={this.nextCal.bind(this)}><a><i className="material-icons black-text">skip_next</i></a></li>
+      <li onClick={this.prevCal.bind(this)} id="mob-date-left-li"><a id="mob-date-left"><i className="material-icons black-text">skip_previous</i></a></li>
+      <li id="mob-date-center"><h1>{this.state.viewtitle}</h1></li>
+      <li onClick={this.nextCal.bind(this)} id="mob-date-right-li"><a id="mob-date-right"><i className="material-icons black-text">skip_next</i></a></li>
       </ul>
-      <ul className="right">
+      <ul className="right hide-on-small-only">
         <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>
-      <li><a className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
+      <li><a id="eventdropdownbutton" className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
       {view=="month" ? <i className="material-icons black-text">today</i> :
         view=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
         view=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
       </a></li>
-      <li><a>|</a></li>
-      <li onClick={this.toggleInfoBar.bind(this)}><a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Show/Hide Infobar">
+    <li className="hide-on-small-only"><a>|</a></li>
+      <li onClick={this.toggleInfoBar.bind(this)}><a className="tooltipped hide-on-med-and-down" data-position="bottom" data-delay="50" data-tooltip="Show/Hide Infobar">
         <i className="material-icons black-text">
           {Meteor.user().preferences.events_infobar?"info":"info_outline"}
         </i>
       </a></li>
-    <li><a onClick={this.openHelp.bind(this)} className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Help"><i className="material-icons black-text">live_help</i></a></li>
+    <li><a onClick={this.openHelp.bind(this)} className="tooltipped hide-on-small-only" data-position="bottom" data-delay="50" data-tooltip="Help"><i className="material-icons black-text">live_help</i></a></li>
       </ul>
-    <ul id="caldrop" className="dropdown-content">
+    <ul id="caldrop" className="dropdown-content hide-on-small-only">
       <li onClick={this.monthView.bind(this)}><a><i className={view=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>
       <li onClick={this.weekView.bind(this)}><a><i className={view=="agendaWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_week</i></a></li>
       <li onClick={this.listView.bind(this)}><a><i className={view=="listWeek" ? "material-icons gold-text" : "material-icons black-text"}>view_list</i></a></li>

@@ -68,7 +68,7 @@ export default class WorkspacePanel extends React.Component {
 				<EventLocation ev={ev} perm={perm} />
 				<EventEVR ev={ev} perm={perm} />
 				<EventReserved ev={ev} perm={perm} />
-				<h5>Event Tags</h5>
+				<h5>Event Types</h5>
 				<EventTags ev={ev} perm={perm} />
 
 				<div className="row" style={{marginTop: "1em"}}>

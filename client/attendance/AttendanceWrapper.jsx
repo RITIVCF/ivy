@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tracker } from 'meteor/tracker';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import AttendanceSummary from './AttendanceSummary.jsx';
 import EventDetail from './EventDetail.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
@@ -39,16 +38,23 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
   getEvent(){
 		//console.log(Events.find({_id: this.props.eid}).fetch());
 		//return Events.find({_id: this.props.eid}).fetch();
-    console.log(this.state.subscription.Events.ready());
+    //console.log(this.state.subscription.Events.ready());
 		var ev = Events.findOne(this.props.eid);
-		var attendees = [];
-		var contact;
-		ev.attendees.map( (attendee)=>{
-			contact = Meteor.users.findOne(attendee._id);
-			for(var key in contact){
-				attendee[key] = contact[key];
-			}
-		});
+		// var attendees = [];
+		// var contact = {};
+		// ev.attendees.forEach( (attendee)=>{
+    //   // for(var key in attendee){
+		// 	// 	contact[key] = attendee[key];
+		// 	// }
+    //   //console.debug(attendee);
+    //   //contact = attendee;
+		// 	//attendee = new Contact(Meteor.users.findOne(attendee._id));
+    //   //console.debug(attendee);
+		// 	// for(var key in contact){
+		// 	// 	attendee[key] = contact[key];
+		// 	// }
+		// });
+    // console.debug("ev.attendees: ", ev.attendees);
 		return ev;
 	}
 
@@ -66,7 +72,7 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 				<div className="row">
 					<div className="col s12">
             {/*this.subsReady()?FlowRouter.current().path=="/attendance"?<h1>Attendance Dashboard</h1>:<h1>Event Detail</h1>:""*/}
-            {this.subsReady()?FlowRouter.current().path=="/attendance"?<AttendanceSummary />:<EventDetail ev={this.getEvent()} />:""}
+            {this.subsReady()?FlowRouter.current().path=="/attendance"?false:<EventDetail ev={this.getEvent()} />:""}
 					</div>
 				</div>
   )

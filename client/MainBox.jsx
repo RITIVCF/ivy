@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SubHeader from './layouts/SubHeader.jsx';
 import InfoBar from './InfoBar.jsx';
+import InfoBarMobile from './layouts/InfoBarMobile.jsx';
 
 
 export default class MainBox extends TrackerReact(React.Component) {
@@ -26,6 +27,9 @@ export default class MainBox extends TrackerReact(React.Component) {
 
 	        <InfoBar
 	          show={this.props.showinfobar}
+	          content={this.props.infobar}
+	          />
+					<InfoBarMobile
 	          content={this.props.infobar}
 	          />
 	      </div>

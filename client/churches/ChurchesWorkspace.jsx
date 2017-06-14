@@ -30,6 +30,10 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 		$("#"+this.props.ch._id).appendTo("body").modal("open");
 	}
 
+	close(){
+		$("#"+this.props.ch._id).modal('close');
+	}
+
 	preventPropo(event){
 		event.stopPropagation();
 	}
@@ -41,7 +45,7 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 		<div id={ch._id} className="modal modal-fixed-footer" onClick={this.preventPropo.bind(this)}>
 			<div className="modal-content">
 				<div className="row">
-					<ChurchName ch={ch}  />
+					<ChurchName ch={ch} />
 				</div>
 				<div className="row">
 					<ChurchURL ch={ch} />
@@ -53,8 +57,8 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 			</div>
 			<div className="modal-footer">
 				<a className="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
-				<ButtonActive ch={ch} />
-				<ButtonDelete ch={ch} />
+				<ButtonActive ch={ch} parent={this} />
+				<ButtonDelete ch={ch} parent={this} />
 			</div>
 
 		</div>

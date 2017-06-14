@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import FunnelTable from './FunnelTable.jsx';
+import FunnelChart from './FunnelChart.jsx';
 import FunnelChartLimited from './FunnelChartLimited.jsx';
 import FunnelChartMembership from './FunnelChartMembership.jsx';
 import FunnelTime from './FunnelTime.jsx';
@@ -24,8 +25,7 @@ export default class OverviewPage extends TrackerReact(React.Component) {
 						<div className="col s12 m6">
 							<div className="card">
 								<div className="card-content">
-									{/*}<FunnelChart ref="funnelchart" />*/}
-									<FunnelChartLimited />
+									<FunnelChart ref="funnelchart" />	{/*<FunnelChartLimited />*/}
 								</div>
 							</div>
 						</div>

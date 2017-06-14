@@ -10,38 +10,22 @@ export default class ContactEmail extends Component {
   updateEmail(event){
     event.preventDefault();
     var text = this.refs.email.value.trim();
-    Meteor.call('updateEmail', this.props.contact._id, text);
-    console.log(text);
-    this.state.value = text;
+    this.props.contact.setEmail(text);
   }
 
-  getContact(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
-		return Contacts.findOne({_id:Meteor.user().contact});
-	}
-
-
   render(){
-    /*
-    let contact = this.props.contact;
-
-  	if(!contact.email){
-  		return (<div>Loading...</div>);
-  	}
-    */
-    {/*this.props.disabled*/}
     return(
-      <div className="form-group" >
-        <label>Email</label>
-          <input type="text"
-            ref="email"
-            className="form-control"
-            disabled={true}
-            onBlur={this.updateEmail.bind(this)}
-            onChange={this.handleEmailChange}
-            value={this.props.contact.emails[0].address}
-          />
+      <div className="input-field">
+        <input type="email"
+          ref="email"
+          class="validate"
+          id="contact_email"
+          disabled={this.props.contact.isUser()}
+          onBlur={this.updateEmail.bind(this)}
+          onChange={this.handleEmailChange}
+          value={this.props.contact.getEmail()}
+        />
+      <label htmlFor="contact_email">Email</label>
       </div>
     )
   }
