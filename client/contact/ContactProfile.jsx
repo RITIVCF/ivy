@@ -17,6 +17,7 @@ import ContactCurrYear from './components/ContactCurrYear.jsx';
 import MemberForm from '../member/MemberForm.jsx';
 //import NewAddressModal from './NewAddressModal.jsx';
 import Event from './Event.jsx';
+import EditTicketForm from '../tickets/EditTicketForm.jsx';
 
 
 export default class ContactProfile extends TrackerReact(React.Component){
@@ -29,6 +30,11 @@ export default class ContactProfile extends TrackerReact(React.Component){
 
   componentDidMount(){
     $('select').material_select();
+    $('.modal').modal();
+  }
+
+  openTicket(){
+    $('#ticketmodal').appendTo("body").modal("open");
   }
 
   viewAllEvents(){
@@ -80,13 +86,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-
               {(contact.isUser()&&!contact.isMember())&&
                 <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
               }
 
               {(checkPermission("tickets")&&contact.hasTicket()&&!contact.isUser())&&
-                <a className="waves-effect waves-light btn right" href={"/tickets/"+contact.getTicketId()}>
+                <a className="waves-effect waves-light btn right" onClick={this.openTicket.bind(this)}>
                   Ticket # {contact.getTicket().ticketnum}
                 </a>
               }
@@ -171,6 +176,16 @@ export default class ContactProfile extends TrackerReact(React.Component){
           </div>
         </div>
         :""}
+        {console.log("Contact profile: ",this.props.modal?"Show Modal":"Do not show modal.")}
+        {(this.props.modal)&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
+          <div className="modal-content">
+            <EditTicketForm ticket={this.getTicket()} modal={false} />
+          </div>
+          <div className="modal-footer">
+            <a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
+            <a className="btn modal-action modal-close" href={"/tickets/"+this.getTicket()._id}>Open Ticket Page</a>
+          </div>
+        </div>}
       </div>
     )
   }

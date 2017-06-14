@@ -25,7 +25,7 @@ export default class MyEvents extends TrackerReact(React.Component) {
 	}
 
 	getRecent(){
-		return Events.find({"attendees._id":Meteor.userId()} ,{sort: {start: -1}}).fetch();
+		return Events.find({"attendees._id":Meteor.userId()} ,{sort: {start: -1}, limit: 3}).fetch();
 	}
 
 

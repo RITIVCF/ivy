@@ -5,8 +5,6 @@ import ContactProfile from './ContactProfile.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
 
-
-
 export default class ContactProfileWrapper extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
@@ -63,7 +61,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 
 		return (
 		<div className="container" >
-			<ContactProfile contact={contact} parent={this} subscriptions={this.state.subscription} />
+			<ContactProfile contact={contact} parent={this} subscriptions={this.state.subscription} modal={true} />
 		</div>
 		)
 	}
