@@ -41,12 +41,32 @@ export default class ContactProfile extends TrackerReact(React.Component){
     this.setState({viewallevents: true});
   }
 
+	getContact(){
+		return new Contact(
+			Meteor.users.findOne(this.props.cid)
+		);
+	}
+
   getEvents(){
+		let contact = this.props.contact;
     var options = {sort:{start:-1}};
     if(!this.state.viewallevents){
       options.limit = 3;
     }
-    return Events.find({"attendees._id": this.props.contact._id}, options).fetch();
+		if(this.props.cid){
+			contact = this.getContact();
+		}
+    return Events.find({"attendees._id": contact._id}, options).fetch();
+  }
+
+	getTicket(){
+    var ticket = Tickets.findOne(this.props.contact.ticket);
+    if(ticket){
+      return ticket;
+    }
+    else {
+      return {ticketnum: ''}
+    }
   }
 
   openMemberOverlay(){
@@ -60,7 +80,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
   }
 
   render() {
-    let contact = this.props.contact;
+		let contact = this.props.contact;
+		if(!!this.props.cid){
+			contact = this.getContact();
+		}
     var disable = true;
     var viewmember = false;
 
