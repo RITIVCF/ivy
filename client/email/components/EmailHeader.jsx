@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 export default class EmailHeader {
   getBannerImageURL() {
-    return "emailbanner.png";
+    return "http://localhost:3000/images/largegroup_1.jpg";
   }
 
   renderHTML() {
