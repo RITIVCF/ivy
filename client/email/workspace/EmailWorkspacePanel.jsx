@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import TinyMCE from '/client/sharedcomponents/TinyMCE.jsx';
+import TextInput from '/client/sharedcomponents/TextInput.jsx';
 import MaterialCollection from '/client/sharedcomponents/MaterialCollection/MaterialCollection.jsx';
 import DropdownButton from '/client/sharedcomponents/DropdownButton/DropdownButton.jsx';
 
@@ -17,7 +18,8 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 
     this.state = {
 			validModules: validModules,
-			activeModule: false
+			activeModule: false,
+			title: ""
     };
 
 		this.addModule = this.addModule.bind(this);
@@ -85,6 +87,7 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 		this.selectModule = this.selectModule.bind(this);
 		this.removeModule = this.removeModule.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleTitleChange = this.handleTitleChange.bind(this);
   }
 
 	addModule(moduleType){
@@ -98,6 +101,12 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 		// Call function that does the changing of stu
 		this.setState({})
 		Meteor.call("setModuleDesc", this.props.email._id, i, desc);
+	}
+
+	handleTitleChange(title){
+		console.log("i: ", i);
+		console.log("title: ", title);
+		Meteor.call("setModuleTitle", this.props.email._id, this.state.activeModule, title);
 	}
 
   componentWillUnmount() {
@@ -158,6 +167,7 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 
     return (
 			<div className="col s12">
+				{this.isModuleSelected() && <TextInput id={id} label="Title" onChange={this.handleTitleChange} defaultValue={email.modules[activeModule].title}/>}
 				{this.isModuleSelected() && <TinyMCE id={id} content={email.modules[activeModule].desc} onChange={this.handleChange} />}
 				<h5>Email Modules:
 					<DropdownButton

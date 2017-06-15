@@ -260,7 +260,7 @@ let options = [
 	    },
 	    {
 	      "value": "thumbnail",
-	      "isUserAccessible": false
+	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "feature",
@@ -268,7 +268,7 @@ let options = [
 	    },
 	    {
 	      "value": "banner",
-	      "isUserAccessible": false
+	      "isUserAccessible": true
 	    }
 	  ]
 	},

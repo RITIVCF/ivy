@@ -84,28 +84,44 @@ Meteor.methods({
 	},
 	setModuleDesc(emid, i, desc){
 		let update = {};
-		update["modules."+i+".desc"] = desc;
+		update = setupModuleUpdate(i, "desc", desc);
 
 		Emails.update(
 			{_id: emid},
 			{$set: update}
 		);
 
+	},
+	setModuleTitle(emid, i, title){
+		let update = {};
+		console.log("i: ", i);
+		update = setupModuleUpdate(i, "title", title);
+		console.log("update: ", update);
+		Emails.update(
+			{_id: emid},
+			{$set: update}
+		);
 	}
 });
 
+
+let setupModuleUpdate = function(i, fieldname, value){
+	let update = {};
+	update["modules." + i + "." + fieldname] = value;
+	return update;
+}
 
 let newModule = function( type ) {
 	if(!Options.findOne({_id: "emailtypes", "vals.value": type})){
 		Meteor.throw("Incorrect type");
 	}
 	let module = {
-		title: false,
+		title: "",
 		type: type,
-		eid: false,
-		desc: false,
-		img: false,
-		layout: false
+		eid: "",
+		desc: "",
+		img: "",
+		layout: ""
 	}
 
 	return module;
