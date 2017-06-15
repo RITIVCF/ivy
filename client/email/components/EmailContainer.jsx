@@ -1,6 +1,3 @@
-import React from 'react';
-import TrackerReact from 'meteor/ultimatejs:tracker-react';
-
 import EmailHeader from './EmailHeader.jsx';
 import EmailBody from './EmailBody.jsx';
 import EmailFooter from './EmailFooter.jsx';
@@ -18,8 +15,7 @@ export default class EmailContainer {
     return "title";
   }
 
-  renderHTML() {
-
+  renderHTML(email) {
     return (
       `<!DOCTYPE html>
       <html lang="en">
@@ -204,7 +200,7 @@ export default class EmailContainer {
                   <td>
                   <![endif]-->`
                   + this.EmailHeader.renderHTML()
-                  + this.EmailBody.renderHTML()
+                  + this.EmailBody.renderHTML(email.modules)
                   + this.EmailFooter.renderHTML() +
             `<!--[if mso]>
                   </td>

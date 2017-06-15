@@ -24,17 +24,18 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
 		console.log(this.refs.emailtemplate.contentWindow.document);
 		console.log(this.refs.emailtemplate.contentWindow.document.body.innerHTML);
 		let email = this.getEmail();
-		this.setContent("Test Content");
+		this.setContent();
 
 	}
 
 	componentWillUpdate(nextProps){
 		// Email Container = new Email Containter
 		// this.setContent(emailContainer.renderHTML());
-		this.setContent("Test Content");
+		this.setContent();
 	}
 
-	setContent(content){
+	setContent(){
+    let content = this.EmailContainer.renderHTML(this.getEmail());
 		this.refs.emailtemplate.contentWindow.document.body.innerHTML = content;
 	}
 
@@ -47,7 +48,7 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
       <div>
 				<iframe
 					ref="emailtemplate"
-					style={{width: "100%", height: "100%"}}
+					style={{width: "100%", height: "100%", border: "none"}}
 					>
 				</iframe>
 			</div>
