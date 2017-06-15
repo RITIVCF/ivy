@@ -28,7 +28,7 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
 
 	}
 
-	componentWillUpdate(nextProps){
+	componentDidUpdate(nextProps){
 		// Email Container = new Email Containter
 		// this.setContent(emailContainer.renderHTML());
 		this.setContent();
