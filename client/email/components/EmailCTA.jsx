@@ -1,7 +1,7 @@
 export default class EmailCTA {
   constructor() {
 
-    this.setButtonColor("#222222")
+    this.setButtonColor("#FCB816")
     this.setBackgroundColor("#ffffff")
 
   }
