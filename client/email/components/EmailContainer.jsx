@@ -25,12 +25,8 @@ export default class EmailContainer {
         <meta name="viewport" content="width=device-width">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="x-apple-disable-message-reformatting">
-        <title>` + this.getEmailTitle() + `</title>
+        <title>` + email.subject + `</title>
 
-        <!-- Web Font / @font-face : BEGIN -->
-        <!-- NOTE: If web fonts are not required, lines 10 - 27 can be safely removed. -->
-
-        <!-- Desktop Outlook chokes on web font references and defaults to Times New Roman, so we force a safe fallback font. -->
         <!--[if mso]>
               <style>
                   * {
@@ -39,7 +35,6 @@ export default class EmailContainer {
               </style>
           <![endif]-->
 
-        <!-- All other clients get the webfont reference; some will render the font and others will silently fail to the fallbacks. More on that here: http://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
         <!--[if !mso]><!-->
         <!-- insert web font reference, eg: <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'> -->
         <!--<![endif]-->
@@ -108,6 +103,12 @@ export default class EmailContainer {
             display: none !important;
           }
 
+          <!-- Attempt to fix emoji replacement in Gmail on computer -->
+          img[goomoji] {
+            max-height: 15px;
+            filter: grayscale();
+          }
+
           .button-link {
             text-decoration: none !important;
           }
@@ -140,6 +141,12 @@ export default class EmailContainer {
           .button-a:hover {
             background: #555555 !important;
             border-color: #555555 !important;
+          }
+
+          <!-- Attempt to fix emoji replacement in Gmail on computer -->
+          img[goomoji] {
+            max-height: 15px !important;
+            filter: grayscale();
           }
 
           @media screen and (max-width: 480px) {
@@ -184,13 +191,13 @@ export default class EmailContainer {
 
       </head>
 
-      <body width="100%" bgcolor="#222222" style="margin: 0; mso-line-height-rule: exactly;">
-        <center style="width: 100%; background: #222222; text-align: left;">
+      <body width="100%" bgcolor="#f1f1f1" style="margin: 0; mso-line-height-rule: exactly;">
+        <center style="width: 100%; background: #f1f1f1; text-align: left;">
 
           <!-- Visually Hidden Preheader Text : BEGIN -->
-          <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
-            (Optional) This text will appear in the inbox preview, but not the email body.
-          </div>
+          <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">`
+            + email.modules[0].desc +
+          `</div>
           <!-- Visually Hidden Preheader Text : END -->
 
           <div style="max-width: 680px; margin: auto;" class="email-container">

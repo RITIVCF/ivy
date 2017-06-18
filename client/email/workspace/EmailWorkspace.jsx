@@ -44,11 +44,12 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
 	}
 
   render() {
+    Events.find().fetch();
     return (
       <div>
 				<iframe
 					ref="emailtemplate"
-					style={{width: "100%", height: "100%", border: "none"}}
+					style={{maxWidth: "100%", height: "100%", border: "none", resize: "horizontal"}}
 					>
 				</iframe>
 			</div>

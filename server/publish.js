@@ -599,6 +599,13 @@ Meteor.publish("thisEmail", function(emid){
   return Emails.find({_id: emid});
 });
 
+Meteor.publish("emailEvents", function() {
+  let n = addDays(new Date(), 7);
+  return Events.find({$or:[
+    {start: {$gt: new Date(), $lt: n}, published: true},
+    {start: {$gt: new Date()}, tags: "Conference"}
+  ]});
+})
 //***************************************
 
 // *******    Debrief   ************

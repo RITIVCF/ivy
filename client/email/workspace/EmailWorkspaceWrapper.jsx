@@ -15,7 +15,8 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
     this.state = {
       subscription: {
-        email: Meteor.subscribe("myEmails")
+        email: Meteor.subscribe("myEmails"),
+        events: Meteor.subscribe("emailEvents")
       }
     };
 
@@ -24,6 +25,7 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
   componentWillUnmount() {
     this.state.subscription.email.stop();
+    this.state.subscription.events.stop();
   }
 
 	getEmail(){
