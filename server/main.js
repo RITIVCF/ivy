@@ -1,7 +1,5 @@
 //import "./jobCollection.js";
 
-import '/server/startup/dbInitialize.js';
-
 function getMyGroupsIDs(){
 	var grps = Groups.find({users: this.userId}).fetch();
 	var ids = [];
