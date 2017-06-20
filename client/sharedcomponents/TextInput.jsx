@@ -8,6 +8,14 @@ export default class TextInput extends TrackerReact(React.Component) {
 		this.handleChange = this.handleChange.bind(this);
   }
 
+	componentDidMount(){
+		Materialize.updateTextFields();
+	}
+
+	componentDidUpdate(){
+		Materialize.updateTextFields();
+	}
+
 	handleChange(event){
 		this.props.onChange(event.target.value);
 	}

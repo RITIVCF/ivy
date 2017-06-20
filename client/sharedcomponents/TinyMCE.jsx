@@ -8,12 +8,17 @@ export default class TinyMCE extends TrackerReact(React.Component) {
   }
 
 	handleChange(content){
-		this.props.onChange(this.props.id, content);
+		this.props.onChange(content);
 	}
 
-	initializeTinyMCE(id){
+	getId(){
+		return this.props.id + "_tinymce";
+	}
+
+	initializeTinyMCE(){
+		let id = this.getId();
 		tinymce.init({
-			selector: "#"+id,
+			selector: "#"+ id,
 			theme: "modern",
 			height: 300,
 			plugins: "paste contextmenu hr searchreplace",
@@ -42,34 +47,35 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 		tinymce.get(id).setContent(this.props.content);
 	}
 
-	removeTinyMCE(id){
+	removeTinyMCE(){
+		let id = this.getId();
 		tinymce.EditorManager.execCommand('mceRemoveEditor', true, id);
 	}
 
   componentDidMount(){
-		this.initializeTinyMCE(this.props.id);
+		this.initializeTinyMCE();
   }
 
 	componentWillUnmount(){
-		this.removeTinyMCE(this.props.id);
+		this.removeTinyMCE();
 	}
 
-	componentWillUpdate(nextProps){
-		if(nextProps.id != this.props.id){
-			// Switching modules
-			this.removeTinyMCE(this.props.id);
-		}
-	}
-
-	componentDidUpdate(prevProps){
-		if(prevProps.id != this.props.id){
-			// Switching Modules
-			this.initializeTinyMCE(this.props.id);
-		}
-	}
+	// componentWillUpdate(nextProps){
+	// 	if(nextProps.id != this.props.id){
+	// 		// Switching modules
+	// 		this.removeTinyMCE(this.props.id);
+	// 	}
+	// }
+	//
+	// componentDidUpdate(prevProps){
+	// 	if(prevProps.id != this.props.id){
+	// 		// Switching Modules
+	// 		this.initializeTinyMCE(this.props.id);
+	// 	}
+	// }
 
 	render() {
-		let id = this.props.id;
+		let id = this.getId();
     return (
 			<textarea id={id}>
 			</textarea>

@@ -1,3 +1,5 @@
+import { Random } from 'meteor/random';
+
 Meteor.methods({
 	// *******    Email Methods  ************
   newEmail(templateId, frm, recip){
@@ -22,6 +24,7 @@ Meteor.methods({
       staged: false
     });
   },
+
   updateEmailSubject(emid, subj){
     Emails.update(emid, {$set: {subject: subj}});
   },
@@ -37,15 +40,18 @@ Meteor.methods({
   updateEmailStaged(emid, stg){
     Emails.update(emid, {$set: {staged: stg}});
   },
+
   sendEmail(emid){
     var email = Emails.findOne(emid);
     // This function processes everything and sends the email
     Emails.update(emid, {$set: {sent: true}});
     StagedEmails.remove({_id: emid});
   },
+
   stageEmail(emid){
     StagedEmails.insert({_id: emid});
   },
+
   newEmailTemplate(email, ttle){
     Emails.insert({
       title: ttle,
@@ -56,9 +62,8 @@ Meteor.methods({
       isTemplate: true
     });
   },
+
 	addModule(emid, type){
-		console.log("emid: ", emid);
-		console.log("Type: ", type);
 		Emails.update(
 			{_id: emid},
 			{$push: {
@@ -66,14 +71,16 @@ Meteor.methods({
 			}
 		});
 	},
-	removeModule(emid, module){
+
+	removeModule(emid, moduleId){
 		Emails.update(
 			{_id: emid},
 			{$pull: {
-				modules: module
+				"modules._id": moduleId
 			}
 		});
 	},
+
 	setModules(emid, modules){
 		Emails.update(
 			{_id: emid},
@@ -82,40 +89,46 @@ Meteor.methods({
 			}
 		});
 	},
-	setModuleDesc(emid, i, desc){
+
+	setModuleField(emid, moduleId, field, value){
 		let update = {};
-		update = setupModuleUpdate(i, "desc", desc);
-
+		update["modules.$."+field] = value;
 		Emails.update(
-			{_id: emid},
-			{$set: update}
-		);
-
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: update
+			}
+		)
 	},
-	setModuleTitle(emid, i, title){
-		let update = {};
-		console.log("i: ", i);
-		update = setupModuleUpdate(i, "title", title);
-		console.log("update: ", update);
+
+	setModuleDesc(emid, moduleId, desc){
 		Emails.update(
-			{_id: emid},
-			{$set: update}
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{$set: {"modules.$.desc": desc}}
+		);
+	},
+
+	setModuleTitle(emid, moduleId, title){
+		Emails.update(
+			{_id: emid,
+				"modules._id": moduleId},
+			{$set: {"modules.$.title": title}}
 		);
 	}
 });
 
-
-let setupModuleUpdate = function(i, fieldname, value){
-	let update = {};
-	update["modules." + i + "." + fieldname] = value;
-	return update;
-}
-
 let newModule = function( type ) {
 	if(!Options.findOne({_id: "emailtypes", "vals.value": type})){
-		Meteor.throw("Incorrect type");
+		Meteor.Error("Incorrect type");
 	}
 	let module = {
+		_id: Random.id(25),
 		title: "",
 		type: type,
 		eid: "",
@@ -126,3 +139,7 @@ let newModule = function( type ) {
 
 	return module;
 }
+
+export {
+	newModule
+};
