@@ -30,7 +30,7 @@ Meteor.methods({
 	},
 	setOptionsVal(id, val){
 		if(checkPermission("admin", Meteor.userId())){
-			Options.update({_id: id}, {$set: {vals: val}});
+			Options.update({_id: id}, {$set: {val: val}});
 		}
 	}
 });

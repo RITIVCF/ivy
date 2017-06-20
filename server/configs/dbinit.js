@@ -1,7 +1,8 @@
 // Check db and initialize
 import { Accounts } from 'meteor/accounts-base';
-//Set up Groups
+import { newModule } from '/server/emailCenterMethods.js';
 
+//Set up Groups
 let groups = [
 	{
 		_id:"admin",
@@ -205,25 +206,25 @@ let options = [
 	  "vals": [
 	    {
 	      "label": "Resource",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Design",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Advertising",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Other",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    }
 	  ]
 	},
 	{
 		_id: "debriefquestions",
-		val: "<p><strong>Where did you see God moving in this event?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p><strong>Was this event a success?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Why/why not?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p><strong>Was this an overall positive experience?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Why/why not?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Would you like to lead an event like this again?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>"
+		val: ""
 	},
 	{
 	  "_id": "funnelcalculation",
@@ -236,38 +237,47 @@ let options = [
 	  "vals": [
 	    {
 	      "value": "header",
+				"title": "",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "footer",
+				"title": "",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "socialmedia",
+				"title": "",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "text",
+				"title": "",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "cta",
+				"title": "",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "grid",
+				"title": "",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "thumbnail",
+				"title": "",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "feature",
+				"title": "",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "banner",
+				"title": "",
 	      "isUserAccessible": true
 	    }
 	  ]
@@ -375,54 +385,67 @@ let options = [
 	  "vals": [
 	    {
 	      "value": "intro",
+				"name": "Intro",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "header",
+				"name": "Header",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "largegroup",
+				"name": "Large Group",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "smallgroup",
+				"name": "Small Group",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "nso",
+				"name": "NSO",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "social",
+				"name": "Social",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "prayer",
+				"name": "Prayer",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "getinvolved",
+				"name": "Get Involved",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "becomeamember",
+				"name": "Become a Member",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "conference",
+				"name": "Conference",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "core",
+				"name": "Core",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "custom",
+				"name": "Custom",
 	      "canChooseLayout": true
 	    },
 	    {
 	      "value": "eventpromotion",
+				"name": "Event Promotion",
 	      "canChooseLayout": false
 	    }
 	  ]
@@ -437,6 +460,40 @@ options.forEach( (option) => {
 		Options.remove({_id: option._id});
 		Options.insert(option);
 	}
+});
+
+
+// Intialize Email Templates
+let emailTemplates = [
+	{
+	  "_id": "newsletter",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "ivcf@rit.edu",
+	  "subject": "IVCF Chapter Newsletter",
+	  "isTemplate": true,
+	  "title": "Newsletter",
+	  "modules": [
+			newModule("intro"),
+			newModule("nso"),
+			newModule("social"),
+			newModule("largegroup"),
+			newModule("smallgroup"),
+			newModule("prayer"),
+			newModule("core"),
+			newModule("conferences"),
+			newModule("becomeamember"),
+			newModule("getinvolved")
+		]
+	}
+];
+
+emailTemplates.forEach( (template) => {
+	Emails.remove({_id: template._id});
+	Emails.insert(template);
 });
 
 // initialize counters
@@ -561,6 +618,7 @@ pagePermissions.forEach( (perm) => {
 		PagePermissions.insert(perm);
 	}
 });
+
 
 
 // Initialize admin user

@@ -1,25 +1,18 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import TinyMCE from '/client/sharedcomponents/TinyMCE.jsx';
-import TextInput from '/client/sharedcomponents/TextInput.jsx';
-import MaterialCollection from '/client/sharedcomponents/MaterialCollection/MaterialCollection.jsx';
+import MaterialCollapsible from '/client/sharedcomponents/MaterialCollapsible/MaterialCollapsible.jsx';
 import DropdownButton from '/client/sharedcomponents/DropdownButton/DropdownButton.jsx';
+import ModuleForm from '/client/email/workspace/ModuleForm.jsx';
+import EmailModule from '/lib/classes/EmailModule.js';
 
 export default class EmailWorkspacePanel extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
 
 		let email = props.email;
-		let validModules = [
-			"custom",
-			"intro",
-			"eventpromotion"
-		];
 
     this.state = {
-			validModules: validModules,
-			activeModule: false,
-			title: ""
+
     };
 
 		this.addModule = this.addModule.bind(this);
@@ -37,76 +30,14 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 			{
 				text: "Intro",
 				arg: "intro"
-			},
-			{
-				text: "Header",
-				arg: "header"
-			},
-			{
-				text: "Social Media",
-				arg: "socialmedia"
-			},
-			{
-				text: "Small Group",
-				arg: "smallgroup"
-			},
-			{
-				text: "Large Group",
-				arg: "largegroup"
-			},
-			{
-				text: "NSO",
-				arg: "nso"
-			},
-			{
-				text: "Social Events",
-				arg: "social"
-			},
-			{
-				text: "Prayer",
-				arg: "prayer"
-			},
-			{
-				text: "Get Involved",
-				arg: "getinvolved"
-			},
-			{
-				text: "Become a Member",
-				arg: "becomeamember"
-			},
-			{
-				text: "Conference",
-				arg: "conference"
-			},
-			{
-				text: "Core",
-				arg: "core"
 			}
 		];
 
-		this.selectModule = this.selectModule.bind(this);
-		this.removeModule = this.removeModule.bind(this);
-		this.handleChange = this.handleChange.bind(this);
-		this.handleTitleChange = this.handleTitleChange.bind(this);
+
   }
 
 	addModule(moduleType){
-		Meteor.call("addModule", this.props.email._id, moduleType, ()=>{
-			// Make the new module active
-			this.setState({activeModule: this.props.email.modules.length});
-		});
-	}
-
-	handleChange(i, desc){
-		// Call function that does the changing of stu
-		this.setState({})
-		Meteor.call("setModuleDesc", this.props.email._id, i, desc);
-	}
-
-	handleTitleChange(title){
-		console.log("i: ", i);
-		console.log("title: ", title);
-		Meteor.call("setModuleTitle", this.props.email._id, this.state.activeModule, title);
+		Meteor.call("addModule", this.props.email._id, moduleType);
 	}
 
   componentWillUnmount() {
@@ -117,39 +48,23 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 		return this.moduleOptions;
 	}
 
-	isModuleSelected(){
-		let module = this.props.email.modules[this.state.activeModule];
-		let moduleType = "";
-		if(!!module){
-			moduleType = module.type;
-		}
-		return this.state.validModules.includes(moduleType);
-	}
-
-	getEditorId(){
-		return this.state.activeModule;
-	}
-
-	getModuleValues(){
-		let types = Options.findOne("emailtypes");
-		let moduleList = [];
-		this.props.email.modules.forEach( (module) => {
-
-			moduleList.push(module.type);
+	getSections(){
+		let emid = this.getEmail()._id;
+		let sections = [];
+		this.getEmail().modules.map( (module) => {
+			let emailModule = new EmailModule(module);
+			let section = {
+				header: emailModule.getModuleName(),
+				icon: "close",
+				content: <ModuleForm emid={emid} module={emailModule} />
+			};
+			sections.push(section);
 		});
-		return moduleList;
+		return sections;
 	}
 
 	getEmail(){
-		// if(!emid){
-		// 	emid = this.props.emid;
-		// }
-		// return Emails.findOne(emid);
 		return this.props.email;
-	}
-
-	selectModule(i){
-		this.setState({activeModule: i});
 	}
 
 	removeModule(module){
@@ -159,31 +74,26 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 	}
 
   render() {
-		let id = this.getEditorId();
 		let email = this.getEmail();
-		let activeModule = this.state.activeModule;
-		let moduleValues = this.getModuleValues();
+		let sections = this.getSections();
 		let options = this.getModuleOptions();
 
     return (
-			<div className="col s12">
-				{this.isModuleSelected() && <TextInput id={id} label="Title" onChange={this.handleTitleChange} defaultValue={email.modules[activeModule].title}/>}
-				{this.isModuleSelected() && <TinyMCE id={id} content={email.modules[activeModule].desc} onChange={this.handleChange} />}
-				<h5>Email Modules:
-					<DropdownButton
-						id={"selectEmailModule"}
-						icon="add"
-						options={options}
-						action={this.addModule}
-						/>
-				</h5>
-				<MaterialCollection
-					selectedIndex={activeModule}
-					values={moduleValues}
-					onSelect={this.selectModule}
-					icon="close"
-					action={this.removeModule}
-					  />
+			<div className="row">
+				<div className="col s12">
+					<h5>Email Modules:
+						<DropdownButton
+							id={"selectEmailModule"}
+							icon="add"
+							options={options}
+							action={this.addModule}
+							/>
+					</h5>
+				</div>
+				<MaterialCollapsible
+					type="accordion"
+					id="emailworkspace"
+					sections={sections} />
 			</div>
     )
   }
