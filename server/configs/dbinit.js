@@ -1,6 +1,6 @@
 // Check db and initialize
 import { Accounts } from 'meteor/accounts-base';
-import { newModule } from '/server/emailCenterMethods.js';
+import { newEmailModule } from '/lib/modules.js';
 
 //Set up Groups
 let groups = [
@@ -237,47 +237,47 @@ let options = [
 	  "vals": [
 	    {
 	      "value": "header",
-				"title": "",
+				"name": "Header",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "footer",
-				"title": "",
+				"name": "Footer",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "socialmedia",
-				"title": "",
+				"name": "Social Media",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "text",
-				"title": "",
+				"name": "Text",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "cta",
-				"title": "",
+				"name": "Call to Action",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "grid",
-				"title": "",
+				"name": "Grid",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "thumbnail",
-				"title": "",
+				"name": "Left/Right Thumbail",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "feature",
-				"title": "",
+				"name": "Feature",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "banner",
-				"title": "",
+				"name": "Banner",
 	      "isUserAccessible": true
 	    }
 	  ]
@@ -386,67 +386,74 @@ let options = [
 	    {
 	      "value": "intro",
 				"name": "Intro",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "header",
 				"name": "Header",
+				"defaultLayout": "header",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "largegroup",
 				"name": "Large Group",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "smallgroup",
 				"name": "Small Group",
+				"defaultLayout": "grid",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "nso",
 				"name": "NSO",
+				"defaultLayout": "grid",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "social",
 				"name": "Social",
+				"defaultLayout": "feature",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "prayer",
 				"name": "Prayer",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "getinvolved",
 				"name": "Get Involved",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "becomeamember",
 				"name": "Become a Member",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "conference",
 				"name": "Conference",
+				"defaultLayout": "feature",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "core",
 				"name": "Core",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "custom",
 				"name": "Custom",
+				"defaultLayout": "text",
 	      "canChooseLayout": true
-	    },
-	    {
-	      "value": "eventpromotion",
-				"name": "Event Promotion",
-	      "canChooseLayout": false
 	    }
 	  ]
 	}
@@ -477,16 +484,16 @@ let emailTemplates = [
 	  "isTemplate": true,
 	  "title": "Newsletter",
 	  "modules": [
-			newModule("intro"),
-			newModule("nso"),
-			newModule("social"),
-			newModule("largegroup"),
-			newModule("smallgroup"),
-			newModule("prayer"),
-			newModule("core"),
-			newModule("conferences"),
-			newModule("becomeamember"),
-			newModule("getinvolved")
+			newEmailModule("intro"),
+			newEmailModule("nso"),
+			newEmailModule("social"),
+			newEmailModule("largegroup"),
+			newEmailModule("smallgroup"),
+			newEmailModule("prayer"),
+			newEmailModule("core"),
+			newEmailModule("conference"),
+			newEmailModule("becomeamember"),
+			newEmailModule("getinvolved")
 		]
 	}
 ];

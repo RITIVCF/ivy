@@ -37,13 +37,14 @@ export default class ModuleForm extends TrackerReact(React.Component){
 
   render() {
 		let module = this.props.module;
+		let isTitleEditable = module.isTitleEditable();
+		let isDescEditable = module.isDescEditable();
 		let id = module._id;
     return (
 			<div className="row">
 				<div className="col s12">
-
-					<TextInput id={id} label="Title" onChange={this.handleTitleChange} defaultValue={module.title} />
-					<TinyMCE id={id} content={module.desc} onChange={this.handleDescChange} />
+					{isTitleEditable && <TextInput id={id} label="Title" onChange={this.handleTitleChange} defaultValue={module.getTitle()} />}
+					{isDescEditable && <TinyMCE id={id} content={module.desc} onChange={this.handleDescChange} />}
 				</div>
 			</div>
     )

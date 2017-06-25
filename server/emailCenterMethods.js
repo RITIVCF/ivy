@@ -1,36 +1,32 @@
-import { Random } from 'meteor/random';
+import {
+	newEmail,
+	updateEmailSubject,
+	updateEmailTo,
+	addUserEmailRecipient,
+	addGroupEmailRecipient,
+	addEmailEmailRecipient
+} from '/lib/emails.js';
+import { newEmailModule } from '/lib/modules.js';
 
 Meteor.methods({
 	// *******    Email Methods  ************
   newEmail(templateId, frm, recip){
-    /* Args:
-              recip: {
-                users: [userIds],
-                groups: [gids],
-                emails: ["emails"]
-              }
-    */
-    var template = Emails.findOne(templateId);
-    return Emails.insert({
-      uid: Meteor.userId(),
-      sent: false,
-      to: recip,
-      from: frm,   // email string
-      subject: template.subject,
-      modules: template.modules,
-      sent: false,
-      when: new moment().add(2,"hours")._d,
-      template: template._id,
-      staged: false
-    });
+    let newEmailId = newEmail(templateId, frm, recip);
+		return newEmailId;
   },
 
   updateEmailSubject(emid, subj){
-    Emails.update(emid, {$set: {subject: subj}});
+    updateEmailSubject(emid, subj);
   },
-  updateEmailTo(emid, to){
-    Emails.update(emid, {$set: {to: to}});
+  addUserEmailRecipient(emid, newRecipient){
+    addUserEmailRecipient(emid, newRecipient);
   },
+	addGroupEmailRecipient(emid, newRecipient){
+		addGroupEmailRecipient(emid, newRecipient);
+	},
+	addEmailEmailRecipient(emid, newRecipient){
+		addEmailEmailRecipient(emid, newRecipient);
+	},
   updateEmailFrom(emid, from){
     Emails.update(emid, {$set: {from: from}});
   },
@@ -66,10 +62,23 @@ Meteor.methods({
 	addModule(emid, type){
 		Emails.update(
 			{_id: emid},
-			{$push: {
-				modules: newModule(type)
+			{
+				$push: {
+					modules: newEmailModule(type)
+				}
 			}
-		});
+		);
+	},
+
+	addCustomModule(emid, layout){
+		Emails.update(
+			{_id: emid},
+			{
+				$push: {
+					modules: newEmailModule("custom", layout)
+				}
+			}
+		);
 	},
 
 	removeModule(emid, moduleId){
@@ -88,6 +97,42 @@ Meteor.methods({
 				modules: modules
 			}
 		});
+	},
+
+	moveModuleUp(emid, moduleIndex){
+		let modules = Emails.findOne(emid).modules;
+		let newIndex = moduleIndex - 1;
+		if(newIndex < 0){ // If at initial position, don't move it
+			newIndex = 0;
+		}
+
+		modules.move(moduleIndex, newIndex);
+
+		Emails.update(
+			{_id: emid},
+			{$set: {
+				modules: modules
+			}}
+		);
+
+
+	},
+
+	moveModuleDown(emid, moduleIndex){
+		let modules = Emails.findOne(emid).modules;
+		let newIndex = moduleIndex + 1;
+		if(newIndex > modules.length){ //If at end, keep at end
+			newIndex = modules.length;
+		}
+
+		modules.move(moduleIndex, newIndex);
+
+		Emails.update(
+			{_id: emid},
+			{$set: {
+				modules: modules
+			}}
+		);
 	},
 
 	setModuleField(emid, moduleId, field, value){
@@ -122,24 +167,3 @@ Meteor.methods({
 		);
 	}
 });
-
-let newModule = function( type ) {
-	if(!Options.findOne({_id: "emailtypes", "vals.value": type})){
-		Meteor.Error("Incorrect type");
-	}
-	let module = {
-		_id: Random.id(25),
-		title: "",
-		type: type,
-		eid: "",
-		desc: "",
-		img: "",
-		layout: ""
-	}
-
-	return module;
-}
-
-export {
-	newModule
-};
