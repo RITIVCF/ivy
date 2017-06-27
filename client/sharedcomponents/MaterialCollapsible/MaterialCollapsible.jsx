@@ -42,7 +42,8 @@ export default class MaterialCollapsible extends TrackerReact(React.Component) {
 						<MaterialCollapsibleSection
 							key={i}
 							header={section.header}
-							icon={section.icon}
+							leftIcon={section.leftIcon}
+							rightIcon={section.rightIcon}
 							content={section.content} />
 					)
 				})}
@@ -60,13 +61,15 @@ class MaterialCollapsibleSection extends TrackerReact(React.Component) {
 
 	render(){
 		let header = this.props.header;
-		let icon = this.props.icon;
+		let leftIcon = this.props.leftIcon;
+		let rightIcon = this.props.rightIcon;
 		let content = this.props.content;
 		return (
 			<li>
 				<div className="collapsible-header">
-					{!!icon && <MaterialIcon icon={icon} />}
+					{!!leftIcon && <MaterialIcon icon={leftIcon.icon} action={leftIcon.action} />}
 					{header}
+					{!!rightIcon && <MaterialIcon icon={rightIcon.icon} action={rightIcon.action} />}
 				</div>
 				<div className="collapsible-body">
 					<span>

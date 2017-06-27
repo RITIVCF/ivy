@@ -6,6 +6,7 @@ import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
 
 import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
+import { loadEmail } from '/lib/emails.js';
 
 //Contacts = new Mongo.Collection('contacts');
 
@@ -29,7 +30,7 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
   }
 
 	getEmail(){
-		return Emails.findOne(this.props.emid);
+		return loadEmail(this.props.emid);
 	}
 
   render() {
@@ -39,8 +40,9 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
     if(!checkPermission("emails")){
       return <NoPerm />
     }
-    document.title="Ivy - Email Workspace";
+    setDocumentTitle("Email Workspace");
 		let email = this.getEmail();
+		console.log("Email: ", email);
 
     return (
       <MainBox
