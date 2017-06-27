@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import EmailContainer from '/client/email/components/EmailContainer.jsx';
+import EmailContainer from '/lib/emails/components/EmailContainer.jsx';
 
 export default class EmailWorkspace extends TrackerReact(React.Component){
   constructor() {

@@ -86,7 +86,6 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ****  Email  ***************
 import EmailWrapper from './email/summary/EmailWrapper.jsx';
 import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
-import EmailTemplateViewWrapper from '/client/email/templateview/EmailTemplateViewWrapper.jsx';
 // ****************************
 
 // **** Forms  ***************
@@ -482,16 +481,6 @@ emailsRoutes.route('/workspace/:emid',{
 		mount(MainLayout, {
 			header: "Email Workspace",
 			content: (<EmailWorkspaceWrapper emid={params.emid} />)
-		})
-	}
-});
-
-// Email template view for iframe
-emailsRoutes.route('/editorView/:emid',{
-	name: "emailtemplateView",
-	action(params){
-		mount(EmailTemplateViewLayout, {
-			content: (<EmailTemplateViewWrapper emid={params.emid} />)
 		})
 	}
 });
