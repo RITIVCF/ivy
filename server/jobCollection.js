@@ -1,4 +1,5 @@
 // Makes sure jobCollection var is in global scope
+import { buildHTML } from '/lib/emails.js';
 var jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
@@ -15,6 +16,19 @@ newFunnelCalulateJob = function(uid, notValidIntervals = 0){
 			notValidIntervals: notValidIntervals
 		}
 	);
+}
+
+newNewsletterJob = function(emid){
+	return new Job(jobCollection, 'sendNewsletter',
+		{
+			emid: emid
+		}
+	);
+}
+
+scheduleJobAndSubmit = function (job, afterValue){
+	job.after( afterValue );
+	job.save();
 }
 
 getJobCollectionJob = function(jid){
@@ -102,6 +116,30 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 		);
 
 	}
+
+	// Mark as finished
+	job.done();
+	job.remove();
+	cb();
+
+
+});
+
+
+
+
+Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+	let email = Emails.findOne(job.data.emid);
+	let emailHTML = buildHTML(email);
+	let recipients = getUsers({newsletter: true});
+	recipients.map( (recipient) => {
+		Email.send({
+      to: recipient.getEmail(),
+      from: email.from,
+      subject: email.subject,
+      html: emailHTML
+    });
+	});
 
 	// Mark as finished
 	job.done();
