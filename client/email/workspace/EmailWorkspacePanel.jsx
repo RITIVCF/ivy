@@ -79,7 +79,7 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 		let options = this.getModuleOptions();
 
     return (
-			<div className="row">
+			<div>
 				<div className="col s12">
 					<h5>Email Modules:
 						<DropdownButton

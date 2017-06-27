@@ -81,7 +81,8 @@ export default class EmailBody {
         case "largegroup":
           let lgs = Events.find({start: {$gt: new Date(), $lt: n}, published: true, tags: "Large Group"}).fetch();
           lgs.forEach( (lg) => {
-            thumbnail = this.EmailThumbImage.renderHTML("") + this.EmailDetails.renderHTML(lg.start, lg.location, lg.owner);
+            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/largegroup_1.jpg");
+            thumbnail = thumbnail + this.EmailDetails.renderHTML(lg.start, lg.location, lg.owner);
             //"&#128197; " + formatDate(lg.start) + "</br>&#128337; " + formatTime(lg.start) + "</br>&#127759; " + lg.location + "</br>&#128231; " + lg.owner
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML("rtl", lg.name, lg.description, thumbnail);
           });
