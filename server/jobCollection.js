@@ -1,5 +1,7 @@
 // Makes sure jobCollection var is in global scope
-import { buildHTML } from '/lib/emails.js';
+import { sendNewsletter } from '/lib/emails.js';
+import { getUsers } from '/lib/users.js';
+
 var jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
@@ -31,6 +33,13 @@ scheduleJobAndSubmit = function (job, afterValue){
 	job.save();
 }
 
+setNewJobAfterValue = function (job, afterValue){
+	job.pause();
+	job.after( afterValue );
+	job.save();
+	job.resume();
+}
+
 getJobCollectionJob = function(jid){
 	return jobCollection.getJob(jid);
 }
@@ -49,12 +58,21 @@ getJobCollectionJobByUserId = function(uid){
 	return job;
 }
 
+getJobCollectionJobByData = function(dataObj){
+	let jobObj = jobCollection.findOne(dataObj);
+	let job = {};
+	if(!jobObj){
+		return false;
+	}
+	else{
+		job = getJobCollectionJob(jobObj._id);
+	}
+}
+
 delayJobNumberOfIntervals = function(job, number){
 	let interval = getInterval();
-	job.pause();
-	job.after( addDays(new Date(), interval*number) );
-	job.save();
-	job.resume();
+	let newValue = addDays(new Date(), interval*number);
+	setNewJobAfterValue(job, newValue);
 }
 
 shouldJobCalculate = function(testVal, numberOfValidIntervals){
@@ -129,17 +147,8 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 
 Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
-	let email = Emails.findOne(job.data.emid);
-	let emailHTML = buildHTML(email);
-	let recipients = getUsers({newsletter: true});
-	recipients.map( (recipient) => {
-		Email.send({
-      to: recipient.getEmail(),
-      from: email.from,
-      subject: email.subject,
-      html: emailHTML
-    });
-	});
+	
+	sendNewsletter(job.data.emid);
 
 	// Mark as finished
 	job.done();

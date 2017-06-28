@@ -4,7 +4,8 @@ import {
 	updateEmailTo,
 	addUserEmailRecipient,
 	addGroupEmailRecipient,
-	addEmailEmailRecipient
+	addEmailEmailRecipient,
+	stageNewsletter
 } from '/lib/emails.js';
 import { newEmailModule } from '/lib/modules.js';
 
@@ -45,8 +46,12 @@ Meteor.methods({
   },
 
   stageEmail(emid){
-    StagedEmails.insert({_id: emid});
+    //
   },
+
+	stageNewsletter(emid){
+		stageNewsletter(emid);
+	},
 
   newEmailTemplate(email, ttle){
     Emails.insert({

@@ -1,17 +1,11 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import EmailContainer from '/lib/emails/components/EmailContainer.jsx';
+import { buildHTML } from '/lib/emails.js';
 
 export default class EmailWorkspace extends TrackerReact(React.Component){
   constructor() {
     super();
 
-
-    this.state = {
-
-    };
-
-    this.EmailContainer = new EmailContainer();
 
   }
 
@@ -35,7 +29,7 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
 	}
 
 	setContent(){
-    let content = this.EmailContainer.renderHTML(this.getEmail());
+    let content = buildHTML(this.getEmail());
 		this.refs.emailtemplate.contentWindow.document.body.innerHTML = content;
 	}
 
