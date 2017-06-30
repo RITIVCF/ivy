@@ -32,15 +32,15 @@ export default class EmailSummary extends TrackerReact(React.Component){
   }
 
   getDrafts(){
-    return Emails.find({staged: false,sent: false}).fetch();
+    return Emails.find({status: "draft"}).fetch();
   }
 
   getStaged(){
-    return Emails.find({staged: true,sent: false}).fetch();
+    return Emails.find({status: "staged"}).fetch();
   }
 
   getSent(){
-    return Emails.find({sent: true}).fetch();
+    return Emails.find({status: "sent"}).fetch();
   }
 
   getRows(num){

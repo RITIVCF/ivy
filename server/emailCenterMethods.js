@@ -5,7 +5,8 @@ import {
 	addUserEmailRecipient,
 	addGroupEmailRecipient,
 	addEmailEmailRecipient,
-	stageNewsletter
+	stageNewsletter,
+	changeNewsletterSendDateTime
 } from '/lib/emails.js';
 import { newEmailModule } from '/lib/modules.js';
 
@@ -32,7 +33,7 @@ Meteor.methods({
     Emails.update(emid, {$set: {from: from}});
   },
   updateEmailWhen(emid, when){
-    Emails.update(emid, {$set: {when: when}});
+    changeNewsletterSendDateTime(emid, when);
   },
   updateEmailStaged(emid, stg){
     Emails.update(emid, {$set: {staged: stg}});

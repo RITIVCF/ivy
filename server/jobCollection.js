@@ -60,13 +60,19 @@ getJobCollectionJobByUserId = function(uid){
 
 getJobCollectionJobByData = function(dataObj){
 	let jobObj = jobCollection.findOne(dataObj);
+	console.log("jobObj", jobObj);
 	let job = {};
 	if(!jobObj){
 		return false;
 	}
 	else{
 		job = getJobCollectionJob(jobObj._id);
+		return job;
 	}
+}
+
+removeJobCollectionJob = function(data){
+	jobCollection.remove(data);
 }
 
 delayJobNumberOfIntervals = function(job, number){
@@ -147,7 +153,7 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 
 Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
-	
+
 	sendNewsletter(job.data.emid);
 
 	// Mark as finished

@@ -37,6 +37,7 @@ export default class NewEmailForm extends TrackerReact(React.Component){
         this.refs.from.value,
         this.state.to, function(err, res){
           FlowRouter.go("/emails/workspace/"+res);
+					$('#NewEmailFormModal').modal("close");
         });
     }
     else{
