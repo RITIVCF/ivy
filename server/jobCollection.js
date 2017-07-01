@@ -1,5 +1,5 @@
 // Makes sure jobCollection var is in global scope
-import { sendNewsletter } from '/lib/emails.js';
+import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 
 var jobCollection = JobCollection('jobQueue');
@@ -26,6 +26,15 @@ newNewsletterJob = function(emid){
 			emid: emid
 		}
 	);
+}
+
+newEventFollowUpEmailJob = function(eid, uid){
+	return new Job(jobCollection, 'sendEventFollowUpEmail',
+		{
+			eid: eid,
+			uid: uid
+		}
+	)
 }
 
 scheduleJobAndSubmit = function (job, afterValue){
@@ -162,4 +171,16 @@ Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
 	cb();
 
 
+});
+
+Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
+	let data = job.data;
+
+	// Send follow up email passing in event ID and user ID
+	sendEventFollowUpEmail(data.eid, data.uid);
+
+	//Mark as finished
+	job.done();
+	job.remove();
+	cb();
 });
