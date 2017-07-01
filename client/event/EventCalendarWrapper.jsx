@@ -28,6 +28,11 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
     this.state.subscription.UnpublishedEvents.stop();
   }
 
+
+  componentDidMount(){
+    $('.dropdown-button').dropdown();
+  }
+
   componentDidUpdate(){
     $(".dropdown-button").dropdown();
   }

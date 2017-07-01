@@ -46,6 +46,7 @@ export default class WorkspacePanel extends React.Component {
 		//this.refs.deleteOverlay.openOverlay();
 		if(window.confirm("Are you sure?\n\nTHIS CANNOT BE UNDONE.")){
 			Meteor.call("deleteEvent", this.props.ev._id);
+			Session.set("evselected","");
       FlowRouter.go("/events");
 		}
 	}
