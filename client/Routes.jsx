@@ -371,43 +371,55 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	}
 });
 
-eventsRoutes.route('/debrief',{
-	action(params) {
-		mount(MainLayout, {
-			header: "Event Debriefs",
-			content: (<EventsDebriefsWrapper />)
-		})
-	}
-});
+	// *******      Debrief Routes  *************
+
+	let debriefRoutes = eventsRoutes.group({
+		prefix: "/debrief",
+		name: "debreif"
+	});
+
+	debriefRoutes.route('/',{
+		name: "debriefssummary",
+		action(params) {
+			mount(MainLayout, {
+				header: "Event Debriefs",
+				content: (<EventsDebriefsWrapper />)
+			})
+		}
+	});
+
+	debriefRoutes.route('/view/:eid',{
+		name: "viewdebrief",
+		action(params) {
+			mount(MainLayout, {
+				header: "Event Debrief",
+				content: (<EventsDebriefWrapper eid={params.eid} />)
+			})
+		}
+	});
+
+	debriefRoutes.route('/edit/:eid',{
+		name: "editdebrief",
+		action(params) {
+			mount(MainLayout, {
+				header: "Edit Event Debrief",
+				content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
+			})
+		}
+	});
 
 
-eventsRoutes.route('/debrief/:eid',{
-	action(params) {
-		mount(MainLayout, {
-			header: "Event Debrief",
-			content: (<EventsDebriefWrapper eid={params.eid} />)
-		})
-	}
-});
+	debriefRoutes.route('/edit',{
+		name: "editdebriefquestions",
+		action(){
+			mount(MainLayout, {
+				header: "Set Debrief Questions",
+				content: (<DebriefCreationWrapper />)
+			})
+		}
+	});
 
-
-eventsRoutes.route('/debrief/edit/:eid', {
-	action(params) {
-		mount(MainLayout, {
-			header: "Edit Event Debrief",
-			content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
-		})
-	}
-});
-
-eventsRoutes.route('/debrief/edit',{
-	action(){
-		mount(MainLayout, {
-			header: "Set Debrief Questions",
-			content: (<DebriefCreationWrapper />)
-		})
-	}
-});
+	// *******   ./ Debrief Routes  *************
 
 // *******   ./ Events Routes  *************
 

@@ -53,12 +53,12 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 								<i className="material-icons">{this.state.show?"expand_less":"expand_more"}</i></a>
 						</div>
 						{this.state.show&&
-						<table className="responsive-table">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Start</th>
-									<th>Tag(s)</th>
+							<table className="responsive-table">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Start</th>
+										<th>Type</th>
 									<th>Leader</th>
 								</tr>
 							</thead>
