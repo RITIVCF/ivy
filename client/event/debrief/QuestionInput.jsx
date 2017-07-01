@@ -22,12 +22,12 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 
 	handleCommentChange(event){
 		this.setState({comment: event.target.value});
-		this.props.updateDraftComment(this.props.i, event.target.value );
+		this.props.updateDraftComment( event.target.value );
 	}
 
 	handleRatingChange(event){
 		this.setState({value: event.target.value});
-		this.props.updateDraftValue(this.props.i, event.target.value);
+		this.props.updateDraftValue( event.target.value);
 	}
 
 	render() {

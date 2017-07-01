@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Rating from './Rating.jsx';
 import QuestionInput from './QuestionInput.jsx';
 
-import Debrief from '../../../lib/classes/Debrief.js';
+import Debrief from '/lib/classes/Debrief.js';
 
 export default class DebriefForm extends TrackerReact(React.Component) {
 	constructor(props) {
@@ -26,19 +26,16 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 
 	load(){
 		let debrief = new Debrief(this.props.eid);
-		console.log("debrief: ", debrief);
 		if(!debrief._id){
-			Meteor.call("insertDebriefDraft", this.props.eid), (error, result) => {
+			Meteor.call("insertDebriefDraft", this.props.eid, (error, result) => {
 				if(error){
 					console.log(error);
 				}else{
-					console.log("Setting from insert callback");
 					this.setState({debrief: new Debrief(this.props.eid)});
 				}
-			};
+			});
 		}
 		else{
-			console.log("Setting because it exists");
 			this.state.debrief = debrief;
 		}
 
@@ -60,17 +57,19 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 	submit(event){
 		event.preventDefault();
 		this.state.debrief.submit();
+		routeTo("viewdebrief");
 	}
 
 	componentDidMount(){
 
 	}
 
-
 	render() {
 		let debrief = this.state.debrief;
 		if(!debrief){
-			return false;
+			return (
+				false
+			);
 		}
 		return (
       <div className="row">
@@ -78,11 +77,10 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 					{debrief.questions.map((question, i)=>{
 						return <QuestionInput
 							key={question._id}
-							i={i}
 							question={question}
-							updateDraftValue={this.updateDraftQuestionValue}
-							updateDraftComment={this.updateDraftQuestionComment}
-							/>
+							updateDraftValue={(value)=>{this.updateDraftQuestionValue(i, value)}}
+							updateDraftComment={(comment)=>{this.updateDraftQuestionComment(i, comment)}}
+									 />
 					})}
 					<div className="col s12">
 						<button className="btn" >Submit</button>

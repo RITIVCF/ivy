@@ -17,6 +17,8 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
        debriefs: Meteor.subscribe("debriefs", 10)
       }
 		};
+
+		this.goToEditQuestions = this.goToEditQuestions.bind(this);
   }
 
 	componentWillUnmount() {
@@ -29,6 +31,10 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 		$('.tooltipped').tooltip({delay: 50});
 	}
 
+	goToEditQuestions(){
+		routeTo("editdebriefquestions");
+	}
+
 	seeMore(){
 		let num = this.state.num;
 		this.setState({num: num+10});
@@ -39,8 +45,8 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 		return (
 			<ul>
 				{checkPermission("admin")&&
-				<li>
-					<a href="/events/debrief/edit" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set Default Questions"><i className="material-icons black-text">edit</i></a>
+					<li>
+						<a onClick={this.goToEditQuestions} className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set Default Questions"><i className="material-icons black-text">edit</i></a>
 				</li>}
 			</ul>
 		)
