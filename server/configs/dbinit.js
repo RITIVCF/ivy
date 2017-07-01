@@ -495,6 +495,21 @@ let emailTemplates = [
 			newEmailModule("becomeamember"),
 			newEmailModule("getinvolved")
 		]
+	},
+	{
+	  "_id": "todoemail",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "",
+	  "subject": "Email Subject",
+	  "isTemplate": true,
+	  "title": "ToDo Email",
+	  "modules": [
+			newEmailModule("custom")
+		]
 	}
 ];
 

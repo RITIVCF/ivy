@@ -8,13 +8,16 @@ import {
 	stageNewsletter,
 	changeNewsletterSendDateTime
 } from '/lib/emails.js';
-import { newEmailModule } from '/lib/modules.js';
+import {
+	newEmailModule,
+	setModuleDesc
+} from '/lib/modules.js';
 
 Meteor.methods({
 	// *******    Email Methods  ************
   newEmail(templateId, frm, recip){
-    let newEmailId = newEmail(templateId, frm, recip);
-		return newEmailId;
+    let newEmail = newEmail(templateId, frm, recip);
+		return newEmail._id;
   },
 
   updateEmailSubject(emid, subj){
@@ -156,13 +159,7 @@ Meteor.methods({
 	},
 
 	setModuleDesc(emid, moduleId, desc){
-		Emails.update(
-			{
-				_id: emid,
-				"modules._id": moduleId
-			},
-			{$set: {"modules.$.desc": desc}}
-		);
+		setModuleDesc(emid, moduleId, desc);
 	},
 
 	setModuleTitle(emid, moduleId, title){
