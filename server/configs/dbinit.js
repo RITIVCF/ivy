@@ -1,7 +1,8 @@
 // Check db and initialize
 import { Accounts } from 'meteor/accounts-base';
-//Set up Groups
+import { newEmailModule } from '/lib/modules.js';
 
+//Set up Groups
 let groups = [
 	{
 		_id:"admin",
@@ -205,25 +206,25 @@ let options = [
 	  "vals": [
 	    {
 	      "label": "Resource",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Design",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Advertising",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    },
 	    {
 	      "label": "Other",
-	      "gid": "PE7nze5figZEhgCWh"
+	      "gid": "admin"
 	    }
 	  ]
 	},
 	{
 		_id: "debriefquestions",
-		val: "<p><strong>Where did you see God moving in this event?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p><strong>Was this event a success?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Why/why not?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>\n<p><strong>Was this an overall positive experience?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Why/why not?</strong></p>\n<p>&nbsp;</p>\n<p><strong>Would you like to lead an event like this again?</strong></p>\n<p>&nbsp;</p>\n<p>&nbsp;</p>"
+		val: ""
 	},
 	{
 	  "_id": "funnelcalculation",
@@ -236,39 +237,48 @@ let options = [
 	  "vals": [
 	    {
 	      "value": "header",
+				"name": "Header",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "footer",
+				"name": "Footer",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "socialmedia",
+				"name": "Social Media",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "text",
+				"name": "Text",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "cta",
+				"name": "Call to Action",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "grid",
+				"name": "Grid",
 	      "isUserAccessible": false
 	    },
 	    {
 	      "value": "thumbnail",
-	      "isUserAccessible": false
+				"name": "Left/Right Thumbail",
+	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "feature",
+				"name": "Feature",
 	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "banner",
-	      "isUserAccessible": false
+				"name": "Banner",
+	      "isUserAccessible": true
 	    }
 	  ]
 	},
@@ -375,55 +385,75 @@ let options = [
 	  "vals": [
 	    {
 	      "value": "intro",
+				"name": "Intro",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "header",
+				"name": "Header",
+				"defaultLayout": "header",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "largegroup",
+				"name": "Large Group",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "smallgroup",
+				"name": "Small Group",
+				"defaultLayout": "grid",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "nso",
+				"name": "NSO",
+				"defaultLayout": "grid",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "social",
+				"name": "Social",
+				"defaultLayout": "feature",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "prayer",
+				"name": "Prayer",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "getinvolved",
+				"name": "Get Involved",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "becomeamember",
+				"name": "Become a Member",
+				"defaultLayout": "text",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "conference",
+				"name": "Conference",
+				"defaultLayout": "feature",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "core",
+				"name": "Core",
+				"defaultLayout": "thumbnail",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "custom",
+				"name": "Custom",
+				"defaultLayout": "text",
 	      "canChooseLayout": true
-	    },
-	    {
-	      "value": "eventpromotion",
-	      "canChooseLayout": false
 	    }
 	  ]
 	}
@@ -437,6 +467,40 @@ options.forEach( (option) => {
 		Options.remove({_id: option._id});
 		Options.insert(option);
 	}
+});
+
+
+// Intialize Email Templates
+let emailTemplates = [
+	{
+	  "_id": "newsletter",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "ivcf@rit.edu",
+	  "subject": "IVCF Chapter Newsletter",
+	  "isTemplate": true,
+	  "title": "Newsletter",
+	  "modules": [
+			newEmailModule("intro"),
+			newEmailModule("nso"),
+			newEmailModule("social"),
+			newEmailModule("largegroup"),
+			newEmailModule("smallgroup"),
+			newEmailModule("prayer"),
+			newEmailModule("core"),
+			newEmailModule("conference"),
+			newEmailModule("becomeamember"),
+			newEmailModule("getinvolved")
+		]
+	}
+];
+
+emailTemplates.forEach( (template) => {
+	Emails.remove({_id: template._id});
+	Emails.insert(template);
 });
 
 // initialize counters
@@ -561,6 +625,7 @@ pagePermissions.forEach( (perm) => {
 		PagePermissions.insert(perm);
 	}
 });
+
 
 
 // Initialize admin user

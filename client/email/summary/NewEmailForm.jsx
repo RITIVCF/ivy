@@ -1,8 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectRecip from '../sharedcomponents/SelectRecip.jsx';
+import SelectRecip from '../../sharedcomponents/SelectRecip.jsx';
 
-export default class EmailSummaryPanel extends TrackerReact(React.Component){
+export default class NewEmailForm extends TrackerReact(React.Component){
   constructor() {
     super();
 
@@ -37,6 +37,7 @@ export default class EmailSummaryPanel extends TrackerReact(React.Component){
         this.refs.from.value,
         this.state.to, function(err, res){
           FlowRouter.go("/emails/workspace/"+res);
+					$('#NewEmailFormModal').modal("close");
         });
     }
     else{

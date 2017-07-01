@@ -1,11 +1,12 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import MainBox from '../MainBox.jsx';
-import EmailContainer from './EmailContainer.jsx'
-import LoaderCircle from '../LoaderCircle.jsx';
-import NoPerm from '../NoPerm.jsx';
+import MainBox from '../../MainBox.jsx';
+import EmailWorkspace from './EmailWorkspace.jsx'
+import LoaderCircle from '../../LoaderCircle.jsx';
+import NoPerm from '../../NoPerm.jsx';
 
 import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
+import { loadEmail } from '/lib/emails.js';
 
 //Contacts = new Mongo.Collection('contacts');
 
@@ -15,7 +16,8 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
     this.state = {
       subscription: {
-        email: Meteor.subscribe("myEmails")
+        email: Meteor.subscribe("myEmails"),
+        events: Meteor.subscribe("emailEvents")
       }
     };
 
@@ -24,19 +26,12 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
   componentWillUnmount() {
     this.state.subscription.email.stop();
+    this.state.subscription.events.stop();
   }
 
-  toggleInfoBar(){
-
-  }
-
-  getSubHeader(){
-    return <ul className="right">
-      <li onClick={this.toggleInfoBar.bind(this)}><a>
-        <i className="material-icons black-text">add</i></a>
-      </li>
-    </ul>
-  }
+	getEmail(){
+		return loadEmail(this.props.emid);
+	}
 
   render() {
     if(!this.state.subscription.email.ready()){
@@ -45,14 +40,16 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
     if(!checkPermission("emails")){
       return <NoPerm />
     }
-    document.title="Ivy - Email Workspace";
+    setDocumentTitle("Email Workspace");
+		let email = this.getEmail();
+		console.log("Email: ", email);
 
     return (
       <MainBox
-        content={<EmailContainer />}
-        subheader={this.getSubHeader()}
+        content={<EmailWorkspace email={email} />}
+        subheader={false}
         showinfobar={true}
-        infobar={<EmailWorkspacePanel />}
+        infobar={<EmailWorkspacePanel email={email} />}
         />
     )
   }

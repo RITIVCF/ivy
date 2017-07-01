@@ -1,15 +1,10 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
-export default class EmailWorkspacePanel extends TrackerReact(React.Component){
+
+export default class EmailPreview extends TrackerReact(React.Component){
   constructor() {
     super();
-
-    this.state = {
-      subscription: {
-
-      }
-    };
 
   }
 
@@ -19,7 +14,9 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 
   render() {
     return (
-      <div></div>
+      <div className="row">
+        {this.props.emid}
+      </div>
     )
   }
 }

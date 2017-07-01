@@ -1,4 +1,7 @@
 // Makes sure jobCollection var is in global scope
+import { sendNewsletter } from '/lib/emails.js';
+import { getUsers } from '/lib/users.js';
+
 var jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
@@ -15,6 +18,26 @@ newFunnelCalulateJob = function(uid, notValidIntervals = 0){
 			notValidIntervals: notValidIntervals
 		}
 	);
+}
+
+newNewsletterJob = function(emid){
+	return new Job(jobCollection, 'sendNewsletter',
+		{
+			emid: emid
+		}
+	);
+}
+
+scheduleJobAndSubmit = function (job, afterValue){
+	job.after( afterValue );
+	job.save();
+}
+
+setNewJobAfterValue = function (job, afterValue){
+	job.pause();
+	job.after( afterValue );
+	job.save();
+	job.resume();
 }
 
 getJobCollectionJob = function(jid){
@@ -35,12 +58,27 @@ getJobCollectionJobByUserId = function(uid){
 	return job;
 }
 
+getJobCollectionJobByData = function(dataObj){
+	let jobObj = jobCollection.findOne(dataObj);
+	console.log("jobObj", jobObj);
+	let job = {};
+	if(!jobObj){
+		return false;
+	}
+	else{
+		job = getJobCollectionJob(jobObj._id);
+		return job;
+	}
+}
+
+removeJobCollectionJob = function(data){
+	jobCollection.remove(data);
+}
+
 delayJobNumberOfIntervals = function(job, number){
 	let interval = getInterval();
-	job.pause();
-	job.after( addDays(new Date(), interval*number) );
-	job.save();
-	job.resume();
+	let newValue = addDays(new Date(), interval*number);
+	setNewJobAfterValue(job, newValue);
 }
 
 shouldJobCalculate = function(testVal, numberOfValidIntervals){
@@ -102,6 +140,21 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 		);
 
 	}
+
+	// Mark as finished
+	job.done();
+	job.remove();
+	cb();
+
+
+});
+
+
+
+
+Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+
+	sendNewsletter(job.data.emid);
 
 	// Mark as finished
 	job.done();
