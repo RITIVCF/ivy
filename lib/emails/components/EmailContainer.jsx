@@ -181,7 +181,12 @@ export default class EmailContainer {
             table.center-on-narrow {
               display: inline-block !important;
             }
-
+            .colsplit {
+              display: block !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              direction: ltr !important;
+            }
             .email-container p {
               font-size: 17px !important;
               line-height: 22px !important;

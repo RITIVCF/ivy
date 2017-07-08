@@ -27,68 +27,80 @@ export default class EmailBody {
     this.EmailDetails = new EmailDetails();
 
   }
-/*
-  {
-    "_id": "PK7Nme6Q338aqgyWf",
-    "name": "New Event",
-    "namelock": false,
-    "createdAt": "2017-06-16T00:55:37.271Z",
-    "published": true,
-    "permUser": [],
-    "permGroup": [],
-    "start": "2017-06-17T20:00:00.000Z",
-    "end": "2017-06-17T21:00:00.000Z",
-    "workpad": [
-      {
-        "name": "Pad 1",
-        "content": "",
-        "lock": false
-      }
-    ],
-    "workpadlock": false,
-    "description": "This is the description of New Event",
-    "descriptionlock": false,
-    "notes": [],
-    "location": "",
-    "locationlock": false,
-    "host": "",
-    "owner": "xuhe7JjaBqQk6czNE",
-    "createdBy": "xuhe7JjaBqQk6czNE",
-    "tags": [
-      "NSO",
-      "Conference",
-      "Large Group"
-    ],
-    "reoccuring": false,
-    "attachements": [],
-    "attendees": [],
-    "rsvps": [],
-    "pic": "",
-    "reserved": false,
-    "evr": false,
-    "jobs": []
+
+  tdir(d) {
+    int = d % 2;
+    if (int == 1) {
+      return "rtl"
+    } else {
+      return "ltr"
+    }
   }
-*/
 
   constructBody(modules) {
 		let bodyHTML = "";
     let n = addDays(new Date(), 7);
+    let d = 0;
 		modules.forEach( (module) => {
       switch (module.type) {
         case "intro":
           bodyHTML = bodyHTML + this.EmailText.renderHTML("",module.desc);
           break;
         case "largegroup":
-          let lgs = Events.find({start: {$gt: new Date(), $lt: n}, published: true, tags: "Large Group"}).fetch();
-          lgs.forEach( (lg) => {
-            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/largegroup_1.jpg");
-            thumbnail = thumbnail + this.EmailDetails.renderHTML(lg.start, lg.location, lg.owner);
-            //"&#128197; " + formatDate(lg.start) + "</br>&#128337; " + formatTime(lg.start) + "</br>&#127759; " + lg.location + "</br>&#128231; " + lg.owner
-            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML("rtl", lg.name, lg.description, thumbnail);
-          });
+          let lg = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Large Group"});
+          if (!!lg) {
+            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
+            details = this.EmailDetails.renderHTML(lg.start, lg.location);
+            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), lg.name, details + lg.description, thumbnail);
+            d = d + 1;
+          }
           break;
+        case "core":
+          let cr = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Core"});
+          if (!!cr) {
+            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/coretammy.jpg");
+            details = this.EmailDetails.renderHTML(cr.start, cr.location);
+            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), cr.name, details + cr.description, thumbnail);
+            d = d + 1;
+          }
+          break;
+        case "prayer":
+          let pr = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Prayer"});
+          if (!!pr) {
+            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/basileiaworship.jpg");
+            details = this.EmailDetails.renderHTML(pr.start, pr.location);
+            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), pr.name, details + pr.description, thumbnail);
+            d = d + 1;
+          }
+          break;
+        case "conference":
+          let cfs = Events.find({start: {$gt: new Date()}, published: true, tags: "Conference"}).fetch();
+          cfs.forEach( (cf) => {
+            details = this.EmailDetails.renderHTML(cf.start, cf.location);
+            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", cf.name, details + cf.description);
+          });
+        case "nso":
+          let nsos = Events.find({start: {$gt: new Date()}, published: true, tags: "NSO"}).fetch();
+          nsos.forEach( (nso) => {
+            details = this.EmailDetails.renderHTML(nso.start, nso.location);
+            bodyHTML = bodyHTML + this.EmailGrid.renderHTML("http://localhost:3000/images/coretammy.jpg", nso.name, details + nso.description);
+          });
+        case "social":
+          let scs = Events.find({start: {$gt: new Date()}, published: true, tags: "Social"}).fetch();
+          scs.forEach( (sc) => {
+            details = this.EmailDetails.renderHTML(sc.start, sc.location);
+            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", sc.name, details + sc.description);
+          });
+        /*case "smallgroup":
+          let scs = Events.find({start: {$gt: new Date()}, published: true, tags: "Small Group"}).fetch();
+          scs.forEach( (sc) => {
+            details = this.EmailDetails.renderHTML(sc.start, sc.location);
+            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", sc.name, details + sc.description);
+          });*/
         default:
-          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML("rtl","Default");
+          thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
+          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),"Default","text",thumbnail);
+          d = d + 1;
       }
 
 		});

@@ -1,5 +1,5 @@
 export default class EmailGrid {
-  renderHTML() {
+  renderHTML(img1,h1,c1,img2="",h2="",c2="") {
     return (
       `<tr>
         <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
@@ -23,12 +23,12 @@ export default class EmailGrid {
                         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
                           <tr>
                             <td>
-                              <img src="http://placehold.it/310" aria-hidden="true" width="310" height="" border="0" alt="alt_text" class="center-on-narrow" style="width: 100%; max-width: 310px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+                              <img src="` + img1 + `" aria-hidden="true" width="310" height="" border="0" alt="alt_text" class="center-on-narrow" style="width: 100%; max-width: 310px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                             </td>
                           </tr>
                           <tr>
                             <td style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding-top: 10px;" class="stack-column-center">
-                              <p style="margin: 0;">Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+                              <p style="margin: 0;">` + c1 + `</p>
                             </td>
                           </tr>
                         </table>
@@ -47,12 +47,12 @@ export default class EmailGrid {
                         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size: 14px;text-align: left;">
                           <tr>
                             <td>
-                              <img src="http://placehold.it/310" aria-hidden="true" width="310" height="" border="0" alt="alt_text" class="center-on-narrow" style="width: 100%; max-width: 310px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+                              <img src="` + img2 + `" aria-hidden="true" width="310" height="" border="0" alt="alt_text" class="center-on-narrow" style="width: 100%; max-width: 310px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                             </td>
                           </tr>
                           <tr>
                             <td style="font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; padding-top: 10px;" class="stack-column-center">
-                              <p style="margin: 0;">Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+                              <p style="margin: 0;">` + c2 + `</p>
                             </td>
                           </tr>
                         </table>
