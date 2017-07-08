@@ -22,6 +22,7 @@ Meteor.methods({
     }
     else{
       // Create new user and get uid
+			signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
       signin.uid = Accounts.createUser({
         name: signin.name,
         email: signin.email,

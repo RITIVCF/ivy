@@ -106,7 +106,7 @@ export default class EmailSummary extends TrackerReact(React.Component){
 				<span style={{width: "30%", display: "inline-block"}}>{this.getTo()}</span>
 				<span style={{width: "15%", display: "inline-block"}}>{email.from}</span>
 				<span style={{width: "15%", display: "inline-block"}}>{this.getTemplate()}</span>
-				<span style={{width: "20%", display: "inline-block"}}>{formatDate(email.when)}</span>
+				<span style={{width: "20%", display: "inline-block"}}>{dateFormat(email.when)}</span>
 			</li>
 		)
 	}

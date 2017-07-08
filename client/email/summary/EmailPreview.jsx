@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-
+import EditEmailDetailsForm from '/client/email/summary/EditEmailDetailsForm';
 
 export default class EmailPreview extends TrackerReact(React.Component){
   constructor() {
@@ -15,7 +15,12 @@ export default class EmailPreview extends TrackerReact(React.Component){
   render() {
     return (
       <div className="row">
-        {this.props.emid}
+				{!this.props.email.isSent()&&
+					<EditEmailDetailsForm
+						email={this.props.email}
+					/>
+				}
+
       </div>
     )
   }

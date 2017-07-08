@@ -6,6 +6,7 @@ import NewEmailForm from './NewEmailForm.jsx';
 import EmailPreview from './EmailPreview.jsx';
 import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
+import { loadEmail } from '/lib/emails.js';
 
 import EmailSummary from './EmailSummary.jsx';
 //Contacts = new Mongo.Collection('contacts');
@@ -28,7 +29,25 @@ export default class EmailWrapper extends TrackerReact(React.Component){
   }
 
   openModal(){
-    this.refs.modal.open();
+    //this.refs.modal.open();
+		let to = {
+			users: [],
+			groups: [],
+			emails: []
+		};
+		Meteor.call("newEmail",
+			"newsletter",
+			"ivcf.rit.edu",
+			to,
+			function(error, result){
+				if(!!error){
+					Materialize.toast("Something went wrong. Please try again.", 5000);
+					console.error(error);
+				} else{
+					Session.set("selectedEmail", result);
+					//FlowRouter.go("/emails/workspace/"+result);
+				}
+			});
   }
 
 	toggleInfoBar(){
@@ -48,6 +67,16 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 		</ul>]
   }
 
+	getSelectEmail(){
+		let selectedEmail = Session.get("selectedEmail");
+		if(selectedEmail){
+			return loadEmail(Session.get("selectedEmail"));
+		}
+		else{
+			return undefined;
+		}
+	}
+
   render() {
     if(!this.state.subscription.email.ready()){
       return (<LoaderCircle />)
@@ -56,6 +85,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
       return <NoPerm />
     }
     document.title="Ivy - Emails";
+		let selectedEmail = this.getSelectEmail();
 
     return (
       <MainBox
@@ -66,12 +96,12 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 						id={"NewEmailFormModal"}
 						ref="modal"
 						content={<NewEmailForm />}
-						/>
-					]}
+					/>
+				]}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.emails_infobar}
-        infobar={
-					<EmailPreview emid={Session.get("selectedEmail")} />
+        infobar={selectedEmail&&
+					<EmailPreview email={selectedEmail} />
 				}
         />
     )
