@@ -68,7 +68,13 @@ export default class EmailWrapper extends TrackerReact(React.Component){
   }
 
 	getSelectEmail(){
-		return loadEmail(Session.get("selectedEmail"));
+		let selectedEmail = Session.get("selectedEmail");
+		if(selectedEmail){
+			return loadEmail(Session.get("selectedEmail"));
+		}
+		else{
+			return undefined;
+		}
 	}
 
   render() {
