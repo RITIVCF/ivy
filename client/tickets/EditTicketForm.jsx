@@ -15,6 +15,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
       status: props.ticket.status,
       notedisable: true
     }
+
+		this.onClose = this.onClose.bind(this);
   }
 
   componentDidMount(){
@@ -166,6 +168,15 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 		Meteor.call("newToDoEmail", this.props.ticket.customer, subject, message);
 	}
 
+	openNewEmailModal(){
+		this.refs.emailmodal.open();
+		this.refs.todoemailform.refs.message.addControl();
+	}
+
+	onClose(){
+		this.refs.todoemailform.refs.message.removeControl();
+	}
+
 
 	render() {
     var activities = this.getActivities();//this.props.ticket.activities.reverse();
@@ -311,13 +322,6 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                   <a className="btn modal-action modal-close" href={"/people/"+this.props.ticket.customer}>Open Profile Page</a>
                 </div>
               </div>}
-							<Modal
-								id={"todoemailmodal"}
-								ref="emailmodal"
-								content={<div></div>}
-								footer={<button onClick={this.sendEmail.bind(this)} className="waves-effect waves-light btn">Send</button>}
-								type="fixed-footer"
-							/>
             </div>
 
   )

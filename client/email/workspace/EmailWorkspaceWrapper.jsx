@@ -47,7 +47,7 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
     return (
       <MainBox
         content={<EmailWorkspace email={email} />}
-        subheader={false}
+        subheader={<ul className="black-text">{email.subject}</ul>}
         showinfobar={true}
         infobar={<EmailWorkspacePanel email={email} />}
         />

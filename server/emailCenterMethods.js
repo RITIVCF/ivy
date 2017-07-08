@@ -3,9 +3,11 @@ import {
 	updateEmailSubject,
 	updateEmailTo,
 	addUserEmailRecipient,
+	setUserEmailRecipients,
 	addGroupEmailRecipient,
 	addEmailEmailRecipient,
 	stageNewsletter,
+	unstageNewsletter,
 	changeNewsletterSendDateTime
 } from '/lib/emails.js';
 import {
@@ -16,8 +18,8 @@ import {
 Meteor.methods({
 	// *******    Email Methods  ************
   newEmail(templateId, frm, recip){
-    let newEmail = newEmail(templateId, frm, recip);
-		return newEmail._id;
+    let resultEmail = newEmail(Meteor.userId(), templateId, frm, recip);
+		return resultEmail._id;
   },
 
   updateEmailSubject(emid, subj){
@@ -26,6 +28,9 @@ Meteor.methods({
   addUserEmailRecipient(emid, newRecipient){
     addUserEmailRecipient(emid, newRecipient);
   },
+	setUserEmailRecipients(emid, recipientArray){
+		setUserEmailRecipients(emid, recipientArray);
+	},
 	addGroupEmailRecipient(emid, newRecipient){
 		addGroupEmailRecipient(emid, newRecipient);
 	},
@@ -50,8 +55,12 @@ Meteor.methods({
   },
 
   stageEmail(emid){
-    //
+    stageNewsletter(emid);
   },
+
+	unstageEmail(emid){
+		unstageNewsletter(emid);
+	},
 
 	stageNewsletter(emid){
 		stageNewsletter(emid);

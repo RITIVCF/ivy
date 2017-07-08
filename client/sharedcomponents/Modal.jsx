@@ -17,6 +17,7 @@ export default class Modal extends React.Component {
 
 	close(){
 		$('#' + this.props.id).modal('close');
+		this.props.onClose();
 	}
 
 	render() {
