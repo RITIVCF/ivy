@@ -387,72 +387,91 @@ let options = [
 	      "value": "intro",
 				"name": "Intro",
 				"defaultLayout": "text",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "header",
 				"name": "Header",
 				"defaultLayout": "header",
+				"defaultDesc": "",
+	      "canChooseLayout": false
+	    },
+			{
+	      "value": "salutation",
+				"name": "Salutation",
+				"defaultLayout": "text",
+				"defaultDesc": "Hello",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "largegroup",
 				"name": "Large Group",
 				"defaultLayout": "thumbnail",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "smallgroup",
 				"name": "Small Group",
 				"defaultLayout": "grid",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "nso",
 				"name": "NSO",
 				"defaultLayout": "grid",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "social",
 				"name": "Social",
 				"defaultLayout": "feature",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "prayer",
 				"name": "Prayer",
 				"defaultLayout": "thumbnail",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "getinvolved",
 				"name": "Get Involved",
 				"defaultLayout": "text",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "becomeamember",
 				"name": "Become a Member",
 				"defaultLayout": "text",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "conference",
 				"name": "Conference",
 				"defaultLayout": "feature",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "core",
 				"name": "Core",
 				"defaultLayout": "thumbnail",
+				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "custom",
 				"name": "Custom",
 				"defaultLayout": "text",
+				"defaultDesc": "",
 	      "canChooseLayout": true
 	    }
 	  ]
@@ -485,6 +504,7 @@ let emailTemplates = [
 	  "title": "Newsletter",
 	  "modules": [
 			newEmailModule("intro"),
+			newEmailModule("salutation"),
 			newEmailModule("nso"),
 			newEmailModule("social"),
 			newEmailModule("largegroup"),
@@ -494,6 +514,37 @@ let emailTemplates = [
 			newEmailModule("conference"),
 			newEmailModule("becomeamember"),
 			newEmailModule("getinvolved")
+		]
+	},
+	{
+	  "_id": "eventfollowup",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "",
+	  "subject": "Welcome to InterVarsity!",
+	  "isTemplate": true,
+	  "title": "Event Follow Up",
+	  "modules": [
+			newEmailModule("salutation"),
+			newEmailModule("custom")
+		]
+	},
+	{
+	  "_id": "todoemail",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "",
+	  "subject": "Email Subject",
+	  "isTemplate": true,
+	  "title": "ToDo Email",
+	  "modules": [
+			newEmailModule("custom")
 		]
 	}
 ];

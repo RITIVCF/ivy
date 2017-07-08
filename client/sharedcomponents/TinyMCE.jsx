@@ -19,6 +19,7 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 		let id = this.getId();
 		tinymce.init({
 			selector: "#"+ id,
+			branding: false,
 			theme: "modern",
 			height: 300,
 			plugins: "paste contextmenu hr searchreplace",
@@ -45,6 +46,16 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 		}
 		});
 		tinymce.get(id).setContent(this.props.content);
+	}
+
+	addControl(){
+		let id = this.getId();
+		tinyMCE.execCommand('mceAddControl', false, id);
+	}
+
+	removeControl(){
+		let id = this.getId();
+		tinyMCE.execCommand('mceRemoveControl', false, id);
 	}
 
 	removeTinyMCE(){

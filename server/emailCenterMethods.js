@@ -3,18 +3,23 @@ import {
 	updateEmailSubject,
 	updateEmailTo,
 	addUserEmailRecipient,
+	setUserEmailRecipients,
 	addGroupEmailRecipient,
 	addEmailEmailRecipient,
 	stageNewsletter,
+	unstageNewsletter,
 	changeNewsletterSendDateTime
 } from '/lib/emails.js';
-import { newEmailModule } from '/lib/modules.js';
+import {
+	newEmailModule,
+	setModuleDesc
+} from '/lib/modules.js';
 
 Meteor.methods({
 	// *******    Email Methods  ************
   newEmail(templateId, frm, recip){
-    let newEmailId = newEmail(templateId, frm, recip);
-		return newEmailId;
+    let resultEmail = newEmail(Meteor.userId(), templateId, frm, recip);
+		return resultEmail._id;
   },
 
   updateEmailSubject(emid, subj){
@@ -23,6 +28,9 @@ Meteor.methods({
   addUserEmailRecipient(emid, newRecipient){
     addUserEmailRecipient(emid, newRecipient);
   },
+	setUserEmailRecipients(emid, recipientArray){
+		setUserEmailRecipients(emid, recipientArray);
+	},
 	addGroupEmailRecipient(emid, newRecipient){
 		addGroupEmailRecipient(emid, newRecipient);
 	},
@@ -47,8 +55,12 @@ Meteor.methods({
   },
 
   stageEmail(emid){
-    //
+    stageNewsletter(emid);
   },
+
+	unstageEmail(emid){
+		unstageNewsletter(emid);
+	},
 
 	stageNewsletter(emid){
 		stageNewsletter(emid);
@@ -156,13 +168,7 @@ Meteor.methods({
 	},
 
 	setModuleDesc(emid, moduleId, desc){
-		Emails.update(
-			{
-				_id: emid,
-				"modules._id": moduleId
-			},
-			{$set: {"modules.$.desc": desc}}
-		);
+		setModuleDesc(emid, moduleId, desc);
 	},
 
 	setModuleTitle(emid, moduleId, title){
