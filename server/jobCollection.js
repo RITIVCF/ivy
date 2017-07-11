@@ -38,7 +38,7 @@ getJobCollectionJobByUserId = function(uid){
 delayJobNumberOfIntervals = function(job, number){
 	let interval = getInterval();
 	job.pause();
-	job.after( addDays(new Date(), interval*number) );
+	job.after( addMinutes(new Date(), interval*number) );
 	job.save();
 	job.resume();
 }

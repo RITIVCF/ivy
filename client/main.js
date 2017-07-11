@@ -31,7 +31,7 @@ checkPermission = function(){
 	for (i = 0; i < arguments.length; i++) {
   	ids.push(arguments[i]);
   }
-	var grps = Groups.find({users: Meteor.userId()}).fetch();
+	var grps = Groups.find({$or: [{users: Meteor.userId()},{leader: Meteor.userId()}]}).fetch();
 	var gids = [];
 	grps.forEach(function(group){
 		gids.push(group._id);
