@@ -29,9 +29,16 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
 		Meteor.call("setDebriefQuestionCommentOpenClosed", this.props.qid, question.commentOpen);
 	}
 
-	deleteQuestion(){
-		Meteor.call("deleteDebriefQuestion", this.props.qid);
-		Session.set("selectedQuestion","");
+	toggleQuestionActive(){
+		let question = this.getQuestion();
+
+		if(question.active){
+			Meteor.call("inactivateDebriefQuestion", this.props.qid);
+		}
+		else{
+			Meteor.call("activateDebriefQuestion", this.props.qid);
+		}
+
 	}
 
   render(){
@@ -62,7 +69,7 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
 	            ref="tagInput"
 	            onSelected={this.addTag.bind(this)}
 	            initialValue={this.state.value}
-	            />
+						/>
 
 						{tags.map( (tag) => {
 							return <Tag key={tag.tag} tag={tag} />
@@ -70,11 +77,13 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
 					</div>
 
 					<Checkbox	label={"Comment open"}
-							onChange={this.changeCommentOpenClosed.bind(this)}
-							checked={question.commentOpen} />
-						<br />
+						onChange={this.changeCommentOpenClosed.bind(this)}
+						checked={question.commentOpen} />
+					<br />
 					{!question.submitted&&
-						<button className="btn red" onClick={this.deleteQuestion.bind(this)}>Remove</button>
+						<button className="btn red" onClick={this.toggleQuestionActive.bind(this)}>
+							{question.active ? "Inactivate" : "Activate"}
+						</button>
 					}
 
         </div>

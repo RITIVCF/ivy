@@ -76,27 +76,31 @@ export default class EventPreview extends TrackerReact(React.Component) {
 
   render() {
     if(!Session.get("evselected")){
-      return <div className="row">
-        <div className="col s12">
-          <h2>Event Calendar</h2>
-          <p>Select an event to continue...</p>
-        </div>
-      </div>
+      return (
+				<div className="row">
+					<div className="col s12">
+						<h2>Event Calendar</h2>
+						<p>Select an event to continue...</p>
+					</div>
+				</div>
+			);
     }
     if(!this.props.event||!this.props.ready){
-      return <div className="preloader-wrapper big active">
-              <div className="spinner-layer spinner-blue-only">
-                <div className="circle-clipper left">
-                  <div className="circle"></div>
-                </div>
-                <div className="gap-patch">
-                  <div className="circle"></div>
-                </div>
-                <div className="circle-clipper right">
-                  <div className="circle"></div>
-                </div>
-              </div>
-            </div>
+      return (
+				<div className="preloader-wrapper big active">
+					<div className="spinner-layer spinner-blue-only">
+						<div className="circle-clipper left">
+							<div className="circle"></div>
+						</div>
+						<div className="gap-patch">
+							<div className="circle"></div>
+						</div>
+						<div className="circle-clipper right">
+							<div className="circle"></div>
+						</div>
+					</div>
+				</div>
+			);
     }
 
     let leader = loadUser(this.props.event.owner);
@@ -107,15 +111,18 @@ export default class EventPreview extends TrackerReact(React.Component) {
           <p>Leader: {leader.getName()}<br/>{leader.getEmail()}</p>
           {this.getDateTime()}
         </div>
-      )
+      );
     }
 
 		let perms = checkEventPermission(this.props.event);
+		let canEditEvent = perms.edit;
+		let canViewEvent = perms.view;
+		let isEventReviewed = this.props.event.isReviewed();
     let isFormOpen = (this.props.event.published)&&(this.props.event.start < new moment(new Date).add(2,"hours"));
 		let isUserOwner = leader._id==Meteor.userId();
 		let isDebriefSubmitted = !!this.props.event.debrief;
 		let hasPermissionToViewDebrief = (checkPermission("admin")||isUserOwner);
-		let isEventPublished = this.props.event.published;
+		let isEventPublished = this.props.event.isPublished();
 		let isPastEventStart = this.props.event.start < new Date();
 		let canEditDebrief = (
 			!isDebriefSubmitted&&
@@ -144,10 +151,10 @@ export default class EventPreview extends TrackerReact(React.Component) {
 	          {this.getDateTime()}
 	        </div>
 	        <div>
-	          {(perms.edit||perms.view)&&
+	          {((canEditEvent||canViewEvent)&&!isEventReviewed)&&
 	            <a href={"/events/workspace/"+this.props.event._id} style={{width: "100%", margin: "10px 0px"}}
 							className="waves-effect waves-light btn">
-	              {perms.edit?"Edit Event":"View Event"}
+	              {canEditEvent?"Edit Event":"View Event"}
 	            </a>
 	          }
 	          {canViewAttendance&&

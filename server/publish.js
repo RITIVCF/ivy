@@ -603,7 +603,7 @@ Meteor.publish("myDebriefDrafts", function(){
 });
 
 Meteor.publish("allDebriefQuestions", function(){
-	return DebriefQuestions.find({deleted: false});
+	return DebriefQuestions.find();
 });
 // *********************************
 

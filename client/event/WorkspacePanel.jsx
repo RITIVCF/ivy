@@ -57,10 +57,12 @@ export default class WorkspacePanel extends React.Component {
 		let perm = this.props.perm;
 		return (
 			<div>
-					{perm?
-						<ButtonPublish published={ev.published} eid={ev._id} />
-						:<p>Published: {ev.published?"Published":"Not Published"}</p>}
-					{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:false}
+				{perm?
+					<ButtonPublish published={ev.isPublished()} eid={ev._id} />
+				:
+				<p>Published: {ev.isPublished()?"Published":"Not Published"}</p>
+				}
+				{perm?<a className="btn red" onClick={this.openDelete.bind(this)}>Delete</a>:false}
 
 
 				<EventDateControls eid={ev._id} start={ev.start} end={ev.end} perm={perm} />
@@ -72,14 +74,13 @@ export default class WorkspacePanel extends React.Component {
 				<EventTags ev={ev} perm={perm} />
 
 				<div className="row" style={{marginTop: "1em"}}>
-					{perm?<a className="btn"
-						onClick={this.viewJobs.bind(this)}>Service Requests</a>:""}
-					{/*}<ul className="collection">
-						{ev.jobs.map( (job)=>{
-							return <JobSingle key={job.uid+job.job} job={job} parent={this} perm={perm} ev={ev} />
-						})}
-					</ul>*/}
+					{perm&&
+						<a className="btn" onClick={this.viewJobs.bind(this)}>
+							Service Requests
+						</a>
+					}
 				</div>
+				
 					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
 					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
 					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}
