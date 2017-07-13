@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import QuestionLine from './QuestionLine.jsx';
+import { loadActiveQuestions, loadInactiveQuestions } from '/lib/debriefQuestions.js';
 
 export default class DebriefCreationForm extends TrackerReact(React.Component) {
 	constructor(props) {
@@ -12,7 +13,11 @@ export default class DebriefCreationForm extends TrackerReact(React.Component) {
 	}
 
 	getQuestions(){
-		return DebriefQuestions.find().fetch().reverse();
+		return loadActiveQuestions();
+	}
+
+	getInactiveQuestions(){
+		return loadInactiveQuestions();
 	}
 
 	addQuestion(event){
@@ -24,6 +29,8 @@ export default class DebriefCreationForm extends TrackerReact(React.Component) {
 
 	render() {
 		let questions = this.getQuestions();
+		let inactiveQuestions = this.getInactiveQuestions();
+
 		return (
 			<div className="row">
 				<div className="col s12">
@@ -53,7 +60,13 @@ export default class DebriefCreationForm extends TrackerReact(React.Component) {
 					<ul className="collection">
 						{questions.length>0?questions.map( (question) => {
 							return <QuestionLine key={question._id} question={question} selected={Session.get("selectedQuestion")==question._id} />
-						}):<li className="collection-item">No Questions</li>}
+						}):<li className="collection-item">No questions</li>}
+					</ul>
+
+					<ul className="collection">
+						{inactiveQuestions.length > 0 ?inactiveQuestions.map( (question) => {
+							return <QuestionLine key={question._id} question={question} selected={Session.get("selectedQuestion")==question._id} />
+						}):<li className="collection-item">No inactive questions</li>}
 					</ul>
 				</div>
 			</div>

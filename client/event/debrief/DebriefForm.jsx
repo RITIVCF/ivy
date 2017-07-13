@@ -10,7 +10,8 @@ export default class DebriefForm extends TrackerReact(React.Component) {
     super(props);
 
 		this.state = {
-			debrief: false
+			debrief: false,
+			submitted: false
 		};
 
 		this.load();
@@ -57,7 +58,7 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 	submit(event){
 		event.preventDefault();
 		this.state.debrief.submit();
-		routeTo("viewdebrief");
+		routeTo("viewdebrief", {eid: this.props.eid});
 	}
 
 	componentDidMount(){
@@ -65,6 +66,7 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 	}
 
 	render() {
+		let ev = this.props.event;
 		let debrief = this.state.debrief;
 		if(!debrief){
 			return (
@@ -72,21 +74,35 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 			);
 		}
 		return (
-      <div className="row">
-        <form onSubmit={this.submit.bind(this)}>
-					{debrief.questions.map((question, i)=>{
-						return <QuestionInput
-							key={question._id}
-							question={question}
-							updateDraftValue={(value)=>{this.updateDraftQuestionValue(i, value)}}
-							updateDraftComment={(comment)=>{this.updateDraftQuestionComment(i, comment)}}
-									 />
-					})}
-					<div className="col s12">
-						<button className="btn" >Submit</button>
+			<div className="card">
+				<div className="card-content">
+					<span className="card-title">{ev.name}</span>
+					<div className="row">
+						<div className="col s12">
+							<p>{moment(ev.start.toISOString()).format("DD MMM YYYY")}
+								{/*}<a className="btn right" onClick={this.openModal.bind(this)}>Edit</a>*/}
+							</p>
+						</div>
 					</div>
-				</form>
-      </div>
+					<div className="row">
+		        <form onSubmit={this.submit.bind(this)}>
+							{debrief.questions.map((question, i)=>{
+								return <QuestionInput
+									key={question._id}
+									question={question}
+									updateDraftValue={(value)=>{this.updateDraftQuestionValue(i, value)}}
+									updateDraftComment={(comment)=>{this.updateDraftQuestionComment(i, comment)}}
+											 />
+							})}
+							<div className="col s12">
+								<button className="btn" >Submit</button>
+								<span className="right">Draft saved</span>
+							</div>
+						</form>
+		      </div>
+				</div>
+			</div>
+
 		)
 	}
 }

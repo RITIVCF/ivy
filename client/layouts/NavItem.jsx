@@ -50,7 +50,6 @@ export default class NavItem extends TrackerReact(Component) {
 	renderChild(){
 		let item = this.props.item;
 		let isActive = this.props.isActive;
-		console.log("Group parent", FlowRouter.current().route.group.parent);
 		return (
 			<li className={isActive?"active":""}>
 				<a onClick={this.go}>

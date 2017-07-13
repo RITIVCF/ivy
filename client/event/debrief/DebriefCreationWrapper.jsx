@@ -28,13 +28,14 @@ export default class DebriefCreationWrapper extends TrackerReact(React.Component
 	}
 
 	render() {
-		// if(!this.state.subscription.DebriefQuestions.ready()){
-		// 	return <LoaderCircle />
-		// }
-		console.log("I am the DebriefCreationWrapper");
+		if(!this.state.subscription.DebriefQuestions.ready()){
+			return <LoaderCircle />
+		}
+
 		if(!checkPermission("admin")){
 			return <NoPerm />
 		}
+
 		return (
 			<MainBox
         content={<DebriefCreationForm />}
