@@ -235,31 +235,8 @@ Meteor.publish("contact", function(cid){
 });
 
 Meteor.publish("allContacts", function(filtr, srt){
-  /*const options = {
-    fields: {
-      _id: 1,
-      name: 1,
-      email: 1,
-      phone: 1
-    }
-  }*/
 
-  var selector = {deleted: {$ne: true}};
-/*
-  if(filtr == "Contact"){
-    selector = {
-      member: {$ne: true}
-    };
-  }
-  if(filtr == "Member"){
-    selector = {
-      member: true
-    };
-  }*/
-  // if(filtr != "All")
-  // selector = {
-  //     status: filtr
-  // };
+  var selector = {status: {$ne: true}};
 
   var options = {
     fields: {

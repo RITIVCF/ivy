@@ -133,7 +133,12 @@ dashboardRoute.route('/',{
 	}
 });
 
-dashboardRoute.route('/profile',{
+let profileRoutes = FlowRouter.group({
+	prefix: '/profile',
+	name: "profile"
+});
+
+profileRoutes.route('/',{
 	action() {
 		mount(MainLayout, {
 			header: "My Profile",

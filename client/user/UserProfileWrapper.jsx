@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import {Tracker} from 'meteor/tracker';
 import ContactProfile from '../contact/ContactProfile.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
-
+import { Contact } from '/lib/classes/Contact.js';
 
 
 export default class UserProfileWrapper extends TrackerReact(React.Component) {

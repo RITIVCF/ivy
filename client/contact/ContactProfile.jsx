@@ -18,7 +18,7 @@ import MemberForm from '../member/MemberForm.jsx';
 //import NewAddressModal from './NewAddressModal.jsx';
 import Event from './Event.jsx';
 import EditTicketForm from '../tickets/EditTicketForm.jsx';
-
+import { Contact } from '/lib/classes/Contact.js';
 
 export default class ContactProfile extends TrackerReact(React.Component){
   constructor(props) {
