@@ -87,6 +87,7 @@ removeJobCollectionJob = function(data){
 delayJobNumberOfIntervals = function(job, number){
 	let interval = getInterval();
 	let newValue = addDays(new Date(), interval*number);
+  
 	setNewJobAfterValue(job, newValue);
 }
 

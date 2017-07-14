@@ -53,15 +53,12 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 		Meteor.call("setGroupLeader", this.props.group._id, user._id);
 	}
 
-	getLeader(){
-		if(this.props.group.leader==""){
-			return "";
-		}
-		return Meteor.users.findOne(this.props.group.leader).name;
+	getLeaders(){
+		return Meteor.users.find({_id: {$in: this.props.group.leader}}).fetch();
 	}
 
-	unset(){
-
+	unsetLeader(user){
+		Meteor.call("unsetGroupLeader", this.props.group._id, user._id);
 	}
 
 	render() {
@@ -71,7 +68,7 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 				<p>Please select a group to continue.</p>
 			</div>
 		}
-
+		let leaders = this.getLeaders();
 		return (
 		<div className="row">
 			<div className="col s12">
@@ -81,15 +78,46 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 				{this.props.group._id!="admin"?<GroupPermissionControl group={this.props.group} />:false}
 				{(this.props.group.type=="Small Group"||this.props.group.type=="Team")&&
 					<div className="row">
-						<div className="col s8">
-							<p>Set leader:</p>
-							<SelectUser
-								initialValue={this.getLeader()}
+						<div className="col s12">
+							<p>Add leaders to the group:</p>
+								<SelectUser
+									initialValue={""}
+									updateUser={this.setLeader.bind(this)}
+									id="leaderselect"
+									ref="leader" />
+									<table>
+										<thead>
+											<tr>
+												<th>Name</th>
+												<th>Email</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											{leaders.map((user)=>{
+												return <tr key={user._id}  id="showhim">
+													<td>{user.name}</td>
+													<td>{user.emails[0].address}</td>
+													<td>{leaders.length>1 && <span className="material-icons"
+																		id="showme"
+																		name={user._id}
+																		onClick={this.unsetLeader.bind(this,user)}>close
+														</span>}
+														{console.log("leaderlength", leaders)}
+													</td>
+												</tr>
+											})}
+										</tbody>
+									</table>
+							{/*<SelectUser
+								initialValue={this.getLeaders()}
 								id="leaderselect"
 								keepName={true}
 								unset={this.unset.bind(this)}
 								updateUser={this.setLeader.bind(this)}
 								ref="leader" />
+for refresh
+								*/}
 						</div>
 					</div>}
 				<GroupUserControl group={this.props.group} />
