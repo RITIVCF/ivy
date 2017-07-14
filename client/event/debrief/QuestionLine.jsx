@@ -28,8 +28,13 @@ export default class QuestionLine extends TrackerReact(React.Component) {
 		if(this.props.selected){
 			selected = " blue white-text";
 		}
+
+		let inactive = "";
+		if(!question.active){
+			inactive = " inactiveQuestion";
+		}
 		return (
-			<li className={"collection-item"+selected} onClick={this.select.bind(this)}>
+			<li className={"collection-item"+selected+inactive} onClick={this.select.bind(this)}>
 				<i className="material-icons">{icon}</i>
 
 				{question.text}

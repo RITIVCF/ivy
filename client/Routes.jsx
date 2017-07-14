@@ -4,6 +4,7 @@ import {mount} from 'react-mounter';
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {EmailTemplateViewLayout} from '/client/layouts/EmailTemplateViewLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
 //Wrappers
@@ -83,8 +84,12 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ************************
 
 // ****  Email  ***************
-import EmailWrapper from './email/EmailWrapper.jsx';
-import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
+import EmailWrapper from './email/summary/EmailWrapper.jsx';
+import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
+// ****************************
+
+// **** Forms  ***************
+import FormWrapper from './forms/FormWrapper.jsx';
 // ****************************
 
 
@@ -128,7 +133,12 @@ dashboardRoute.route('/',{
 	}
 });
 
-dashboardRoute.route('/profile',{
+let profileRoutes = FlowRouter.group({
+	prefix: '/profile',
+	name: "profile"
+});
+
+profileRoutes.route('/',{
 	action() {
 		mount(MainLayout, {
 			header: "My Profile",
@@ -367,43 +377,55 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	}
 });
 
-eventsRoutes.route('/debrief',{
-	action(params) {
-		mount(MainLayout, {
-			header: "Event Debriefs",
-			content: (<EventsDebriefsWrapper />)
-		})
-	}
-});
+	// *******      Debrief Routes  *************
+
+	let debriefRoutes = eventsRoutes.group({
+		prefix: "/debrief",
+		name: "debreif"
+	});
+
+	debriefRoutes.route('/',{
+		name: "debriefssummary",
+		action(params) {
+			mount(MainLayout, {
+				header: "Event Debriefs",
+				content: (<EventsDebriefsWrapper />)
+			})
+		}
+	});
+
+	debriefRoutes.route('/view/:eid',{
+		name: "viewdebrief",
+		action(params) {
+			mount(MainLayout, {
+				header: "Event Debrief",
+				content: (<EventsDebriefWrapper eid={params.eid} />)
+			})
+		}
+	});
+
+	debriefRoutes.route('/edit/:eid',{
+		name: "editdebrief",
+		action(params) {
+			mount(MainLayout, {
+				header: "Edit Event Debrief",
+				content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
+			})
+		}
+	});
 
 
-eventsRoutes.route('/debrief/:eid',{
-	action(params) {
-		mount(MainLayout, {
-			header: "Event Debrief",
-			content: (<EventsDebriefWrapper eid={params.eid} />)
-		})
-	}
-});
+	debriefRoutes.route('/edit',{
+		name: "editdebriefquestions",
+		action(){
+			mount(MainLayout, {
+				header: "Set Debrief Questions",
+				content: (<DebriefCreationWrapper />)
+			})
+		}
+	});
 
-
-eventsRoutes.route('/debrief/edit/:eid', {
-	action(params) {
-		mount(MainLayout, {
-			header: "Edit Event Debrief",
-			content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
-		})
-	}
-});
-
-eventsRoutes.route('/debrief/edit',{
-	action(){
-		mount(MainLayout, {
-			header: "Set Debrief Questions",
-			content: (<DebriefCreationWrapper />)
-		})
-	}
-});
+	// *******   ./ Debrief Routes  *************
 
 // *******   ./ Events Routes  *************
 
@@ -418,7 +440,7 @@ ticketsRoutes.route('/',{
 	name: "tickets",
 	action() {
 		mount(MainLayout, {
-			header: "Tickets",
+			header: "To-Dos",
 			content: (<TicketWrapper />)
 		})
 	}
@@ -427,7 +449,7 @@ ticketsRoutes.route('/',{
 ticketsRoutes.route('/:tid',{
 	action(params) {
 		mount(MainLayout, {
-			header: "Tickets",
+			header: "To-Dos",
 			content: (<EditTicketWrapper tid={params.tid} />)
 		})
 	}
@@ -483,14 +505,14 @@ emailsRoutes.route('/workspace/:emid',{
 // *******  ./ Emails Routes  **********
 
 
-FlowRouter.route('/forms/member', {
-	action() {
-		mount(FormLayout, {
-				content: (<MemberWrapper />)
-			}
-		)
-	}
-});
+// FlowRouter.route('/forms/member', {
+// 	action() {
+// 		mount(FormLayout, {
+// 				content: (<MemberWrapper />)
+// 			}
+// 		)
+// 	}
+// });
 
 FlowRouter.route('/forms/contact', {
 	action() {

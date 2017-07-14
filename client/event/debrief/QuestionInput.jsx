@@ -22,18 +22,18 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 
 	handleCommentChange(event){
 		this.setState({comment: event.target.value});
-		this.props.updateDraftComment(this.props.i, event.target.value );
+		this.props.updateDraftComment( event.target.value );
 	}
 
 	handleRatingChange(event){
 		this.setState({value: event.target.value});
-		this.props.updateDraftValue(this.props.i, event.target.value);
+		this.props.updateDraftValue( event.target.value);
 	}
 
 	render() {
 		let question = this.props.question;
 		return (
-			<li>
+			<div>
 				<p>{question.text}</p>
 				{this.state.values.map((value) => {
 					let inputId = question._id+"_"+value;
@@ -44,10 +44,10 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 							onChange={this.handleRatingChange}/>
 						<label htmlFor={inputId}>{value}</label>
 			    </p>
-				)
+					)
 				})}
 				<textarea onChange={this.handleCommentChange} value={question.comment} />
-			</li>
+			</div>
 		)
 	}
 }

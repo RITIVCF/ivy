@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Attendee from './Attendee.jsx';
+import { Contact } from '/lib/classes/Contact.js';
 
 
 //Events = new Mongo.Collection("events");

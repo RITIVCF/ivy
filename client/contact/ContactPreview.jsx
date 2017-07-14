@@ -3,6 +3,7 @@ import PreviewEvent from './components/PreviewEvent.jsx';
 import FunnelTable from '../admin/overview/FunnelTable.jsx';
 import FunnelChart from '../admin/overview/FunnelChart.jsx';
 import FunnelChartMembership from '../admin/overview/FunnelChartMembership.jsx';
+import { Contact } from '/lib/classes/Contact.js';
 
 export default class ContactPreview extends Component {
   constructor() {

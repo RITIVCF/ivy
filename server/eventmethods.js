@@ -1,3 +1,5 @@
+import { createNewEventFollowUpEmail } from '/lib/emails.js';
+
 Meteor.methods({
   /// Takes in a sign in object
   /// For existing users:
@@ -20,6 +22,7 @@ Meteor.methods({
     }
     else{
       // Create new user and get uid
+			signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
       signin.uid = Accounts.createUser({
         name: signin.name,
         email: signin.email,
@@ -52,6 +55,8 @@ Meteor.methods({
 		//calculateFunnelStatus(signin.uid);
 
     setupStatusJobs(signin.uid);
+
+		createNewEventFollowUpEmail(signin.eid, signin.uid);
 
 
   }

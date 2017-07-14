@@ -235,31 +235,8 @@ Meteor.publish("contact", function(cid){
 });
 
 Meteor.publish("allContacts", function(filtr, srt){
-  /*const options = {
-    fields: {
-      _id: 1,
-      name: 1,
-      email: 1,
-      phone: 1
-    }
-  }*/
 
-  var selector = {deleted: {$ne: true}};
-/*
-  if(filtr == "Contact"){
-    selector = {
-      member: {$ne: true}
-    };
-  }
-  if(filtr == "Member"){
-    selector = {
-      member: true
-    };
-  }*/
-  // if(filtr != "All")
-  // selector = {
-  //     status: filtr
-  // };
+  var selector = {status: {$ne: true}};
 
   var options = {
     fields: {
@@ -595,6 +572,17 @@ Meteor.publish("myEmails", function(){
   return Emails.find({$or:[{uid: this.userId},{isTemplate: true}]});
 });
 
+Meteor.publish("thisEmail", function(emid){
+  return Emails.find({_id: emid});
+});
+
+Meteor.publish("emailEvents", function() {
+  let n = addDays(new Date(), 7);
+  return Events.find({$or:[
+    {start: {$gt: new Date(), $lt: n}, published: true},
+    {start: {$gt: new Date()}, tags: "Conference"}
+  ]});
+})
 //***************************************
 
 // *******    Debrief   ************
@@ -603,7 +591,7 @@ Meteor.publish("myDebriefDrafts", function(){
 });
 
 Meteor.publish("allDebriefQuestions", function(){
-	return DebriefQuestions.find({deleted: false});
+	return DebriefQuestions.find();
 });
 // *********************************
 

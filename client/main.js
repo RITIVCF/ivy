@@ -21,6 +21,10 @@ SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
 
+routeTo = function(routeName, params){
+	FlowRouter.go(FlowRouter.path(routeName, params));
+}
+
 checkPermission = function(){
 	// if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
 	// 	return true;

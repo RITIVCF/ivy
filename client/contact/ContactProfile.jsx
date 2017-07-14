@@ -17,7 +17,8 @@ import ContactCurrYear from './components/ContactCurrYear.jsx';
 import MemberForm from '../member/MemberForm.jsx';
 //import NewAddressModal from './NewAddressModal.jsx';
 import Event from './Event.jsx';
-
+import EditTicketForm from '../tickets/EditTicketForm.jsx';
+import { Contact } from '/lib/classes/Contact.js';
 
 export default class ContactProfile extends TrackerReact(React.Component){
   constructor(props) {
@@ -29,18 +30,43 @@ export default class ContactProfile extends TrackerReact(React.Component){
 
   componentDidMount(){
     $('select').material_select();
+    $('.modal').modal();
+  }
+
+  openTicket(){
+    $('#ticketmodal').appendTo("body").modal("open");
   }
 
   viewAllEvents(){
     this.setState({viewallevents: true});
   }
 
+	getContact(){
+		return new Contact(
+			Meteor.users.findOne(this.props.cid)
+		);
+	}
+
   getEvents(){
+		let contact = this.props.contact;
     var options = {sort:{start:-1}};
     if(!this.state.viewallevents){
       options.limit = 3;
     }
-    return Events.find({"attendees._id": this.props.contact._id}, options).fetch();
+		if(this.props.cid){
+			contact = this.getContact();
+		}
+    return Events.find({"attendees._id": contact._id}, options).fetch();
+  }
+
+	getTicket(){
+    var ticket = Tickets.findOne(this.props.contact.ticket);
+    if(ticket){
+      return ticket;
+    }
+    else {
+      return {ticketnum: ''}
+    }
   }
 
   openMemberOverlay(){
@@ -54,7 +80,10 @@ export default class ContactProfile extends TrackerReact(React.Component){
   }
 
   render() {
-    let contact = this.props.contact;
+		let contact = this.props.contact;
+		if(!!this.props.cid){
+			contact = this.getContact();
+		}
     var disable = true;
     var viewmember = false;
 
@@ -80,13 +109,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-
               {(contact.isUser()&&!contact.isMember())&&
                 <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
               }
 
               {(checkPermission("tickets")&&contact.hasTicket()&&!contact.isUser())&&
-                <a className="waves-effect waves-light btn right" href={"/tickets/"+contact.getTicketId()}>
+                <a className="waves-effect waves-light btn right" onClick={this.openTicket.bind(this)}>
                   Ticket # {contact.getTicket().ticketnum}
                 </a>
               }
@@ -171,6 +199,16 @@ export default class ContactProfile extends TrackerReact(React.Component){
           </div>
         </div>
         :""}
+        {console.log("Contact profile: ",this.props.modal?"Show Modal":"Do not show modal.")}
+        {(this.props.modal)&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
+          <div className="modal-content">
+            <EditTicketForm ticket={this.getTicket()} modal={false} />
+          </div>
+          <div className="modal-footer">
+            <a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
+            <a className="btn modal-action modal-close" href={"/tickets/"+this.getTicket()._id}>Open Ticket Page</a>
+          </div>
+        </div>}
       </div>
     )
   }

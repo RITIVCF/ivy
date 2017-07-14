@@ -61,7 +61,7 @@ export default class Header extends TrackerReact(React.Component) {
 						<ul className="left">
 							<li><a onClick={this.goBack.bind(this)} id="mobile-padding-2"><i className="material-icons">arrow_back</i></a></li>
 						</ul>
-						<a href="/" id="page-title" className="brand-logo">{/*Ivy &nbsp; |&nbsp; */}{this.props.header}</a>
+						<a href="/" id="page-title"className="brand-logo">{/*Ivy &nbsp; |&nbsp; */}{this.props.header}</a>
 						<ul className="right hide-on-med-and-down">
 							{/*}<li><a href="#!"><i className="material-icons">search</i></a></li>*/}
 								<li><a href="mobile.html"></a></li>

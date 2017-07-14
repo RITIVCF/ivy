@@ -3,14 +3,15 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Rating from './Rating.jsx';
 import QuestionInput from './QuestionInput.jsx';
 
-import Debrief from '../../../lib/classes/Debrief.js';
+import Debrief from '/lib/classes/Debrief.js';
 
 export default class DebriefForm extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
 
 		this.state = {
-			debrief: false
+			debrief: false,
+			submitted: false
 		};
 
 		this.load();
@@ -26,19 +27,16 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 
 	load(){
 		let debrief = new Debrief(this.props.eid);
-		console.log("debrief: ", debrief);
 		if(!debrief._id){
-			Meteor.call("insertDebriefDraft", this.props.eid), (error, result) => {
+			Meteor.call("insertDebriefDraft", this.props.eid, (error, result) => {
 				if(error){
 					console.log(error);
 				}else{
-					console.log("Setting from insert callback");
 					this.setState({debrief: new Debrief(this.props.eid)});
 				}
-			};
+			});
 		}
 		else{
-			console.log("Setting because it exists");
 			this.state.debrief = debrief;
 		}
 
@@ -60,35 +58,51 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 	submit(event){
 		event.preventDefault();
 		this.state.debrief.submit();
+		routeTo("viewdebrief", {eid: this.props.eid});
 	}
 
 	componentDidMount(){
 
 	}
 
-
 	render() {
+		let ev = this.props.event;
 		let debrief = this.state.debrief;
 		if(!debrief){
-			return false;
+			return (
+				false
+			);
 		}
 		return (
-      <div className="row">
-        <form onSubmit={this.submit.bind(this)}>
-					{debrief.questions.map((question, i)=>{
-						return <QuestionInput
-							key={question._id}
-							i={i}
-							question={question}
-							updateDraftValue={this.updateDraftQuestionValue}
-							updateDraftComment={this.updateDraftQuestionComment}
-							/>
-					})}
-					<div className="col s12">
-						<button className="btn" >Submit</button>
+			<div className="card">
+				<div className="card-content">
+					<span className="card-title">{ev.name}</span>
+					<div className="row">
+						<div className="col s12">
+							<p>{moment(ev.start.toISOString()).format("DD MMM YYYY")}
+								{/*}<a className="btn right" onClick={this.openModal.bind(this)}>Edit</a>*/}
+							</p>
+						</div>
 					</div>
-				</form>
-      </div>
+					<div className="row">
+		        <form onSubmit={this.submit.bind(this)}>
+							{debrief.questions.map((question, i)=>{
+								return <QuestionInput
+									key={question._id}
+									question={question}
+									updateDraftValue={(value)=>{this.updateDraftQuestionValue(i, value)}}
+									updateDraftComment={(comment)=>{this.updateDraftQuestionComment(i, comment)}}
+											 />
+							})}
+							<div className="col s12">
+								<button className="btn" >Submit</button>
+								<span className="right">Draft saved</span>
+							</div>
+						</form>
+		      </div>
+				</div>
+			</div>
+
 		)
 	}
 }

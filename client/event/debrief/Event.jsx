@@ -9,7 +9,12 @@ export default class DebriefSummary extends React.Component {
   }
 
 	open(){
-		FlowRouter.go("/events/debrief/edit/"+this.props.ev._id);
+		if(!!this.props.ev.debrief){
+			FlowRouter.go("/events/debrief/view/"+this.props.ev._id);
+		}
+		else{
+			FlowRouter.go("/events/debrief/edit/"+this.props.ev._id);
+		}
 	}
 
 	tags(){
