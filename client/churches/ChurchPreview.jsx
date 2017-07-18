@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import { Contact } from '/lib/classes/Contact.js';
+import Contact from '/lib/classes/Contact.js';
 
 export default class ChurchesPreview extends TrackerReact(React.Component) {
 	constructor() {

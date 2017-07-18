@@ -234,9 +234,36 @@ Meteor.publish("contact", function(cid){
   return Meteor.users.find(selector, options);
 });
 
+Meteor.publish("graduatedContacts", function(){
+	let selector = {
+		status: "Graduated"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("expiredContacts", function(){
+	let selector = {
+		status: "Expired"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("outofscopeContacts", function(){
+	let selector = {
+		status: "Out of Scope"
+	};
+	return Meteor.users.find(selector);
+});
+
 Meteor.publish("allContacts", function(filtr, srt){
 
-  var selector = {status: {$ne: true}};
+  var selector = {status: {$nin: [
+		"Admin",
+		"Out of Scope",
+		"Expired",
+		"Graduated",
+		"Deleted"
+	]}};
 
   var options = {
     fields: {

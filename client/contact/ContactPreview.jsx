@@ -3,7 +3,7 @@ import PreviewEvent from './components/PreviewEvent.jsx';
 import FunnelTable from '../admin/overview/FunnelTable.jsx';
 import FunnelChart from '../admin/overview/FunnelChart.jsx';
 import FunnelChartMembership from '../admin/overview/FunnelChartMembership.jsx';
-import { Contact } from '/lib/classes/Contact.js';
+import { getUser } from '/lib/users.js';
 
 export default class ContactPreview extends Component {
   constructor() {
@@ -16,7 +16,7 @@ export default class ContactPreview extends Component {
   }
 
   getContact(){
-    return new Contact(Meteor.users.findOne(this.props.cid));
+		return getUser(this.props.cid);
   }
 
   contactsCount(){

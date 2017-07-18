@@ -1,7 +1,18 @@
+import { isContactPresent } from '/lib/contactStatus.js';
+import { getUser } from '/lib/users.js';
+
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
   let status = "Contact";
-  let user = Meteor.users.findOne(uid);
+  let user = getUser(uid);
+
+	if( // if not valid, do not Calculate Funnel Status
+		user.status == "Out of Scope" ||
+		user.status == "Graduated" ||
+		user.status == "Deleted" ||
+		user.status == "Admin"){
+			return;
+		}
 
   // Is user Visitor, Crowd, or Contact
   // Uses event attendance
@@ -17,8 +28,16 @@ calculateFunnelStatus = function(uid){
     status = "Contact";
   }
 
-  // Check to see if we need to follow up with them
-  checkIntegration(status, uid);
+	// If present, do not take attendance into consideration
+	// for calculating funnel
+	let currentStatus = user.getStatus();
+	if(!isContactPresent(currentStatus)){
+		status = currentStatus;
+	}
+	else{
+		// Check to see if we need to follow up with them
+	  checkIntegration(status, uid);
+	}
 
   // Is user Multiplier
   if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
@@ -66,7 +85,7 @@ saveStatusChange = function(uid, status){
 
 insertAndUpdateStatus = function(uid, status){
 	Funnel.insert({uid: uid, status: status, timestamp: new Date()}, () => {
-		Meteor.users.update({_id: uid}, {$set: {status: status}});
+		Meteor.users.update({_id: uid}, {$set: {funnelStatus: status}});
 	});
 }
 

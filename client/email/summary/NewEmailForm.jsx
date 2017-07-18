@@ -28,8 +28,6 @@ export default class NewEmailForm extends TrackerReact(React.Component){
   submit(event){
     event.preventDefault();
     //this.setState({})
-    console.log(this.state);
-    console.log(this.refs.template.value);
     let to = this.state.to;
     if(to.users.length>0||to.groups.length>0||to.emails.length>0){
       Meteor.call("newEmail",
@@ -86,15 +84,19 @@ export default class NewEmailForm extends TrackerReact(React.Component){
 
   getFrom(){
     var emails= [];
-    Meteor.user().emails.forEach((email)=>{
-      emails.push(email.address);
-    });
-    if(checkPermission("ivrep")){
-      emails.push("ivcf@rit.edu");
-    }
-    if(checkPermission("sysadmin")){
-      emails.push("ivy@rit.edu");
-    }
+		if(Meteor.user().emails){
+			Meteor.user().emails.forEach((email)=>{
+				emails.push(email.address);
+			});
+
+		}
+
+		if(checkPermission("ivrep")){
+			emails.push("ivcf@rit.edu");
+		}
+		if(checkPermission("sysadmin")){
+			emails.push("ivy@rit.edu");
+		}
     return emails;
   }
 

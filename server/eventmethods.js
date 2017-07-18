@@ -1,4 +1,6 @@
 import { createNewEventFollowUpEmail } from '/lib/emails.js';
+import Contact from '/lib/classes/Contact.js';
+import { createNewUser } from '/lib/users.js';
 
 Meteor.methods({
   /// Takes in a sign in object
@@ -23,20 +25,14 @@ Meteor.methods({
     else{
       // Create new user and get uid
 			signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
-      signin.uid = Accounts.createUser({
-        name: signin.name,
+			let userDoc = {
+				name: signin.name,
         email: signin.email,
         phone: signin.phone,
         major: signin.major,
-        howhear: signin.howhear,
-        bio: "" ,
-        ticket: "",
-        addresses: [],
-        affiliations: [],
-        communitylife: [],
-        status: "Contact",
-        createdAt: new Date()
-      });
+        howhear: signin.howhear
+			}
+      signin.uid = createNewUser(userDoc);
 
       // Create follow up ticket
       addAttendanceTicket(signin.eid, signin.uid);

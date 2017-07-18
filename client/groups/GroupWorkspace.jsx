@@ -6,6 +6,7 @@ import GroupContactControl from './components/GroupContactControl.jsx';
 import GroupUserControl from './components/GroupUserControl.jsx';
 import GroupPermissionControl from './GroupPermissionControl.jsx';
 import SelectUser from '../sharedcomponents/SelectUser.jsx';
+import { getUsers } from '/lib/users.js';
 
 export default class GroupsWorkspace extends TrackerReact(React.Component) {
 	constructor(props) {
@@ -54,7 +55,10 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 	}
 
 	getLeaders(){
-		return Meteor.users.find({_id: {$in: this.props.group.leader}}).fetch();
+		let query = {_id:
+			{$in: this.props.group.leader}
+		};
+		return getUsers(query);
 	}
 
 	unsetLeader(user){
@@ -68,7 +72,15 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 				<p>Please select a group to continue.</p>
 			</div>
 		}
-		let leaders = this.getLeaders();
+
+		let hasLeaders = (
+			this.props.group.type=="Small Group"||
+			this.props.group.type=="Team"
+		);
+		let leaders = [];
+		if(hasLeaders){
+			leaders = this.getLeaders();
+		}
 		return (
 		<div className="row">
 			<div className="col s12">
@@ -76,39 +88,38 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 				{/*<input type="checkbox" ref="admin" value={this.props.group.admingroup} onChange={this.toggleAdmin.bind(this)} />*/}
 				{/*this.props.group.admingroup ? <p><i>This is an admin group.</></p>:<div></div>*/}
 				{this.props.group._id!="admin"?<GroupPermissionControl group={this.props.group} />:false}
-				{(this.props.group.type=="Small Group"||this.props.group.type=="Team")&&
+				{hasLeaders&&
 					<div className="row">
 						<div className="col s12">
 							<p>Add leaders to the group:</p>
-								<SelectUser
-									initialValue={""}
-									updateUser={this.setLeader.bind(this)}
-									id="leaderselect"
-									ref="leader" />
-									<table>
-										<thead>
-											<tr>
-												<th>Name</th>
-												<th>Email</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											{leaders.map((user)=>{
-												return <tr key={user._id}  id="showhim">
-													<td>{user.name}</td>
-													<td>{user.emails[0].address}</td>
-													<td>{leaders.length>1 && <span className="material-icons"
-																		id="showme"
-																		name={user._id}
-																		onClick={this.unsetLeader.bind(this,user)}>close
-														</span>}
-														{console.log("leaderlength", leaders)}
-													</td>
-												</tr>
-											})}
-										</tbody>
-									</table>
+							<SelectUser
+								initialValue={""}
+								updateUser={this.setLeader.bind(this)}
+								id="leaderselect"
+							ref="leader" />
+							<table>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Email</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									{leaders.map((user)=>{
+										return <tr key={user._id}  id="showhim">
+											<td>{user.getName()}</td>
+											<td>{user.getEmail()}</td>
+											<td>{leaders.length>1 && <span className="material-icons"
+												id="showme"
+												name={user._id}
+												onClick={this.unsetLeader.bind(this,user)}>close
+											</span>}
+											</td>
+										</tr>
+									})}
+								</tbody>
+							</table>
 							{/*<SelectUser
 								initialValue={this.getLeaders()}
 								id="leaderselect"
@@ -116,8 +127,8 @@ export default class GroupsWorkspace extends TrackerReact(React.Component) {
 								unset={this.unset.bind(this)}
 								updateUser={this.setLeader.bind(this)}
 								ref="leader" />
-for refresh
-								*/}
+								for refresh
+							*/}
 						</div>
 					</div>}
 				<GroupUserControl group={this.props.group} />
