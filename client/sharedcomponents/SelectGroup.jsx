@@ -55,9 +55,7 @@ export default class SelectGroup extends TrackerReact(React.Component) {
 
       let ingrouptrue = false;
       if (!!this.props.ingroup) {
-        let ingrouptrue = this.props.ingroup;
-      } else {
-        let ingrouptrue = false;
+        ingrouptrue = this.props.ingroup;
       }
 
       this.state = {

@@ -135,7 +135,13 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 				</div>
 			);
 		}
-
+		let recurTrue = false;
+		if (!!ev.recurId) {
+			recurTrue = true;
+			let recurId = ev.recurId;
+			console.log("I got here");
+		}
+		console.log(recurTrue);
 		return (
 				<MainBox
 					content={[<EventWorkspace key={0} perm={perms.edit} ev={ev} />,
@@ -143,7 +149,11 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 							key={1}
 							id={"RepeatEventModal"}
 							ref="modal"
-							content={<RecurringModal ev={ev} perm={perms.edit} />}
+							content={recurTrue?<div>
+									<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
+				        	<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
+								</div>:
+								<RecurringModal ev={ev} perm={perms.edit} />}
 							onClose={this.closeRecur.bind(this)}
 							type={"fixed-footer"}
 							footer={<div>
