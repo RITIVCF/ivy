@@ -1,6 +1,22 @@
 // Check db and initialize
+import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { newEmailModule } from '/lib/modules.js';
+import { createNewUser } from '/lib/users.js';
+
+// Set admin user
+let adminUserId = null;
+let adminUser = Meteor.users.findOne({username: "admin"});
+if(!adminUser){
+	let userDoc = {
+		name: "Administrator",
+		username: "admin",
+		password: Meteor.settings.adminpassword
+	}
+
+	adminUserId = createNewUser(userDoc, true);
+}
+
 
 //Set up Groups
 let groups = [
@@ -13,12 +29,22 @@ let groups = [
 ];
 groups.forEach( (group) => {
 	if(!Groups.findOne(group._id)){
+
 		Groups.insert(group);
 	}
 });
 
 
-
+// If admin user needs to be created
+if(!!adminUserId){
+	let adminGroup = Groups.findOne({
+		_id: "admin",
+		users: adminUserId
+	});
+	if(!adminGroup){
+		Groups.update("admin", {$addToSet: {users: adminUserId}});
+	}
+}
 
 
 //Set up Options

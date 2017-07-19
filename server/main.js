@@ -30,6 +30,29 @@ Meteor.methods({
 		if(checkPermission("admin", Meteor.userId())){
 			Options.update({_id: id}, {$set: {val: val}});
 		}
+	},
+	groupLeaderToArray(){
+		let groups = Groups.find().fetch();
+		groups.forEach( (group) => {
+			if(group.leader){
+				let leader = [group.leader];
+				Groups.update(group._id, {$set: {leader: leader}});
+			}
+		});
+	},
+	configureStatusOptions(){
+		// This is a temp method to perform the algorithm to update all of the
+		// status options from status to funnelStatus and adding status
+
+		// Copy status to funnelStatus
+		let users = Meteor.users.find().fetch();
+		users.forEach( (user) => {
+			Meteor.users.update(user._id,{$set: {funnelStatus: user.status}});
+		});
+
+		// Set all to Present. Will have to change the others later.
+		Meteor.users.update({}, {$set: {status: "Present"}});
+
 	}
 });
 

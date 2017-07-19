@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SignInButtonWrapper from '/client/user/SignInButtonWrapper.jsx';
+import Contact from '/lib/classes/Contact.js';
 
 
 export default class SideBarMobile extends TrackerReact(React.Component) {
@@ -37,7 +38,11 @@ export default class SideBarMobile extends TrackerReact(React.Component) {
 	}
 
 	getUserEmail(){
-		return Meteor.user()&&Meteor.user().emails[0].address;
+		if(Meteor.user()){
+			let user = new Contact(Meteor.user());
+			return user.getEmail();
+		}
+		return false;
 	}
 
 	goToProfile(){

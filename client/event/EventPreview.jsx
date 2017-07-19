@@ -118,7 +118,7 @@ export default class EventPreview extends TrackerReact(React.Component) {
 		let canEditEvent = perms.edit;
 		let canViewEvent = perms.view;
 		let isEventReviewed = this.props.event.isReviewed();
-    let isFormOpen = (this.props.event.published)&&(this.props.event.start < new moment(new Date).add(2,"hours"));
+    let isFormOpen = (this.props.event.isPublished())&&(this.props.event.start < new moment(new Date).add(2,"hours"));
 		let isUserOwner = leader._id==Meteor.userId();
 		let isDebriefSubmitted = !!this.props.event.debrief;
 		let hasPermissionToViewDebrief = (checkPermission("admin")||isUserOwner);

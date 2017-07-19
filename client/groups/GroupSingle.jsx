@@ -37,8 +37,16 @@ export default class GroupsSingle extends Component {
     return Meteor.users.find({_id: {$in: this.props.group.users}}).fetch();
   }
 
-  getLeader(){
-    if(this.props.group.leader==""){
+  getLeaders(){
+    let leaderstring = "";
+    let leaders = Meteor.users.find({_id: {$in: this.props.group.leader}}).fetch();
+    leaderstring = leaders[0].name;
+    for (var i = 1; i < leaders.length; i++) {
+      leaderstring = leaderstring + ', ' + leaders[i].name;
+    }
+    return leaderstring
+
+    /*if(this.props.group.leader==""){
       return "";
     }
     var leader = Meteor.users.findOne(this.props.group.leader);
@@ -48,7 +56,7 @@ export default class GroupsSingle extends Component {
     }
     else{
       return leader.name;
-    }
+    }*/
   }
 
   render() {
@@ -59,7 +67,7 @@ export default class GroupsSingle extends Component {
           style={{width: "100%"}} onClick={this.edit.bind(this)}>
           <div className="card-content">
             <span className="card-title">{this.props.group.name}</span>
-            <p>{isSG&&<b>Leader:</b>}&nbsp;{isSG&&this.getLeader()}</p>
+            <p>{isSG&&<b>Leader:</b>}&nbsp;{isSG&&this.getLeaders()}</p>
             {/*?
               <p><b>Leader:</b> {this.getLeader()}</p>:""
             }*/}
