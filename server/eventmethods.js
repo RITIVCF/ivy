@@ -1,6 +1,13 @@
 import { createNewEventFollowUpEmail } from '/lib/emails.js';
+import {
+	canUserEditEvent,
+	createRecurringEvents,
+	setPublishAllRecurEvents,
+	deleteAllRecurEvents,
+	setEventGroup } from '/lib/events.js';
 import Contact from '/lib/classes/Contact.js';
 import { createNewUser } from '/lib/users.js';
+
 
 Meteor.methods({
   /// Takes in a sign in object
@@ -55,7 +62,45 @@ Meteor.methods({
 		createNewEventFollowUpEmail(signin.eid, signin.uid);
 
 
-  }
+  },
+
+	createEventRecurrence(eid, date, groupId = false){
+		let event = Events.findOne(eid);
+
+		// if user has edit permission
+		// else do nothing
+		if(canUserEditEvent(event)){
+			createRecurringEvents(eid, date);
+			if(groupId){
+				setEventGroup(eid, groupId);
+			}
+		}
+	},
+
+	deleteAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			deleteAllRecurEvents(event.recurId);
+		}
+	},
+
+	publishAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			setPublishAllRecurEvents(event.recurId, true);
+		}
+	},
+
+	unpublishAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			setPublishAllRecurEvents(event.recurId, false);
+		}
+	}
+
 });
 
   /// Takes an input object
