@@ -80,7 +80,7 @@ export default class WorkspacePanel extends React.Component {
 						</a>
 					}
 				</div>
-				
+
 					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
 					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
 					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}

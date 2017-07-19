@@ -6,6 +6,8 @@ import MainBox from '../MainBox.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
+import Modal from '../sharedcomponents/Modal.jsx';
+import RecurringModal from './RecurringModal.jsx';
 
 import Event from '/lib/classes/Event.js';
 
@@ -47,7 +49,25 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	//	this.state.subscription.options.stop();
   }
 
+	componentDidMount() {
+		$('.tooltipped').tooltip({delay: 50});
+	}
 
+	repeatEvent() {
+		this.refs.modal.open();
+	}
+
+	cancelRecur() {
+		this.refs.modal.close();
+	}
+
+	closeRecur() {
+
+	}
+
+	setRepeat() {
+		console.log("nothing yet");
+	}
 
 	openReoccuring(event){
 		event.preventDefault();
@@ -97,7 +117,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 			return(<div className="center-align" style={{paddingTop:"50px"}}>
 				<div className="card-panel">
 					<div className="card-content">
-						{!this.state.submitted?<p>You do not have permission to view this event's workspace. Click <a href="" onClick={this.request.bind(this)}>here</a> to request permission to help with this event.</p>:<p>Submitted.</p>}
+						{!this.state.submitted?<p>You do not have permission to view this events workspace. Click <a href="" onClick={this.request.bind(this)}>here</a> to request permission to help with this event.</p>:<p>Submitted.</p>}
 
 					</div>
 				</div>
@@ -115,11 +135,33 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 				</div>
 			);
 		}
-
+		let recurTrue = false;
+		if (!!ev.recurId) {
+			recurTrue = true;
+			let recurId = ev.recurId;
+			console.log("I got here");
+		}
+		console.log(recurTrue);
 		return (
 				<MainBox
-					content={<EventWorkspace perm={perms.edit} ev={ev} />}
-					subheader={""}
+					content={[<EventWorkspace key={0} perm={perms.edit} ev={ev} />,
+						<Modal
+							key={1}
+							id={"RepeatEventModal"}
+							ref="modal"
+							content={recurTrue?<div>
+									<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
+				        	<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
+								</div>:
+								<RecurringModal ev={ev} perm={perms.edit} />}
+							onClose={this.closeRecur.bind(this)}
+							type={"fixed-footer"}
+							footer={<div>
+								<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
+			        	<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
+							</div>}
+						/>]}
+					subheader={<ul><li><a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set recurrence" onClick={this.repeatEvent.bind(this)}><i className="material-icons black-text">content_copy</i></a></li></ul>}
 					showinfobar={true}
 					infobar={<WorkspacePanel perm={perms.edit} ev={ev} />}
 					/>

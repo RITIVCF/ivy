@@ -4,17 +4,21 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 
-function getList(){
-      return Groups.find().fetch();
+function getList(ingroup){
+  if (ingroup) {
+    return Groups.find({$or: [{leader: Meteor.userId()},{users: Meteor.userId()}]}).fetch();
+  } else {
+    return Groups.find().fetch();
+  }
 }
 
-function getSuggestions(value) {
+function getSuggestions(value, ingroup) {
   //users: true, find Users
   //       fasle, use contacts
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-    return inputLength === 0 ? [] : getList().filter(group =>
+    return inputLength === 0 ? [] : getList(ingroup).filter(group =>
       group.name.toLowerCase().slice(0, inputLength) === inputValue
     );
 
@@ -49,11 +53,15 @@ export default class SelectGroup extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
 
-
+      let ingrouptrue = false;
+      if (!!this.props.ingroup) {
+        ingrouptrue = this.props.ingroup;
+      }
 
       this.state = {
         value: '',
-        suggestions: getSuggestions('')
+        ingroup: ingrouptrue,
+        suggestions: getSuggestions('', ingrouptrue)
       };
 
 
@@ -114,7 +122,7 @@ shouldComponentUpdate(nextProps, nextState){
 
   onSuggestionsFetchRequested({ value }) {
     this.setState({
-      suggestions: getSuggestions(value)
+      suggestions: getSuggestions(value, this.state.ingroup)
     });
   }
 
@@ -137,16 +145,16 @@ shouldComponentUpdate(nextProps, nextState){
       return (
         <Autosuggest id={this.props.id}
                     suggestions={suggestions}
-                     getSuggestionValue={getSuggestionValue}
-                     focusFirstSuggestion={true}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     focusInputOnSuggestionClick={false}
-                     shouldRenderSuggestions={shouldRenderSuggestions}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps}
-                     renderInputComponent={inputComponent}
-                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+                    getSuggestionValue={getSuggestionValue}
+                    focusFirstSuggestion={true}
+                    onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+                    focusInputOnSuggestionClick={false}
+                    shouldRenderSuggestions={shouldRenderSuggestions}
+                    renderSuggestion={renderSuggestion}
+                    inputProps={inputProps}
+                    renderInputComponent={inputComponent}
+                    onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+                    onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
                      />
       );
     }
