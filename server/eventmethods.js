@@ -1,3 +1,14 @@
+import { createNewEventFollowUpEmail } from '/lib/emails.js';
+import {
+	canUserEditEvent,
+	createRecurringEvents,
+	setPublishAllRecurEvents,
+	deleteAllRecurEvents,
+	setEventGroup } from '/lib/events.js';
+import Contact from '/lib/classes/Contact.js';
+import { createNewUser } from '/lib/users.js';
+
+
 Meteor.methods({
   /// Takes in a sign in object
   /// For existing users:
@@ -20,20 +31,15 @@ Meteor.methods({
     }
     else{
       // Create new user and get uid
-      signin.uid = Accounts.createUser({
-        name: signin.name,
+			signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
+			let userDoc = {
+				name: signin.name,
         email: signin.email,
         phone: signin.phone,
         major: signin.major,
-        howhear: signin.howhear,
-        bio: "" ,
-        ticket: "",
-        addresses: [],
-        affiliations: [],
-        communitylife: [],
-        status: "Contact",
-        createdAt: new Date()
-      });
+        howhear: signin.howhear
+			}
+      signin.uid = createNewUser(userDoc);
 
       // Create follow up ticket
       addAttendanceTicket(signin.eid, signin.uid);
@@ -53,8 +59,48 @@ Meteor.methods({
 
     setupStatusJobs(signin.uid);
 
+		createNewEventFollowUpEmail(signin.eid, signin.uid);
 
-  }
+
+  },
+
+	createEventRecurrence(eid, date, groupId = false){
+		let event = Events.findOne(eid);
+
+		// if user has edit permission
+		// else do nothing
+		if(canUserEditEvent(event)){
+			createRecurringEvents(eid, date);
+			if(groupId){
+				setEventGroup(eid, groupId);
+			}
+		}
+	},
+
+	deleteAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			deleteAllRecurEvents(event.recurId);
+		}
+	},
+
+	publishAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			setPublishAllRecurEvents(event.recurId, true);
+		}
+	},
+
+	unpublishAllRecurEvents(eid){
+		let event = Events.findOne(eid);
+
+		if(canUserEditEvent(event)){
+			setPublishAllRecurEvents(event.recurId, false);
+		}
+	}
+
 });
 
   /// Takes an input object

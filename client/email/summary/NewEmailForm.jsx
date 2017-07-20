@@ -1,8 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectRecip from '../sharedcomponents/SelectRecip.jsx';
+import SelectRecip from '../../sharedcomponents/SelectRecip.jsx';
 
-export default class EmailSummaryPanel extends TrackerReact(React.Component){
+export default class NewEmailForm extends TrackerReact(React.Component){
   constructor() {
     super();
 
@@ -28,15 +28,19 @@ export default class EmailSummaryPanel extends TrackerReact(React.Component){
   submit(event){
     event.preventDefault();
     //this.setState({})
-    console.log(this.state);
-    console.log(this.refs.template.value);
     let to = this.state.to;
     if(to.users.length>0||to.groups.length>0||to.emails.length>0){
       Meteor.call("newEmail",
         this.refs.template.value,
         this.refs.from.value,
         this.state.to, function(err, res){
-          FlowRouter.go("/emails/workspace/"+res);
+					if(!!err){
+						Materialize.toast("Something went wrong. Please try again.", 5000);
+						console.error(err);
+					} else{
+						FlowRouter.go("/emails/workspace/"+res);
+						$('#NewEmailFormModal').modal("close");
+					}
         });
     }
     else{
@@ -80,15 +84,19 @@ export default class EmailSummaryPanel extends TrackerReact(React.Component){
 
   getFrom(){
     var emails= [];
-    Meteor.user().emails.forEach((email)=>{
-      emails.push(email.address);
-    });
-    if(checkPermission("ivrep")){
-      emails.push("ivcf@rit.edu");
-    }
-    if(checkPermission("sysadmin")){
-      emails.push("ivy@rit.edu");
-    }
+		if(Meteor.user().emails){
+			Meteor.user().emails.forEach((email)=>{
+				emails.push(email.address);
+			});
+
+		}
+
+		if(checkPermission("ivrep")){
+			emails.push("ivcf@rit.edu");
+		}
+		if(checkPermission("sysadmin")){
+			emails.push("ivy@rit.edu");
+		}
     return emails;
   }
 

@@ -4,6 +4,7 @@ import {mount} from 'react-mounter';
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {EmailTemplateViewLayout} from '/client/layouts/EmailTemplateViewLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
 //Wrappers
@@ -83,8 +84,8 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ************************
 
 // ****  Email  ***************
-import EmailWrapper from './email/EmailWrapper.jsx';
-import EmailWorkspaceWrapper from './email/EmailWorkspaceWrapper.jsx';
+import EmailWrapper from './email/summary/EmailWrapper.jsx';
+import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
 // ****************************
 
 // **** Forms  ***************
@@ -132,7 +133,12 @@ dashboardRoute.route('/',{
 	}
 });
 
-dashboardRoute.route('/profile',{
+let profileRoutes = FlowRouter.group({
+	prefix: '/profile',
+	name: "profile"
+});
+
+profileRoutes.route('/',{
 	action() {
 		mount(MainLayout, {
 			header: "My Profile",

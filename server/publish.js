@@ -234,32 +234,36 @@ Meteor.publish("contact", function(cid){
   return Meteor.users.find(selector, options);
 });
 
-Meteor.publish("allContacts", function(filtr, srt){
-  /*const options = {
-    fields: {
-      _id: 1,
-      name: 1,
-      email: 1,
-      phone: 1
-    }
-  }*/
+Meteor.publish("graduatedContacts", function(){
+	let selector = {
+		status: "Graduated"
+	};
+	return Meteor.users.find(selector);
+});
 
-  var selector = {deleted: {$ne: true}};
-/*
-  if(filtr == "Contact"){
-    selector = {
-      member: {$ne: true}
-    };
-  }
-  if(filtr == "Member"){
-    selector = {
-      member: true
-    };
-  }*/
-  // if(filtr != "All")
-  // selector = {
-  //     status: filtr
-  // };
+Meteor.publish("expiredContacts", function(){
+	let selector = {
+		status: "Expired"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("outofscopeContacts", function(){
+	let selector = {
+		status: "Out of Scope"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("allContacts", function(filtr, srt){
+
+  var selector = {status: {$nin: [
+		"Admin",
+		"Out of Scope",
+		"Expired",
+		"Graduated",
+		"Deleted"
+	]}};
 
   var options = {
     fields: {
@@ -595,6 +599,17 @@ Meteor.publish("myEmails", function(){
   return Emails.find({$or:[{uid: this.userId},{isTemplate: true}]});
 });
 
+Meteor.publish("thisEmail", function(emid){
+  return Emails.find({_id: emid});
+});
+
+Meteor.publish("emailEvents", function() {
+  let n = addDays(new Date(), 7);
+  return Events.find({$or:[
+    {start: {$gt: new Date(), $lt: n}, published: true},
+    {start: {$gt: new Date()}, tags: "Conference"}
+  ]});
+})
 //***************************************
 
 // *******    Debrief   ************

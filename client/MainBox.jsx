@@ -17,6 +17,10 @@ export default class MainBox extends TrackerReact(React.Component) {
 		event.stopPropagation();
 	}
 
+	componentDidMount() {
+		$('.tooltipped').tooltip({delay: 50});
+	}
+
 	render() {
 		return (
 				<div>

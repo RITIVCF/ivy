@@ -1,4 +1,9 @@
 // Makes sure jobCollection var is in global scope
+import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
+import { getUsers } from '/lib/users.js';
+import { processExpiredContacts } from '/server/contactStatus.js';
+
+
 var jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
@@ -8,13 +13,52 @@ createJobAndDelay = function(uid, delayAmount, notValidIntervals = 0){
 	delayJobNumberOfIntervals(newJob, delayAmount);
 }
 
+createNewJob = function(type, data){
+	let jobDoc = {};
+	if(!!data){
+		jobDoc = data;
+	}
+	return new Job(jobCollection, type, jobDoc);
+}
+
 newFunnelCalulateJob = function(uid, notValidIntervals = 0){
-	return new Job(jobCollection, 'checkFunnelStatus',
-		{
-			uid: uid,
-			notValidIntervals: notValidIntervals
-		}
-	);
+	let jobDoc = {
+		uid: uid,
+		notValidIntervals: notValidIntervals
+	};
+
+	return createNewJob('checkFunnelStatus', jobDoc);
+}
+
+newNewsletterJob = function(emid){
+	let jobDoc = {
+		emid: emid
+	};
+
+	return createNewJob('sendNewsletter', jobDoc);
+}
+
+newEventFollowUpEmailJob = function(eid, uid){
+	let jobDoc = {
+		eid: eid,
+		uid: uid
+	}
+
+	return createNewJob('sendEventFollowUpEmail', jobDoc);
+}
+
+scheduleJobAndSubmit = function (job, afterValue){
+	console.log("Job: ", job);
+	console.log("After Value: ", afterValue);
+	job.after( afterValue );
+	job.save();
+}
+
+setNewJobAfterValue = function (job, afterValue){
+	job.pause();
+	job.after( afterValue );
+	job.save();
+	job.resume();
 }
 
 getJobCollectionJob = function(jid){
@@ -35,12 +79,37 @@ getJobCollectionJobByUserId = function(uid){
 	return job;
 }
 
+getJobCollectionJobByData = function(dataObj){
+	let jobObj = jobCollection.findOne(dataObj);
+	console.log("jobObj", jobObj);
+	let job = {};
+	if(!jobObj){
+		return false;
+	}
+	else{
+		job = getJobCollectionJob(jobObj._id);
+		return job;
+	}
+}
+
+getJobCollectionJobByType = function(type){
+	let jobObj = jobCollection.findOne({type: type});
+	let job;
+	if(!!jobObj){
+		job = getJobCollectionJob(jobObj._id);
+	}
+	return job;
+}
+
+removeJobCollectionJob = function(data){
+	jobCollection.remove(data);
+}
+
 delayJobNumberOfIntervals = function(job, number){
 	let interval = getInterval();
-	job.pause();
-	job.after( addDays(new Date(), interval*number) );
-	job.save();
-	job.resume();
+	let newValue = addDays(new Date(), interval*number);
+
+	setNewJobAfterValue(job, newValue);
 }
 
 shouldJobCalculate = function(testVal, numberOfValidIntervals){
@@ -110,3 +179,57 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 
 });
+
+
+
+
+Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+
+	sendNewsletter(job.data.emid);
+
+	// Mark as finished
+	job.done();
+	job.remove();
+	cb();
+
+
+});
+
+Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
+	let data = job.data;
+
+	// Send follow up email passing in event ID and user ID
+	sendEventFollowUpEmail(data.eid, data.uid);
+
+	//Mark as finished
+	job.done();
+	job.remove();
+	cb();
+});
+
+
+Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
+
+	processExpiredContacts();
+
+	//Mark as finished
+	job.done();
+	job.remove();
+	cb();
+});
+
+// Intialize expiredContactsJob
+function newProcessExpiredContactsJob(){
+	let newJob = createNewJob('processExpiredContacts');
+
+	newJob.repeat({
+		schedule: jobCollection.later.parse.recur().on(7).month()
+	});
+
+	newJob.save();
+}
+
+let processExpiredContactsJob = getJobCollectionJobByType("processExpiredContacts");
+if(!processExpiredContactsJob){
+	newProcessExpiredContactsJob();
+}

@@ -14,18 +14,19 @@ export default class EventItem extends TrackerReact(React.Component) {
 	render() {
 
 
-		return (<li className="collection-item avatar">
-      <img src="images/defaultEventSmall.png" alt="" className="circle"/>
-      <span className="title">{this.props.event.name}</span>
-      <p>{this.props.event.location}
-				{false?
-					<a className="right waves-effect waves-light btn green">RSVP</a>:""}
-				<br/>
-         {new moment(this.props.event.start.toISOString()).format("DD MMM @ h:mmA")}
-      </p>
+		return (
+			<li className="collection-item avatar">
+				<img src="images/defaultEventSmall.png" alt="" className="circle"/>
+				<span className="title">{this.props.event.name}</span>
 
-    </li>
+				<p>
+					{this.props.event.location}
+					{false&&<a className="right waves-effect waves-light btn green">RSVP</a>}
+					{!!this.props.event.location&&<br />}
+					{new moment(this.props.event.start.toISOString()).format("DD MMM @ h:mmA")}
+				</p>
 
+			</li>
 		)
 	}
 }

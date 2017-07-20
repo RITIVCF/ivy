@@ -1,7 +1,44 @@
+import { isContactPresent } from '/lib/contactStatus.js';
+import { getUser } from '/lib/users.js';
+
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
   let status = "Contact";
-  let user = Meteor.users.findOne(uid);
+  let user = getUser(uid);
+
+	if( // if not valid, do not Calculate Funnel Status
+		user.status == "Out of Scope" ||
+		user.status == "Graduated" ||
+		user.status == "Deleted" ||
+		user.status == "Admin"){
+			return;
+		}
+
+  // Is user Visitor, Crowd, or Contact
+  // Uses event attendance
+  var count = getIntervalCounts(uid);
+
+  if (count>=threshold) {
+    status = "Visitor";
+  }
+  else if ((count >= 1)&&(count<threshold)){
+    status = "Crowd";
+  }
+  else {
+    status = "Contact";
+  }
+
+	// If present, do not take attendance into consideration
+	// for calculating funnel
+	let currentStatus = user.getStatus();
+	if(!isContactPresent(currentStatus)){
+		status = currentStatus;
+	}
+	else{
+		// Check to see if we need to follow up with them
+	  checkIntegration(status, uid);
+	}
+
   // Is user Multiplier
   if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
     status = "Multiplier";
@@ -18,22 +55,7 @@ calculateFunnelStatus = function(uid){
   else if (user.member) {
     status = "Member";
   }
-  // Is user Visitor, Crowd, or Contact
-  // Uses event attendance
-  else {
-    var count = getIntervalCounts(uid);
 
-
-    if (count>=threshold) {
-      status = "Visitor";
-    }
-    else if ((count >= 1)&&(count<threshold)){
-      status = "Crowd";
-    }
-    else {
-      status = "Contact";
-    }
-  }
 
   // After finding status, set status
   saveStatusChange(uid, status);
@@ -50,6 +72,7 @@ saveStatusChange = function(uid, status){
   let currStatus = getUserStatus(uid);
 
   if(currStatus){
+
     if(currStatus!=status){
       insertAndUpdateStatus(uid, status);
     }
@@ -62,7 +85,7 @@ saveStatusChange = function(uid, status){
 
 insertAndUpdateStatus = function(uid, status){
 	Funnel.insert({uid: uid, status: status, timestamp: new Date()}, () => {
-		Meteor.users.update({_id: uid}, {$set: {status: status}});
+		Meteor.users.update({_id: uid}, {$set: {funnelStatus: status}});
 	});
 }
 
@@ -77,7 +100,7 @@ getIntervals = function(){
 
   for( var i=0; i < period; i++ ){
     // Move start date back
-    var startDate = subtractDays(endDate, intervalLength);
+    var startDate = subtractMinutes(endDate, intervalLength);
 
 
     // Get count of events in this interval
@@ -130,7 +153,7 @@ getNumberOfValidIntervals = function(numOfIntervals){
 
   for( var i=0; i < numOfIntervals; i++ ){
     // Move start date back
-    startDate = subtractDays(endDate, intervalLength);
+    startDate = subtractMinutes(endDate, intervalLength);
 
     // are there events in this interval?
     numOfEventsInInterval = Events.find({
@@ -166,7 +189,7 @@ setupStatusJobs = function(uid){
 
 populateFunnel = function(excludeIds){
 	if(!excludeIds){
-		excludeIds = []; 
+		excludeIds = [];
 	}
   Meteor.users.find({_id: {$nin: excludeIds}}).fetch().forEach((user)=>{
     Funnel.insert({uid: user._id, status: user.status, timestamp: new Date()});
@@ -188,4 +211,76 @@ getPeriod = function(){
 
 getInterval = function(){
 	return getCalculationOptions().interval;
+}
+
+checkIntegration = function(status, uid){
+  let curstatus = getUserStatus(uid);
+  let nonIntegrated = ["Visitor", "Crowd", "Contact"];
+  switch (curstatus) {
+    case "Multiplier":
+    case "Leader":
+    case "Server":
+    case "Member":
+      if (nonIntegrated.includes(status)) {
+        addIntegrationTicket(uid);
+      }
+      break;
+    case "Visitor":
+      if (status == "Crowd" || status == "Contact") {
+        addIntegrationTicket(uid);
+      }
+      break;
+    default:
+      break;
+  }
+
+
+}
+
+addIntegrationTicket = function(uid){
+  ret = Counters.findOne("ticketID");
+  Counters.update({_id:"ticketID"}, {$inc: {seq: 1}});
+  let user = new Contact(Meteor.users.findOne(uid));
+  let desc = user.getName()+" has not been coming for a while.\n"+user.getEmail()+"\n"+user.getPhone()+"\n"+user.getHowHear();
+  let gid = Options.findOne("ticketcontact").gid;
+  console.log("gid: ", gid);
+  var tktId = Tickets.insert({
+    ticketnum: ret.seq,
+    subject: "See how " + user.getName() + " is doing!",
+    description: desc,
+    assignedgroup: gid,
+    assigneduser: Groups.findOne(gid).leader[0],
+    customer: uid,  // Affected, or "customer" user
+    status: "Open",
+    type:"Contact",
+    evreqtype: "",
+    eid: "",
+    activities: [],
+    createdAt: new Date(),
+    submittedby: "Ivy System",
+    lastUpdated: new Date()
+  });
+  // Sets huh?
+  sendIntegrationNotification(tktId);
+  return tktId;
+}
+
+sendIntegrationNotification = function(tktId) {
+  let gid = Options.findOne("ticketcontact").gid;
+  let group = Groups.findOne(gid);
+  let leaders = [];
+  let custId = Tickets.findOne(tktId).customer;
+  let contact = new Contact(Meteor.users.findOne(custId));
+  group.leader.forEach( (leaderId) => {
+    let leader = new Contact(Meteor.users.findOne(leaderId));
+    leaders.push(leader);
+  });
+  leaders.forEach( (leader) => {
+    Email.send({
+      to: leader.getEmail(),
+      from: "Ivy Information System",
+      subject: "New Integration Ticket For: " + contact.getName(),
+      html: contact.getName()+" has not been coming for a while.<br>"+contact.getEmail()+"<br>"+contact.getPhone()+"<br>"+contact.getHowHear()+"<br><a href='http://ivy.rit.edu/tickets/"+tktId+"'>View the ticket here</a>"
+    });
+  });
 }

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 
-export default class Contact extends Component {
+export default class User extends Component {
   remove(event){
     event.preventDefault();
-    Meteor.call("removeUserFromGroup", this.props.gid, this.props.uid);
+    Meteor.call("removeUserFromGroup", this.props.gid, this.props.user._id);
   }
 
   getContact(){
-    return Meteor.users.findOne(this.props.uid);
+    return this.props.user;
   }
 
 
@@ -15,16 +15,9 @@ export default class Contact extends Component {
     contact = this.getContact();
     return(
       <tr id="showhim">
-        <td>{contact.name}</td>
+        <td>{contact.getName()}</td>
         <td>
-          {contact.emails[0].address}
-        {/*}  <button
-            style={{float: "right"}}
-            className="btn btn-danger"
-            id="hover-content"
-            onClick={this.remove.bind(this)}>
-              Remove
-          </button>*/}
+          {contact.getEmail()}
         </td>
         <td>
           <span onClick={this.remove.bind(this)}
