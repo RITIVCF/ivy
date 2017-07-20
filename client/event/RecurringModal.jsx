@@ -11,12 +11,11 @@ export default class RecurringModal extends React.Component {
     super(props);
     momentLocalizer(moment);
     this.state = {
-      enddate: this.props.ev.start
     };
   }
 
   setEndDate(value) {
-    this.setState({enddate: value});
+    this.props.onpick(value);
   }
 
   unset(){
@@ -24,7 +23,7 @@ export default class RecurringModal extends React.Component {
 	}
 
 	addGroup(group){
-		console.log("group");
+		this.props.group(group);
 	}
 
 	getGroups(){
@@ -35,18 +34,20 @@ export default class RecurringModal extends React.Component {
     return (
       <div>
         <DateTimePicker ref="start"
-          defaultValue={this.state.enddate}
+          defaultValue={this.props.defaultEndDate}
           onChange={this.setEndDate.bind(this)}
           />
-        <SelectGroup
-          parent={this}
-          id={this.props.ev.id}
-          unset={this.unset.bind(this)}
-          updateContact={this.addGroup.bind(this)}
-          initialValue={""}
-          ref={"group"}
-          ingroup={true}
-          />
+        {this.props.ev.tags.includes("Small Group")&&
+          <SelectGroup
+            parent={this}
+            id={this.props.ev.id}
+            unset={this.unset.bind(this)}
+            updateContact={this.addGroup.bind(this)}
+            initialValue={""}
+            ref={"group"}
+            ingroup={true}
+            />
+          }
       </div>
     )
   }
