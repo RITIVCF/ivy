@@ -43,35 +43,3 @@ if ($) {
 else {
   Vel = Velocity; // change value with jQuery.Velocity
 }
-
-
-checkEventPermission = function(ev){
-	if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
-		return {view: true, edit: true};
-	}
-  // if(!ev.permUser){
-  //   return {"view":false,"edit": false};
-  // }
-	if(ev.owner==Meteor.userId()){
-		return {view: true, edit: true}
-	}
-  var perm = false;// ev.perm[""]
-	var view = false;
-	for(i=0; i < ev.permUser.length; i++){
-		if(ev.permUser[i].id == Meteor.userId()){
-			view = true;
-			perm = ev.permUser[i].edit;
-			break;
-		}
-	}
-	//console.log(ev.permGroup);
-	for(i=0; i < ev.permGroup.length; i++){
-		if(getUserGroupPermission().indexOf(ev.permGroup[i].id)>-1){
-			//console.log("true");
-			view = true;
-			perm = ev.permGroup[i].edit||perm;
-			break;
-		}
-	}
-  return {"view": view,"edit": perm};
-}
