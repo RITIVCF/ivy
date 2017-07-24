@@ -4,13 +4,17 @@ import React, {Component} from 'react';
 //    tkt:  ticket
 export default class TicketRow extends Component {
   getUser(){
-    //console.log(this);
     if(this.props.tkt.assigneduser==""){
       return {name:""};
     }
-    //return Contacts.findOne({_id:
-      return  Meteor.users.findOne({_id:this.props.tkt.assigneduser})//.contact}
-    //  );
+
+		let user = Meteor.users.findOne({_id:this.props.tkt.assigneduser});
+
+		if ( user ) {
+			return user;
+		} else {
+			return {name: ""};
+		}
   }
 
   getGroup(){
@@ -22,12 +26,14 @@ export default class TicketRow extends Component {
       return {name: ""};
     }
     console.log(this.props.tkt.customer);
-    // if(this.props.tkt.type == "Contact"){
-    //   return {name: ""};//Contacts.findOne(this.props.tkt.customer).name;
-    // }
-    //return Contacts.findOne({_id:
-      return  Meteor.users.findOne({_id:this.props.tkt.customer})//.contact}
-    //  );
+		let user = Meteor.users.findOne({_id:this.props.tkt.customer});
+
+		if ( user ) {
+			return user;
+		} else {
+			return {name: ""};
+		}
+
   }
 
   go(){
