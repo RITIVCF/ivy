@@ -12,7 +12,6 @@ Meteor.publish("summaryEvents", function(){
 
 Meteor.publish("myAttendedEvents", function(){
   return Events.find({"attendees._id": this.userId, deleted: {$ne: true}});
-  //return Events.find({$or: [{}]});
 });
 
 Meteor.publish("ownerEvents", function(){
@@ -53,7 +52,7 @@ Meteor.publish("mySchedule", function(){
 
 Meteor.publish("UpcomingEvents", function(){
   var twoweeks = new moment(new Date().toISOString()).add(2,"weeks")._d;
-  return Events.find({published: true, start: {$gte: new Date(),$lte: twoweeks}, deleted: {$ne: true}},{limit: 3});
+  return Events.find({status: "Published", start: {$gte: new Date(),$lte: twoweeks}, deleted: {$ne: true}},{limit: 3});
 });
 
 Meteor.publish("AttendedEvents", function(){
@@ -72,22 +71,13 @@ Meteor.publish("myEvents", function(){
 	});
 	return Events.find({$or: [
     {owner: this.userId},
-    {published: true},
+    {status: "Published"},
     {"permUser.id": this.userId},
     {"permGroup.id": {$in: ids}}
   ], deleted: {$ne: true}});
 });
 
 Meteor.publish("otherUnpublishedEvents", function(){
-  // var grps = Groups.find({users: this.userId}).fetch();
-	// var ids = [];
-	// grps.forEach(function(group){
-	// 	ids.push(group._id);
-	// });
-	//console.log("GGroups:");
-	//console.log(ids);
-  //console.log(checkPermission("events", this.userId));
-  //if(perm){
   var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1,owner: 1}};
   if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
@@ -100,25 +90,20 @@ Meteor.publish("otherUnpublishedEvents", function(){
 // all published events, plus my unpublished events
 
 Meteor.publish("publishedEvents", function(){
-  return Events.find({published: true, deleted: {$ne: true}});
-  //console.log(Events.find({published: true}));
-  // var events = Events.aggregate([{ "$project" : { title:"$name", start: 1, end: 1 }}, {"$match": {published: true}}]);
-  // console.log(events);
-  // //console.log(events.fetch());
-  // return events;
+  return Events.find({status: "Published", deleted: {$ne: true}});
 });
 
 Meteor.publish("pastEvents", function(lim){
   if(lim == 0){
     return Events.find({
-      published: true,
+      status: "Published",
       start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
       deleted: {$ne: true}
     },{sort: {start:-1} // Sorts descending chronologically by start
     });
   }
   return Events.find({
-    published: true,
+    status: "Published",
     start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
     deleted: {$ne: true}},{
     sort: {start:-1}, // Sorts descending chronologically by start
@@ -287,6 +272,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     curryear: 1,
     member: 1,
     status: 1,
+		funnelStatus: 1,
     user: 1,
     createdAt: 1
   },
@@ -311,7 +297,8 @@ Meteor.publish("allContacts", function(filtr, srt){
       ethnicity: 1,
       gradterm: 1,
       curryear: 1,
-      member: 1
+      member: 1,
+			funnelStatus: 1
     },
     sort: {
       member: 1,
@@ -606,7 +593,7 @@ Meteor.publish("thisEmail", function(emid){
 Meteor.publish("emailEvents", function() {
   let n = addDays(new Date(), 7);
   return Events.find({$or:[
-    {start: {$gt: new Date(), $lt: n}, published: true},
+    {start: {$gt: new Date(), $lt: n}, status: "Published"},
     {start: {$gt: new Date()}, tags: "Conference"}
   ]});
 })
@@ -641,9 +628,18 @@ Meteor.publish("publicOptions", function(){
 Meteor.publish("currentFunnel", function(){
   ReactiveAggregate(this, Funnel, [
     {$sort: {date: -1}},
-    {$group: {_id: "$uid", status: {$last: "$status"}}}]);
+    {$group: {_id: "$uid", status: {$last: "$status"}}}
+	]);
 });
 
 Meteor.publish("funnelHistory", function(){
   return  FunnelHistory.find();
-})
+});
+
+
+Meteor.publish("contactStatus", function(){
+	ReactiveAggregate(this, Status, [
+		{$sort: {date: -1}},
+    {$group: {_id: "$uid", status: {$last: "$status"}}}
+	]);
+});

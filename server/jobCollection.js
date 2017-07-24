@@ -2,6 +2,7 @@
 import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 import { processExpiredContacts } from '/server/contactStatus.js';
+import { shouldCalculateFunnel } from '/lib/contactStatus.js';
 
 
 var jobCollection = JobCollection('jobQueue');
@@ -101,8 +102,24 @@ getJobCollectionJobByType = function(type){
 	return job;
 }
 
+getCheckFunnelStatusJobByUserId = function(uid) {
+	let jobObj = jobCollection.findOne({"data.uid": uid, type: "checkFunnelStatus"});
+	let job = {};
+	if(!jobObj){
+		return false;
+	}
+	else{
+		job = getJobCollectionJob(jobObj._id);
+		return job;
+	}
+}
+
 removeJobCollectionJob = function(data){
 	jobCollection.remove(data);
+}
+
+removeJob = function(jid) {
+	jobCollection.remove({_id: jid});
 }
 
 delayJobNumberOfIntervals = function(job, number){
@@ -125,57 +142,106 @@ shouldJobCalculate = function(testVal, numberOfValidIntervals){
 	return shouldICalculate;
 }
 
+export function failJob(job, reason){
+	job.fail(
+	  {
+	    reason: reason
+	  },
+	  {
+	    fatal: false  // Default case
+	  },
+	  function (err, result) {
+	    if (result) {
+	      // Status updated
+	    }
+	  }
+	);
+}
+
+export function restartJob(job){
+	job.restart(
+	  {
+	    antecedents: true,  // Also restart all jobs that must
+	                        // complete before this job can run.
+	    retries: 0          // Only try one more time. This is the default.
+	  },
+	  function (err, result) {
+	    if (result) {
+	      // Status updated
+	    }
+	  }
+	);
+}
+
 //let worker =
 Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
-	let data = job.data;
-	let threshold = getThreshold();
-	let period = getPeriod();
-	let currentStatus = getUserStatus(data.uid);
-	let shouldICalculate;
-	let numberOfValidIntervals;
-	let intervalsToTest;
+	try {
+		let data = job.data;
+		let threshold = getThreshold();
+		let period = getPeriod();
+		let currentStatus = getUserFunnelStatus(data.uid);
+		let shouldICalculate;
+		let numberOfValidIntervals;
+		let intervalsToTest;
 
-	if(currentStatus == "Crowd"){
-		intervalsToTest = period-threshold;
-		numberOfValidIntervals = getNumberOfValidIntervals(intervalsToTest + data.notValidIntervals);
-		shouldICalculate = shouldJobCalculate(intervalsToTest, numberOfValidIntervals);
-	}
-	else{
-		intervalsToTest = threshold;
-		numberOfValidIntervals = getNumberOfValidIntervals(intervalsToTest + data.notValidIntervals);
-		shouldICalculate = shouldJobCalculate(intervalsToTest, numberOfValidIntervals);
+		if(shouldCalculateFunnel(data.uid)){
+			if(currentStatus == "Crowd"){
+				intervalsToTest = period-threshold;
+				numberOfValidIntervals = getNumberOfValidIntervals(intervalsToTest + data.notValidIntervals);
+				shouldICalculate = shouldJobCalculate(intervalsToTest, numberOfValidIntervals);
+			}
+			else{
+				intervalsToTest = threshold;
+				numberOfValidIntervals = getNumberOfValidIntervals(intervalsToTest + data.notValidIntervals);
+				shouldICalculate = shouldJobCalculate(intervalsToTest, numberOfValidIntervals);
 
-	}
+			}
 
-	if(shouldICalculate){
-		let result = calculateFunnelStatus(data.uid);
+			if(shouldICalculate){
+				let result = calculateFunnelStatus(data.uid);
 
-		switch(result){
-			case "Contact":
-				break;
-			case "Crowd":
-				// Create new job
-				let job = newFunnelCalulateJob(data.uid);
-				createJobAndDelay(data.uid, period-threshold);
-				break;
-			default:
-				createJobAndDelay(data.uid, threshold);
+				switch(result){
+					case "Contact":
+						break;
+					case "Crowd":
+						// Create new job
+						let job = newFunnelCalulateJob(data.uid);
+						createJobAndDelay(data.uid, period-threshold);
+						break;
+					default:
+						createJobAndDelay(data.uid, threshold);
+				}
+			}
+			else{
+				let numberOfIntervalsToAdd = intervalsToTest - numberOfValidIntervals;
+
+				createJobAndDelay(data.uid,	// Data
+					numberOfIntervalsToAdd,  	// Delay Amount
+					data.notValidIntervals + numberOfIntervalsToAdd  // notValidIntervals
+				);
+
+			}
 		}
-	}
-	else{
-		let numberOfIntervalsToAdd = intervalsToTest - numberOfValidIntervals;
 
-		createJobAndDelay(data.uid,	// Data
-			numberOfIntervalsToAdd,  	// Delay Amount
-			data.notValidIntervals + numberOfIntervalsToAdd  // notValidIntervals
+		// Mark as finished
+		job.done();
+		job.remove();
+		cb();
+
+	} catch (e) {
+		let user = Meteor.users.findOne(uid);
+		failJob(job, e);
+		sendErrorEmail(
+			"checkFunnelStatus Job " + user.name,
+			"Debug: <br>" + "Data.uid: " + data.uid + "<br><br>" + e
 		);
 
 	}
 
-	// Mark as finished
-	job.done();
-	job.remove();
-	cb();
+
+
+
+
 
 
 });
@@ -184,13 +250,23 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 
 Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+	try {
+		sendNewsletter(job.data.emid);
 
-	sendNewsletter(job.data.emid);
+		// Mark as finished
+		job.done();
+		job.remove();
+		cb();
 
-	// Mark as finished
-	job.done();
-	job.remove();
-	cb();
+	} catch (e) {
+		failJob(job, e);
+		sendErrorEmail(
+			"sendNewsletter Job",
+			"Debug: <br>" + "Data.emid: " + data.emid + "<br><br>" + e
+		);
+
+	}
+
 
 
 });
@@ -198,24 +274,47 @@ Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
 Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 	let data = job.data;
 
-	// Send follow up email passing in event ID and user ID
-	sendEventFollowUpEmail(data.eid, data.uid);
+	try {
+		// Send follow up email passing in event ID and user ID
+		sendEventFollowUpEmail(data.eid, data.uid);
 
-	//Mark as finished
-	job.done();
-	job.remove();
-	cb();
+		//Mark as finished
+		job.done();
+		job.remove();
+		cb();
+
+	} catch (e) {
+		let user = Meteor.users.findOne(uid);
+		failJob(job, e);
+		sendErrorEmail(
+			"sendEventFollowUpEmail job " + user.name,
+			"Debug: <br>" + "Data.uid: " + data.uid + "<br><br>" + e
+		);
+
+	}
+
 });
 
 
 Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
+	try {
+		processExpiredContacts();
 
-	processExpiredContacts();
+		//Mark as finished
+		job.done();
+		job.remove();
+		cb();
 
-	//Mark as finished
-	job.done();
-	job.remove();
-	cb();
+	} catch (e) {
+		let user = Meteor.users.findOne(uid);
+		failJob(job, e);
+		sendErrorEmail(
+			"sendEventFollowUpEmail job " + user.name,
+			"Debug: <br>" + "Data.uid: " + data.uid + "<br><br>" + e
+		);
+
+	}
+
 });
 
 // Intialize expiredContactsJob
