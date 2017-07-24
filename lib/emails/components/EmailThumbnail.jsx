@@ -21,7 +21,7 @@ export default class EmailThumbnail {
           <table role="presentation" aria-hidden="true" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
             <tr align="center">
               <td style="padding: 0 20px;">
-                  <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #1a3d6d; font-weight: bold;">` + heading.toUpperCase() + `</h1>
+                  <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.toUpperCase() + `</h1>
               </td>
             </tr>
             <tr>
@@ -44,7 +44,7 @@ export default class EmailThumbnail {
                                   </td>
                                   <td align="left" valign="top" width="440">
                                   <![endif]-->
-                
+
                 <div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:200px; vertical-align:top;" class="stack-column">
                   <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>

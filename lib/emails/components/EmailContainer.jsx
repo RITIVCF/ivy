@@ -113,6 +113,15 @@ export default class EmailContainer {
             text-decoration: none !important;
           }
 
+          <!-- Event details styling -->
+          .colsplit {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            direction: ltr !important;
+          }
+
+
           @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
             .email-container {
               min-width: 375px !important;
@@ -139,14 +148,22 @@ export default class EmailContainer {
 
           .button-td:hover,
           .button-a:hover {
-            background: #555555 !important;
-            border-color: #555555 !important;
+            background: #FCB816 !important;
+            border-color: #FCB816 !important;
           }
 
           <!-- Attempt to fix emoji replacement in Gmail on computer -->
           img[goomoji] {
             max-height: 15px !important;
             filter: grayscale();
+          }
+
+          <!-- Event details styling -->
+          .colsplit {
+            display: block !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            direction: ltr !important;
           }
 
           @media screen and (max-width: 480px) {
@@ -181,7 +198,12 @@ export default class EmailContainer {
             table.center-on-narrow {
               display: inline-block !important;
             }
-
+            .colsplit {
+              display: block !important;
+              width: 100% !important;
+              max-width: 100% !important;
+              direction: ltr !important;
+            }
             .email-container p {
               font-size: 17px !important;
               line-height: 22px !important;
