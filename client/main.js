@@ -20,28 +20,11 @@ Meteor.subscribe("allCounters");
 SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
+Meteor.subscribe("currentStatus");
+
 
 routeTo = function(routeName, params){
 	FlowRouter.go(FlowRouter.path(routeName, params));
-}
-
-checkPermission = function(){
-	// if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
-	// 	return true;
-	// }
-	var ids = [];
-	//console.log(arguments);
-	//console.log(arguments[0]);
-	for (i = 0; i < arguments.length; i++) {
-  	ids.push(arguments[i]);
-  }
-	var grps = Groups.find({$or: [{users: Meteor.userId()},{leader: Meteor.userId()}]}).fetch();
-	var gids = [];
-	grps.forEach(function(group){
-		gids.push(group._id);
-	});
-
-	return PagePermissions.find({_id: {$in: ids },groups: {$in: gids}}).fetch().length>0;
 }
 
 

@@ -50,3 +50,4 @@ hb5:meteor-freewall
 ulfschneider:tinycolorpick
 static-html #So that it grabs the <head> tag from index.html
 vsivsi:job-collection
+#ziarno:refresh-sound

@@ -51,7 +51,14 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   }
 
   getEventName(){
-    return Events.findOne(this.props.ticket.eid).name;
+		let event = Events.findOne(this.props.ticket.eid);
+		if(event){
+			return event.name;
+		}
+		else{
+			return "-";
+		}
+
   }
 
   goToEvent(){

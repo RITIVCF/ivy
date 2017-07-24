@@ -73,6 +73,36 @@ export default class ContactProfile extends TrackerReact(React.Component){
     this.refs.becmemwin.open();
   }
 
+	setAsPresent(){
+		if(confirm("Are you sure?")){
+			Meteor.call("makePresent", this.props.contact._id);
+		}
+	}
+
+	setAsGraduated(){
+		if(confirm("Are you sure? This cannot be undone.")){
+			Meteor.call("makeGraduated", this.props.contact._id);
+		}
+	}
+
+	setAsAbsent(){
+		if(confirm("Are you sure?")){
+			Meteor.call("makeAbsent", this.props.contact._id);
+		}
+	}
+
+	setOutOfScope(){
+		if(confirm("Are you sure? This cannot be undone.")){
+			Meteor.call("makeOutOfScope", this.props.contact._id);
+		}
+	}
+
+	setAsAdmin(){
+		if(confirm("Are you sure? This cannot be undone.")){
+			Meteor.call("makeAdmin", this.props.contact._id);
+		}
+	}
+
   remove(){
     if(confirm("Only remove a contact if it is a mistake creation.")){
       this.props.contact.remove();
@@ -103,7 +133,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
           <div className="card">{/*
             <div className="card-image">
               <img src="/images/defaultEventSmall.png" style={{width: "100%"}}/>
-            </div>e*/}
+					</div>e*/}
             <div className="card-content">
               <span className="card-title">
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
@@ -127,26 +157,26 @@ export default class ContactProfile extends TrackerReact(React.Component){
             <div className="card-content">
               <span className="card-title">Contact Information</span>
 
-                <ContactName contact={contact} disabled={disable} />
-                <ContactEmail contact={contact} disabled={disable} />
-                <ContactPhone contact={contact} disabled={disable} />
-                <ContactNewsletter contact={contact} disabled={disable} />
+							<ContactName contact={contact} disabled={disable} />
+							<ContactEmail contact={contact} disabled={disable} />
+							<ContactPhone contact={contact} disabled={disable} />
+							<ContactNewsletter contact={contact} disabled={disable} />
 
-                {!viewmember&&
-                  <ContactMajor contact={contact} disabled={disable} />
-                }
+							{!viewmember&&
+								<ContactMajor contact={contact} disabled={disable} />
+							}
 
             </div>
           </div>
           {viewmember&&
-          <div className="card">
-            <div className="card-content">
-              <span className="card-title">Ethnicity & Gender</span>
+						<div className="card">
+							<div className="card-content">
+								<span className="card-title">Ethnicity & Gender</span>
                 <p>Ethnicity:</p>
                 <ContactIntl contact={contact} disabled={disable} />
                 <ContactGender contact={contact} disabled={disable} />
-            </div>
-          </div>}
+							</div>
+						</div>}
           <AddressForm contact={contact} disabled={disable} addresses={contact.getAddresses()} />
         </div>
         <div className="col s12 m6 l6">
@@ -154,27 +184,27 @@ export default class ContactProfile extends TrackerReact(React.Component){
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Involvement</span>
-                  <p>Campus Affiliations</p>
-                  <CampusAffiliations contact={contact} disabled={disable}  />
-                  <p>Community Life</p>
-                  <CommunityLife contact={contact} disabled={disable} />
+								<p>Campus Affiliations</p>
+								<CampusAffiliations contact={contact} disabled={disable}  />
+								<p>Community Life</p>
+								<CommunityLife contact={contact} disabled={disable} />
               </div>
             </div>}
           <div className="card">
             <div className="card-content">
               <span className="card-title">Bio</span>
-                <ContactBio contact={contact} disabled={disable} />
+							<ContactBio contact={contact} disabled={disable} />
             </div>
           </div>
-            {viewmember&&
-              <div className="card">
-                <div className="card-content">
-                  <span className="card-title">University Info</span>
-                    <ContactMajor contact={contact} disabled={disable} />
-                    <ContactGradTerm contact={contact} disabled={disable}  parent={this} />
-                    <ContactCurrYear contact={contact} disabled={disable} />
-                </div>
-              </div>}
+					{viewmember&&
+						<div className="card">
+							<div className="card-content">
+								<span className="card-title">University Info</span>
+								<ContactMajor contact={contact} disabled={disable} />
+								<ContactGradTerm contact={contact} disabled={disable}  parent={this} />
+								<ContactCurrYear contact={contact} disabled={disable} />
+							</div>
+						</div>}
           <div className="card">
             <div className="card-content">
               <span className="card-title">Events</span>
@@ -191,15 +221,81 @@ export default class ContactProfile extends TrackerReact(React.Component){
             </div>
           </div>
         </div>
-        {checkPermission("removecontact")?
-        <div className="row">
-          <div className="col s12">
-            <a className="waves-effect waves-light btn-flat left"
-              onClick={this.remove.bind(this)}>Remove Contact</a>
-          </div>
-        </div>
-        :""}
-        {console.log("Contact profile: ",this.props.modal?"Show Modal":"Do not show modal.")}
+				{
+					(
+						checkPermission("admin")&&
+						contact.isMember()&&
+						!contact.isGraduated()
+					) &&
+					<div className="row">
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.setAsGraduated.bind(this)}>Mark Graduated</a>
+						</div>
+					</div>
+        }
+				{
+					(
+						checkPermission("admin")&&
+						!contact.isPresent()
+					) &&
+					<div className="row">
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.setAsPresent.bind(this)}>Mark Present</a>
+						</div>
+					</div>
+        }
+				{
+					(
+						checkPermission("admin")&&
+						!contact.isAbsent()
+					) &&
+					<div className="row">
+						{console.log("is not absent")}
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.setAsAbsent.bind(this)}>Mark Absent</a>
+						</div>
+					</div>
+        }
+				{
+					(
+						checkPermission("admin")&&
+						!contact.isOutOfScope()
+					) &&
+					<div className="row">
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.setOutOfScope.bind(this)}>Mark Out of Scope</a>
+						</div>
+					</div>
+        }
+				{
+					(
+						checkPermission("admin")&&
+						!contact.isAdmin()
+					) &&
+					<div className="row">
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.setAsAdmin.bind(this)}>Mark Admin</a>
+						</div>
+					</div>
+        }
+				{
+					(
+						checkPermission("removecontact")&&
+						!contact.isDeleted()
+					) &&
+					<div className="row">
+						<div className="col s12">
+							<a className="waves-effect waves-light btn-flat left"
+								onClick={this.remove.bind(this)}>Remove Contact</a>
+						</div>
+					</div>
+        }
+
         {(this.props.modal)&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
           <div className="modal-content">
             <EditTicketForm ticket={this.getTicket()} modal={false} />

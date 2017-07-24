@@ -56,7 +56,8 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
 
   contacts(){
-    var query= {status: {$in: Session.get("contactstatusfilter")}};
+    var query= {};
+		query.funnelStatus = {$in: Session.get("contactstatusfilter")};
     query.status = {$in: ["Present", "Absent"]};
     let options = {sort: {name: 1}, limit: this.state.num};
     if(this.state.filter!=""){

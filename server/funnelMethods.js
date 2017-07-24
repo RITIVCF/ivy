@@ -6,14 +6,6 @@ calculateFunnelStatus = function(uid){
   let status = "Contact";
   let user = getUser(uid);
 
-	if( // if not valid, do not Calculate Funnel Status
-		user.status == "Out of Scope" ||
-		user.status == "Graduated" ||
-		user.status == "Deleted" ||
-		user.status == "Admin"){
-			return;
-		}
-
   // Is user Visitor, Crowd, or Contact
   // Uses event attendance
   var count = getIntervalCounts(uid);
@@ -62,28 +54,28 @@ calculateFunnelStatus = function(uid){
 	return status;
 }
 
-getUserStatus = function(uid){
+getUserFunnelStatus = function(uid){
 	let funnelObj = Funnel.find({uid: uid}, {sort: {timestamp: -1}, limit: 1}).fetch()[0];
 	return funnelObj ? funnelObj.status : false;
 }
 
 saveStatusChange = function(uid, status){
   // If current status
-  let currStatus = getUserStatus(uid);
+  let currStatus = getUserFunnelStatus(uid);
 
   if(currStatus){
 
     if(currStatus!=status){
-      insertAndUpdateStatus(uid, status);
+      insertAndUpdateFunnelStatus(uid, status);
     }
   }
   else{
-    insertAndUpdateStatus(uid, status);
+    insertAndUpdateFunnelStatus(uid, status);
   }
 
 }
 
-insertAndUpdateStatus = function(uid, status){
+insertAndUpdateFunnelStatus = function(uid, status){
 	Funnel.insert({uid: uid, status: status, timestamp: new Date()}, () => {
 		Meteor.users.update({_id: uid}, {$set: {funnelStatus: status}});
 	});
@@ -176,7 +168,7 @@ setupStatusJobs = function(uid){
   let job = getJobCollectionJobByUserId(uid);
 	let threshold = getThreshold();
 
-	let currentStatus = getUserStatus(uid);
+	let currentStatus = getUserFunnelStatus(uid);
 	if(currentStatus == "Crowd"){
 		let period = getPeriod();
 		delayJobNumberOfIntervals(job, period - threshold);
@@ -214,7 +206,7 @@ getInterval = function(){
 }
 
 checkIntegration = function(status, uid){
-  let curstatus = getUserStatus(uid);
+  let curstatus = getUserFunnelStatus(uid);
   let nonIntegrated = ["Visitor", "Crowd", "Contact"];
   switch (curstatus) {
     case "Multiplier":

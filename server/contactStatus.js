@@ -1,5 +1,5 @@
 import { getUsers } from '/lib/users.js';
-import { setStatus } from '/lib/contactStatus.js';
+import { expireContact } from '/lib/contactStatus.js';
 
 export {
 	processExpiredContacts
@@ -26,7 +26,7 @@ function processExpiredContacts(){
 		).fetch();
 
 		if(events.length == 0){
-			setStatus(user._id, "Expired");
+			expireContact(user._id);
 		}
 	});
 }
