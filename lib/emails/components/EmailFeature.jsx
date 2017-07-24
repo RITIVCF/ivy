@@ -2,8 +2,8 @@ export default class EmailFeature {
   renderHTML(imgURL,heading,content) {
     return (
       `<tr>
-        <td style="padding: 40px 40px 20px; text-align: center;">
-            <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">` + heading + `</h1>
+        <td bgcolor="#ffffff" style="padding: 0 20px 10px; text-align: center;">
+            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.toUpperCase() + `</h1>
         </td>
       </tr>
       <tr>

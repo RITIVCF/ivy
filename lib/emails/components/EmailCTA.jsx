@@ -1,7 +1,7 @@
 export default class EmailCTA {
   constructor() {
 
-    this.setButtonColor("#FCB816")
+    this.setButtonColor("#1A3D6D")
     this.setBackgroundColor("#ffffff")
 
   }
@@ -14,22 +14,23 @@ export default class EmailCTA {
     this.buttonColor = color;
   }
 
-
-
-
-
-  renderHTML(heading,content,btnText,btnTarget) {
+  renderHTML(content,btnText,btnTarget,heading="") {
+    let headingtext = "";
+    if (heading != "") {
+      headingtext = `<tr>
+        <td style="padding: 40px 40px 20px; text-align: center;">
+            <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">` + heading + `</h1>
+        </td>
+      </tr>`;
+    }
     return (
       `<tr>
         <td bgcolor="` + this.backgroundColor + `">
-          <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">`
+            + headingtext +
+            `
             <tr>
-              <td style="padding: 40px 40px 20px; text-align: center;">
-                  <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">` + heading + `</h1>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;">
+              <td style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;">
                 <p style="margin: 0;">` + content + `</p>
               </td>
             </tr>

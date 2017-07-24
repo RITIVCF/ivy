@@ -148,8 +148,8 @@ export default class EmailContainer {
 
           .button-td:hover,
           .button-a:hover {
-            background: #555555 !important;
-            border-color: #555555 !important;
+            background: #FCB816 !important;
+            border-color: #FCB816 !important;
           }
 
           <!-- Attempt to fix emoji replacement in Gmail on computer -->
