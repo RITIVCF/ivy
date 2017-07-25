@@ -59,7 +59,9 @@ Meteor.methods({
 
     setupStatusJobs(signin.uid);
 
-		createNewEventFollowUpEmail(signin.eid, signin.uid);
+		if( signin.new ){
+			createNewEventFollowUpEmail(signin.eid, signin.uid);
+		}
 
 
   },

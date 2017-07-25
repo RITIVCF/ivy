@@ -46,11 +46,13 @@ export default class Debrief extends TrackerReact(React.Component) {
 							})}
 						</div>
 					</div>
-					<div className="row">
-						<div className="col s12">
-							<a className="btn" >Edit</a>
+					{/*
+						<div className="row">
+							<div className="col s12">
+						<a className="btn" >Edit</a>
+							</div>
 						</div>
-					</div>
+					*/}
 				</div>
 			</div>
 		)
