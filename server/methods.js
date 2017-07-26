@@ -1,4 +1,5 @@
 import { Accounts } from 'meteor/accounts-base';
+import { runDbMigration } from '/server/utils.js';
 
 Meteor.methods({
   enrollUser(id){
@@ -504,7 +505,12 @@ Meteor.methods({
     return retval;
 
 
-  }
+  },
+	migrateSummer2017(){
+		if(checkPermission("admin")){
+			runDbMigration();
+		}
+	}
 
 
 })

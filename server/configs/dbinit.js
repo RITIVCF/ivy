@@ -576,8 +576,10 @@ let emailTemplates = [
 ];
 
 emailTemplates.forEach( (template) => {
-	Emails.remove({_id: template._id});
-	Emails.insert(template);
+	let currentRecord = Emails.findOne(template._id);
+	if(!currentRecord){
+		Emails.insert(template);
+	}
 });
 
 // initialize counters
