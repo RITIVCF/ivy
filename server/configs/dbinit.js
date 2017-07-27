@@ -508,10 +508,10 @@ options.forEach( (option) => {
 	if(!Options.findOne(option._id)){
 		Options.insert(option);
 	}
-	else{
-		Options.remove({_id: option._id});
-		Options.insert(option);
-	}
+	// else{
+	// 	Options.remove({_id: option._id});
+	// 	Options.insert(option);
+	// }
 });
 
 
