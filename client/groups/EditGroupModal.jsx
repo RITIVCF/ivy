@@ -113,7 +113,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
 
 
   render() {
-    let notshow = !(this.props.group._id=="admin"||this.props.group._id=="multipliers");
+    let show = false;//!(this.props.group._id=="admin"||this.props.group._id=="multipliers");
     return (
       <div id={"editgroupmodal"+this.props.group._id} className="modal modal-fixed-footer">
         <div className="modal-content">
@@ -121,7 +121,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
         </div>
         <div className="modal-footer">{/*buttons top to bottom go right to left */}
           <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-          {notshow&&<a onClick={this.delete.bind(this)} className="modal-action modal-close waves-effect waves-green btn red">Remove</a>}
+          {show&&<a onClick={this.delete.bind(this)} className="modal-action modal-close waves-effect waves-green btn red">Remove</a>}
         </div>
       </div>
     )
