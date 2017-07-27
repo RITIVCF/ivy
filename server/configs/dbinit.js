@@ -199,31 +199,31 @@ let options = [
 	  "vals": [
 	    {
 	      "tag": "Social",
-	      "color": "#FF0"
+	      "color": "#FF5722"
 	    },
 	    {
 	      "tag": "Large Group",
-	      "color": "#0FF"
+	      "color": "#3F51B5"
 	    },
 	    {
 	      "tag": "Small Group",
-	      "color": "#0F0"
+	      "color": "#009688"
 	    },
 	    {
 	      "tag": "NSO",
-	      "color": "#F0F"
+	      "color": "#FFC107"
 	    },
 	    {
 	      "tag": "Prayer",
-	      "color": "#00F"
+	      "color": "#9C27B0"
 	    },
 	    {
 	      "tag": "Conference",
-	      "color": "#F00"
+	      "color": "#8BC34A"
 	    },
 	    {
 	      "tag": "Core",
-	      "color": "#DA7C30"
+	      "color": "#2196F3"
 	    }
 	  ]
 	},
@@ -388,13 +388,13 @@ let options = [
 	          "permission": "admin",
 	          "children": []
 	        },
-	        {
-	          "id": "feedback",
-	          "icon": "swap_vert",
-	          "text": "Feedback",
-	          "permission": "feedback",
-	          "children": []
-	        },
+	        // {
+	        //   "id": "feedback",
+	        //   "icon": "swap_vert",
+	        //   "text": "Feedback",
+	        //   "permission": "feedback",
+	        //   "children": []
+	        // },
 	        {
 	          "id": "overview",
 	          "icon": "assessment",
@@ -526,10 +526,10 @@ options.forEach( (option) => {
 	if(!Options.findOne(option._id)){
 		Options.insert(option);
 	}
-	else{
-		Options.remove({_id: option._id});
-		Options.insert(option);
-	}
+	// else{
+	// 	Options.remove({_id: option._id});
+	// 	Options.insert(option);
+	// }
 });
 
 
@@ -594,8 +594,10 @@ let emailTemplates = [
 ];
 
 emailTemplates.forEach( (template) => {
-	Emails.remove({_id: template._id});
-	Emails.insert(template);
+	let currentRecord = Emails.findOne(template._id);
+	if(!currentRecord){
+		Emails.insert(template);
+	}
 });
 
 // initialize counters

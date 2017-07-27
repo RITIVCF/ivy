@@ -243,7 +243,7 @@ Meteor.publish("outofscopeContacts", function(){
 Meteor.publish("allContacts", function(filtr, srt){
 
   var selector = {status: {$nin: [
-		"Admin",
+		"User",
 		"Out of Scope",
 		"Expired",
 		"Graduated",
@@ -508,11 +508,13 @@ Meteor.publish("allUsersEverything", function(){
 Meteor.publish("allActiveTickets", function(){
   const selector = Groups.find({_id:"admin",users: this.userId}).fetch().length==1?{
     $and: [
+			{deleted: false},
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}}
     ]
   }:{
     $and: [
+			{deleted: false},
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}},
       {type: {$ne: "Feedback"}}
@@ -557,7 +559,11 @@ Meteor.publish("thisTicket", function(tid){
   var ticket = Tickets.findOne(tid);
   //console.log(ticket);
   //console.log(Events.find({_id:ticket.eid}).fetch());
-  return [Tickets.find({_id: tid}),Events.find({_id:ticket.eid})];
+  return [
+		Tickets.find({_id: tid}),
+		Events.find({_id:ticket.eid}),
+		Meteor.users.find()
+	];
 });
 
 Meteor.publish("ticket", function(cid){

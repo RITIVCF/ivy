@@ -36,7 +36,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     if(id=="Ivy System"){
       return "Ivy System";
     }
-    //console.log(id);
+    console.log("getUser ID: ", id);
     //console.log(Meteor.users.findOne(id).contact);
     //console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
     //return Contacts.findOne(Meteor.users.findOne(id).contact).name;
