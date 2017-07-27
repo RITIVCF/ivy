@@ -62,9 +62,13 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	cancelRecur() {
 		try {
     	this.refs.modal.close();
-			$('#RepeatEventModal').modal('close');
 		}
 		catch(err) {
+		}
+		try {
+			$('#RepeatEventModal').modal('close');
+		} catch (e) {
+
 		}
 
 	}

@@ -70,6 +70,9 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     }
     $("#calendar").fullCalendar({
       events: [],
+      eventColor: "#eee",
+      eventBackgroundColor: "#eee",
+      eventTextColor: "#555",
       header: false,
       defaultView: calView,
       firstDay: 1,
@@ -275,11 +278,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     );
     $(calendar).fullCalendar( 'addEventSource',
       {events: this.getUnPublishedEvents(),
-        color: "red"
+        className: "unpublishedEvent"
       }
     );
     $(calendar).fullCalendar( 'rerenderEvents');
-    //$('.modal').modal();
+    //$('.modal').modal(); r
 
   }
 
