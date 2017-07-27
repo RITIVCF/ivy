@@ -37,11 +37,12 @@ export default class EmailBody {
     }
   }
 
-  constructBody(modules) {
+  constructBody(modules, when) {
 		let bodyHTML = "";
-    let n = addDays(new Date(), 7);
+    let n = addDays(when, 7);
     let d = 0;
     let featured = [];
+    let evs = Events.find({}).fetch();
     modules.forEach( (module) => {
       if (module.eid != "") {
         featured.push(module.eid);
@@ -118,9 +119,10 @@ Welcome to week 9! I hope you have had an amazing time!
 
         case "intro":
           bodyHTML = bodyHTML + this.EmailText.renderHTML("",module.desc);
+          console.log("Intro module");
           break;
         case "largegroup":
-          let lg = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Large Group"});
+          let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group"});
           if (!!lg) {
             thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
             details = this.EmailDetails.renderHTML(lg.start, lg.location);
@@ -129,32 +131,34 @@ Welcome to week 9! I hope you have had an amazing time!
           }
           break;
         case "core":
-          let cr = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Core"});
+          let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core"});
           if (!!cr) {
             thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/coretammy.jpg");
             details = this.EmailDetails.renderHTML(cr.start, cr.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), cr.name, details + cr.description, thumbnail);
             d = d + 1;
           }
+          console.log("Core module");
           break;
         case "prayer":
-          let pr = Events.findOne({start: {$gt: new Date(), $lt: n}, published: true, tags: "Prayer"});
+          let pr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer"});
           if (!!pr) {
             thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/basileiaworship.jpg");
             details = this.EmailDetails.renderHTML(pr.start, pr.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), pr.name, details + pr.description, thumbnail);
             d = d + 1;
           }
+          console.log("Prayer module");
           break;
         case "conference":
-          let cfs = Events.find({start: {$gt: new Date()}, published: true, tags: "Conference"}).fetch();
+          let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference"}).fetch();
           cfs.forEach( (cf) => {
             details = this.EmailDetails.renderHTML(cf.start, cf.location);
             bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", cf.name, details + cf.description);
           });
           break;
         case "nso":
-          let nsos = Events.find({start: {$gt: new Date()}, published: true, tags: "NSO"}).fetch();
+          let nsos = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "NSO"}).fetch();
           remaining = nsos.filter(function(i) {return featured.indexOf(i) < 0;});
           for (var i = 0; i < remaining.length; i += 2) {
             nso1 = remaining[i];
@@ -180,7 +184,7 @@ Welcome to week 9! I hope you have had an amazing time!
           }
           break;
         case "social":
-          let scss = Events.find({start: {$gt: new Date()}, published: true, tags: "Social"}).fetch();
+          let scss = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Social"}).fetch();
           remaining = scss.filter(function(i) {return featured.indexOf(i) < 0;});
           for (var i = 0; i < remaining.length; i += 2) {
             scs1 = remaining[i];
@@ -206,41 +210,23 @@ Welcome to week 9! I hope you have had an amazing time!
           }
           break;
         /*case "smallgroup":
-          let scs = Events.find({start: {$gt: new Date()}, published: true, tags: "Small Group"}).fetch();
+          let scs = Events.find({start: {$gt: when}, status: "Published", tags: "Small Group"}).fetch();
           scs.forEach( (sc) => {
             details = this.EmailDetails.renderHTML(sc.start, sc.location);
             bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", sc.name, details + sc.description);
           });
           */
         case "becomeamember":
-          memberpitch = "Do you consider yourself a member of InterVarsity? If so, become a member through a simple process by clicking the button below for instructions. This is a new way to help us keep track of our members as our community grows, so we highly encourage you to do this if you consider yourself a member!";
+          memberpitch = module.desc;
           bodyHTML = bodyHTML + this.EmailCTA.renderHTML(memberpitch,"Become a Member","http://ivcf.rit.edu/becomeamember");
           break;
         case "getinvolved":
-          list = `What are some ways you can contribute to and make our community better? Every tiny bit is so important and pulls us closer together, closer to God, and brings others closer to Him. Here are some areas you can get involved in. Please email me at ritivcf@gmail.com if you are interested.
-          <ul>
-            <li>Prayer Meetings – plan, help out, and/or lead</li>
-            <li>Advertising/Design Team – brainstorm, design, and/or distribute (currently need people to join)</li>
-            <li>Dimitri House homeless shelter volunteering (need people to volunteer one or two times)</li>
-            <li>Be an MC at Large Group</li>
-            <li>Small Groups – join one and/or lead one</li>
-            <li>Large Group – attend and/or help plan</li>
-            Resource Team – make sure our club functions :)</li>
-            <li>Strategy Team – plan and/or lead events</li>
-            <li>Welcome – say ‘hi’ to people as they sign in to Large Group!
-            Sound Team</li>
-            <li>Worship Team</li>
-            <li>Web Development Team</li>
-            <li>Fundraising</li>
-            <li>After Events planning</li>
-            <li>Proxe Stations</li>
-            <li>Community Service</li>
-          </ul>`;
+          list = module.desc;
           bodyHTML = bodyHTML + this.EmailText.renderHTML("Get Involved",list);
           break;
         default:
           thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
-          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),"Default","text",thumbnail);
+          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),module.type,"text",thumbnail);
           d = d + 1;
       }
 
@@ -248,10 +234,10 @@ Welcome to week 9! I hope you have had an amazing time!
     return bodyHTML;
   }
 
-  renderHTML(modules) {
+  renderHTML(modules, when) {
     return (
       `<table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;" class="email-container">`
-      + this.constructBody(modules) +
+      + this.constructBody(modules, when) +
       `</table>`
     );
   }

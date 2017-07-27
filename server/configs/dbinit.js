@@ -469,14 +469,32 @@ let options = [
 	      "value": "getinvolved",
 				"name": "Get Involved",
 				"defaultLayout": "text",
-				"defaultDesc": "",
+				"defaultDesc": `What are some ways you can contribute to and make our community better? Every tiny bit is so important and pulls us closer together, closer to God, and brings others closer to Him. Here are some areas you can get involved in. Please email me at ritivcf@gmail.com if you are interested.
+				<ul>
+					<li>Prayer Meetings – plan, help out, and/or lead</li>
+					<li>Advertising/Design Team – brainstorm, design, and/or distribute (currently need people to join)</li>
+					<li>Dimitri House homeless shelter volunteering (need people to volunteer one or two times)</li>
+					<li>Be an MC at Large Group</li>
+					<li>Small Groups – join one and/or lead one</li>
+					<li>Large Group – attend and/or help plan</li>
+					Resource Team – make sure our club functions :)</li>
+					<li>Strategy Team – plan and/or lead events</li>
+					<li>Welcome – say ‘hi’ to people as they sign in to Large Group!
+					Sound Team</li>
+					<li>Worship Team</li>
+					<li>Web Development Team</li>
+					<li>Fundraising</li>
+					<li>After Events planning</li>
+					<li>Proxe Stations</li>
+					<li>Community Service</li>
+				</ul>`,
 	      "canChooseLayout": false
 	    },
 	    {
 	      "value": "becomeamember",
 				"name": "Become a Member",
 				"defaultLayout": "text",
-				"defaultDesc": "",
+				"defaultDesc": `Do you consider yourself a member of InterVarsity? If so, become a member through a simple process by clicking the button below for instructions. This is a new way to help us keep track of our members as our community grows, so we highly encourage you to do this if you consider yourself a member!`,
 	      "canChooseLayout": false
 	    },
 	    {

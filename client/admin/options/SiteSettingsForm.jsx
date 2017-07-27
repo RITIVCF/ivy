@@ -106,14 +106,14 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 						<div className="divider"></div>
 						<EventTagForm />
 					</div>
-					<div className="row">
+					{/*<div className="row">
 						<div className="col s12">
 							<h2>All Options</h2>
 								{this.getOptions().map( (option) => {
 									return <Option key={option._id} option={option} />
 								})}
 						</div>
-					</div>
+					</div>*/}
 				</div>
 				{/*checkPermission("removecontact")?
 				<div className="row">

@@ -60,16 +60,23 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 	cancelRecur() {
-		this.refs.modal.close();
+		try {
+    	this.refs.modal.close();
+			$('#RepeatEventModal').modal('close');
+		}
+		catch(err) {
+		}
+
 	}
 
 	closeRecur() {
-
+		// for refresh 2
 	}
 
 	setRepeat() {
 		if (this.state.recurGroup) {
 			this.refs.modal.close();
+			this.cancelRecur.bind(this.refs.closebtn);
 			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
 				if(error) {
 					Materialize.toast("There was an error creating the recurring events", 2000);
@@ -77,8 +84,18 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 					Materialize.toast("Created recurring events", 2000);
 				}
 			});
-		} else {
+		} else if (this.getEvent().tags.includes("Small Group")) {
 			Materialize.toast("Associated small group is required", 2000);
+		} else {
+			this.refs.modal.close();
+			this.cancelRecur.bind(this.refs.closebtn);
+			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
+				if(error) {
+					Materialize.toast("There was an error creating the recurring events", 2000);
+				} else {
+					Materialize.toast("Created recurring events", 2000);
+				}
+			});
 		}
 	}
 
@@ -201,7 +218,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 							onClose={this.closeRecur.bind(this)}
 							type={recurTrue?'':"fixed-footer"}
 							footer={recurTrue?<div>
-								<a className="btn" onClick={this.cancelRecur.bind(this)}>Close</a>
+								<a className="btn modal-action modal-close" ref="closebtn" onClick={this.cancelRecur.bind(this)}>Close</a>
 							</div>:<div>
 									<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
 				        	<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>

@@ -229,7 +229,7 @@ export default class EmailContainer {
                   <td>
                   <![endif]-->`
                   + this.EmailHeader.renderHTML()
-                  + this.EmailBody.renderHTML(email.modules)
+                  + this.EmailBody.renderHTML(email.modules, email.when)
                   + this.EmailFooter.renderHTML() +
             `<!--[if mso]>
                   </td>

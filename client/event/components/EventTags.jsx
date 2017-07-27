@@ -38,12 +38,17 @@ export default class EventTags extends TrackerReact(React.Component) {
   submit(tag){
     //event.preventDefault();
     console.log("submitted");
-    console.log(tag);
-    Meteor.call("addEventTag", this.props.ev._id, tag);
+    console.log(tag.target.value);
+
+    Meteor.call("addEventTag", this.props.ev._id, tag.target.value);
     //this.refs.tag.initialValue="";
     //this.setState({value: ""});
 
 
+  }
+
+  fillTags() {
+    return Options.findOne("eventtags").vals;
   }
 
   // setTextValue(txt){
@@ -58,25 +63,21 @@ export default class EventTags extends TrackerReact(React.Component) {
   render(){
     let ev = this.props.ev;//this.getEvent();
 
+    //browser-default
+
   	var tags = ev.tags;
     return(
-      <div style={{backgroundColor: "white", outline:"grey solid 1px", padding: "5px"}}>
-        {/*  <input type="text" ref="tag" placeholder="+Tag" /> LOOK INTO REACT-WIDGETS MULTISELECT*/}
-        {/*}  unset={this.unset.bind(this)} */}
-        {/*}  onChange={this.setTextValue.bind(this)} */}
+      <div>
         {this.props.perm&&
-          <SelectTag
-            parent={this}
-            ref="tag"
+          <select ref="tag" className="browser-default" value={tags[0]} onChange={this.submit.bind(this)}>
+              <option value={""}>Select an event type</option>
+              {this.fillTags().map( (val) => {
+                return (<option value={val.tag}>{val.tag}</option>)
+              })}
+          </select>
 
-            onSelected={this.submit.bind(this)}
-            initialValue={this.state.value}
-            />}
-    {/*this.props.subscription.ready() ? */// this.getTags().map( (tag)=>{
-      ev.tags.map((tag)=>{
-        return <Tag key={tag} eid={ev._id} tag={tag} perm={this.props.perm} />
-    }) /* : <div></div>*/}
-  </div>
+        }
+      </div>
   )
   }
 }
