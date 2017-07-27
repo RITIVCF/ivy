@@ -510,6 +510,7 @@ Meteor.methods({
 		if(checkPermission("admin")){
 			runDbMigration();
 		}
+		return true;
 	}
 
 

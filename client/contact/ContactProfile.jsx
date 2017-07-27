@@ -97,14 +97,15 @@ export default class ContactProfile extends TrackerReact(React.Component){
 		}
 	}
 
-	setAsAdmin(){
+	setAsUser(){
 		if(confirm("Are you sure? This cannot be undone.")){
-			Meteor.call("makeAdmin", this.props.contact._id);
+			Meteor.call("makeUser", this.props.contact._id);
 		}
 	}
 
   remove(){
     if(confirm("Only remove a contact if it is a mistake creation.")){
+			routeTo("people");
       this.props.contact.remove();
     }
   }
@@ -117,16 +118,16 @@ export default class ContactProfile extends TrackerReact(React.Component){
     var disable = true;
     var viewmember = false;
 
-    if(contact.isUser()||checkPermission("contactdetails")){
+    if(contact.isCurrentUser()||checkPermission("contactdetails")){
       disable = false;
     }
-    if((contact.isUser()||checkPermission("memberdetail"))&&contact.isMember()){
+    if((contact.isCurrentUser()||checkPermission("memberdetail"))&&contact.isMember()){
       viewmember = true;
     }
 
     return (
       <div className="row">
-        {(contact.isUser()&&!contact.isMember())&&
+        {(contact.isCurrentUser()&&!contact.isMember())&&
           <MemberForm ref="becmemwin" />}
         <div className="col s12">
           {/*Contact profile header here: name, picture, wall picture*/}
@@ -139,11 +140,11 @@ export default class ContactProfile extends TrackerReact(React.Component){
                 <img src="/images/defaultPic.png" style={{width: "10%", verticalAlign: "middle", margin: "5px", marginBottom: "7px"}} className="circle responsive-img" />
                 {contact?contact.name:""}
               </span>
-              {(contact.isUser()&&!contact.isMember())&&
+              {(contact.isCurrentUser()&&!contact.isMember())&&
                 <a className="waves-effect waves-light btn blue right" onClick={this.openMemberOverlay.bind(this)}>Become a Member</a>
               }
 
-              {(checkPermission("tickets")&&contact.hasTicket()&&!contact.isUser())&&
+              {(checkPermission("tickets")&&contact.hasTicket()&&!contact.isCurrentUser())&&
                 <a className="waves-effect waves-light btn right" onClick={this.openTicket.bind(this)}>
                   Ticket # {contact.getTicket().ticketnum}
                 </a>
@@ -274,12 +275,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
 				{
 					(
 						checkPermission("admin")&&
-						!contact.isAdmin()
+						!contact.isUser()
 					) &&
 					<div className="row">
 						<div className="col s12">
 							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setAsAdmin.bind(this)}>Mark Admin</a>
+								onClick={this.setAsUser.bind(this)}>Mark user</a>
 						</div>
 					</div>
         }
@@ -296,7 +297,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
 					</div>
         }
 
-        {(this.props.modal)&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
+        {(this.props.modal&&contact.hasTicket())&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
           <div className="modal-content">
             <EditTicketForm ticket={this.getTicket()} modal={false} />
           </div>
