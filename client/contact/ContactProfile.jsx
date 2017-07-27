@@ -253,7 +253,6 @@ export default class ContactProfile extends TrackerReact(React.Component){
 						!contact.isAbsent()
 					) &&
 					<div className="row">
-						{console.log("is not absent")}
 						<div className="col s12">
 							<a className="waves-effect waves-light btn-flat left"
 								onClick={this.setAsAbsent.bind(this)}>Mark Absent</a>
