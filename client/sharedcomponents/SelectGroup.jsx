@@ -6,7 +6,13 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 function getList(ingroup){
   if (ingroup) {
-    return Groups.find({$or: [{leader: Meteor.userId()},{users: Meteor.userId()}]}).fetch();
+		let groups = Groups.find(
+			{$and: [
+				{$or: [{leader: Meteor.userId()},{users: Meteor.userId()}]},
+				{type: "Small Group"}
+			]}
+		).fetch()
+    return groups;
   } else {
     return Groups.find().fetch();
   }
@@ -18,11 +24,10 @@ function getSuggestions(value, ingroup) {
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 
-    return inputLength === 0 ? [] : getList(ingroup).filter(group =>
-      group.name.toLowerCase().slice(0, inputLength) === inputValue
-    );
-
-
+	return inputLength === 0 ? [] : getList(ingroup).filter(group => {
+			return group.name.toLowerCase().slice(0, inputLength) === inputValue
+		}
+	);
 
 }
 

@@ -45,8 +45,6 @@ export default class NewEventModal extends TrackerReact(React.Component) {
 }
 
   checkValue(event){
-    console.log(this.refs.createevent);
-    console.log(this.refs.editevent);
     if(event.target.value==""){
       this.setState({createdisabled: true});
       return;
