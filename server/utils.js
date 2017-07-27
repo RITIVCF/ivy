@@ -69,7 +69,7 @@ function migrateUsers(){
 	});
 
 	// Remove the deleted field
-	Meteoer.users.update({},{$unset: {deleted: ""}},{multi: true});
+	Meteor.users.update({},{$unset: {deleted: ""}},{multi: true});
 }
 
 function migrateDebriefs(){
@@ -89,6 +89,7 @@ function migrateGroups(){
 	groups.forEach( (group) => {
 		// COnvert to leader array
 		if(group.leader){
+			
 			Groups.update(group._id, {$set: {leader: [group.leader]}});
 		}
 	});
