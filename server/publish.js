@@ -90,7 +90,7 @@ Meteor.publish("otherUnpublishedEvents", function(){
 // all published events, plus my unpublished events
 
 Meteor.publish("publishedEvents", function(){
-  return Events.find({status: "Published", deleted: {$ne: true}});
+  return Events.find({status: {$in: ["Published", "Reviewed"]}, deleted: {$ne: true}});
 });
 
 Meteor.publish("pastEvents", function(lim){
