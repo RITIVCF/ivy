@@ -237,6 +237,19 @@ Meteor.publish("outofscopeContacts", function(){
 	return Meteor.users.find(selector);
 });
 
+Meteor.publish("userContacts", functions(){
+	let selector = {
+		status: "User"
+	};
+	let options = {
+		fields: {
+			name: 1,
+			email: 1
+		}
+	};
+	return Meteor.users.find(selector);
+})
+
 Meteor.publish("allContacts", function(filtr, srt){
 
   var selector = {status: {$nin: [

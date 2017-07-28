@@ -21,6 +21,7 @@ SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
 Meteor.subscribe("currentStatus");
+Meteor.subscribe("userContacts");
 
 
 routeTo = function(routeName, params){
