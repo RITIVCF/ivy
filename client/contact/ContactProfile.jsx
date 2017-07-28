@@ -222,79 +222,83 @@ export default class ContactProfile extends TrackerReact(React.Component){
             </div>
           </div>
         </div>
-				{
-					(
-						checkPermission("admin")&&
-						contact.isMember()&&
-						!contact.isGraduated()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setAsGraduated.bind(this)}>Mark Graduated</a>
-						</div>
+				{this.props.modal&&
+					<div>
+						{
+							(
+								checkPermission("admin")&&
+								contact.isMember()&&
+								!contact.isGraduated()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.setAsGraduated.bind(this)}>Mark Graduated</a>
+								</div>
+							</div>
+						}
+						{
+							(
+								checkPermission("admin")&&
+								!contact.isPresent()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.setAsPresent.bind(this)}>Mark Present</a>
+								</div>
+							</div>
+						}
+						{
+							(
+								checkPermission("admin")&&
+								!contact.isAbsent()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.setAsAbsent.bind(this)}>Mark Absent</a>
+								</div>
+							</div>
+						}
+						{
+							(
+								checkPermission("admin")&&
+								!contact.isOutOfScope()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.setOutOfScope.bind(this)}>Mark Out of Scope</a>
+								</div>
+							</div>
+						}
+						{
+							(
+								checkPermission("admin")&&
+								!contact.isUser()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.setAsUser.bind(this)}>Mark user</a>
+								</div>
+							</div>
+						}
+						{
+							(
+								checkPermission("removecontact")&&
+								!contact.isDeleted()
+							) &&
+							<div className="row">
+								<div className="col s12">
+									<a className="waves-effect waves-light btn-flat left"
+										onClick={this.remove.bind(this)}>Remove Contact</a>
+								</div>
+							</div>
+						}
 					</div>
-        }
-				{
-					(
-						checkPermission("admin")&&
-						!contact.isPresent()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setAsPresent.bind(this)}>Mark Present</a>
-						</div>
-					</div>
-        }
-				{
-					(
-						checkPermission("admin")&&
-						!contact.isAbsent()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setAsAbsent.bind(this)}>Mark Absent</a>
-						</div>
-					</div>
-        }
-				{
-					(
-						checkPermission("admin")&&
-						!contact.isOutOfScope()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setOutOfScope.bind(this)}>Mark Out of Scope</a>
-						</div>
-					</div>
-        }
-				{
-					(
-						checkPermission("admin")&&
-						!contact.isUser()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.setAsUser.bind(this)}>Mark user</a>
-						</div>
-					</div>
-        }
-				{
-					(
-						checkPermission("removecontact")&&
-						!contact.isDeleted()
-					) &&
-					<div className="row">
-						<div className="col s12">
-							<a className="waves-effect waves-light btn-flat left"
-								onClick={this.remove.bind(this)}>Remove Contact</a>
-						</div>
-					</div>
-        }
+				}
 
         {(this.props.modal&&contact.hasTicket())&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
           <div className="modal-content">
