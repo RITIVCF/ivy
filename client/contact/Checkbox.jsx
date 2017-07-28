@@ -10,13 +10,14 @@ export default class Checkbox extends Component {
   }
 
   render() {
+		let id = this.props.label.toLowerCase()+"status";
     return(
       <span>
         <input type="checkbox"
-          id={this.props.label.toLowerCase()+"status"}
+          id={id}
           checked={this.props.checked}
           onChange={this.props.onChange} />
-        <label htmlFor={this.props.label.toLowerCase()+"status"}>{this.props.label}</label>
+				<label htmlFor={id}>{this.props.label}</label>
       </span>
 
     )

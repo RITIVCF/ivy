@@ -70,6 +70,9 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     }
     $("#calendar").fullCalendar({
       events: [],
+      eventColor: "#eee",
+      eventBackgroundColor: "#eee",
+      eventTextColor: "#555",
       header: false,
       defaultView: calView,
       firstDay: 1,
@@ -185,43 +188,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       },
       eventRender: (event, element) => {
 
-           //if(!this.props.sidebar){
-           //element[0].class += " tooltipped";
-           //element[0].innerHtml+=this.renderPopoverContent(event);
-           //element[0].class
-           //console.log(element);
-           //console.log(element[0]);
-           //element.setAttribute("data-position","bottom");
-           //element.setAttribute("data-delay", "50");
-           //element.setAttribute("data-tooltip", this.renderPopoverContent(event));
-        // element.popover({
-        //   placement: "auto left",
-        //   container: calendar,
-        //   trigger: "manual",
-        //   animation: false,
-        //   template: '<div class="popover" role="tooltip">' +
-        //   '<div class="arrow"></div>' +
-        //   '<div class="popover-content"></div>' +
-        //   '</div>',
-        //   html: true,
-        //   content: this.renderPopoverContent(event)
-        // }).on("mouseenter", () => {
-        //   clearTimeout(element.timeout);
-        //   $(element).popover("show");
-        //   $(calendar).children(".popover").on("mouseleave", (event) => {
-        //     element.timeout = setTimeout(() => {
-        //       $(event.currentTarget).popover('hide');
-        //     }, 250);
-        //   });
-        // }).on("mouseleave", () => {
-        //   clearTimeout(element.timeout);
-        //   element.timeout = setTimeout(() => {
-        //     if (!$(".popover:hover").length) {
-        //       $(element).popover("hide");
-        //     }
-        //   }, 500);
-        //});
-    //  }
       }
     });
     this.setState({mounted: true});
@@ -232,7 +198,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   getPublishedEvents(){
     //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
     let tags = Options.findOne("eventtags").vals;
-    var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], published: true}).fetch();
+    var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], $or: [{status: "Published"},{status: "Reviewed"}]}).fetch();
     events.forEach((event)=>{
       event.title=event.name;
       var newcolors = [];
@@ -265,7 +231,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
-      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], published: false}).fetch();
+      var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], status: "Unpublished"}).fetch();
 
       //var events = Events.find({published: false}).fetch();
 
@@ -275,7 +241,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
 
       var events = Events.find({
         $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
-        published: false,
+        status: "Unpublished",
         $or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
       }).fetch();
       return this.addTagToUnPublishedEvents(events);
@@ -312,11 +278,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     );
     $(calendar).fullCalendar( 'addEventSource',
       {events: this.getUnPublishedEvents(),
-        color: "red"
+        className: "unpublishedEvent"
       }
     );
     $(calendar).fullCalendar( 'rerenderEvents');
-    //$('.modal').modal();
+    //$('.modal').modal(); r
 
   }
 
@@ -342,8 +308,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         <div ref="calendar" id="calendar"></div>
         {/*{this.getPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
-        })}
-        {this.getUnPublishedEvents().map((event)=>{
+					})}
+					{this.getUnPublishedEvents().map((event)=>{
           return <EventContent key={event._id} event={event} />
         })}*/}
         {checkPermission("events")&&<NewEventModal ref="newevmodal" />}

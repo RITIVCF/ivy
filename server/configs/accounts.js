@@ -6,10 +6,6 @@ import { Accounts } from 'meteor/accounts-base';
 
 
   Accounts.onCreateUser(function(options, user) {
-    //let contact = this.getContact(redundantEmail)
-    console.log(options);
-    console.log(user);
-    //user.email = options.contact.email;
     if (options.profile){
       user.profile = options.profile;
     }
@@ -50,7 +46,7 @@ import { Accounts } from 'meteor/accounts-base';
     FlowRouter.go("/signup/"+token);
   };
 
-  
+
 
   Accounts.emailTemplates.sitename = "Ivy";
   Accounts.emailTemplates.from = "Ivy <no-reply@ivy.rit.edu>";

@@ -34,21 +34,24 @@ export default class EventDebriefWrapper extends TrackerReact(React.Component) {
 			return <NoPerm />
 		}
 		let ev = this.Event();
-		if(!ev.debrief){
-			return(
-				<div className="card">
-					<div className="card-content">
-						<span className="card-title">{ev.name}</span>
-						<div className="row">
-							<div className="col s12">
-								<p>{moment(ev.start.toISOString()).format("DD MMM YYYY")}
-									{/*}<a className="btn right" onClick={this.openModal.bind(this)}>Edit</a>*/}
-								</p>
+		if(!ev){
+			return false;
+		}
+
+		if(this.props.edit){
+			if(ev.debrief){
+				return (
+					<div className="center-align" style={{paddingTop:"50px"}}>
+						<div className="card-panel">
+							<div className="card-content">
+								<p>This debrief has already been submitted. You can view it <a href={"/events/debrief/view/"+ev._id}>here</a>.</p>
 							</div>
 						</div>
-						<DebriefForm ev={ev} />
 					</div>
-				</div>
+				)
+			}
+			return(
+				<DebriefForm event={ev} eid={this.props.eid} />
 			)
 		}
 		return (

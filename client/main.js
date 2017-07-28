@@ -20,24 +20,11 @@ Meteor.subscribe("allCounters");
 SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
+Meteor.subscribe("currentStatus");
 
-checkPermission = function(){
-	// if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
-	// 	return true;
-	// }
-	var ids = [];
-	//console.log(arguments);
-	//console.log(arguments[0]);
-	for (i = 0; i < arguments.length; i++) {
-  	ids.push(arguments[i]);
-  }
-	var grps = Groups.find({users: Meteor.userId()}).fetch();
-	var gids = [];
-	grps.forEach(function(group){
-		gids.push(group._id);
-	});
 
-	return PagePermissions.find({_id: {$in: ids },groups: {$in: gids}}).fetch().length>0;
+routeTo = function(routeName, params){
+	FlowRouter.go(FlowRouter.path(routeName, params));
 }
 
 
@@ -55,36 +42,4 @@ if ($) {
 }
 else {
   Vel = Velocity; // change value with jQuery.Velocity
-}
-
-
-checkEventPermission = function(ev){
-	if(Groups.find({_id:"admin", users: Meteor.userId()}).fetch().length==1){
-		return {view: true, edit: true};
-	}
-  // if(!ev.permUser){
-  //   return {"view":false,"edit": false};
-  // }
-	if(ev.owner==Meteor.userId()){
-		return {view: true, edit: true}
-	}
-  var perm = false;// ev.perm[""]
-	var view = false;
-	for(i=0; i < ev.permUser.length; i++){
-		if(ev.permUser[i].id == Meteor.userId()){
-			view = true;
-			perm = ev.permUser[i].edit;
-			break;
-		}
-	}
-	//console.log(ev.permGroup);
-	for(i=0; i < ev.permGroup.length; i++){
-		if(getUserGroupPermission().indexOf(ev.permGroup[i].id)>-1){
-			//console.log("true");
-			view = true;
-			perm = ev.permGroup[i].edit||perm;
-			break;
-		}
-	}
-  return {"view": view,"edit": perm};
 }

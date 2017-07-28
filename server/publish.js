@@ -7,12 +7,10 @@ Meteor.publish("allEvents", function(){
 
 Meteor.publish("summaryEvents", function(){
 
-  //return Events.find({$or: [{}]});
 });
 
 Meteor.publish("myAttendedEvents", function(){
   return Events.find({"attendees._id": this.userId, deleted: {$ne: true}});
-  //return Events.find({$or: [{}]});
 });
 
 Meteor.publish("ownerEvents", function(){
@@ -53,7 +51,7 @@ Meteor.publish("mySchedule", function(){
 
 Meteor.publish("UpcomingEvents", function(){
   var twoweeks = new moment(new Date().toISOString()).add(2,"weeks")._d;
-  return Events.find({published: true, start: {$gte: new Date(),$lte: twoweeks}, deleted: {$ne: true}},{limit: 3});
+  return Events.find({status: "Published", start: {$gte: new Date(),$lte: twoweeks}, deleted: {$ne: true}},{limit: 3});
 });
 
 Meteor.publish("AttendedEvents", function(){
@@ -72,53 +70,37 @@ Meteor.publish("myEvents", function(){
 	});
 	return Events.find({$or: [
     {owner: this.userId},
-    {published: true},
+    {status: "Published"},
     {"permUser.id": this.userId},
     {"permGroup.id": {$in: ids}}
   ], deleted: {$ne: true}});
 });
 
 Meteor.publish("otherUnpublishedEvents", function(){
-  // var grps = Groups.find({users: this.userId}).fetch();
-	// var ids = [];
-	// grps.forEach(function(group){
-	// 	ids.push(group._id);
-	// });
-	//console.log("GGroups:");
-	//console.log(ids);
-  //console.log(checkPermission("events", this.userId));
-  //if(perm){
   var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1,owner: 1}};
   if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
 	}
     return Events.find({deleted: {$ne: true}}, options);
-  //}
-
 });
 
 // all published events, plus my unpublished events
 
 Meteor.publish("publishedEvents", function(){
-  return Events.find({published: true, deleted: {$ne: true}});
-  //console.log(Events.find({published: true}));
-  // var events = Events.aggregate([{ "$project" : { title:"$name", start: 1, end: 1 }}, {"$match": {published: true}}]);
-  // console.log(events);
-  // //console.log(events.fetch());
-  // return events;
+  return Events.find({status: {$in: ["Published", "Reviewed"]}, deleted: {$ne: true}});
 });
 
 Meteor.publish("pastEvents", function(lim){
   if(lim == 0){
     return Events.find({
-      published: true,
+      status: "Published",
       start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
       deleted: {$ne: true}
     },{sort: {start:-1} // Sorts descending chronologically by start
     });
   }
   return Events.find({
-    published: true,
+    status: "Published",
     start: {$lt: new moment(new Date().toISOString()).add(2, "hours")._d},
     deleted: {$ne: true}},{
     sort: {start:-1}, // Sorts descending chronologically by start
@@ -194,11 +176,9 @@ Meteor.publish("activeChurches", function(){
 
 /*  Contact functions*/
 Meteor.publish("contact", function(cid){
-  //console.log(cid);
   if(!cid){
-    //console.log("Finding one");
     try{
-      cid = this.userId; //Meteor.user().contact;
+      cid = this.userId;
     }
     catch (error){
       cid = "";
@@ -228,38 +208,44 @@ Meteor.publish("contact", function(cid){
     ethnicity: 1,
     gradterm: 1,
     curryear: 1,
-    member: 1
+    member: 1,
+		funnelStatus: 1,
+		status: 1
      }
-  }
+  };
   return Meteor.users.find(selector, options);
 });
 
-Meteor.publish("allContacts", function(filtr, srt){
-  /*const options = {
-    fields: {
-      _id: 1,
-      name: 1,
-      email: 1,
-      phone: 1
-    }
-  }*/
+Meteor.publish("graduatedContacts", function(){
+	let selector = {
+		status: "Graduated"
+	};
+	return Meteor.users.find(selector);
+});
 
-  var selector = {deleted: {$ne: true}};
-/*
-  if(filtr == "Contact"){
-    selector = {
-      member: {$ne: true}
-    };
-  }
-  if(filtr == "Member"){
-    selector = {
-      member: true
-    };
-  }*/
-  // if(filtr != "All")
-  // selector = {
-  //     status: filtr
-  // };
+Meteor.publish("expiredContacts", function(){
+	let selector = {
+		status: "Expired"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("outofscopeContacts", function(){
+	let selector = {
+		status: "Out of Scope"
+	};
+	return Meteor.users.find(selector);
+});
+
+Meteor.publish("allContacts", function(filtr, srt){
+
+  var selector = {status: {$nin: [
+		"User",
+		"Out of Scope",
+		"Expired",
+		"Graduated",
+		"Deleted"
+	]}};
 
   var options = {
     fields: {
@@ -283,6 +269,7 @@ Meteor.publish("allContacts", function(filtr, srt){
     curryear: 1,
     member: 1,
     status: 1,
+		funnelStatus: 1,
     user: 1,
     createdAt: 1
   },
@@ -307,7 +294,8 @@ Meteor.publish("allContacts", function(filtr, srt){
       ethnicity: 1,
       gradterm: 1,
       curryear: 1,
-      member: 1
+      member: 1,
+			funnelStatus: 1
     },
     sort: {
       member: 1,
@@ -387,14 +375,13 @@ Meteor.publish("userContacts", function(){
 Meteor.publish("duplicateContacts", function(){
   var result = Meteor.users.aggregate(     {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
     {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
-    //console.log(result);
   var ids =[];
     for(var i=0;i<result.length;i++){
       for(var y=0;y<result[i].ids.length;y++){
         ids.push(result[i].ids[y]);
       }
     }
-    //console.log(ids);
+
     result = Meteor.users.aggregate(     {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
       {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } );
       for(var i=0;i<result.length;i++){
@@ -450,12 +437,7 @@ Meteor.publish("userSelf", function(){
 });
 
 Meteor.publish("allActiveUsers", function(){
-  /*const options = {
-    fields: {
-      _id: 1,
-      contact: 1
-    }
-  }*/
+
   const options = {
     fields: {
     name: 1,
@@ -480,12 +462,7 @@ Meteor.publish("allActiveUsers", function(){
 });
 
 Meteor.publish("allInactiveUsers", function(){
-  /*const options = {
-    fields: {
-      _id: 1,
-      contact: 1
-    }
-  }*/
+
   const options = {
     fields: {
     name: 1,
@@ -517,11 +494,13 @@ Meteor.publish("allUsersEverything", function(){
 Meteor.publish("allActiveTickets", function(){
   const selector = Groups.find({_id:"admin",users: this.userId}).fetch().length==1?{
     $and: [
+			{deleted: false},
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}}
     ]
   }:{
     $and: [
+			{deleted: false},
       {status: {$ne: "Closed"}},
       {status: {$ne: "Canceled"}},
       {type: {$ne: "Feedback"}}
@@ -540,12 +519,12 @@ Meteor.publish("eventTickets", function(evid){
 
 Meteor.publish("MyTickets", function(){
   var grps = Groups.find({users: this.userId}).fetch();
-  //console.log(grps);
+
 	var ids = [];
 	grps.forEach(function(group){
 		ids.push(group._id);
 	});
-  //console.log(ids);
+
   return Tickets.find(
     {$and:[
       {status: {$nin: ["Cancelled","Closed","Canceled"]}},
@@ -564,9 +543,11 @@ Meteor.publish("allTicketStatus", function(){
 
 Meteor.publish("thisTicket", function(tid){
   var ticket = Tickets.findOne(tid);
-  //console.log(ticket);
-  //console.log(Events.find({_id:ticket.eid}).fetch());
-  return [Tickets.find({_id: tid}),Events.find({_id:ticket.eid})];
+  return [
+		Tickets.find({_id: tid}),
+		Events.find({_id:ticket.eid}),
+		Meteor.users.find()
+	];
 });
 
 Meteor.publish("ticket", function(cid){
@@ -595,11 +576,26 @@ Meteor.publish("myEmails", function(){
   return Emails.find({$or:[{uid: this.userId},{isTemplate: true}]});
 });
 
+Meteor.publish("thisEmail", function(emid){
+  return Emails.find({_id: emid});
+});
+
+Meteor.publish("emailEvents", function() {
+  let n = addDays(new Date(), 7);
+  return Events.find({$or:[
+    {start: {$gt: new Date(), $lt: n}, status: "Published"},
+    {start: {$gt: new Date()}, tags: "Conference"}
+  ]});
+})
 //***************************************
 
 // *******    Debrief   ************
 Meteor.publish("myDebriefDrafts", function(){
   return Debriefs.find({uid: this.userId});
+});
+
+Meteor.publish("allDebriefQuestions", function(){
+	return DebriefQuestions.find();
 });
 // *********************************
 
@@ -622,9 +618,18 @@ Meteor.publish("publicOptions", function(){
 Meteor.publish("currentFunnel", function(){
   ReactiveAggregate(this, Funnel, [
     {$sort: {date: -1}},
-    {$group: {_id: "$uid", status: {$last: "$status"}}}]);
+    {$group: {_id: "$uid", status: {$last: "$status"}}}
+	]);
 });
 
 Meteor.publish("funnelHistory", function(){
   return  FunnelHistory.find();
-})
+});
+
+
+Meteor.publish("currentStatus", function(){
+	ReactiveAggregate(this, Status, [
+		{$sort: {date: -1}},
+    {$group: {_id: "$uid", status: {$last: "$status"}}}
+	]);
+});

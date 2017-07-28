@@ -18,9 +18,9 @@ export default class ContactEmail extends Component {
       <div className="input-field">
         <input type="email"
           ref="email"
-          class="validate"
+          className="validate"
           id="contact_email"
-          disabled={this.props.contact.isUser()}
+          disabled={this.props.contact.isCurrentUser()}
           onBlur={this.updateEmail.bind(this)}
           onChange={this.handleEmailChange}
           value={this.props.contact.getEmail()}

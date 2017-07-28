@@ -5,6 +5,7 @@ import SelectTeam from '../sharedcomponents/SelectTeam.jsx';
 import TicketSubject from './components/TicketSubject.jsx';
 import TicketDescription from './components/TicketDescription.jsx';
 import Activity from './Activity.jsx';
+import ContactProfile from '../contact/ContactProfile.jsx';
 
 export default class EditTicketForm extends TrackerReact(React.Component) {
   constructor(props) {
@@ -14,11 +15,18 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
       status: props.ticket.status,
       notedisable: true
     }
+
+		this.onClose = this.onClose.bind(this);
   }
 
   componentDidMount(){
     Materialize.updateTextFields();
     $('select').material_select();
+    $('.modal').modal();
+  }
+
+  openProfile(){
+    $('#profilemodal').appendTo("body").modal("open");
   }
 
   getUser(id){
@@ -28,7 +36,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     if(id=="Ivy System"){
       return "Ivy System";
     }
-    //console.log(id);
+    console.log("getUser ID: ", id);
     //console.log(Meteor.users.findOne(id).contact);
     //console.log(Contacts.findOne(Meteor.users.findOne(id).contact).name);
     //return Contacts.findOne(Meteor.users.findOne(id).contact).name;
@@ -43,7 +51,14 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
   }
 
   getEventName(){
-    return Events.findOne(this.props.ticket.eid).name;
+		let event = Events.findOne(this.props.ticket.eid);
+		if(event){
+			return event.name;
+		}
+		else{
+			return "-";
+		}
+
   }
 
   goToEvent(){
@@ -156,15 +171,25 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     });
   }
 
+	sendEmail(subject, message){
+		Meteor.call("newToDoEmail", this.props.ticket.customer, subject, message);
+	}
+
+	openNewEmailModal(){
+		this.refs.emailmodal.open();
+		this.refs.todoemailform.refs.message.addControl();
+	}
+
+	onClose(){
+		this.refs.todoemailform.refs.message.removeControl();
+	}
+
 
 	render() {
     var activities = this.getActivities();//this.props.ticket.activities.reverse();
     let isAdmin = Groups.find({_id:"admin",users: Meteor.userId()}).fetch().length==1;
 		return (
-      <div className="row">
-        <div className="col s12">
-        <div className="card">
-          <div className="card-content">
+
             <div className="row">
               <div className="col s12 m6">
                 <div className="col s4">
@@ -194,13 +219,14 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       unset={this.unset.bind(this)}
                       updateUser={this.updateCust.bind(this)}
                       initialValue={this.getUser(this.props.ticket.customer)}
-                      ref="cust"  />
-                    {(checkPermission("contacts")&&this.props.ticket.customer)&&<a href={"/people/"+this.props.ticket.customer} className="">View Customer</a>}
+										ref="cust"  />
+                    {/*(checkPermission("contacts")&&this.props.ticket.customer)&&<a href={"/people/"+this.props.ticket.customer} className="">View Customer</a>*/}
+                    {(checkPermission("contacts")&&this.props.ticket.customer&&this.props.modal)&&<a onClick={this.openProfile.bind(this)} className="" style={{cursor: "pointer"}}>View Customer</a>}
 
                     <TicketSubject parent={this} ticket={this.props.ticket} />
                     <TicketDescription parent={this} ticket={this.props.ticket} />
                     <div className="">
-                    <label>Type:</label>
+											<label>Type:</label>
                       <select ref="type" className="browser-default"
                         value={this.props.ticket.type}
                         onChange={this.updateType.bind(this)}>
@@ -211,7 +237,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       </select>
                     </div>
                     {this.props.ticket.type == "Event Request" && <div>
-                    <label>Request Type:</label>
+											<label>Request Type:</label>
                       <select ref="reqtype"
                         className="browser-default"
                         value={this.props.ticket.ereqtype}
@@ -222,21 +248,21 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       </select>
                     </div>}
 
-                     <SelectTeam
+										<SelectTeam
                				parent={this}
                				id="assignedgroup"
                				unset={this.unset.bind(this)}
                				updateContact={this.updateAssignedG.bind(this)}
                				initialValue={this.getGroup(this.props.ticket.assignedgroup)}
                				ref="assignedgroup"
-               				/>
+										/>
                     <SelectUser parent={this}
                       id="assigneduser"
                       label="Assigned User"
                       unset={this.unset.bind(this)}
                       initialValue={this.getUser(this.props.ticket.assigneduser)}
                       updateUser={this.updateAssignedU.bind(this)}
-                      ref="assigneduser" aria-describedby="assignme"/>
+										ref="assigneduser" aria-describedby="assignme"/>
                     {/*}<button className="btn btn-info" onClick={this.assignToMe.bind(this)}>Assign to Me</button>*/}
                     <label>Status:</label>
                     <select className="browser-default"
@@ -262,8 +288,8 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                       <p>Event:</p>
                     </div>
                     <div className="col s8">
-                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:
-                      <a href={"/attendance/event/"+this.props.ticket.eid}>{this.getEventName()}</a>}
+                      {!checkPermission('attendance')?<p>{this.getEventName()}</p>:<p>
+												<a href={"/attendance/event/"+this.props.ticket.eid} className="modal-close">{this.getEventName()}</a></p>}
                     </div>
                   </div>
                 }
@@ -289,15 +315,22 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     className="browser-default"
                     rows="3"
                     onChange={this.noteChangeHandle.bind(this)}
-                    placeholder="Add note here...." />
+									placeholder="Add note here...." />
                 </div>
                 <a className="waves-effect waves-light btn" disabled={this.state.notedisable} onClick={this.addNote.bind(this)} >Add Note</a>
               </div>
+              {console.log("Edit ticket form: ",this.props.modal?"Show Modal":"Do not show modal.")}
+              {(this.props.modal&&this.props.ticket.customer)&&<div id="profilemodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
+                <div className="modal-content">
+                  <ContactProfile cid={this.props.ticket.customer} modal={false} />
+                </div>
+                <div className="modal-footer">
+                  <a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
+                  <a className="btn modal-action modal-close" href={"/people/"+this.props.ticket.customer}>Open Profile Page</a>
+                </div>
+              </div>}
             </div>
-          </div>
-        </div>
-        </div>
-      </div>
+
   )
 	}
 }

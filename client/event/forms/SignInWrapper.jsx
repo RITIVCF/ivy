@@ -7,16 +7,19 @@ export default class SignInWrapper extends TrackerReact(React.Component){
 
     this.state = {
       subscription: {
-        Event: Meteor.subscribe("Event", props.eid)/*,
-        Contacts: Meteor.subscribe("allContacts")*/
+        Event: Meteor.subscribe("Event", props.eid),
+				graduatedContacts: Meteor.subscribe("graduatedContacts"),
+				expiredContacts: Meteor.subscribe("expiredContacts"),
+				outofscopeContacts: Meteor.subscribe("outofscopeContacts")
       },
       id: 1
     };
   }
 
   componentWillUnmount(){
-    this.state.subscription.Event.stop();
-    //this.state.subscription.Contacts.stop();
+		Object.keys(this.state.subscription).forEach((key)=>{
+	    this.state.subscription[key].stop();
+	  });
   }
 
   getEvent(){

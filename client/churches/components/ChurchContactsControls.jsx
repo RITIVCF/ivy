@@ -3,7 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import ChurchContact from './ChurchContact.jsx';
 import SelectOption from '../../sharedcomponents/SelectOption.jsx';
 import SelectUser from '../../sharedcomponents/SelectUser.jsx';
-
+import Contact from '/lib/classes/Contact.js';
 
 export default class ChurchContactsControls extends TrackerReact(React.Component) {
   constructor() {
@@ -62,14 +62,14 @@ export default class ChurchContactsControls extends TrackerReact(React.Component
     return(
       <div>
         {/*}<h4>Church Contacts</h4>
-      <p>Choose a name from the list to add person</p>*/}
+				<p>Choose a name from the list to add person</p>*/}
         <SelectUser
           parent={this}
           unset={this.unset.bind(this)}
           initialValue={""}
           label="Add Contact"
           updateUser={this.addContact.bind(this)}
-          ref="contact"  />
+				ref="contact"  />
         <div className="card">
           <table>
             <thead>

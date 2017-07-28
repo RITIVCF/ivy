@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import SelectUser from '../../sharedcomponents/SelectUser.jsx';
 import User from './User.jsx';
+import { getUsers } from '/lib/users.js';
 
 
 export default class GroupUserControl extends TrackerReact(React.Component) {
@@ -20,11 +21,20 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 		//user.component.forceUpdate();
 	}
 
+	getUsers(){
+		let query = {
+			_id: {$in: this.props.group.users}
+		};
+		return getUsers(query);
+	}
+
 	unset(){
 
 	}
 
 	render() {
+
+		let users = this.getUsers();
 
 		return (
 			<div>
@@ -36,7 +46,7 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 					users={true}
 					initialValue={""}
 					updateUser={this.addUser.bind(this)}
-					ref="contact" />
+				ref="contact" />
 				<table className="bordered striped">
 					<thead>
 						<tr>
@@ -45,8 +55,8 @@ export default class GroupUserControl extends TrackerReact(React.Component) {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.group.users.map((uid)=>{
-							return <User key={uid} gid={this.props.group._id} uid={uid} />
+						{users.map((user)=>{
+							return <User key={user._id} gid={this.props.group._id} user={user} />
 						})}
 					</tbody>
 				</table>

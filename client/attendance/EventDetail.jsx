@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Attendee from './Attendee.jsx';
+import Contact from '/lib/classes/Contact.js';
 
 
 //Events = new Mongo.Collection("events");
@@ -130,7 +131,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	render() {
 
 	let ev = this.props.ev;
-	//console.log(ev);
+	console.log("Event Details ev: ", ev);
 	//this.state.ev= ev;
 	/*
 	if(!ev){

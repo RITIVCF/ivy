@@ -19,7 +19,10 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
       subscription:{
         Events: Meteor.subscribe("publishedEvents"),
         Tickets: Meteor.subscribe("allTicketStatus"),
-				Contacts: Meteor.subscribe("allContacts")
+				Contacts: Meteor.subscribe("allContacts"),
+				graduatedContacts: Meteor.subscribe("graduatedContacts"),
+				expiredContacts: Meteor.subscribe("expiredContacts"),
+				outofscopeContacts: Meteor.subscribe("outofscopeContacts")
       },
       num:10
     };

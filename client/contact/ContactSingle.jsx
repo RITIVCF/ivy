@@ -40,22 +40,22 @@ export default class ContactSingle extends Component {
           <td>{contact.getName()}</td>
           <td>{contact.getEmail()}</td>
           <td>{contact.getPhone()}</td>
-          <td>{contact.isSignedUpForNewsletter()}</td>
-          <td>{contact.getStatus()}</td>
+          <td>{contact.isSignedUpForNewsletter()?"Yes":"No"}</td>
+          <td>{contact.getFunnelStatus()}</td>
         </tr>
       )
     }
     return (
       <div className="col s12 m6 l4">
-      <div className={this.props.selected?"card left addBorderToCard":"card left "}
-        onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
-        <div className="card-image">
-          <img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
-        </div>
-        <div className="card-content">
-          <span className="card-title">{contact.getName()}</span>
-        <p className="truncate">{contact.getEmail()}</p>
-        <p>{contact.getStatus()}</p>
+				<div className={this.props.selected?"card left addBorderToCard":"card left "}
+					onClick={this.selectThis.bind(this)} onDoubleClick={this.go.bind(this)}>
+					<div className="card-image">
+						<img src="/images/defaultPic.png" style={{width: "25%"}} className="circle responsive-img" />
+					</div>
+					<div className="card-content">
+						<span className="card-title">{contact.getName()}</span>
+						<p className="truncate">{contact.getEmail()}</p>
+						<p>{contact.getFunnelStatus()}</p>
         {/*<p>{contact.status //contact.member ? "Member":"Contact"}</p> */}
 
         {this.props.perm?<p>

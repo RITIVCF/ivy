@@ -17,7 +17,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
       availableperms: permarray,
       groupperms: [],
       users: [],
-      leader: {name: ""}
+      leader: []
     };
   }
 
@@ -38,25 +38,25 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
     // you can grab the page perm ids from 'this.state.groupperms' array
     console.log("Type: ", this.props.type);
     console.log("Leader: ", this.state.leader);
-    if(this.props.type=="Team"||this.props.type=="Small Group"){
+    /*if(this.props.type=="Team"||this.props.type=="Small Group"){
       var id = this.state.leader._id?this.state.leader._id:"";
     }
     else{
       var id= "";
-    }
+    }*/
 
     Meteor.call("addGroup",
       this.refs.name.value,
       this.props.type,
       this.state.groupperms,
       this.state.users,
-      id
+      this.state.leader
     );
     this.refs.name.value="";
     this.setState({availableperms: this.state.allperms});
     this.setState({groupperms: []});
     this.setState({users: []});
-    this.setState({leader: {name: ""}});
+    this.setState({leader: []});
   }
 
   handleTypeChange(event){
@@ -67,8 +67,9 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   check(){
     console.log("Name Value: ", this.refs.name.value);
     console.log(this.props.type);
-    if(this.refs.name.value==""){
-          this.setState({createdisabled: true});
+    console.log(this.state.leader.length);
+    if(this.refs.name.value=="" || this.state.leader.length==0){
+      this.setState({createdisabled: true});
     }
     else{
       this.setState({createdisabled: false});
@@ -106,11 +107,26 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   }
 
   setLeader(user){
-    this.setState({leader: user});
+    this.setState((prevState, props)=>{
+      this.state.leader.push(user._id);
+      return {leader: this.state.leader}
+    });
+    console.log("set: " + this.state.leader.length);
+    this.check();
   }
 
   unsetLeader(){
-    this.setState({leader: {name: ""}});
+    var id = event.target.name;
+    this.setState((prevState, props)=>{
+      this.state.leader.splice(this.state.leader.indexOf(id),1);
+      return {users: this.state.leader}
+    });
+    console.log("unset: " + this.state.leader.length);
+    this.check();
+  }
+
+  getLeaders(){
+    return Meteor.users.find({_id: {$in: this.state.leader}});
   }
 
   addUser(user){
@@ -176,9 +192,38 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
           </div>
           {(this.props.type=="Small Group"||this.props.type=="Team")&&
             <div className="row">
-              <div className="col s8">
+              <div className="col s12">
                 {/*}<p>Set leader:*</p>*/}
+                <p>Add leaders to the group:</p>
                 <SelectUser
+                  initialValue={""}
+                  updateUser={this.setLeader.bind(this)}
+                  id="leaderselect"
+                  ref="leader" />
+                  <table>
+          					<thead>
+          						<tr>
+          							<th>Name</th>
+          							<th>Email</th>
+                        <th></th>
+          						</tr>
+          					</thead>
+          					<tbody>
+          						{this.getLeaders().map((user)=>{
+          							return <tr key={user._id}  id="showhim">
+                          <td>{user.name}</td>
+                          <td>{user.emails[0].address}</td>
+                          <td><span className="material-icons"
+                                    id="showme"
+                                    name={user._id}
+                                    onClick={this.unsetLeader.bind(this)}>close
+                            </span>
+                          </td>
+                        </tr>
+          						})}
+          					</tbody>
+          				</table>
+                {/*<SelectUser
                   initialValue={this.state.leader.name}
                   id="leaderselect"
                   label="Set Leader:*"
@@ -186,6 +231,7 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
                   unset={this.unsetLeader.bind(this)}
         					updateUser={this.setLeader.bind(this)}
         					ref="leader" />
+                  for refresh*/}
               </div>
             </div>}
           <div className="row">
