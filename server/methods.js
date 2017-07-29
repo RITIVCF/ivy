@@ -508,7 +508,7 @@ Meteor.methods({
   },
 	migrateSummer2017(){
 		if(checkPermission("admin")){
-			runDbMigration();
+			return runDbMigration();
 		}
 		return true;
 	}
