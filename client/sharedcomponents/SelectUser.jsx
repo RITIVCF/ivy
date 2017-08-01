@@ -25,7 +25,6 @@ function getList(){
 const getSuggestions = value => {
   //users: true, find Users
   //       fasle, use contacts
-  console.log("getSuggestions value: ", value);
   const inputValue = value.trim().toLowerCase();
   const inputLength = inputValue.length;
 

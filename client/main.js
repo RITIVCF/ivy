@@ -6,7 +6,9 @@ import { Accounts } from 'meteor/accounts-base';
 // }
 
 document.title="Ivy";
-
+if(!process.env.VERSION){
+	process.env.VERSION = "X.X.X";
+}
 
 //For testing
 //Meteor.subscribe("allUsers");

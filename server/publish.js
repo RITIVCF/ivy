@@ -1,3 +1,5 @@
+import { getUser } from '/lib/users.js';
+
 ContactsBackup = new Mongo.Collection("contactsbackup");
 EventsAttendanceBackup = new Mongo.Collection("eventsattendancebackup");
 
@@ -547,8 +549,13 @@ Meteor.publish("allTicketStatus", function(){
 
 Meteor.publish("thisTicket", function(tid){
   var ticket = Tickets.findOne(tid);
+	let customer = {ticket: ""};
+	if(ticket.customer){
+		customer = getUser(ticket.customer);
+	}
+
   return [
-		Tickets.find({_id: tid}),
+		Tickets.find({_id: {$in: [tid, customer.ticket]}}),
 		Events.find({_id:ticket.eid}),
 		Meteor.users.find()
 	];

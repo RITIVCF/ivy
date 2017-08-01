@@ -32,15 +32,15 @@ export default class EmailSummary extends TrackerReact(React.Component){
   }
 
   getDrafts(){
-    return Emails.find({status: "draft"}).fetch();
+    return Emails.find({status: "draft"}, {sort: {when: -1}}).fetch();
   }
 
   getStaged(){
-    return Emails.find({status: "staged"}).fetch();
+    return Emails.find({status: "staged"}, {sort: {when: -1}}).fetch();
   }
 
   getSent(){
-    return Emails.find({status: "sent"}).fetch();
+    return Emails.find({status: "sent"}, {sort: {when: -1}}).fetch();
   }
 
   getRows(num){
@@ -60,11 +60,21 @@ export default class EmailSummary extends TrackerReact(React.Component){
         <div className="col s12">
           <div className="card">
             <div className="card-content">
+							<ul className="collection" style={{border: "0px solid"}}>
+								<li className={"collection-item trunc-cell"}>
+									<span style={{width: "20%", display: "inline-block"}}><b>Subject</b></span>
+									<span style={{width: "30%", display: "inline-block"}}><b>To</b></span>
+									<span style={{width: "15%", display: "inline-block"}}><b>From Email</b></span>
+									<span style={{width: "15%", display: "inline-block"}}><b>Template</b></span>
+									<span style={{width: "20%", display: "inline-block"}}><b>When</b></span>
+								</li>
+							</ul>
+
               <h5 onClick={this.toggleDrafts.bind(this)}>
                 <a className="btn-flat" style={{padding: 0}}><i className="small material-icons">{this.state.showDrafts?"expand_more":"chevron_right"}</i></a> Drafts
               </h5>
               <ul style={drafts.length==0?{textAlign: "center"}:{}} className={this.state.showDrafts?"collection":"collection hide-emails"}>
-                {drafts.length!=0?this.getDrafts().map((email)=>{
+                {drafts.length>0?drafts.map((email)=>{
                   return <Row key={email._id} email={email} isSelected={Session.get("selectedEmail")==email._id} />
                 }):<span>No Drafts</span>}
               </ul>
@@ -72,7 +82,7 @@ export default class EmailSummary extends TrackerReact(React.Component){
                 <a className="btn-flat" style={{padding: 0}}><i className="small material-icons">{this.state.showStaged?"expand_more":"chevron_right"}</i></a> Staged
               </h5>
               <ul style={staged.length==0?{textAlign: "center"}:{}} className={this.state.showStaged?"collection":"collection hide-emails"}>
-                {staged.length!=0?this.getStaged().map((email)=>{
+                {staged.length>0?staged.map((email)=>{
                   return <Row key={email._id} email={email} isSelected={Session.get("selectedEmail")==email._id} />
                 }):<span style={{textAlign: "center"}}>No Staged</span>}
               </ul>
@@ -80,8 +90,8 @@ export default class EmailSummary extends TrackerReact(React.Component){
                 <a className="btn-flat" style={{padding: 0}}><i className="small material-icons">{this.state.showSent?"expand_more":"chevron_right"}</i></a> Sent Items
               </h5>
               <ul style={sent.length==0?{textAlign: "center"}:{}} className={this.state.showSent?"collection":"collection hide-emails"}>
-                {sent.length!=0?this.getSent().map((email,i)=>{
-                  return <Row key={email} email={email} isSelected={Session.get("selectedEmail")==email._id} />
+                {sent.length>0?sent.map((email,i)=>{
+                  return <Row key={email._id} email={email} isSelected={Session.get("selectedEmail")==email._id} />
                 }):<span style={{textAlign: "center"}}>No Sent</span>}
               </ul>
             </div>
