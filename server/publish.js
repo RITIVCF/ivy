@@ -237,6 +237,19 @@ Meteor.publish("outofscopeContacts", function(){
 	return Meteor.users.find(selector);
 });
 
+Meteor.publish("userContacts", function(){
+	let selector = {
+		status: "User"
+	};
+	let options = {
+		fields: {
+			name: 1,
+			email: 1
+		}
+	};
+	return Meteor.users.find(selector);
+})
+
 Meteor.publish("allContacts", function(filtr, srt){
 
   var selector = {status: {$nin: [
@@ -361,15 +374,6 @@ Meteor.publish("contactNames", function(){
     Contacts.find({}, {fields: {name:1}}),
     Meteor.users.find({},{fields: {contact: 1}})
   ];
-});
-
-Meteor.publish("userContacts", function(){
-  var users = Meteor.users.find({},{contact: 1}).fetch();
-  var cids = []
-  users.forEach(function(user){
-    cids.push(user.contact);
-  });
-  return Contacts.find({_id: {$in: cids}});
 });
 
 Meteor.publish("duplicateContacts", function(){
