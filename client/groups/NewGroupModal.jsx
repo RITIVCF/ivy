@@ -22,12 +22,6 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   }
 
   componentDidMount(){
-    // Use Materialize custom select input
-    //console.log(this.refs.type);
-    //$(this.refs.type).materiasl_select(this.check.bind(this));
-    //$('#newgrouptype').on('change', 'input', function(){this.check.bind(this)});
-    //$('#subject_update select[name=type]').on('change',function(){console.log('select has changed to:',$(this).val());});
-    //$(React.findDOMNode(this.refs.type)).on('change',this.check.bind(this));
   }
 
   open(){
@@ -36,14 +30,6 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
 
   create(){
     // you can grab the page perm ids from 'this.state.groupperms' array
-    console.log("Type: ", this.props.type);
-    console.log("Leader: ", this.state.leader);
-    /*if(this.props.type=="Team"||this.props.type=="Small Group"){
-      var id = this.state.leader._id?this.state.leader._id:"";
-    }
-    else{
-      var id= "";
-    }*/
 
     Meteor.call("addGroup",
       this.refs.name.value,
@@ -65,9 +51,6 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   }
 
   check(){
-    console.log("Name Value: ", this.refs.name.value);
-    console.log(this.props.type);
-    console.log(this.state.leader.length);
     if(this.refs.name.value=="" || this.state.leader.length==0){
       this.setState({createdisabled: true});
     }
@@ -107,12 +90,11 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   }
 
   setLeader(user){
-    this.setState((prevState, props)=>{
-      this.state.leader.push(user._id);
-      return {leader: this.state.leader}
+		let leader = this.state.leader.slice();
+		leader.push(user._id);
+    this.setState({leader: leader},()=>{
+      this.check();
     });
-    console.log("set: " + this.state.leader.length);
-    this.check();
   }
 
   unsetLeader(){
@@ -121,7 +103,6 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
       this.state.leader.splice(this.state.leader.indexOf(id),1);
       return {users: this.state.leader}
     });
-    console.log("unset: " + this.state.leader.length);
     this.check();
   }
 
@@ -137,8 +118,6 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
   }
 
   removeUser(event){
-    // console.log(event.target.value);
-    // console.log(event.target);
     var id = event.target.name;
     this.setState((prevState, props)=>{
       this.state.users.splice(this.state.users.indexOf(id),1);
