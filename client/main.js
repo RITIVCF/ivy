@@ -7,7 +7,6 @@ import { Accounts } from 'meteor/accounts-base';
 
 document.title="Ivy";
 
-
 //For testing
 //Meteor.subscribe("allUsers");
 
