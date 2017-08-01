@@ -19,6 +19,8 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
       users: [],
       leader: []
     };
+
+		this.unsetLeader = this.unsetLeader.bind(this);
   }
 
   componentDidMount(){
@@ -97,13 +99,12 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
     });
   }
 
-  unsetLeader(){
-    var id = event.target.name;
-    this.setState((prevState, props)=>{
-      this.state.leader.splice(this.state.leader.indexOf(id),1);
-      return {users: this.state.leader}
-    });
-    this.check();
+  unsetLeader(id){
+		let leader = this.state.leader.slice();
+		leader.splice(leader.indexOf(id), 1);
+		this.setState({leader: leader}, ()=>{
+			this.check();
+		});
   }
 
   getLeaders(){
@@ -178,39 +179,30 @@ export default class NewGroupModal extends TrackerReact(React.Component) {
                   initialValue={""}
                   updateUser={this.setLeader.bind(this)}
                   id="leaderselect"
-                  ref="leader" />
-                  <table>
-          					<thead>
-          						<tr>
-          							<th>Name</th>
-          							<th>Email</th>
-                        <th></th>
-          						</tr>
-          					</thead>
-          					<tbody>
-          						{this.getLeaders().map((user)=>{
-          							return <tr key={user._id}  id="showhim">
-                          <td>{user.name}</td>
-                          <td>{user.emails[0].address}</td>
-                          <td><span className="material-icons"
-                                    id="showme"
-                                    name={user._id}
-                                    onClick={this.unsetLeader.bind(this)}>close
-                            </span>
-                          </td>
-                        </tr>
-          						})}
-          					</tbody>
-          				</table>
-                {/*<SelectUser
-                  initialValue={this.state.leader.name}
-                  id="leaderselect"
-                  label="Set Leader:*"
-                  keepName={true}
-                  unset={this.unsetLeader.bind(this)}
-        					updateUser={this.setLeader.bind(this)}
-        					ref="leader" />
-                  for refresh*/}
+								ref="leader" />
+								<table>
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Email</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										{this.getLeaders().map((user)=>{
+											return <tr key={user._id}  id="showhim">
+												<td>{user.name}</td>
+												<td>{user.emails[0].address}</td>
+												<td><span className="material-icons"
+													id="showme"
+													name={user._id}
+													onClick={()=>{this.unsetLeader(user._id)}}>close
+												</span>
+												</td>
+											</tr>
+										})}
+									</tbody>
+								</table>
               </div>
             </div>}
           <div className="row">
