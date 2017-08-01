@@ -23,12 +23,21 @@ export default class Footer extends TrackerReact(React.Component) {
 
 	}
 
+	getVersionNumber(){
+		let version = "X.X.X";
+		if(Meteor.settings.public.VERSION){
+			version = Meteor.settings.public.VERSION;
+		}
+		return version;
+	}
+
 	render(){
+		let versionNumber = this.getVersionNumber();
 		return(
 			<footer className="page-footer">
 				<div className="footer-copyright">
 	        <div className="container">
-						&nbsp;{"Ivy v"+ process.env.VERSION}
+						&nbsp;{"Ivy v"+ versionNumber}
 	        <a className="grey-text text-lighten-4 right" target="_blank" href="http://ivcf.rit.edu">ivcf.rit.edu</a>
 	        </div>
 	      </div>
