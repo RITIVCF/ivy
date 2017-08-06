@@ -8,7 +8,8 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 		this.state = {
 			values: [1, 2, 3, 4, 5],
 			value: props.question.value,
-			comment: props.question.comment
+			comment: props.question.comment,
+			commentOpen: props.question.commentOpen
 		};
 
 		this.getValue = this.getValue.bind(this);
@@ -18,6 +19,10 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 
 	getValue(){
 		return this.state;
+	}
+
+	toggleComment() {
+		this.setState({commentOpen: !this.state.commentOpen});
 	}
 
 	handleCommentChange(event){
@@ -32,22 +37,26 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 
 	render() {
 		let question = this.props.question;
+		const commentOpen = this.state.commentOpen;
 		return (
-			<div>
+			<div style={{marginBottom: "20px"}}>
 				<p>{question.text}</p>
 				{this.state.values.map((value) => {
 					let inputId = question._id+"_"+value;
-					return	(<p key={value}>
+					return	(<p style={{display: "inline-block", margin: "0 10px"}} key={value}>
 			      <input type="radio" value={value}
 							id={inputId}
 							checked={this.state.value==value}
 							onChange={this.handleRatingChange}/>
-						<label htmlFor={inputId}>{value}</label>
+						<label htmlFor={inputId} style={{paddingLeft: "25px"}}>{value}</label>
 			    </p>
 					)
 				})}
-				<textarea onChange={this.handleCommentChange} value={question.comment} />
+				<br />
+				<span style={{userSelect: "none", fontSize: "12px", color: "#777", cursor: "pointer"}} onClick={this.toggleComment.bind(this)}>{commentOpen?"Collapse comment":"Expand comment"}</span>
+				<textarea style={{width: "100%"}} className={commentOpen?"commentDefault commentOpen":"commentDefault"} onChange={this.handleCommentChange} value={question.comment} />
 			</div>
 		)
 	}
+	// refresh again
 }

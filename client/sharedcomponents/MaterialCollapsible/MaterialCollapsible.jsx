@@ -36,7 +36,7 @@ export default class MaterialCollapsible extends TrackerReact(React.Component) {
 		let id = this.getId();
 		let sections = this.props.sections;
 		return (
-			<ul id={id} className="collapsible" data-collapsible={type} >
+			<ul id={id} className="collapsible" data-collapsible={type} style={this.props.style}>
 				{sections.map( (section, i) => {
 					return (
 						<MaterialCollapsibleSection

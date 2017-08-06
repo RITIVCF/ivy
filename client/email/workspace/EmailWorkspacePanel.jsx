@@ -106,6 +106,7 @@ export default class EmailWorkspacePanel extends TrackerReact(React.Component){
 				<MaterialCollapsible
 					type="accordion"
 					id="emailworkspace"
+          style={{margin: "0 -15px", border: "0"}}
 					sections={sections} />
 			</div>
     )

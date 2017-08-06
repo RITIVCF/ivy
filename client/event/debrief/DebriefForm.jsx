@@ -76,14 +76,11 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 		return (
 			<div className="card">
 				<div className="card-content">
-					<span className="card-title">{ev.name}</span>
-					<div className="row">
-						<div className="col s12">
-							<p>{moment(ev.start.toISOString()).format("DD MMM YYYY")}
-								{/*}<a className="btn right" onClick={this.openModal.bind(this)}>Edit</a>*/}
-							</p>
-						</div>
-					</div>
+					<span className="card-title">{ev.name}
+						<span style={{fontSize: "14px", marginLeft: "10px"}}>
+							{moment(ev.start.toISOString()).format("DD MMM YYYY")}
+						</span>
+					</span>
 					<div className="row">
 		        <form onSubmit={this.submit.bind(this)}>
 							{debrief.questions.map((question, i)=>{
