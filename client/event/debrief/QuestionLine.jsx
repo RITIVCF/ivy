@@ -34,12 +34,11 @@ export default class QuestionLine extends TrackerReact(React.Component) {
 			inactive = " inactiveQuestion";
 		}
 		return (
-			<li className={"collection-item"+selected+inactive} onClick={this.select.bind(this)}>
-				<i className="material-icons">{icon}</i>
+			<li style={{height: "55px", lineHeight: "34px"}} className={"collection-item"+selected+inactive} onClick={this.select.bind(this)}>
 
 				{question.text}
 
-				<span className="right">
+				<span style={{lineHeight: "34px"}} className="right">
 					{tags.map( (tag) => {
 						return <Tag key={tag.tag} qid={question._id} tag={tag} />
 					})}

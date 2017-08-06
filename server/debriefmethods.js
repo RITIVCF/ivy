@@ -8,7 +8,8 @@ Meteor.methods({
 				$or: [
 					{"types": {$in: event.tags}},
 					{"types": []}
-				]
+				],
+				active: true
 			},
 			{fields: {text:1, commentOpen: 1}}
 		).fetch();

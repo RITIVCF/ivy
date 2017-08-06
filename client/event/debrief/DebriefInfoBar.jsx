@@ -61,6 +61,11 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
     return (
       <div className="row">
         <div className="col s12">
+
+					<button className="btn red" onClick={this.toggleQuestionActive.bind(this)}>
+						{question.active ? "Inactivate" : "Activate"}
+					</button>
+
 					<p><strong>Add to/Remove from event type:</strong></p>
 
 					<div style={{backgroundColor: "white", outline:"grey solid 1px", padding: "5px"}}>
@@ -80,11 +85,7 @@ export default class DebriefInfoBar extends TrackerReact(React.Component) {
 						onChange={this.changeCommentOpenClosed.bind(this)}
 						checked={question.commentOpen} />
 					<br />
-					{!question.submitted&&
-						<button className="btn red" onClick={this.toggleQuestionActive.bind(this)}>
-							{question.active ? "Inactivate" : "Activate"}
-						</button>
-					}
+
 
         </div>
       </div>

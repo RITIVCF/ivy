@@ -23,7 +23,7 @@ export default class MaterialIcon extends TrackerReact(React.Component) {
 			{
 				cursor: "pointer",
 				float: "left",
-				margin: "0 24px 0 0",
+				margin: "0 10px 0 0",
 				width: "24px"
 			}
 			:{};

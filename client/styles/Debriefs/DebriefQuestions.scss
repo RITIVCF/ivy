@@ -1,3 +1,13 @@
 .collection .collection-item.inactiveQuestion {
 	background-color: #d3d3d3;
 }
+
+.commentDefault {
+	display: none;
+}
+
+.commentOpen {
+	display: block;
+	resize: vertical;
+	width: 90%;
+}
