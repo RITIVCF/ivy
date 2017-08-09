@@ -31,11 +31,11 @@ routeTo = function(routeName, params, queryParams){
 
 Accounts.onEnrollmentLink(function(token,done){
   //Accounts.resetPassword()
-  FlowRouter.go("/signup/"+token);
+  FlowRouter.go("/public/signup/"+token);
 });
 
 Accounts.onResetPasswordLink(function(token, done){
-	FlowRouter.go("/forgotpassword/"+token);
+	FlowRouter.go("/public/forgotpassword/"+token);
 });
 
 if ($) {

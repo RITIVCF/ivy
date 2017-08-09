@@ -88,7 +88,7 @@ import { insertStatus } from '/lib/contactStatus.js';
 
   Accounts.onEnrollmentLink= function(token,done){
     //Accounts.resetPassword()
-    FlowRouter.go("/signup/"+token);
+    FlowRouter.go("/public/signup/"+token);
   };
 
 
