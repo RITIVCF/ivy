@@ -65,12 +65,12 @@ export default class LoginWrapper extends TrackerReact(React.Component){
 										</div>
 									}
 									<div className="input-field col s12">
-                      <input type="text" name="email" />
-                      <label>Email</label>
-                    </div>
-                    <div className="input-field col s12">
-                      <input type="password" name="loginPassword" ref="password" />
-                      <label>Password</label>
+										<input type="text" id="email" name="email" />
+										<label htmlFor="email">Email</label>
+									</div>
+									<div className="input-field col s12">
+										<input type="password" id="password" name="loginPassword" ref="password" />
+										<label htmlFor="password">Password</label>
                     </div>
                     <button className="btn waves-effect waves-light" type="submit" name="action">Login
                     </button>
