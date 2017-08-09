@@ -28,10 +28,6 @@ export default class HowHearSelect extends TrackerReact(React.Component){
       }else{
         thiz.setState({other: false});
       }
-      console.log("li click");
-      console.log(event.target.innerHTML);
-      //if()
-      //thiz.setState({other: })
     });
   }
 
@@ -45,10 +41,6 @@ export default class HowHearSelect extends TrackerReact(React.Component){
       }else{
         thiz.setState({other: false});
       }
-      console.log("li click");
-      console.log(event.target.innerHTML);
-      //if()
-      //thiz.setState({other: })
     });
   }
 

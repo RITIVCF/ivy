@@ -19,6 +19,7 @@ import DashboardWrapper from './Dashboard.jsx';
 // ***** People  **************
 import ContactProfileWrapper from './contact/ContactProfileWrapper.jsx';
 import ContactWrapper from './contact/ContactWrapper.jsx';
+import NewContactWrapper from './contact/forms/NewContactWrapper.jsx';
 // ****************************
 
 // ****  Events   *********
@@ -41,7 +42,7 @@ import LoginWrapper from './user/LoginWrapper.jsx';
 import SignUpWrapper from './user/SignUpWrapper.jsx';
 import SelectContactWrapper from './user/SelectContactWrapper.jsx';
 import ForgotPassword from './user/ForgotPassword.jsx';
-import NewContactWrapper from './user/NewContactWrapper.jsx';
+//import NewContactWrapper from './user/NewContactWrapper.jsx';
 import ChangePassword from './user/ChangePassword.jsx';
 // ************************************
 
@@ -94,14 +95,9 @@ import FormWrapper from './forms/FormWrapper.jsx';
 
 
 function signInForceCheck(context) {
-  // context is the output of `FlowRouter.current()`
-	if(context.path.substring(0,6)!="/login"
-		&&context.path.substring(0,7)!="/signup"
-		&&context.path!="/newcontact"
-		&&context.path.substring(0,15)!="/forgotpassword"
-	){
+	if(context.route.group.name != "public"){
 		if(!Meteor.userId()){
-			FlowRouter.go("/login?r="+context.path);
+			routeTo('login', {}, {r: context.path});
 		}
 	}
 }
@@ -262,6 +258,15 @@ peopleRoutes.route('/', {
 	}
 });
 
+peopleRoutes.route('/new', {
+	name: "newcontactform",
+	action() {
+		mount(FormLayout, {
+			content: <NewContactWrapper />
+		})
+	}
+});
+
 peopleRoutes.route('/:cid',{
 	action(params) {
 		mount(MainLayout, {
@@ -271,34 +276,82 @@ peopleRoutes.route('/:cid',{
 	}
 });
 
+
+
 //********** ./ People Routes ***********
 
+// ***********   Public Routes   **********
 
+let publicRoutes = FlowRouter.group({
+	prefix: "/public",
+	name: "public"
+});
 
-FlowRouter.route('/forms/contacts/new', {
+publicRoutes.route('/newcontact', {
+	name: "publicnewcontact",
 	action(){
 		mount(FormLayout, {
-			content: (<NewContactWrapper />)
+			content: (<NewContactWrapper route={"signup"} />)
 		})
 	}
 });
 
-FlowRouter.route('/newcontact', {
-	action(){
-		mount(FormLayout, {
-			content: (<NewContactWrapper route={"/signup"} />)
+publicRoutes.route('/login', {
+	name: "login",
+	action(params, queryParams) {
+		mount(FormLayout,  {
+			content: (<LoginWrapper route={queryParams.r} />)
 		})
-	}
+	},
+	triggersExit: [subscribeContactSelf]
 });
 
-FlowRouter.route('/mysg', {
+publicRoutes.route('/signup', {
+	name: "signupform",
 	action() {
-		mount(MainLayout, {
-			header: "My Small Group",
-			content: (<MySmallGroupWrapper />)
+		mount(FormLayout, {
+			content: (<SelectContactWrapper />)
 		})
 	}
 });
+
+publicRoutes.route('/signup/:t', {
+	name: "signup",
+	action(params) {
+		mount(FormLayout, {
+			content: (<SignUpWrapper token={params.t}/>)
+		})
+	},
+	triggersExit: [subscribeContactSelf]
+});
+
+publicRoutes.route('/forgotpassword/:token', {
+	action(params) {
+		mount(FormLayout, {
+			content: (<ForgotPassword token={params.token} />)
+		})
+	}
+});
+
+publicRoutes.route('/forgotpassword', {
+	name: "forgotpasswordform",
+	action() {
+		mount(FormLayout, {
+			content: (<ForgotPassword />)
+		})
+	}
+});
+
+//********** ./ Public Routes ***********
+
+// FlowRouter.route('/mysg', {
+// 	action() {
+// 		mount(MainLayout, {
+// 			header: "My Small Group",
+// 			content: (<MySmallGroupWrapper />)
+// 		})
+// 	}
+// });
 
 // ***********   Events Routes   **********
 let eventsRoutes = FlowRouter.group({
@@ -504,26 +557,12 @@ emailsRoutes.route('/workspace/:emid',{
 
 // *******  ./ Emails Routes  **********
 
-
-// FlowRouter.route('/forms/member', {
-// 	action() {
-// 		mount(FormLayout, {
-// 				content: (<MemberWrapper />)
-// 			}
-// 		)
-// 	}
-// });
-
-FlowRouter.route('/forms/contact', {
-	action() {
-		mount(FormLayout, {
-				content: (<ContactWrapper />)
-			}
-		)
-	}
+const formRoutes = FlowRouter.group({
+	prefix: "/forms",
+	name: "forms"
 });
 
-FlowRouter.route('/forms/signin/:eid', {
+formRoutes.route('/signin/:eid', {
 	name: "signinform",
 	action(params) {
 		mount(FormLayout, {
@@ -533,43 +572,19 @@ FlowRouter.route('/forms/signin/:eid', {
 	}
 });
 
-FlowRouter.route('/forms/rsvp/:eid', {
-	name: "rsvpform",
-	action(params) {
-		mount(FormLayout, {
-				content: (<RSVPWrapper eid={params.eid} />)
-			}
-		)
-	}
-});
+// FlowRouter.route('/forms/rsvp/:eid', {
+// 	name: "rsvpform",
+// 	action(params) {
+// 		mount(FormLayout, {
+// 				content: (<RSVPWrapper eid={params.eid} />)
+// 			}
+// 		)
+// 	}
+// });
 
-FlowRouter.route('/login', {
-	action(params, queryParams) {
-		mount(FormLayout,  {
-			content: (<LoginWrapper route={queryParams.r} />)
-		})
-	},
-	triggersExit: [subscribeContactSelf]
-});
 
-FlowRouter.route('/signup', {
-	action() {
-		mount(FormLayout, {
-			content: (<SelectContactWrapper />)
-		})
-	}
-});
 
-FlowRouter.route('/signup/:t', {
-	action(params) {
-		mount(FormLayout, {
-			content: (<SignUpWrapper token={params.t}/>)
-		})
-	},
-	triggersExit: [subscribeContactSelf]
-});
-
-FlowRouter.route('/changepassword', {
+dashboardRoute.route('/changepassword', {
 	action() {
 		mount(MainLayout, {
 			header: "My Account",
@@ -578,30 +593,6 @@ FlowRouter.route('/changepassword', {
 	}
 });
 
-FlowRouter.route('/forgotpassword/:token', {
-	action(params) {
-		mount(FormLayout, {
-			content: (<ForgotPassword token={params.token} />)
-		})
-	}
-});
-
-FlowRouter.route('/forgotpassword', {
-	action() {
-		mount(FormLayout, {
-			content: (<ForgotPassword />)
-		})
-	}
-});
-
-FlowRouter.route('/feedback',{
-	action() {
-		mount(MainLayout, {
-			header: "Feedback Summary",
-			content: (<FeedbackWrapper />)
-		})
-	}
-});
 
 FlowRouter.notFound = {
   action() {

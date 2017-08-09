@@ -66,15 +66,15 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
           <h5>Select Contact</h5>
           <p>An email will be sent to your email with a sign up link.</p>
           <p>Please select yourself from the list:</p>
-            <SelectUser
-              parent={this}
-              unset={this.unset.bind(this)}
-              unCreated={true}
-              initialValue={""}
-              updateUser={this.setContact.bind(this)}
-              ref="contact"  />
-            {!this.state.contact?
-              <p>If your name does not show up, go <a href="/newcontact">here</a> to create a new contact card.</p>
+					<SelectUser
+						parent={this}
+						unset={this.unset.bind(this)}
+						unCreated={true}
+						initialValue={""}
+						updateUser={this.setContact.bind(this)}
+					ref="contact"  />
+					{!this.state.contact?
+						<p>If your name does not show up, go <a href="/public/newcontact">here</a> to create a new contact card.</p>
               :""}
         </div>
         {!this.state.contact?"":
