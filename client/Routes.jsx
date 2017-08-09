@@ -385,6 +385,7 @@ eventsRoutes.route('/', {
 });
 
 eventsRoutes.route('/attendance/:eid',{
+	name: "eventattendance",
 	action(params) {
 		mount(MainLayout, {
 			header: "Attendance",
