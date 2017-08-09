@@ -29,6 +29,8 @@ import { insertStatus } from '/lib/contactStatus.js';
 		}
 		if(!userDoc.ticket){
 			user.ticket = "";
+		} else {
+			Tickets.update(userDoc.ticket, {$set: {customer: user._id}});
 		}
 		if(!userDoc.addresses){
 			user.addresses = [];

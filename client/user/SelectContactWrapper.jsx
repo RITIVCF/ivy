@@ -67,6 +67,7 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
           <p>An email will be sent to your email with a sign up link.</p>
           <p>Please select yourself from the list:</p>
 					<SelectUser
+						id="selectcontact"
 						parent={this}
 						unset={this.unset.bind(this)}
 						unCreated={true}
