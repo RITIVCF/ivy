@@ -129,6 +129,21 @@ dashboardRoute.route('/',{
 	}
 });
 
+const changePasswordRoute = FlowRouter.group({
+	prefix: "/changepassword",
+	name: "changepassword"
+});
+
+changePasswordRoute.route('/', {
+	name: "changepassword",
+	action() {
+		mount(MainLayout, {
+			header: "My Account",
+			content: (<ChangePassword />)
+		})
+	}
+});
+
 let profileRoutes = FlowRouter.group({
 	prefix: '/profile',
 	name: "profile"
@@ -581,17 +596,6 @@ formRoutes.route('/signin/:eid', {
 // 		)
 // 	}
 // });
-
-
-
-dashboardRoute.route('/changepassword', {
-	action() {
-		mount(MainLayout, {
-			header: "My Account",
-			content: (<ChangePassword />)
-		})
-	}
-});
 
 
 FlowRouter.notFound = {
