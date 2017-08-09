@@ -30,15 +30,26 @@ export default class MaterialIcon extends TrackerReact(React.Component) {
 		return style;
 	}
 
+	getClassName(){
+		let className = "material-icons";
+		console.log("ClassName: ", this.props.className);
+		if(this.props.className){
+			className = className + " " + this.props.className;
+		}
+		return className;
+	}
+
 	render(){
 	 	let icon = this.props.icon;
 		let action = this.props.action;
 		let style = this.getStyle();
+		let className = this.getClassName();
 		return (
 			<i
 				onClick={this.onClick}
 				style={style}
-				className="material-icons">
+				className={className}
+			>
 				{icon}
 			</i>
 		)
