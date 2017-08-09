@@ -57,7 +57,7 @@ export default class GroupsWrapper extends TrackerReact(React.Component) {
       <ul className="tabs blue-text">
         <li className="tab col s3">
           <a onClick={this.setActiveGroup.bind(this,"Team")}
-            className={Meteor.user().preferences.groups_view=="Team"?"active":""}>Teams</a>
+            className={Meteor.user().preferences.groups_view=="Team"?"active":""}>Ministry Teams</a>
         </li>
         <li className="tab col s3">
           <a onClick={this.setActiveGroup.bind(this,"Role")}

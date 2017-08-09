@@ -23,18 +23,19 @@ Meteor.subscribe("currentStatus");
 Meteor.subscribe("userContacts");
 
 
-routeTo = function(routeName, params){
-	FlowRouter.go(FlowRouter.path(routeName, params));
+routeTo = function(routeName, params, queryParams){
+	let path = FlowRouter.path(routeName, params, queryParams);
+	FlowRouter.go(path);
 }
 
 
 Accounts.onEnrollmentLink(function(token,done){
   //Accounts.resetPassword()
-  FlowRouter.go("/signup/"+token);
+  FlowRouter.go("/public/signup/"+token);
 });
 
 Accounts.onResetPasswordLink(function(token, done){
-	FlowRouter.go("/forgotpassword/"+token);
+	FlowRouter.go("/public/forgotpassword/"+token);
 });
 
 if ($) {

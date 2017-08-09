@@ -1,16 +1,17 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import SelectUser from '../../sharedcomponents/SelectUser.jsx';
-import HowHearSelect from './HowHearSelect.jsx';
+import SelectUser from '/client/sharedcomponents/SelectUser.jsx';
+import HowHearSelect from '/client/event/forms/HowHearSelect.jsx';
 
-export default class SignIn extends TrackerReact(React.Component){
+export default class NewContactForm extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
 
     this.state = {
-      user: false,
+      name: "",
       new: true,
-      submitted: false
+      submitted: false,
+			disabled: false
     };
   }
 
@@ -76,31 +77,35 @@ export default class SignIn extends TrackerReact(React.Component){
 
   submit(event){
     event.preventDefault();
-    let signInObj = {
-      eid: this.props.ev._id,
-      uid: this.state.user._id,
-      new: !this.state.user, // If not user, new is true
-      name: this.refs.user.state.value.trim(),
+    let newContact = {
+      name: this.state.name.trim(),
       email: this.refs.email.value.trim(),
       phone: this.refs.phone.value.trim(),
       major: this.refs.major.value.trim()
     };
-    if(this.state.new){
-        signInObj.newsletter = this.refs.newsletter.checked;
-        signInObj.learnmore = this.refs.learnmore.checked;
-        if(this.refs.howhear.state.other){
-          signInObj.howhear = this.refs.howhear.refs.other.value;
-        }
-        else{
-          signInObj.howhear = this.refs.howhear.refs.howhear.value;
-        }
-    }
+    newContact.newsletter = this.refs.newsletter.checked;
+	  newContact.learnmore = this.refs.learnmore.checked;
+	  if(this.refs.howhear.state.other){
+	    newContact.howhear = this.refs.howhear.refs.other.value;
+	  }
+	  else{
+	    newContact.howhear = this.refs.howhear.refs.howhear.value;
+	  }
 
-    Meteor.call("handleEventSignIn", signInObj, function(error){
+    Meteor.call("createNewContact", newContact, (error) => {
       if(error){
-        console.log("Handle signin error: ", error);
-        window.alert("Oops. Something went wrong. Please try again.");
-      }
+        console.log("Handle new contact error: ", error);
+				if(error.reason == "Email already exists."){
+					window.alert("Email already exists.");
+				}
+				else{
+					window.alert("Oops. Something went wrong. Please try again.");
+				}
+      } else {
+				if(this.props.route){
+          routeTo(this.props.route);
+        }
+			}
     });
 
     this.circleGrow();
@@ -117,39 +122,34 @@ export default class SignIn extends TrackerReact(React.Component){
 
   // Only disables name field for now
   disableEnableFields(){
-    this.refs.user.setState({disabled: !this.refs.user.state.disabled}, ()=>{
+    this.setState({disabled: !this.state.disabled}, ()=>{
       this.refs.user.focus();
     });
-  }
-
-
-  getusers(){
-    return Meteor.users.find().fetch();
   }
 
   update(contt){
     //console.log("Suggestion Selected. Print autosuggest return object.");
     //console.log(contt);
     //this.state.contact = contt;
-    this.setState({user: contt});
-    //this.state.new = false;
-    this.setState({new: false});
-    //console.log("print state");
-    //console.log(this.state);
-    this.refs.email.value = contt.emails[0].address;
-    this.refs.email.disabled = true;
-    this.refs.phone.value = contt.phone;
-    this.refs.phone.disabled = true;
-    this.refs.major.value = contt.major;
-    this.refs.major.disabled = true;
-    this.refs.howhear.refs.howhear.value = contt.howhear;
-    this.refs.howhear.refs.howhear.disabled = true;
-    this.refs.newsletter.checked = contt.newsletter;
-    this.refs.newsletter.disabled = true;
-    this.refs.learnmore.checked = contt.learnmore;
-    this.refs.learnmore.disabled = true;
-    $('select').material_select();
-    Materialize.updateTextFields();
+    // this.setState({user: contt});
+    // //this.state.new = false;
+    // this.setState({new: false});
+    // //console.log("print state");
+    // //console.log(this.state);
+    // this.refs.email.value = contt.emails[0].address;
+    // this.refs.email.disabled = true;
+    // this.refs.phone.value = contt.phone;
+    // this.refs.phone.disabled = true;
+    // this.refs.major.value = contt.major;
+    // this.refs.major.disabled = true;
+    // this.refs.howhear.refs.howhear.value = contt.howhear;
+    // this.refs.howhear.refs.howhear.disabled = true;
+    // this.refs.newsletter.checked = contt.newsletter;
+    // this.refs.newsletter.disabled = true;
+    // this.refs.learnmore.checked = contt.learnmore;
+    // this.refs.learnmore.disabled = true;
+    // $('select').material_select();
+    // Materialize.updateTextFields();
     //this.refs.phone.value = this.state.contact.phone;
     //this.refs.newsletter.checked = this.state.contact.newsletter;
     //this.setState({contact:contt});
@@ -169,8 +169,8 @@ export default class SignIn extends TrackerReact(React.Component){
   unset(){
     //console.log(this);
     //this.state.contact = false;
-    this.setState({new: true});
-    this.setState({user: false});
+    // this.setState({new: true});
+    this.setState({name: ''});
     this.refs.email.value = "";
     this.refs.email.disabled = false;
     this.refs.phone.value = "";
@@ -204,20 +204,16 @@ export default class SignIn extends TrackerReact(React.Component){
         <div id="signinformcontainer">
           <div className="card-panel z-depth-5" id="cardwait">
             <div className="card-content">
-              <h1>Welcome to {this.props.ev.name}!</h1>
-              <h2>Please sign in</h2>
+              <h1>Add Contact</h1>
+              <h2>Fill out the info below to create a new contact card</h2>
               <form ref="publicForm" className="publicForm" onSubmit={this.submit.bind(this)} name="form">
-                <SelectUser
-                  parent={this}
-                  unset={this.unset.bind(this)}
-                  onBlur={this.setNew.bind(this)}
-                  initialValue={""}
-                  onChange={this.changeName.bind(this)}
-                  updateUser={this.update.bind(this)}
-                  id="first_name"
-                  type="text"
-                  ref="user"
-								className="validate" />
+								<div className="input-field">
+									<input type="text" id="user" ref="user" className="validate" required
+										value={this.state.name}
+										onChange={this.changeName.bind(this)}
+									/>
+									<label htmlFor="user">Name</label>
+								</div>
 								<div className="input-field">
 									<input ref="email" id="email" type="email" className="validate" required />
 									<label htmlFor="email">Email</label>
@@ -244,17 +240,14 @@ export default class SignIn extends TrackerReact(React.Component){
 									</span>
 								</button>
 								<div id="welcome-message">
-									<h1>Welcome to {this.props.ev.name}!</h1>
-									<h2>Thank you for signing in!</h2>
-                  </div>
-                  <div className="clear-fix"></div>
+									<h1>Created contact {this.state.name.trim()}</h1>
+								</div>
+								<div className="clear-fix"></div>
               </form>
             </div>
           </div>
         </div>
       )
-
-/* adding something more*/
 
   }
 }
