@@ -79,7 +79,7 @@ Meteor.publish("myEvents", function(){
 });
 
 Meteor.publish("otherUnpublishedEvents", function(){
-  var options = {fields: {start: 1, end:1, published: 1, permUser: 1, permGroup: 1,owner: 1}};
+  var options = {fields: {start: 1, end:1, status: 1, permUser: 1, permGroup: 1,owner: 1, tags: 1}};
   if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
 	}

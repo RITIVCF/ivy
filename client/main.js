@@ -11,6 +11,9 @@ document.title="Ivy";
 //Meteor.subscribe("allUsers");
 
 Meteor.subscribe("allContacts");
+Meteor.subscribe("userContacts");
+Meteor.subscribe("graduatedContacts");
+Meteor.subscribe("expiredContacts");
 Meteor.subscribe("oldContacts");
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
@@ -20,7 +23,6 @@ SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
 Meteor.subscribe("currentStatus");
-Meteor.subscribe("userContacts");
 
 
 routeTo = function(routeName, params, queryParams){

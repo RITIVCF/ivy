@@ -242,7 +242,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       var events = Events.find({
         $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
         status: "Unpublished",
-        $or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
+        //$or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
       }).fetch();
       return this.addTagToUnPublishedEvents(events);
     }
