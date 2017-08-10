@@ -72,7 +72,7 @@ Meteor.publish("myEvents", function(){
 	});
 	return Events.find({$or: [
     {owner: this.userId},
-    {status: "Published"},
+    {status: {$in: ["Published", "Reviewed"]}},
     {"permUser.id": this.userId},
     {"permGroup.id": {$in: ids}}
   ], deleted: {$ne: true}});

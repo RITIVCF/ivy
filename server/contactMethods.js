@@ -11,15 +11,18 @@ Meteor.methods({
 			addedBy = getUser(Meteor.userId()).name;
 		}
 		let desc = "Added manually by " + addedBy + ".";
-		let ticketID = addTicket({
+
+		const uid = createNewUser(userDoc);
+
+		const ticketID = addTicket({
 			subject: "New Contact: " + userDoc.name,
+			customer: uid,
 			description: desc,
 			type: "Contact",
 			submittedBy: Meteor.userId()
 		});
-		userDoc.ticket = ticketID;
 
-		let uid = createNewUser(userDoc);
+		Meteor.users.update(uid, {$set: {ticket: ticketID}});
 
 		if(userDoc.newsletter){
 			Meteor.call("updateNewsletter", uid, true);

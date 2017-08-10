@@ -29,7 +29,6 @@ Meteor.methods({
     // If not new, sign in and skip
     if(!signin.new){
       addAttendanceRecord(signin);
-			calculateFunnelStatus(signin.uid);
     }
     else{
       // Create new user and get uid
@@ -124,6 +123,7 @@ Meteor.methods({
           }
         }}
       );
+			calculateFunnelStatus(record.uid);
     }
   }
 

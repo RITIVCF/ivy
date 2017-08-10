@@ -5,10 +5,14 @@ calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
   let status = "Contact";
   let user = getUser(uid);
+	console.log("User: ", user);
+	console.log("Pre funnel status: ", user.funnelStatus);
+	console.log("pre contact status: ", user.status);
 
   // Is user Visitor, Crowd, or Contact
   // Uses event attendance
   var count = getIntervalCounts(uid);
+	console.log("Count: ", count);
 
   if (count>=threshold) {
     status = "Visitor";
@@ -23,8 +27,13 @@ calculateFunnelStatus = function(uid){
 	// If present, do not take attendance into consideration
 	// for calculating funnel
 	let currentStatus = user.getStatus();
+	console.log("currentStatus: ", currentStatus);
+	let funnelRecords = Funnel.find({uid: uid}).fetch();
+	console.log("Funnel Records: ", funnelRecords);
+	let statusRecords = Status.find({uid: uid}).fetch();
+	console.log("Status Records: ", statusRecords);
 	if(!isContactPresent(currentStatus)){
-		status = currentStatus;
+		status = user.getFunnelStatus();
 	}
 	else{
 		// Check to see if we need to follow up with them
@@ -62,14 +71,20 @@ getUserFunnelStatus = function(uid){
 saveStatusChange = function(uid, status){
   // If current status
   let currStatus = getUserFunnelStatus(uid);
+	console.log("currStatus", currStatus);
+	console.log("status: ", status);
 
   if(currStatus){
-
+		console.log("currStatus exitst");
     if(currStatus!=status){
+			console.log("currStatus != status");
       insertAndUpdateFunnelStatus(uid, status);
-    }
+    } else {
+			console.log("currStatus == status");
+		}
   }
   else{
+		console.log("currStatus does not exist");
     insertAndUpdateFunnelStatus(uid, status);
   }
 
@@ -86,13 +101,14 @@ getIntervals = function(){
 	var intervalLength = options.interval; //In days
   var period = options.period; //In intervalLengths
   var endDate = new Date();
-  var startDate = new Date();
+	// Add 2 hours because form opens 2 hours before event starts.
+  var startDate = new moment().add(2, "hours");
 
   let intervals = [];
 
   for( var i=0; i < period; i++ ){
     // Move start date back
-    var startDate = subtractMinutes(endDate, intervalLength);
+    var startDate = subtractDays(endDate, intervalLength);
 
 
     // Get count of events in this interval
@@ -101,7 +117,7 @@ getIntervals = function(){
 				$gte : startDate,
 				$lt : endDate
 			},
-      published: true,
+      status: {$in: ["Published", "Reviewed"]},
 		}, {name: 1}).count();
 
 		// are there no events?
@@ -145,7 +161,7 @@ getNumberOfValidIntervals = function(numOfIntervals){
 
   for( var i=0; i < numOfIntervals; i++ ){
     // Move start date back
-    startDate = subtractMinutes(endDate, intervalLength);
+    startDate = subtractDays(endDate, intervalLength);
 
     // are there events in this interval?
     numOfEventsInInterval = Events.find({
