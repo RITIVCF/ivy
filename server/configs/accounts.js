@@ -59,7 +59,6 @@ import { insertStatus } from '/lib/contactStatus.js';
 			else{
 				user.status = "Present";
 			}
-			insertStatus(user._id, user.status);
 		}
 		user.createdAt = new Date();
 
