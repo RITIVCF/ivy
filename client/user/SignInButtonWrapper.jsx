@@ -11,7 +11,7 @@ export default class LoginWrapper extends TrackerReact(React.Component){
   logout(){
     event.preventDefault();
       Meteor.logout();
-      FlowRouter.go("/login");
+      routeTo("login");
   }
 
   render(){

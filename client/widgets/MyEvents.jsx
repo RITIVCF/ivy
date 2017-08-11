@@ -21,7 +21,7 @@ export default class MyEvents extends TrackerReact(React.Component) {
 	}
 
 	getUpcoming(){
-		return Events.find({published: true, start: {$gte: new Date()}},{sort: {start: 1}}).fetch();
+		return Events.find({"status": "Published", start: {$gte: new Date()}},{sort: {start: 1}}).fetch();
 	}
 
 	getRecent(){

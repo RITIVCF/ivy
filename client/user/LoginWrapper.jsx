@@ -20,12 +20,12 @@ export default class LoginWrapper extends TrackerReact(React.Component){
   }
 
   createAccount(){
-    FlowRouter.go("/signup");
+    routeTo("signupform");
   }
 
   forgotPassword(event){
     event.preventDefault();
-    FlowRouter.go("/forgotpassword");
+		routeTo("forgotpasswordform");
   }
 
   submit(event){
@@ -56,15 +56,21 @@ export default class LoginWrapper extends TrackerReact(React.Component){
             <div className="card">
               <div className="card-content">
                 <span className="card-title">Ivy Sign In</span>
-                  <form className="publicForm" onSubmit={this.submit.bind(this)}>
-                    {this.state.forgot?<p>Incorrect username or password. Please try again or click 'forgot password'.</p>:""}
-                    <div className="input-field col s12">
-                      <input type="text" name="email" /> 
-                      <label>Email</label>
-                    </div>
-                    <div className="input-field col s12">
-                      <input type="password" name="loginPassword" ref="password" />
-                      <label>Password</label>
+								<form className="publicForm" onSubmit={this.submit.bind(this)}>
+									{this.state.forgot&&
+										<div className="row">
+											<div className="col s12">
+												<p>Incorrect username or password. Please try again or click 'forgot password'.</p>
+											</div>
+										</div>
+									}
+									<div className="input-field col s12">
+										<input type="text" id="email" name="email" />
+										<label htmlFor="email">Email</label>
+									</div>
+									<div className="input-field col s12">
+										<input type="password" id="password" name="loginPassword" ref="password" />
+										<label htmlFor="password">Password</label>
                     </div>
                     <button className="btn waves-effect waves-light" type="submit" name="action">Login
                     </button>

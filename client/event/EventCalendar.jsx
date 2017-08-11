@@ -23,8 +23,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     if(!Session.get("calendardate")){
       Session.set("calendardate", moment()._d.toISOString());
     }
-    console.log("Moment: ",moment()._d);
-    console.log("Initialization: ", Session.get("calendardate"));
     if(!Session.get("calendartagfilter")){
       var result = Options.findOne("eventtags").vals;
       var tags = [];
@@ -85,9 +83,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         //After Update Tue Nov 29 2016 23:00:00 GMT-0500 (Eastern Standard Time)
         //Session.set("calendarview", view.name);
         Meteor.call("setCalendarView", view.name);
-        console.log("Before update", Session.get("calendardate"));
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
-        console.log("After Update",$(calendar).fullCalendar( 'getDate' )._d.toISOString() );
         var height = $('#mainbox > div').height();
         $('#calendar').fullCalendar('option','height', height);
       },
@@ -153,35 +149,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         //console.log($('#neweventmodalstart'));
         //console.log(newevent);
         thiz.refs.newevmodal.open();
-
-
-
-        //$(calendar).fullCalendar( 'renderEvent', {title: "", start: date._d, end: end._d});
-
-
-
-        // create new event, open popup for name
-        // console.log(view);
-        // console.log(date);
-        // var component = this;
-        // if(view.name=="month"){
-        //     date.add(20,"hours");
-        // }
-        // else{
-        //   date.add(5, "hours");
-        // }
-        // console.log(date);
-        // console.log(date._d);
-        // Meteor.call('addBlankEvent', date._d, function(error, result){
-        //   if(error){
-        //     console.log(error.reason);
-        //     return;
-        //   }
-        // //FlowRouter.go("/events/workspace/"+result);
-        // });
-
-        //$(calendar).fullCalendar( 'gotoDate', date );
-        //$(calendar).fullCalendar( 'changeView', "basicDay" );
       },
       eventAfterAllRender(view){
         $('.modal').modal();
@@ -242,7 +209,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       var events = Events.find({
         $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
         status: "Unpublished",
-        $or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
+        //$or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
       }).fetch();
       return this.addTagToUnPublishedEvents(events);
     }

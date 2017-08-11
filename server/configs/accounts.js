@@ -1,26 +1,66 @@
 import {Meteor} from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
-//export default () => {
+import { insertStatus } from '/lib/contactStatus.js';
 
 // For environment variable when testing locally
 
 
   Accounts.onCreateUser(function(options, user) {
+		const DEFAULT_FUNNEL_STATUS = "Contact";
     if (options.profile){
       user.profile = options.profile;
     }
-    user.contact=options._id;
-    user.name=options.name;
-    user.phone=options.phone;
-    user.major=options.major;
-    user.howhear=options.howhear;
-    user.bio="";
-    user.ticket="";
-    user.addresses=[];
-    user.affiliations=[];
-    user.communitylife=[];
-    user.status="Crowd";
-    user.createdAt=new Date();
+
+		let userDoc = options;
+
+    user.name=userDoc.name;
+
+		if(!userDoc.phone){
+			user.phone = "";
+		}
+		if(!userDoc.major){
+			user.major = "";
+		}
+		if(!userDoc.howhear){
+			user.howhear = "";
+		}
+		if(!userDoc.bio){
+			user.bio = "";
+		}
+		if(!userDoc.ticket){
+			user.ticket = "";
+		} else {
+			Tickets.update(userDoc.ticket, {$set: {customer: user._id}});
+		}
+		if(!userDoc.addresses){
+			user.addresses = [];
+		}
+		if(!userDoc.affiliations){
+			user.affiliations = [];
+		}
+		if(!userDoc.communitylife){
+			user.communitylife = [];
+		}
+		if(!userDoc.funnelStatus){
+			user.funnelStatus = DEFAULT_FUNNEL_STATUS;
+			insertAndUpdateFunnelStatus(user._id, DEFAULT_FUNNEL_STATUS);
+		} else {
+			user.funnelStatus = userDoc.funnelStatus;
+			insertAndUpdateFunnelStatus(user._id, userDoc.funnelStatus);
+		}
+		if(userDoc.newsletter === undefined){
+			user.newsletter = false;
+		}
+		if(!userDoc.status){
+			if(userDoc.isUser){
+				user.status = "User";
+				delete userDoc.isUser;
+			}
+			else{
+				user.status = "Present";
+			}
+		}
+		user.createdAt = new Date();
 
     // initialize user preferences
     user.preferences={
@@ -38,12 +78,19 @@ import { Accounts } from 'meteor/accounts-base';
     // to just users
     //Contacts.update({_id: options.contactid},{$set:{user: true}});
     //user.contact = options.contactid;
+
+		// set up funnel calculation jobs
+		setupStatusJobs(user._id);
+
+		// insert inital status record
+		insertStatus(user._id, user.status);
+
     return user;
   });
 
   Accounts.onEnrollmentLink= function(token,done){
     //Accounts.resetPassword()
-    FlowRouter.go("/signup/"+token);
+    FlowRouter.go("/public/signup/"+token);
   };
 
 
