@@ -42,17 +42,12 @@ Meteor.methods({
     var ticket = Tickets.findOne(tid);
     var group = Groups.findOne(gid);
     var users = Meteor.users.find({_id: {$in: group.users}}).fetch();
-    console.log("users");
-    console.log(users);
     var emails = [];
     users.forEach(function(contact){
       //var contact = Meteor.users.findOne(user.contact);
       contact = new Contact(contact);
-      console.log("pushing: "+contact.getEmail());
       emails.push(contact.getEmail());
     });
-    console.log("emails:");
-    console.log(emails);
     Email.send({
       to: emails,
       from: "Ivy Information System",
@@ -80,14 +75,12 @@ Meteor.methods({
     var result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
       {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
       {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }] );
-      //console.log(result);
     var ids =[];
       for(var i=0;i<result.length;i++){
         for(var y=0;y<result[i].ids.length;y++){
           ids.push(result[i].ids[y]);
         }
       }
-      //console.log(ids);
       result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
         {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
         {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } ]);
@@ -187,8 +180,6 @@ Meteor.methods({
   },
   funnelTime(numdays){
     if(numdays!="0"){
-      //  console.log("Numdays: "+numdays);
-      //  console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
         var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+1, "days")._d}}).fetch();
     }
     else{
@@ -231,13 +222,7 @@ Meteor.methods({
     if(rst.min<0){
       rst.min=0;
     }
-    // console.log(rst);
-    // console.log(totals);
-    // console.log(rst.max);
     return rst;
-  },
-  testCreation(){
-    console.log(Accounts.createUser({email: "testemail@email.com"}));
   },
   updateContactFunnelStatus(uid){
     var intervl = 7; //In days
@@ -269,249 +254,36 @@ Meteor.methods({
         events.push(event._id);
       });
       eventsPerInterval.push(events);
-      //endDate.setDate(endDate.getDate() - intervl);
-      // console.log("endDate: ", endDate);
-      // console.log("startDate: ", startDate);
-      endDate = startDate;//new moment(endDate.toISOString()).subtract(intervl,"days")._d
-      //console.log("New endDate: ", endDate);
+      endDate = startDate;
     }
     var mults = Groups.findOne("multipliers").users;
-    //console.log("Users: ", Meteor.users.find({deleted: {$ne: true}}).fetch());
-    //for (var i in Meteor.users.find({deleted: {$ne: true}}).fetch()) {
-    //Meteor.users.find({deleted: {$ne: true}}).fetch().map((user)=>{
     let user = Meteor.users.findOne(uid);
-      //var uid = user._id;
-      //console.log(uid, user.name);
-      // console.log("Is Leader: ", Groups.find({leader: uid}).fetch());
-      //if (uid in mults) {
       if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
-        // console.log(user.name, " Is multiplier");
         Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
       } else if (Groups.find({leader : uid}).fetch().length > 0) {
-        // console.log(user.name, " Is leader");
         Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
       } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
-        //console.log(user.name, " Is server");
         Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
       } else if (user.member) {
-        // console.log(user.name, " Is member");
         Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
       } else {
-        // console.log(user.name, " Is visitor or crowd");
         var count = 0;
-        //console.log(eventsPerInterval);
+
         eventsPerInterval.forEach((intvl)=>{
-        //  console.log(intvl);
+
           if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
             count++
           }
         });
 
-        // for (var ls in eventsPerInterval) {
-        // 	if (ls.find({attendees : uid}).fetch().length > 0) {
-        // 		count++;
-        // 	}
-        // }
         if (count>=threshold) {
-          // console.log(user.name, " Is visitor");
           Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
         } else {
-          // console.log(user.name, " Is crowd");
+
           Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
         }
       }
-    //  console.log(user.name, " end.");
-  //   });
-  },
-  migrateDatabase(){
-    //var userMeteor.users = Meteor.users.find({user: true}).fetch();
-    var notUserContacts = Contacts.find({user: {$ne: true}}).fetch();
-
-    // CONTACT ONLY UPDATE SECTION
-    notUserContacts.forEach((contact)=>{
-      console.log("Contact");
-      console.log(contact);
-      var contactid=contact._id;
-      delete contact._id;
-      var uid = Accounts.createUser(contact);
-      //Contacts.update({_id: contactid},{$set: {user:true}});
-      Meteor.users.update({_id: uid},{$set: {contact: contactid}});
-      //===========  Event update attendance ids
-    Events.update(
-      {"attendees._id":contactid}, // where cid is an attendee
-      {$set:
-        {"attendees.$._id":uid}   // set attendee id to user id
-      },
-      {multi: true}
-    );
-    //===============
-    Churches.update(
-      {contacts: contactid},
-      {$addToSet: {contacts: uid}},
-      {multi: true}
-    );
-    Churches.update(
-      {contacts: contactid},
-      {$pull: {contacts: contactid}},
-      {multi: true}
-    );
-    //===============
-    });
-    var retval;
-    //
-    //     USER UPDATE SECTION
-    var userContacts = Contacts.find({user: true}).fetch();
-    userContacts.forEach((contact)=>{
-      console.log("Contact");
-      console.log(contact);
-
-      var contactid = contact._id;
-      delete contact._id;
-      Meteor.users.update({contact: contactid}, {$set: contact});
-      console.log("Updated user");
-      console.log(
-        Meteor.users.findOne({contact: contactid})
-        );
-        console.log("contactid: ",contactid);
-      var user = Meteor.users.findOne({contact: contactid});
-        //===========  Event update attendance ids
-        if(user.name=="Bobby Picciotti"){
-          var events =Events.find({_id: "4ZCcw5oneKYwCjmLo", "attendees._id":contactid},{name: 1, attendees: 1}).fetch();
-          events.forEach((event)=>{
-            console.log("Event Name": event.name);
-            event.attendees.forEach((attendee)=>{
-              console.log(attendee);
-            })
-          });
-        }
-        if(user.name=="Bobby Picciotti"){
-          console.log("Updating attendance");
-        }
-      Events.update(
-        {"attendees._id":contactid}, // where cid is an attendee
-        {$set:
-          {"attendees.$._id": user._id}   // set attendee id to user id
-        },
-        {multi: true}
-      );
-      Events.update(
-        {"attendees._id":contactid}, // where cid is an attendee
-        {$pull:
-          {attendees: {_id: contactid}}   // pull any duplicates
-        },
-        {multi: true}
-      );
-      if(user.name=="Bobby Picciotti"){
-        events.forEach((event)=>{
-          console.log("Event Name": event.name);
-          event.attendees.forEach((attendee)=>{
-            console.log(attendee);
-          })
-        });
-      }
-      //===============
-      Churches.update(
-        {contacts: contactid},
-        {$addToSet: {contacts: user._id}},
-        {multi: true}
-      );
-      Churches.update(
-        {contacts: contactid},
-        {$pull: {contacts: contactid}},
-        {multi: true}
-      );
-      //===============
-
-    });
-    Meteor.users.update({},{$set: {preferences: {
-      "theme-color": "Default",
-      "contacts_view":"Tile",
-      "contacts_infobar": true,
-      "tickets_view":"List",
-      "tickets_infobar":true,
-      "calendar_view":"month",
-      "events_infobar":true,
-      "groups_view": "Team",
-      "churches_view":"Tile",
-      "churches_infobar":true
-      }
-    }}, {multi: true});
+  }
 
 
-
-
-    // OPtions
-    var requesttypes = Options.findOne("requesttypes").vals;
-    console.log("Request Types: ", requesttypes);
-    var newtypes = [];
-    requesttypes.forEach((type)=>{
-        var typobj = {label:type,gid: "admin"};
-        console.log(typobj);
-        newtypes.push(typobj);
-    });
-    console.log("New types", newtypes);
-    Options.update("requesttypes",{$set: {vals: newtypes}});
-
-    var eventtags = Options.findOne("eventtags").vals;
-    console.log("Event Tags: ", eventtags);
-    var colors = ["#FF0","#0FF","#0F0","#F0F","#00F","#F00"];
-    var cnt = 0;
-    var newtags = [];
-    eventtags.forEach((tag)=>{
-      var tagobj = {tag: tag, color: colors[cnt]};
-      console.log("New tag: ", tagobj);
-      newtags.push(tagobj);
-      cnt+=1;
-    });
-    console.log("New Tags: ",newtags);
-    Options.update("eventtags", {$set: {vals: newtags}});
-
-    //Email Template Initialization
-    Emails.insert({
-      _id: "newsletter",
-      title: "Newsletter",
-      to: {users: [],groups:[],emails:[]},
-      from: "ivcf@rit.edu",
-      subject: "IVCF Chapter Newsletter",
-      content: "",
-      isTemplate: true
-    });
-
-    //Page Permissions
-    PagePermissions.insert({
-      "_id" : "emails",
-      "groups" : ["admin"],
-      "pagename" : "View/Edit Emails"
-    });
-    PagePermissions.insert({
-      "_id" : "ivrep",
-      "groups" : [ "" ],
-      "pagename" : "IV Official"
-    });
-
-    //Event Workpad changes
-    var events = Events.find().fetch();
-    events.forEach((event)=>{
-      var newworkpad = [
-          {
-            "name" : "Pad 1",
-            "content" : event.workpad,
-            "lock" : false
-          }
-        ]
-      Events.update({_id: event._id},{$set: {workpad: newworkpad}});
-    });
-
-    return retval;
-
-
-  },
-	migrateSummer2017(){
-		if(checkPermission("admin")){
-			return runDbMigration();
-		}
-		return true;
-	}
-
-
-})
+});

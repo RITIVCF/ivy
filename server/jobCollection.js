@@ -49,8 +49,6 @@ newEventFollowUpEmailJob = function(eid, uid){
 }
 
 scheduleJobAndSubmit = function (job, afterValue){
-	console.log("Job: ", job);
-	console.log("After Value: ", afterValue);
 	job.after( afterValue );
 	job.save();
 }
@@ -82,7 +80,6 @@ getJobCollectionJobByUserId = function(uid){
 
 getJobCollectionJobByData = function(dataObj){
 	let jobObj = jobCollection.findOne(dataObj);
-	console.log("jobObj", jobObj);
 	let job = {};
 	if(!jobObj){
 		return false;
