@@ -1,18 +1,15 @@
 import { isContactPresent } from '/lib/contactStatus.js';
 import { getUser } from '/lib/users.js';
+import Contact from '/lib/classes/Contact.js';
 
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
   let status = "Contact";
   let user = getUser(uid);
-	console.log("User: ", user);
-	console.log("Pre funnel status: ", user.funnelStatus);
-	console.log("pre contact status: ", user.status);
 
   // Is user Visitor, Crowd, or Contact
   // Uses event attendance
   var count = getIntervalCounts(uid);
-	console.log("Count: ", count);
 
   if (count>=threshold) {
     status = "Visitor";
@@ -27,11 +24,8 @@ calculateFunnelStatus = function(uid){
 	// If present, do not take attendance into consideration
 	// for calculating funnel
 	let currentStatus = user.getStatus();
-	console.log("currentStatus: ", currentStatus);
 	let funnelRecords = Funnel.find({uid: uid}).fetch();
-	console.log("Funnel Records: ", funnelRecords);
 	let statusRecords = Status.find({uid: uid}).fetch();
-	console.log("Status Records: ", statusRecords);
 	if(!isContactPresent(currentStatus)){
 		status = user.getFunnelStatus();
 	}
@@ -71,20 +65,13 @@ getUserFunnelStatus = function(uid){
 saveStatusChange = function(uid, status){
   // If current status
   let currStatus = getUserFunnelStatus(uid);
-	console.log("currStatus", currStatus);
-	console.log("status: ", status);
 
   if(currStatus){
-		console.log("currStatus exitst");
     if(currStatus!=status){
-			console.log("currStatus != status");
       insertAndUpdateFunnelStatus(uid, status);
-    } else {
-			console.log("currStatus == status");
-		}
+    }
   }
   else{
-		console.log("currStatus does not exist");
     insertAndUpdateFunnelStatus(uid, status);
   }
 
@@ -251,7 +238,6 @@ addIntegrationTicket = function(uid){
   let user = new Contact(Meteor.users.findOne(uid));
   let desc = user.getName()+" has not been coming for a while.\n"+user.getEmail()+"\n"+user.getPhone()+"\n"+user.getHowHear();
   let gid = Options.findOne("ticketcontact").gid;
-  console.log("gid: ", gid);
   var tktId = Tickets.insert({
     ticketnum: ret.seq,
     subject: "See how " + user.getName() + " is doing!",

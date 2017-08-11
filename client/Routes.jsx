@@ -24,10 +24,8 @@ import NewContactWrapper from './contact/forms/NewContactWrapper.jsx';
 
 // ****  Events   *********
 import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
-import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
-import EventCalendarSub from './event/EventCalendarSub.jsx';
 import SigninWrapper from './event/forms/SignInWrapper.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
 // ****   Debriefs  *******
