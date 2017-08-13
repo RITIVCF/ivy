@@ -45,19 +45,12 @@ export default class EventDateControls extends React.Component {
   updateStartDate(event){
     event.preventDefault();
     Meteor.call("updateEventStart", this.props.eid, this.state.start);
-    console.log("Starttime: ", this.state.start);
-    var difference = new moment(this.state.end) - new moment(this.state.start);
-    Meteor.call("updateEventEnd", this.props.eid, new moment(this.props.end).add(moment.duration(difference))._d);
     this.toggleStart();
 	}
 
 	updateEndDate(event){
     event.preventDefault();
     Meteor.call("updateEventEnd", this.props.eid, this.state.end);
-    if(this.state.start > this.state.end){
-      var difference = new moment(this.state.end) - new moment(this.state.start);
-      Meteor.call("updateEventStart", this.props.eid, new moment(this.props.start).subtract(moment.duration(difference))._d);
-    }
     this.toggleEnd();
 	}
 
@@ -78,21 +71,21 @@ export default class EventDateControls extends React.Component {
     let editend = this.state.editend;
     return (
       <div>
-      <label>Start</label>{(this.props.perm&&!editstart)&&<i className="tiny material-icons" onClick={this.toggleStart.bind(this)}>edit</i>}
-      {!editstart?<p style={{marginTop:"0px"}}>{startdate} {starttime}</p>:
-      <form onSubmit={this.updateStartDate.bind(this)}>
-        <DateTimePicker ref="start"
-          defaultValue={this.state.start}
-          onChange={this.handleStartChange.bind(this)}
+				<label>Start</label>{(this.props.perm&&!editstart)&&<i className="tiny material-icons" onClick={this.toggleStart.bind(this)}>edit</i>}
+				{!editstart?<p style={{marginTop:"0px"}}>{startdate} {starttime}</p>:
+				<form onSubmit={this.updateStartDate.bind(this)}>
+					<DateTimePicker ref="start"
+						defaultValue={this.props.start}
+						onChange={this.handleStartChange.bind(this)}
           />
-        <input type="submit" value="Save" className="btn" />
-        <button type="button" onClick={this.toggleStart.bind(this)} className="btn">Close</button>
-      </form>}
-      <label>End</label>{(this.props.perm&&!editend)&&<i className="tiny material-icons" onClick={this.toggleEnd.bind(this)}>edit</i>}
-      {!editend?<p style={{marginTop:"0px"}}>{enddate} {endtime}</p>:
+					<input type="submit" value="Save" className="btn" />
+					<button type="button" onClick={this.toggleStart.bind(this)} className="btn">Close</button>
+				</form>}
+				<label>End</label>{(this.props.perm&&!editend)&&<i className="tiny material-icons" onClick={this.toggleEnd.bind(this)}>edit</i>}
+				{!editend?<p style={{marginTop:"0px"}}>{enddate} {endtime}</p>:
         <form onSubmit={this.updateEndDate.bind(this)}>
           <DateTimePicker ref="end"
-            defaultValue={this.state.end}
+            defaultValue={this.props.end}
             onChange={this.handleEndChange.bind(this)}
             />
           <input type="submit" value="Save" className="btn" />
