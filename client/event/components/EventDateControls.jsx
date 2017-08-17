@@ -17,23 +17,6 @@ export default class EventDateControls extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    // console.log("Prop start: ", this.props.start);
-    // console.log("Next Prop start: ", nextProps.start);
-    // console.log("Prop end: ", this.props.end);
-    // console.log("Next prop end: ", nextProps.end);
-    // console.log("Starts equal? ", this.props.start==nextProps.start);
-    // console.log("Ends equal ", this.props.end==nextProps.end);
-    // if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
-    //   console.log("should not update");
-    //   return false
-    // }else{
-    //   console.log("updating");
-    //   return true;
-    // }
-    return true;
-  }
-
   handleStartChange(value){
     this.setState({start: value});
   }
@@ -45,7 +28,6 @@ export default class EventDateControls extends React.Component {
   updateStartDate(event){
     event.preventDefault();
     Meteor.call("updateEventStart", this.props.eid, this.state.start);
-    console.log("Starttime: ", this.state.start);
     var difference = new moment(this.state.end) - new moment(this.state.start);
     Meteor.call("updateEventEnd", this.props.eid, new moment(this.props.end).add(moment.duration(difference))._d);
     this.toggleStart();

@@ -21,54 +21,22 @@ export default class EventWorkpad extends Component {
   updateWorkpad(event){
 		event.preventDefault();
 		Meteor.call("updateEventWorkpad", this.props.eid, this.refs.workpad.value);
-		//this.state.value = this.refs.name;
 	}
 
   handleWorkpadChange(event){ // need one of these for each component
     this.setState({workpad:event.target.value});
     this.setState({editting: true});
     updWorkpad(this.props.ev._id, event.target.value);
-    ////console.log(this);
     setWorkPadFalse(this, this.props.ev._id);
 
   }
 
-
-
-  componentDidMount(){
-    // var thiz = this;
-    // tinymce.init({
-		// 	//selector: "#mytextarea",
-    //   selector: '#tabname',
-    //   theme: "modern",
-    //   height: 300,
-		// 	plugins: "table link textcolor colorpicker autolink fullscreen paste contextmenu hr searchreplace",
-		// 	elementpath: false,
-		// 	menubar: "edit insert view format table",
-		// 	setup : function(editor) {
-		// 		editor.on('keyup', function(e) {
-    //         //console.log('key event', e);
-		// 				updWorkpad(thiz.props.ev._id, tinymce.activeEditor.getContent());
-		// 		    ////console.log(this);
-		// 		    setWorkPadFalse(thiz, thiz.props.ev._id);
-    //     });
-    // }
-  	// });
-  }
-
-  // getEvent(){
-	// 	////console.log(Events.find({_id: this.props.eid}).fetch());
-	// 	//return Events.find({_id: this.props.eid}).fetch();
-	// 	return Events.findOne(this.props.eid);
-	// }
-
   newTab(){
     Meteor.call("addNewWorkpadTab", this.props.ev._id, function(error, result){
       if(error){
-        console.log(error);
+        console.error(error);
         return;
       }
-      //console.log("new Tab: ", result);
       $('ul.tabs').tabs();
       $('ul.tabs').tabs('select_tab', "NewSheet");
     });
@@ -79,46 +47,29 @@ export default class EventWorkpad extends Component {
   }
 
   init(){
-    console.log("Initializing tabs");
     $('ul.tabs').tabs();
   }
 
 
   render(){
-    /*let ev = this.props.ev; // this.getEvent();
 
-  	if(!ev){
-  		return (<div>Loading...</div>);
-  	}
-  	var workpad = ev.workpad;
-    */
     let workpads = this.getWorkpads();
     return(
       <div className="row">
         <label>Workspace</label>
-          {/*}<div className="col s12">
+				{/*}<div className="col s12">
             <ul className="tabs">
-              {workpads.map((tab)=>{
-                return <Tab key={tab.name} tab={tab} eid={this.props.ev._id} />
-              })}
-              {/*this.props.perm&&<li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>\}
+					{workpads.map((tab)=>{
+					return <Tab key={tab.name} tab={tab} eid={this.props.ev._id} />
+					})}
+					{/*this.props.perm&&<li className="tab"><a  onClick={this.newTab.bind(this)}>+ Tab</a></li>\}
             </ul>
-          </div>*/}
+				</div>*/}
 
         {workpads.map((pad)=>{
           return <Pad key={pad.name} eid={this.props.ev._id} pad={pad} editperm={this.props.perm} />
         })}
-
-
-
-        {/*<TinyMCETest ev={this.props.ev}/>}<br/>
-        <textarea ref="workpad"
-          className="form-control"
-          rows="12"
-          onChange={this.handleWorkpadChange.bind(this)}
-          value={this.state.workpad}
-          disabled={this.state.workpadlock||!this.props.perm} />
-          <a className="btn" onClick={this.init.bind(this)}>Initialize</a>*/}
+				
       </div>
     )
   }

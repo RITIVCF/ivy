@@ -12,11 +12,6 @@ export default class EventEVR extends Component {
 
 
   render(){
-    /*
-  	if(!contact.newsletter){
-  		return (<div>Loading...</div>);
-  	}*/
-
     return(
       <div>
           <input type="checkbox"

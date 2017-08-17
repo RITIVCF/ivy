@@ -12,10 +12,6 @@ export default class EventReserved extends Component {
 
 
   render(){
-    /*
-  	if(!contact.newsletter){
-  		return (<div>Loading...</div>);
-  	}*/
 
     return(
       <div>

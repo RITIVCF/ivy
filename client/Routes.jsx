@@ -427,15 +427,11 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 		Meteor.call("getEvent", params.eid, function(error,result){
 			if(result){
 				let ev = result;
-				console.log("Event: ", ev);
 				if(Meteor.userId()==ev.owner){
 					Meteor.call("addEventUserPerm",params.eid,params.uid);
-					console.log("Added perm");
 					if(params.vore=="edit"){
-						console.log("Add edit perm");
 						Meteor.call("updateEventUserPerm", params.eid, params.uid, true );
 					}
-					console.log("Perms added, go to dahsboard");
 					FlowRouter.go("/");
 				}else{
 					FlowRouter.go("/event/workspace/"+params.vore+"/"+params.eid+"/"+params.uid);

@@ -34,15 +34,6 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
       return;
     }
     var thiz= this;
-    //console.log(this.state.contact);
-    // Meteor.call("createNewUser", this.state.contact._id, this.state.contact.email, function(error, result){
-    //   if(error){
-    //     console.log(error);
-    //   }
-    //   else{
-    //     console.log(result);
-    //   }
-    // });
     Meteor.call("enrollUser", this.state.contact._id, function(error){
       if(error){
         window.alert("Sorry something went wrong. Please try again.");

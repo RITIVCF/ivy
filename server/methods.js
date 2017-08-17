@@ -42,17 +42,11 @@ Meteor.methods({
     var ticket = Tickets.findOne(tid);
     var group = Groups.findOne(gid);
     var users = Meteor.users.find({_id: {$in: group.users}}).fetch();
-    console.log("users");
-    console.log(users);
     var emails = [];
     users.forEach(function(contact){
-      //var contact = Meteor.users.findOne(user.contact);
       contact = new Contact(contact);
-      console.log("pushing: "+contact.getEmail());
       emails.push(contact.getEmail());
     });
-    console.log("emails:");
-    console.log(emails);
     Email.send({
       to: emails,
       from: "Ivy Information System",
@@ -80,14 +74,12 @@ Meteor.methods({
     var result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
       {"$group" : { "_id": "$name", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
       {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }] );
-      //console.log(result);
     var ids =[];
       for(var i=0;i<result.length;i++){
         for(var y=0;y<result[i].ids.length;y++){
           ids.push(result[i].ids[y]);
         }
       }
-      //console.log(ids);
       result = Meteor.users.aggregate( [{"$match": {deleted: {$ne: true}}},
         {"$group" : { "_id": "$email", "count": { "$sum": 1 }, ids: {$push: "$_id"}} },
         {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } } ]);
@@ -187,8 +179,6 @@ Meteor.methods({
   },
   funnelTime(numdays){
     if(numdays!="0"){
-      //  console.log("Numdays: "+numdays);
-      //  console.log(new moment().subtract(parseInt(numdays)+1, "days")._d);
         var result = FunnelHistory.find({timestamp: {$gte: new moment().subtract(parseInt(numdays)+1, "days")._d}}).fetch();
     }
     else{
@@ -231,9 +221,6 @@ Meteor.methods({
     if(rst.min<0){
       rst.min=0;
     }
-    // console.log(rst);
-    // console.log(totals);
-    // console.log(rst.max);
     return rst;
   },
   testCreation(){
@@ -269,21 +256,13 @@ Meteor.methods({
         events.push(event._id);
       });
       eventsPerInterval.push(events);
-      //endDate.setDate(endDate.getDate() - intervl);
-      // console.log("endDate: ", endDate);
-      // console.log("startDate: ", startDate);
-      endDate = startDate;//new moment(endDate.toISOString()).subtract(intervl,"days")._d
-      //console.log("New endDate: ", endDate);
+      endDate = startDate;
+
     }
     var mults = Groups.findOne("multipliers").users;
-    //console.log("Users: ", Meteor.users.find({deleted: {$ne: true}}).fetch());
-    //for (var i in Meteor.users.find({deleted: {$ne: true}}).fetch()) {
-    //Meteor.users.find({deleted: {$ne: true}}).fetch().map((user)=>{
+
     let user = Meteor.users.findOne(uid);
-      //var uid = user._id;
-      //console.log(uid, user.name);
-      // console.log("Is Leader: ", Groups.find({leader: uid}).fetch());
-      //if (uid in mults) {
+
       if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
         // console.log(user.name, " Is multiplier");
         Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
