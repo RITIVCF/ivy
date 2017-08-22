@@ -1,4 +1,5 @@
 import { getUser } from '/lib/users.js';
+import { loadEmail } from '/lib/emails.js';
 
 ContactsBackup = new Mongo.Collection("contactsbackup");
 EventsAttendanceBackup = new Mongo.Collection("eventsattendancebackup");
@@ -591,11 +592,13 @@ Meteor.publish("thisEmail", function(emid){
   return Emails.find({_id: emid});
 });
 
-Meteor.publish("emailEvents", function() {
-  let n = addDays(new Date(), 7);
+Meteor.publish("emailEvents", function(emid) {
+  let email = Emails.findOne(emid);
+  let when = email.when;
+  let n = addDays(when, 7);
   return Events.find({$or:[
-    {start: {$gt: new Date(), $lt: n}, status: "Published"},
-    {start: {$gt: new Date()}, tags: "Conference"}
+    {start: {$gt: when, $lt: n}, status: "Published"},
+    {start: {$gt: when}, tags: "Conference"}
   ]});
 })
 //***************************************

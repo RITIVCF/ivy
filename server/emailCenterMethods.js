@@ -8,7 +8,8 @@ import {
 	addEmailEmailRecipient,
 	stageNewsletter,
 	unstageNewsletter,
-	changeNewsletterSendDateTime
+	changeNewsletterSendDateTime,
+	sendToMe
 } from '/lib/emails.js';
 import {
 	newEmailModule,
@@ -177,5 +178,10 @@ Meteor.methods({
 				"modules._id": moduleId},
 			{$set: {"modules.$.title": title}}
 		);
+	},
+
+	sendToMe(emid) {
+		sendToMe(emid, Meteor.userId());
 	}
+
 });

@@ -4,6 +4,10 @@ export {
 	convertStatusArchitecture
 }
 
+if (Meteor.isDevelopment) {
+	process.env.mail_url= Meteor.settings.mail_url;
+}
+
 function getMyGroupsIDs(){
 	var grps = Groups.find({users: this.userId}).fetch();
 	var ids = [];

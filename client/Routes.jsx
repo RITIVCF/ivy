@@ -1,9 +1,11 @@
 import React from 'react';
 import {mount} from 'react-mounter';
+import LZString from 'lz-string';
 
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {BlankLayout} from './layouts/BlankLayout.jsx';
 import {EmailTemplateViewLayout} from '/client/layouts/EmailTemplateViewLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
@@ -599,6 +601,23 @@ FlowRouter.route('/feedback',{
 		mount(MainLayout, {
 			header: "Feedback Summary",
 			content: (<FeedbackWrapper />)
+		})
+	}
+});
+
+FlowRouter.route('/emailrender/:compressedHTML', {
+	action(params) {
+		var decompressedHTML = LZString.decompressFromEncodedURIComponent(params.compressedHTML);
+		mount(BlankLayout, {
+			content: (decompressedHTML)
+		})
+	}
+});
+
+FlowRouter.route('/unsubscribe/:subid', {
+	action(params) {
+		mount(FormLayout, {
+			content: (<UnsubscribeForm token={params.subid} />)
 		})
 	}
 });
