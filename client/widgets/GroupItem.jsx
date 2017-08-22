@@ -10,7 +10,7 @@ export default class GroupItem extends TrackerReact(React.Component) {
 
 	go(){
 		if(checkPermission('admin')){
-			FlowRouter.go("/admin/groups");
+			FlowRouter.go("/admin/structures");
 		}
 	}
 

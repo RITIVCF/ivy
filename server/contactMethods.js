@@ -1,7 +1,38 @@
 import { setStatus } from '/lib/contactStatus.js';
 import { deleteUser } from '/lib/users.js';
+import { getUser, createNewUser } from '/lib/users.js';
+import { addTicket } from '/lib/tickets.js';
 
 Meteor.methods({
+	createNewContact(userDoc){
+		// Create follow up ticket
+		let addedBy = userDoc.name;
+		if(Meteor.userId()){
+			addedBy = getUser(Meteor.userId()).name;
+		}
+		let desc = "Added manually by " + addedBy + ".";
+
+		const uid = createNewUser(userDoc);
+
+		const ticketID = addTicket({
+			subject: "New Contact: " + userDoc.name,
+			customer: uid,
+			description: desc,
+			type: "Contact",
+			submittedBy: Meteor.userId()
+		});
+
+		Meteor.users.update(uid, {$set: {ticket: ticketID}});
+
+		if(userDoc.newsletter){
+			Meteor.call("updateNewsletter", uid, true);
+		}
+		if(userDoc.learnmore){
+			Meteor.call("addLearnMoreTicket", uid);
+		}
+
+		return uid;
+	},
 	makePresent(cid){
 		if(checkPermission("admin")){
 			setStatus(cid, "Present");

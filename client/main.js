@@ -11,6 +11,9 @@ document.title="Ivy";
 //Meteor.subscribe("allUsers");
 
 Meteor.subscribe("allContacts");
+Meteor.subscribe("userContacts");
+Meteor.subscribe("graduatedContacts");
+Meteor.subscribe("expiredContacts");
 Meteor.subscribe("oldContacts");
 Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
@@ -20,21 +23,21 @@ SiteOptions = Meteor.subscribe("allOptions");
 Meteor.subscribe("allPagePermissions");
 Meteor.subscribe("currentFunnel");
 Meteor.subscribe("currentStatus");
-Meteor.subscribe("userContacts");
 
 
-routeTo = function(routeName, params){
-	FlowRouter.go(FlowRouter.path(routeName, params));
+routeTo = function(routeName, params, queryParams){
+	let path = FlowRouter.path(routeName, params, queryParams);
+	FlowRouter.go(path);
 }
 
 
 Accounts.onEnrollmentLink(function(token,done){
   //Accounts.resetPassword()
-  FlowRouter.go("/signup/"+token);
+  FlowRouter.go("/public/signup/"+token);
 });
 
 Accounts.onResetPasswordLink(function(token, done){
-	FlowRouter.go("/forgotpassword/"+token);
+	FlowRouter.go("/public/forgotpassword/"+token);
 });
 
 if ($) {

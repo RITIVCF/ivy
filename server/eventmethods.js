@@ -5,6 +5,7 @@ import {
 	setPublishAllRecurEvents,
 	deleteAllRecurEvents,
 	setEventGroup } from '/lib/events.js';
+import { addTicket } from '/lib/tickets.js';
 import Contact from '/lib/classes/Contact.js';
 import { createNewUser } from '/lib/users.js';
 
@@ -54,10 +55,6 @@ Meteor.methods({
       }
 
     }
-
-		//calculateFunnelStatus(signin.uid);
-
-    setupStatusJobs(signin.uid);
 
 		if( signin.new ){
 			createNewEventFollowUpEmail(signin.eid, signin.uid);
@@ -126,32 +123,24 @@ Meteor.methods({
           }
         }}
       );
-      calculateFunnelStatus(record.uid);
+			calculateFunnelStatus(record.uid);
     }
   }
 
   addAttendanceTicket = function(eid, uid){
-        ret = Counters.findOne("ticketID");
-    Counters.update({_id:"ticketID"}, {$inc: {seq: 1}});
+
     let evname = Events.findOne(eid).name;
     let user = new Contact(Meteor.users.findOne(uid));
     let desc = evname+"\n"+user.getName()+"\n"+user.getEmail()+"\n"+user.getPhone()+"\n"+user.getHowHear();
-    var tktId = Tickets.insert({
-      ticketnum: ret.seq,
-      subject: "New Contact: " + user.getName(),
-      description: desc,
-      assignedgroup: Options.findOne("ticketcontact").gid,
-      assigneduser: "",
-      customer: uid,  // Affected, or "customer" user
-      status: "Open",
-      type:"Contact",
-      evreqtype: "",
-      eid: eid,
-      activities: [],
-      createdAt: new Date(),
-      submittedby: "Ivy System",
-      lastUpdated: new Date()
-    });
+		let subject = "New Contact: " + user.getName()
+
+    let tktId = addTicket({
+			subject: subject,
+			description: desc,
+			type: "Contact",
+			customer: uid,
+			eid: eid
+		})
     // Sets
     Meteor.users.update(user._id, {$set: {ticket: tktId}});
     return tktId;

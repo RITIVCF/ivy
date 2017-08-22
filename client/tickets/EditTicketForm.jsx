@@ -63,7 +63,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 
   goToEvent(){
     if(checkPermission('attendance')){
-      FlowRouter.go("/attendance/event/"+this.props.ticket.eid);
+			routeTo("eventattendance", {eid: this.props.ticket.eid});
     }
   }
 
@@ -289,7 +289,7 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
                     </div>
                     <div className="col s8">
                       {!checkPermission('attendance')?<p>{this.getEventName()}</p>:<p>
-												<a href={"/attendance/event/"+this.props.ticket.eid} className="modal-close">{this.getEventName()}</a></p>}
+												<a href={"/events/attendance/"+this.props.ticket.eid} className="modal-close">{this.getEventName()}</a></p>}
                     </div>
                   </div>
                 }

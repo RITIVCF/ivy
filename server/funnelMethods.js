@@ -1,5 +1,6 @@
 import { isContactPresent } from '/lib/contactStatus.js';
 import { getUser } from '/lib/users.js';
+import Contact from '/lib/classes/Contact.js';
 
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
@@ -23,8 +24,10 @@ calculateFunnelStatus = function(uid){
 	// If present, do not take attendance into consideration
 	// for calculating funnel
 	let currentStatus = user.getStatus();
+	let funnelRecords = Funnel.find({uid: uid}).fetch();
+	let statusRecords = Status.find({uid: uid}).fetch();
 	if(!isContactPresent(currentStatus)){
-		status = currentStatus;
+		status = user.getFunnelStatus();
 	}
 	else{
 		// Check to see if we need to follow up with them
@@ -64,7 +67,6 @@ saveStatusChange = function(uid, status){
   let currStatus = getUserFunnelStatus(uid);
 
   if(currStatus){
-
     if(currStatus!=status){
       insertAndUpdateFunnelStatus(uid, status);
     }
@@ -86,13 +88,14 @@ getIntervals = function(){
 	var intervalLength = options.interval; //In days
   var period = options.period; //In intervalLengths
   var endDate = new Date();
-  var startDate = new Date();
+	// Add 2 hours because form opens 2 hours before event starts.
+  var startDate = new moment().add(2, "hours");
 
   let intervals = [];
 
   for( var i=0; i < period; i++ ){
     // Move start date back
-    var startDate = subtractMinutes(endDate, intervalLength);
+    var startDate = subtractDays(endDate, intervalLength);
 
 
     // Get count of events in this interval
@@ -101,7 +104,7 @@ getIntervals = function(){
 				$gte : startDate,
 				$lt : endDate
 			},
-      published: true,
+      status: {$in: ["Published", "Reviewed"]},
 		}, {name: 1}).count();
 
 		// are there no events?
@@ -145,7 +148,7 @@ getNumberOfValidIntervals = function(numOfIntervals){
 
   for( var i=0; i < numOfIntervals; i++ ){
     // Move start date back
-    startDate = subtractMinutes(endDate, intervalLength);
+    startDate = subtractDays(endDate, intervalLength);
 
     // are there events in this interval?
     numOfEventsInInterval = Events.find({
@@ -235,7 +238,6 @@ addIntegrationTicket = function(uid){
   let user = new Contact(Meteor.users.findOne(uid));
   let desc = user.getName()+" has not been coming for a while.\n"+user.getEmail()+"\n"+user.getPhone()+"\n"+user.getHowHear();
   let gid = Options.findOne("ticketcontact").gid;
-  console.log("gid: ", gid);
   var tktId = Tickets.insert({
     ticketnum: ret.seq,
     subject: "See how " + user.getName() + " is doing!",

@@ -31,16 +31,18 @@ export default class EmailSummary extends TrackerReact(React.Component){
     this.setState({showSent: !this.state.showSent});
   }
 
+	// The specification of template: newsletter can be remove once the email area is used for
+	// more than just newsletters
   getDrafts(){
-    return Emails.find({status: "draft"}, {sort: {when: -1}}).fetch();
+    return Emails.find({status: "draft", template: "newsletter"}, {sort: {when: -1}}).fetch();
   }
 
   getStaged(){
-    return Emails.find({status: "staged"}, {sort: {when: -1}}).fetch();
+    return Emails.find({status: "staged", template: "newsletter"}, {sort: {when: -1}}).fetch();
   }
 
   getSent(){
-    return Emails.find({status: "sent"}, {sort: {when: -1}}).fetch();
+    return Emails.find({status: "sent", template: "newsletter"}, {sort: {when: -1}}).fetch();
   }
 
   getRows(num){
