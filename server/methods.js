@@ -257,134 +257,32 @@ Meteor.methods({
     }
     var mults = Groups.findOne("multipliers").users;
     let user = Meteor.users.findOne(uid);
-      if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
-        Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
-      } else if (Groups.find({leader : uid}).fetch().length > 0) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
-      } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
-      } else if (user.member) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
-      } else {
-        var count = 0;
+    if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
+      Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
+    } else if (Groups.find({leader : uid}).fetch().length > 0) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
+    } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
+    } else if (user.member) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
+    } else {
+      var count = 0;
 
-        eventsPerInterval.forEach((intvl)=>{
+      eventsPerInterval.forEach((intvl)=>{
 
-          if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
-            count++
-          }
-        });
-
-        if (count>=threshold) {
-          Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
-        } else {
-
-          Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
+        if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
+          count++
         }
+      });
+
+      if (count>=threshold) {
+        Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
+      } else {
+
+        Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
       }
-      //===============
-      Churches.update(
-        {contacts: contactid},
-        {$addToSet: {contacts: user._id}},
-        {multi: true}
-      );
-      Churches.update(
-        {contacts: contactid},
-        {$pull: {contacts: contactid}},
-        {multi: true}
-      );
-      //===============
-
-    });
-    Meteor.users.update({},{$set: {preferences: {
-      "theme-color": "Default",
-      "contacts_view":"Tile",
-      "contacts_infobar": true,
-      "tickets_view":"List",
-      "tickets_infobar":true,
-      "calendar_view":"month",
-      "events_infobar":true,
-      "groups_view": "Team",
-      "churches_view":"Tile",
-      "churches_infobar":true
-      }
-    }}, {multi: true});
-
-
-
-
-    // OPtions
-    var requesttypes = Options.findOne("requesttypes").vals;
-    console.log("Request Types: ", requesttypes);
-    var newtypes = [];
-    requesttypes.forEach((type)=>{
-        var typobj = {label:type,gid: "admin"};
-        console.log(typobj);
-        newtypes.push(typobj);
-    });
-    console.log("New types", newtypes);
-    Options.update("requesttypes",{$set: {vals: newtypes}});
-
-    var eventtags = Options.findOne("eventtags").vals;
-    console.log("Event Tags: ", eventtags);
-    var colors = ["#FF0","#0FF","#0F0","#F0F","#00F","#F00"];
-    var cnt = 0;
-    var newtags = [];
-    eventtags.forEach((tag)=>{
-      var tagobj = {tag: tag, color: colors[cnt]};
-      console.log("New tag: ", tagobj);
-      newtags.push(tagobj);
-      cnt+=1;
-    });
-    console.log("New Tags: ",newtags);
-    Options.update("eventtags", {$set: {vals: newtags}});
-
-    //Email Template Initialization
-    Emails.insert({
-      _id: "newsletter",
-      title: "Newsletter",
-      to: {users: [],groups:[],emails:[]},
-      from: "ivcf@rit.edu",
-      subject: "IVCF Chapter Newsletter",
-      content: "",
-      isTemplate: true
-    });
-
-    //Page Permissions
-    PagePermissions.insert({
-      "_id" : "emails",
-      "groups" : ["admin"],
-      "pagename" : "View/Edit Emails"
-    });
-    PagePermissions.insert({
-      "_id" : "ivrep",
-      "groups" : [ "" ],
-      "pagename" : "IV Official"
-    });
-
-    //Event Workpad changes
-    var events = Events.find().fetch();
-    events.forEach((event)=>{
-      var newworkpad = [
-          {
-            "name" : "Pad 1",
-            "content" : event.workpad,
-            "lock" : false
-          }
-        ]
-      Events.update({_id: event._id},{$set: {workpad: newworkpad}});
-    });
-
-    return retval;
-
-
-  },
-	migrateSummer2017(){
-		if(checkPermission("admin")){
-			return runDbMigration();
 		}
-		return true;
-	},
+  },
 	addEmailModuleLabels(){
 		const types = Options.findOne("emailtypes");
 		let typeDict = {};
