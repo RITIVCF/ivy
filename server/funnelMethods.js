@@ -24,8 +24,6 @@ calculateFunnelStatus = function(uid){
 	// If present, do not take attendance into consideration
 	// for calculating funnel
 	let currentStatus = user.getStatus();
-	let funnelRecords = Funnel.find({uid: uid}).fetch();
-	let statusRecords = Status.find({uid: uid}).fetch();
 	if(!isContactPresent(currentStatus)){
 		status = user.getFunnelStatus();
 	}

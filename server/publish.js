@@ -596,11 +596,21 @@ Meteor.publish("emailEvents", function(emid) {
   let email = Emails.findOne(emid);
   let when = !!email.when?email.when:new Date();
   let n = addDays(when, 7);
-  return Events.find({$or:[
-    {start: {$gt: when, $lt: n}, status: "Published"},
-    {start: {$gt: when}, tags: "Conference"}
-  ]});
-})
+  return Events.find(
+		{$and: [{
+			$or:[
+		    {start: {$gt: when, $lt: n}, status: "Published"},
+		    {start: {$gt: when}, tags: "Conference"}
+		  ]},
+			{$or: [
+				{deleted: false},
+				{deleted: {$exists: false}}
+			]}
+		]
+		}
+	);
+});
+
 //***************************************
 
 // *******    Debrief   ************

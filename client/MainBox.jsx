@@ -8,9 +8,7 @@ import InfoBarMobile from './layouts/InfoBarMobile.jsx';
 export default class MainBox extends TrackerReact(React.Component) {
 	constructor(){
 		super();
-		// if(!Session.get("infobar")){
-		// 	Session.set("infobar",true);
-		// }
+		
 	}
 
 	stopit(event){

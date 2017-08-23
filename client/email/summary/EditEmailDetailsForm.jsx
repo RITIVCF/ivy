@@ -1,6 +1,7 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import TextInput from '/client/sharedcomponents/TextInput';
+import { Row, Column } from '/client/materialize.jsx';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
@@ -27,6 +28,12 @@ export default class EditEmailDetailsForm extends TrackerReact(React.Component){
 		if(isStaged){
 			Meteor.call("unstageEmail", this.props.email._id);
 		} else{
+			if(this.props.email.when < new Date()){
+				const response = window.confirm("The scheduled time to send is before the current date. This will send the email immediately upon staging. If this is what you want, click okay, otherwise, please cancel and change the scheduled send time.");
+				if(!response){
+					return; // Do not stage
+				}
+			}
 			Meteor.call("stageEmail", this.props.email._id);
 		}
 	}
@@ -40,29 +47,31 @@ export default class EditEmailDetailsForm extends TrackerReact(React.Component){
 		let isStaged = email.status == "staged";
 		let isSent = email.status == "sent";
     return (
-      <div className="row">
-				{!isSent&&
-					<button
-						className="btn waves-light waves-effect"
-						onClick={()=>{this.handleStageClick(isStaged)}}
-					>
-						{isStaged?"Unstage":"stage"}
-					</button>
-				}
-				<TextInput
-					id="emailsubject"
-					defaultValue={email.subject}
-					label="Email Subject"
-					onChange={(newValue)=>{this.handleSubjectChange(newValue)}}
-				/>
-				<label>Scheduled Time to Send</label>
-				<DateTimePicker
-					ref="when"
-					defaultValue={email.when}
-					onChange={this.handleWhenChange}
-				/>
+      <Row>
+				<Column>
+					{!isSent&&
+						<button
+							className="btn waves-light waves-effect"
+							onClick={()=>{this.handleStageClick(isStaged)}}
+						>
+							{isStaged?"Unstage":"stage"}
+						</button>
+					}
+					<TextInput
+						id="emailsubject"
+						defaultValue={email.subject}
+						label="Email Subject"
+						onChange={(newValue)=>{this.handleSubjectChange(newValue)}}
+					/>
+					<label>Scheduled Time to Send</label>
+					<DateTimePicker
+						ref="when"
+						defaultValue={email.when}
+						onChange={this.handleWhenChange}
+					/>
 
-			</div>
+				</Column>
+			</Row>
 		)
-  }
+	}
 }

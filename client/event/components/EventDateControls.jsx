@@ -17,23 +17,6 @@ export default class EventDateControls extends React.Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    // console.log("Prop start: ", this.props.start);
-    // console.log("Next Prop start: ", nextProps.start);
-    // console.log("Prop end: ", this.props.end);
-    // console.log("Next prop end: ", nextProps.end);
-    // console.log("Starts equal? ", this.props.start==nextProps.start);
-    // console.log("Ends equal ", this.props.end==nextProps.end);
-    // if(this.props.start==nextProps.start&&this.props.end==nextProps.end){
-    //   console.log("should not update");
-    //   return false
-    // }else{
-    //   console.log("updating");
-    //   return true;
-    // }
-    return true;
-  }
-
   handleStartChange(value){
     this.setState({start: value});
   }
