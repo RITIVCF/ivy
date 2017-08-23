@@ -284,7 +284,7 @@ let options = [
 	    {
 	      "value": "cta",
 				"name": "Call to Action",
-	      "isUserAccessible": false
+	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "grid",
@@ -302,8 +302,13 @@ let options = [
 	      "isUserAccessible": true
 	    },
 	    {
-	      "value": "banner",
-				"name": "Banner",
+	      "value": "spacer",
+				"name": "Spacer",
+	      "isUserAccessible": true
+	    },
+	    {
+	      "value": "divider",
+				"name": "Divider",
 	      "isUserAccessible": true
 	    }
 	  ]
@@ -418,7 +423,7 @@ let options = [
 	    },
 			{
 	      "value": "misvision",
-				"name": "Mission\Vision",
+				"name": "Mission\\Vision",
 				"defaultLayout": "text",
 				"defaultDesc": "In response to God's love, grace, and truth, we want to see LIVES TRANSFORMED, CAMPUSES RENEWED, AND WORLD CHANGERS DEVELOPED",
 	      "canChooseLayout": false
