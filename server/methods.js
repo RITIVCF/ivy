@@ -490,6 +490,28 @@ Meteor.methods({
 			return runDbMigration();
 		}
 		return true;
+	},
+	addEmailModuleLabels(){
+		const types = Options.findOne("emailtypes");
+		let typeDict = {};
+		types.vals.forEach( (type)=>{
+			typeDict[type.value] = type.name;
+		});
+
+		const emails = Emails.find().fetch();
+		emails.forEach((email)=>{
+			let modules = email.modules;
+
+			modules.map((module)=>{
+				if(!module.hasOwnProperty('label')){
+					module.label = typeDict[module.type];
+				}
+			});
+
+			Emails.update(email._id, {$set: {modules: modules}});
+
+		});
+
 	}
 
 

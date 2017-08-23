@@ -592,12 +592,22 @@ Meteor.publish("thisEmail", function(emid){
 });
 
 Meteor.publish("emailEvents", function() {
-  let n = addDays(new Date(), 7);
-  return Events.find({$or:[
-    {start: {$gt: new Date(), $lt: n}, status: "Published"},
-    {start: {$gt: new Date()}, tags: "Conference"}
-  ]});
-})
+  //let n = addDays(new Date(), 7);
+  return Events.find(
+		{$and: [{
+			$or:[
+		    {start: {$gt: new Date()}, status: "Published"},
+		    {start: {$gt: new Date()}, tags: "Conference"}
+		  ]},
+			{$or: [
+				{deleted: false},
+				{deleted: {$exists: false}}
+			]}
+		]
+		}
+	);
+});
+
 //***************************************
 
 // *******    Debrief   ************

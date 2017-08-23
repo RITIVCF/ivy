@@ -12,8 +12,6 @@ export default class MaterialIcon extends TrackerReact(React.Component) {
 	onClick(event){
 		if(!!this.props.action){
 			event.stopPropagation();
-			// this.props.icon.action(this.props.icon.arg);
-			console.log("The icon is about to execute the action.");
 			this.props.action();
 		}
 	}
@@ -32,7 +30,6 @@ export default class MaterialIcon extends TrackerReact(React.Component) {
 
 	getClassName(){
 		let className = "material-icons";
-		console.log("ClassName: ", this.props.className);
 		if(this.props.className){
 			className = className + " " + this.props.className;
 		}

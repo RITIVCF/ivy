@@ -103,7 +103,7 @@ Meteor.methods({
 		Emails.update(
 			{_id: emid},
 			{$pull: {
-				"modules._id": moduleId
+				"modules": {"_id": moduleId}
 			}
 		});
 	},
@@ -176,6 +176,66 @@ Meteor.methods({
 			{_id: emid,
 				"modules._id": moduleId},
 			{$set: {"modules.$.title": title}}
+		);
+	},
+
+	setModuleImg(emid, moduleId, imgURL){
+		Emails.update(
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: {"modules.$.img": imgURL}
+			}
+		);
+	},
+
+	setModuleEvent(emid, moduleId, eid){
+		Emails.update(
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: {"modules.$.eid": eid}
+			}
+		);
+	},
+
+	setModuleLabel(emid, moduleId, newLabel){
+		Emails.update(
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: {"modules.$.label": newLabel}
+			}
+		);
+	},
+
+	setModuleURL(emid, moduleId, newURL){
+		Emails.update(
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: {"modules.$.url": newURL}
+			}
+		);
+	},
+
+	setModuleButtonText(emid, moduleId, text){
+		Emails.update(
+			{
+				_id: emid,
+				"modules._id": moduleId
+			},
+			{
+				$set: {"modules.$.": text}
+			}
 		);
 	}
 });

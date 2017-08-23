@@ -44,9 +44,9 @@ export default class EventTags extends TrackerReact(React.Component) {
       <div>
         {this.props.perm&&
           <select ref="tag" className="browser-default" value={tags[0]} onChange={this.submit.bind(this)}>
-              <option value={""}>Select an event type</option>
-              {this.fillTags().map( (val) => {
-                return (<option value={val.tag}>{val.tag}</option>)
+						<option value={""}>Select an event type</option>
+						{this.fillTags().map( (val) => {
+							return (<option key={val.tag} value={val.tag}>{val.tag}</option>)
               })}
           </select>
 

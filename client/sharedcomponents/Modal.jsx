@@ -24,7 +24,7 @@ export default class Modal extends React.Component {
     return (
       <div id={this.props.id} className={this.getModalType()}>
         {this.getModalContent()}
-
+				
 				{this.getModalFooter()}
       </div>
     )
