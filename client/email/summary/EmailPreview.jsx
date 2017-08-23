@@ -14,7 +14,7 @@ export default class EmailPreview extends TrackerReact(React.Component){
 
   render() {
     return (
-      <div className="row">
+      <div>
 				{!this.props.email.isSent()&&
 					<EditEmailDetailsForm
 						email={this.props.email}

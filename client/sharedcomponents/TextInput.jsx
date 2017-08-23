@@ -5,6 +5,10 @@ export default class TextInput extends TrackerReact(React.Component) {
   constructor(props){
     super(props);
 
+		this.state = {
+			value: props.value ? props.value : this.getDefaultValue()
+		};
+
 		this.handleChange = this.handleChange.bind(this);
   }
 
@@ -18,6 +22,8 @@ export default class TextInput extends TrackerReact(React.Component) {
 
 	handleChange(event){
 		this.props.onChange(event.target.value);
+		this.setState({value: event.target.value});
+		this.value = event.target.value;
 	}
 
 	getTextFieldId(){
@@ -25,7 +31,7 @@ export default class TextInput extends TrackerReact(React.Component) {
 	}
 
 	getClassName(){
-		return "";
+		return "col s12";
 	}
 
 	getDefaultValue(){
@@ -41,18 +47,28 @@ export default class TextInput extends TrackerReact(React.Component) {
 		let id = this.getTextFieldId();
 		let label = this.props.label;
 		let defaultValue = this.getDefaultValue();
-		let value = this.props.value;
+		const value = this.state.value;
 		let className = this.getClassName();
+		const childProps = {
+			id: id,
+			type: "text",
+			className: this.props.multi&&"materialize-textarea",
+			value: value,
+			defaultValue: defaultValue,
+			onChange: this.handleChange
+		}
     return (
-			<div className="input-field">
-				<input id={id}
-					type="text"
-					className={className}
-					value={value}
-					defaultValue={defaultValue}
-					onChange={this.handleChange} />
-				<label htmlFor={id}>{label}</label>
-			</div>
+			<Row>
+				<div className="input-field col s12">
+					{
+						this.props.multi ?
+							<textarea {...childProps} />
+						:
+						<input {...childProps} />
+					}
+					<label htmlFor={id}>{label}</label>
+				</div>
+			</Row>
     )
   }
 

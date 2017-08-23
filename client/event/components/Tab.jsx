@@ -24,9 +24,7 @@ export default class Tab extends Component {
 
   update(){
     var newtabname = prompt("Please enter new tab name: ");
-    console.log(newtabname);
     Meteor.call("changeTabName", this.props.eid, this.props.tab.name, newtabname);
-    //Meteor.call("changeTabName", this.props.eid, this.props.tab, this.refs.tab.value);
     this.setState({editting: false});
   }
 

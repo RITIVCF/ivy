@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 
 var updDescription = _.throttle(
   function(eid, value)
-  {//console.log(value);
+  {
     Meteor.call("updateEventDescription", eid, value);
     Meteor.call("EventDescriptionLock", eid, true);
   },500);
 
 var setDescFalse = _.debounce(function(thiz, eid){
-  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventDescriptionLock", eid, false);
 }, 1000);
@@ -27,7 +26,6 @@ export default class EventDescription extends Component {
   updateDescription(event){
 		event.preventDefault();
 		Meteor.call("updateEventDescription", this.props.eid, this.refs.description.value);
-		//this.state.value = this.refs.description;
 	}
 
   handleDescriptionChange(event){ // need one of these for each component
@@ -50,13 +48,10 @@ export default class EventDescription extends Component {
   }
 
   getEvent(){
-		////console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}
 
   edit(){
-    //React.render(<DescriptionModal eid={this.props.eid} />, this.refs.modal);
     this.setState({edit: true})
   }
 
@@ -67,7 +62,6 @@ export default class EventDescription extends Component {
 
   submit(event){
 		event.preventDefault();
-    console.log("Submitting...", this.refs.description.value);
 		Meteor.call("updateEventDescription", this.props.ev._id, this.refs.description.value);
     this.setState({edit: false});
 	}
@@ -77,16 +71,17 @@ export default class EventDescription extends Component {
     let edit = this.state.edit;
     return(
       <div className="row">
-        <label>Description</label>{(this.props.perm&&!edit)&&<i className="tiny material-icons" onClick={this.edit.bind(this)}>edit</i>}
-          {edit?<form onSubmit={this.submit.bind(this)}>
-            <div className="input-field col s12">
-              <textarea ref="description"
-                id="description"
-                className="materialize-textarea"
-                defaultValue={this.state.description}
-                />
-            </div><input type="submit" className="btn" value="Save" />
+        <label>Advertising Description</label>{(this.props.perm&&!edit)&&<i className="tiny material-icons" onClick={this.edit.bind(this)}>edit</i>}
+				{edit?<form onSubmit={this.submit.bind(this)}>
+					<div className="input-field col s12">
+						<textarea ref="description"
+							id="description"
+							className="materialize-textarea"
+							defaultValue={this.state.description}
+						/>
+					</div><input type="submit" className="btn" value="Save" />
           <button type="button" onClick={this.close.bind(this)} className="btn">Cancel</button>
+					<p style={{fontSize: "small",	color: "grey", fontStyle: "italic"}}>*This description is for use in IVCF publications and is meant for advertising purposes. All internal descriptions and planning should go in the workpad.</p>
         </form>:<p>{this.props.ev.description}</p>}
       </div>
     )

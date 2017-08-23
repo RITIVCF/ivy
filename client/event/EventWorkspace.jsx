@@ -7,7 +7,6 @@ import EventWorkpad	from './components/EventWorkpad.jsx';
 import InfoBar from '../InfoBar.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 
-
 //export default class EventWorkspace extends TrackerReact(React.Component) {
 export default class EventWorkspace extends React.Component {
 	constructor(props) {
@@ -30,13 +29,13 @@ export default class EventWorkspace extends React.Component {
 	render() {
 		let ev = this.props.ev;
 		let perm = this.props.perm;
-
+		const imgPath = ev.pic ? ev.pic : "/images/defaultEventSmall.png";
 		return (
 				<div className="row" style={{height: "100%"}}>
 					<div className="col s12">
 						<div className="card">
 							<div className="card-image">
-								<img src="/images/defaultEventSmall.png" />
+								<img src={imgPath} />
 								<EventName ev={ev} perm={perm} />
 							</div>
 							<div className="card-content">
