@@ -416,6 +416,13 @@ let options = [
 				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
+			{
+	      "value": "misvision",
+				"name": "Mission\Vision",
+				"defaultLayout": "text",
+				"defaultDesc": "In response to God's love, grace, and truth, we want to see LIVES TRANSFORMED, CAMPUSES RENEWED, AND WORLD CHANGERS DEVELOPED",
+	      "canChooseLayout": false
+	    },
 	    {
 	      "value": "header",
 				"name": "Header",
@@ -477,7 +484,7 @@ let options = [
 					<li>Be an MC at Large Group</li>
 					<li>Small Groups – join one and/or lead one</li>
 					<li>Large Group – attend and/or help plan</li>
-					Resource Team – make sure our club functions :)</li>
+					<li>Resource Team – make sure our club functions :)</li>
 					<li>Strategy Team – plan and/or lead events</li>
 					<li>Welcome – say ‘hi’ to people as they sign in to Large Group!
 					Sound Team</li>
@@ -548,13 +555,12 @@ let emailTemplates = [
 	  "title": "Newsletter",
 	  "modules": [
 			newEmailModule("intro"),
-			newEmailModule("salutation"),
+			newEmailModule("misvision"),
 			newEmailModule("nso"),
 			newEmailModule("social"),
 			newEmailModule("largegroup"),
 			newEmailModule("smallgroup"),
 			newEmailModule("prayer"),
-			newEmailModule("core"),
 			newEmailModule("conference"),
 			newEmailModule("becomeamember"),
 			newEmailModule("getinvolved")
@@ -573,6 +579,7 @@ let emailTemplates = [
 	  "title": "Event Follow Up",
 	  "modules": [
 			newEmailModule("salutation"),
+			newEmailModule("misvision"),
 			newEmailModule("custom")
 		]
 	},

@@ -223,9 +223,6 @@ Meteor.methods({
     }
     return rst;
   },
-  testCreation(){
-    console.log(Accounts.createUser({email: "testemail@email.com"}));
-  },
   updateContactFunnelStatus(uid){
     var intervl = 7; //In days
     var period = 4; //In intervls
@@ -257,136 +254,33 @@ Meteor.methods({
       });
       eventsPerInterval.push(events);
       endDate = startDate;
-
     }
     var mults = Groups.findOne("multipliers").users;
-
     let user = Meteor.users.findOne(uid);
-
       if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
-        // console.log(user.name, " Is multiplier");
         Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
       } else if (Groups.find({leader : uid}).fetch().length > 0) {
-        // console.log(user.name, " Is leader");
         Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
       } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
-        //console.log(user.name, " Is server");
         Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
       } else if (user.member) {
-        // console.log(user.name, " Is member");
         Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
       } else {
-        // console.log(user.name, " Is visitor or crowd");
         var count = 0;
-        //console.log(eventsPerInterval);
+
         eventsPerInterval.forEach((intvl)=>{
-        //  console.log(intvl);
+
           if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
             count++
           }
         });
 
-        // for (var ls in eventsPerInterval) {
-        // 	if (ls.find({attendees : uid}).fetch().length > 0) {
-        // 		count++;
-        // 	}
-        // }
         if (count>=threshold) {
-          // console.log(user.name, " Is visitor");
           Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
         } else {
-          // console.log(user.name, " Is crowd");
+
           Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
         }
-      }
-    //  console.log(user.name, " end.");
-  //   });
-  },
-  migrateDatabase(){
-    //var userMeteor.users = Meteor.users.find({user: true}).fetch();
-    var notUserContacts = Contacts.find({user: {$ne: true}}).fetch();
-
-    // CONTACT ONLY UPDATE SECTION
-    notUserContacts.forEach((contact)=>{
-      console.log("Contact");
-      console.log(contact);
-      var contactid=contact._id;
-      delete contact._id;
-      var uid = Accounts.createUser(contact);
-      //Contacts.update({_id: contactid},{$set: {user:true}});
-      Meteor.users.update({_id: uid},{$set: {contact: contactid}});
-      //===========  Event update attendance ids
-    Events.update(
-      {"attendees._id":contactid}, // where cid is an attendee
-      {$set:
-        {"attendees.$._id":uid}   // set attendee id to user id
-      },
-      {multi: true}
-    );
-    //===============
-    Churches.update(
-      {contacts: contactid},
-      {$addToSet: {contacts: uid}},
-      {multi: true}
-    );
-    Churches.update(
-      {contacts: contactid},
-      {$pull: {contacts: contactid}},
-      {multi: true}
-    );
-    //===============
-    });
-    var retval;
-    //
-    //     USER UPDATE SECTION
-    var userContacts = Contacts.find({user: true}).fetch();
-    userContacts.forEach((contact)=>{
-      console.log("Contact");
-      console.log(contact);
-
-      var contactid = contact._id;
-      delete contact._id;
-      Meteor.users.update({contact: contactid}, {$set: contact});
-      console.log("Updated user");
-      console.log(
-        Meteor.users.findOne({contact: contactid})
-        );
-        console.log("contactid: ",contactid);
-      var user = Meteor.users.findOne({contact: contactid});
-        //===========  Event update attendance ids
-        if(user.name=="Bobby Picciotti"){
-          var events =Events.find({_id: "4ZCcw5oneKYwCjmLo", "attendees._id":contactid},{name: 1, attendees: 1}).fetch();
-          events.forEach((event)=>{
-            console.log("Event Name": event.name);
-            event.attendees.forEach((attendee)=>{
-              console.log(attendee);
-            })
-          });
-        }
-        if(user.name=="Bobby Picciotti"){
-          console.log("Updating attendance");
-        }
-      Events.update(
-        {"attendees._id":contactid}, // where cid is an attendee
-        {$set:
-          {"attendees.$._id": user._id}   // set attendee id to user id
-        },
-        {multi: true}
-      );
-      Events.update(
-        {"attendees._id":contactid}, // where cid is an attendee
-        {$pull:
-          {attendees: {_id: contactid}}   // pull any duplicates
-        },
-        {multi: true}
-      );
-      if(user.name=="Bobby Picciotti"){
-        events.forEach((event)=>{
-          console.log("Event Name": event.name);
-          event.attendees.forEach((attendee)=>{
-            console.log(attendee);
-          })
-        });
       }
       //===============
       Churches.update(
@@ -515,4 +409,4 @@ Meteor.methods({
 	}
 
 
-})
+});

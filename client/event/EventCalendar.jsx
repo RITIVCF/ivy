@@ -183,24 +183,12 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   	grps.forEach(function(group){
   		ids.push(group._id);
   	});
-  	//console.log("GGroups:");
-  	//console.log(ids);
-    // console.log(Events.find({$or: [
-    //   {owner: Meteor.userId()},
-    //   {published: true},
-    //   {"permUser.id": Meteor.userId()},
-    //   {"permGroup.id": {$in: ids}}
-    // ]}).fetch());
-
-
 
     return events;
   }
   getUnPublishedEvents(){
     if(checkPermission('events')){
       var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}], status: "Unpublished"}).fetch();
-
-      //var events = Events.find({published: false}).fetch();
 
       return this.addTagToUnPublishedEvents(events);
     }
@@ -213,7 +201,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       }).fetch();
       return this.addTagToUnPublishedEvents(events);
     }
-    //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
   }
 
   addTagToUnPublishedEvents(events){

@@ -1,9 +1,11 @@
 import React from 'react';
 import {mount} from 'react-mounter';
+import LZString from 'lz-string';
 
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {BlankLayout} from './layouts/BlankLayout.jsx';
 import {EmailTemplateViewLayout} from '/client/layouts/EmailTemplateViewLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
@@ -24,10 +26,8 @@ import NewContactWrapper from './contact/forms/NewContactWrapper.jsx';
 
 // ****  Events   *********
 import EventWorkspaceWrapper from './event/EventWorkspaceWrapper.jsx';
-import EventsWrapper from './event/EventsWrapper.jsx';
 import EventOld from './event/EventOld.jsx';
 import EventCalendarWrapper from './event/EventCalendarWrapper.jsx';
-import EventCalendarSub from './event/EventCalendarSub.jsx';
 import SigninWrapper from './event/forms/SignInWrapper.jsx';
 import RSVPWrapper from './event/forms/RSVP.jsx';
 // ****   Debriefs  *******
@@ -594,6 +594,23 @@ formRoutes.route('/signin/:eid', {
 // 	}
 // });
 
+
+FlowRouter.route('/emailrender/:compressedHTML', {
+	action(params) {
+		var decompressedHTML = LZString.decompressFromEncodedURIComponent(params.compressedHTML);
+		mount(BlankLayout, {
+			content: (decompressedHTML)
+		})
+	}
+});
+
+FlowRouter.route('/unsubscribe/:subid', {
+	action(params) {
+		mount(FormLayout, {
+			content: (<UnsubscribeForm token={params.subid} />)
+		})
+	}
+});
 
 FlowRouter.notFound = {
   action() {

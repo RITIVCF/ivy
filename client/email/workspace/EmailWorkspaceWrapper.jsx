@@ -11,17 +11,35 @@ import { loadEmail } from '/lib/emails.js';
 //Contacts = new Mongo.Collection('contacts');
 
 export default class EmailWorkspaceWrapper extends TrackerReact(React.Component){
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       subscription: {
         email: Meteor.subscribe("myEmails"),
-        events: Meteor.subscribe("emailEvents")
+        events: Meteor.subscribe("emailEvents", this.props.emid)
       }
     };
 
 
+  }
+
+  sendToMe() {
+    Meteor.call("sendToMe", this.props.emid, (error) => {
+			if(error) {
+				Materialize.toast("Could not send email", 2000);
+			} else {
+				Materialize.toast("Sent to you", 2000);
+			}
+		});
+  }
+
+  getSubHeader(email) {
+    return [<ul key="0" style={{marginLeft: "20px"}} className="left black-text">{email.subject}</ul>,
+    <ul key="1" style={{marginRight: "20px"}} className="right">
+      <li onClick={this.sendToMe.bind(this)}>
+        <a className="black-text">Send to me</a></li>
+    </ul>]
   }
 
   componentWillUnmount() {
@@ -42,12 +60,11 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
     }
     setDocumentTitle("Email Workspace");
 		let email = this.getEmail();
-		console.log("Email: ", email);
 
     return (
       <MainBox
         content={<EmailWorkspace email={email} />}
-        subheader={<ul style={{marginLeft: "20px"}} className="black-text">{email.subject}</ul>}
+        subheader={this.getSubHeader(email)}
         showinfobar={true}
         infobar={<EmailWorkspacePanel email={email} />}
         />

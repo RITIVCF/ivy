@@ -1,5 +1,6 @@
 import { isContactPresent } from '/lib/contactStatus.js';
 import { getUser } from '/lib/users.js';
+import Contact from '/lib/classes/Contact.js';
 
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
@@ -66,9 +67,7 @@ saveStatusChange = function(uid, status){
   if(currStatus){
     if(currStatus!=status){
       insertAndUpdateFunnelStatus(uid, status);
-    } else {
-
-		}
+    }
   }
   else{
     insertAndUpdateFunnelStatus(uid, status);

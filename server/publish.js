@@ -1,4 +1,5 @@
 import { getUser } from '/lib/users.js';
+import { loadEmail } from '/lib/emails.js';
 
 ContactsBackup = new Mongo.Collection("contactsbackup");
 EventsAttendanceBackup = new Mongo.Collection("eventsattendancebackup");
