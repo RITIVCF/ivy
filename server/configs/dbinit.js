@@ -452,15 +452,8 @@ let options = [
 	      "canChooseLayout": false
 	    },
 	    {
-	      "value": "nso",
-				"name": "NSO",
-				"defaultLayout": "grid",
-				"defaultDesc": "",
-	      "canChooseLayout": false
-	    },
-	    {
-	      "value": "social",
-				"name": "Social",
+	      "value": "community",
+				"name": "Community",
 				"defaultLayout": "feature",
 				"defaultDesc": "",
 	      "canChooseLayout": false
@@ -530,8 +523,32 @@ let options = [
 ];
 
 options.forEach( (option) => {
-	if(!Options.findOne(option._id)){
+	const currOptions = Options.findOne(option._id);
+	if(!currOptions){
 		Options.insert(option);
+	} else {
+		if(option._id == "emailtypes"){
+			// do not overwrite existing modules
+			// Add new modules
+			// Remove modules not in db init
+
+
+			let moduleValues = [];
+
+			option.vals.forEach( (module) =>{
+				if(!Options.findOne({_id: option._id, "vals.value": module.value})){
+					Options.update(option._id, {$addToSet: {modules: module}});
+				}
+
+				moduleValues.push(module.value);
+			});
+
+			// Remove any modules that are not in the dbinit
+			Options.update(option._id, {$pull: {vals: {value: {$nin: moduleValues}}}});
+
+
+
+		}
 	}
 	// else{
 	// 	Options.remove({_id: option._id});
