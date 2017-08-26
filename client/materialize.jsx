@@ -39,8 +39,46 @@ Button = function(props){
 	)
 }
 
+Navbar = function(props) {
+	return <ul className={props.right?"right":""}>
+		{props.children}
+	</ul>
+}
+
 NavbarItem = function(props) {
 	return (
-		<li><a href={props.href}>{props.children}</a></li>
+		<li onClick={props.onClick}><a href={props.href}>{props.children}</a></li>
+	)
+}
+
+Card = function(props) {
+	return (
+		<div
+			className="card"
+			onClick={props.onClick}
+			onDoubleClick={props.onDoubleClick}
+		>
+			{props.img&&<CardImage src={props.img} />}
+			<CardContent title={props.title} >
+				{props.children}
+			</CardContent>
+		</div>
+	)
+}
+
+CardImage = function(props) {
+	return (
+		<div className="card-image">
+			<img src={props.src} className="circle" />
+		</div>
+	)
+}
+
+CardContent = function(props) {
+	return (
+		<div className="card-content">
+			<span className="card-title">{props.title}</span>
+			{props.children}
+		</div>
 	)
 }

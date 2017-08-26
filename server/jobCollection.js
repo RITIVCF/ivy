@@ -5,7 +5,7 @@ import { processExpiredContacts } from '/server/contactStatus.js';
 import { shouldCalculateFunnel } from '/lib/contactStatus.js';
 
 
-var jobCollection = JobCollection('jobQueue');
+jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
 createJobAndDelay = function(uid, delayAmount, notValidIntervals = 0){
@@ -140,6 +140,9 @@ shouldJobCalculate = function(testVal, numberOfValidIntervals){
 }
 
 export function failJob(job, reason){
+	console.log("Failing Job");
+	console.log(job);
+	console.log("Reason: ", reason);
 	job.fail(
 	  {
 	    reason: reason
@@ -222,15 +225,16 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 		// Mark as finished
 		job.done();
-		job.remove();
+		//job.remove();
 		cb();
 
 	} catch (e) {
-		let user = Meteor.users.findOne(uid);
+		let user = Meteor.users.findOne(job.data.uid);
+		console.log("Error in checkFunnelStatus job ("+job._id+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
 			"checkFunnelStatus Job " + user.name,
-			"Debug: <br>" + "Data.uid: " + data.uid + "<br><br>" + e
+			"Debug: <br>" + "Data.uid: " + job.data.uid + "<br><br>" + e
 		);
 
 	}
@@ -252,14 +256,15 @@ Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
 
 		// Mark as finished
 		job.done();
-		job.remove();
+		//job.remove();
 		cb();
 
 	} catch (e) {
+		console.log("Error in sendNewsletter job (emid: "+job.data.emid+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
 			"sendNewsletter Job",
-			"Debug: <br>" + "Data.emid: " + data.emid + "<br><br>" + e
+			"Debug: <br>" + "Data.emid: " + job.data.emid + "<br><br>" + e
 		);
 
 	}
@@ -277,11 +282,12 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 
 		//Mark as finished
 		job.done();
-		job.remove();
+		//job.remove();
 		cb();
 
 	} catch (e) {
-		let user = Meteor.users.findOne(uid);
+		console.log("Error in sendEventFollowUpEmail job ("+job._id+"): ", e);
+		let user = Meteor.users.findOne(data.uid);
 		failJob(job, e);
 		sendErrorEmail(
 			"sendEventFollowUpEmail job " + user.name,
@@ -299,15 +305,15 @@ Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
 
 		//Mark as finished
 		job.done();
-		job.remove();
+		//job.remove();
 		cb();
 
 	} catch (e) {
-		let user = Meteor.users.findOne(uid);
+		console.log("Error in processExpiredContacts job ("+job._id+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
-			"sendEventFollowUpEmail job " + user.name,
-			"Debug: <br>" + "Data.uid: " + data.uid + "<br><br>" + e
+			"processExpiredContacts job ",
+			"Debug:<br><br>" + e
 		);
 
 	}
@@ -329,3 +335,7 @@ let processExpiredContactsJob = getJobCollectionJobByType("processExpiredContact
 if(!processExpiredContactsJob){
 	newProcessExpiredContactsJob();
 }
+
+
+
+//export const jobQueue = jobCollection.processJobs();

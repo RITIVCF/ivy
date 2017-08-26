@@ -393,20 +393,20 @@ let options = [
 	          "permission": "admin",
 	          "children": []
 	        },
-	        // {
-	        //   "id": "feedback",
-	        //   "icon": "swap_vert",
-	        //   "text": "Feedback",
-	        //   "permission": "feedback",
-	        //   "children": []
-	        // },
 	        {
 	          "id": "overview",
 	          "icon": "assessment",
 	          "text": "Chapter Overview",
 	          "permission": "admin",
 	          "children": []
-	        }
+	        },
+					{
+			      "id": "jobmanager",
+			      "icon": "dashboard",
+			      "text": "Job Manager",
+			      "permission": "sysadmin",
+			      "children": []
+			    }
 	      ]
 	    }
 	  ]
