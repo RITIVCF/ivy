@@ -59,7 +59,7 @@ export default class EmailBody {
           bodyHTML = bodyHTML + this.EmailText.renderHTML("",misvision);
           break;
         case "largegroup":
-          let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group"});
+          let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group", deleted: {$ne: true}});
           if (!!lg) {
             let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
             let details = this.EmailDetails.renderHTML(lg.start, lg.location);
@@ -68,7 +68,7 @@ export default class EmailBody {
           }
           break;
         case "core":
-          let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core"});
+          let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core", deleted: {$ne: true}});
           if (!!cr) {
             let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/coretammy.jpg");
             let details = this.EmailDetails.renderHTML(cr.start, cr.location);
@@ -77,7 +77,7 @@ export default class EmailBody {
           }
           break;
         case "prayer":
-          let prs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer"}).fetch();
+          let prs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer", deleted: {$ne: true}}).fetch();
           console.log(prs);
           if (prs.length >= 1) {
             let pr1 = prs[0];
@@ -103,14 +103,14 @@ export default class EmailBody {
           }
           break;
         case "conference":
-          let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference"}).fetch();
+          let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference", deleted: {$ne: true}}).fetch();
           cfs.forEach( (cf) => {
             details = this.EmailDetails.renderHTML(cf.start, cf.location);
             bodyHTML = bodyHTML + this.EmailFeature.renderHTML(cf.pic, cf.name, details + cf.description);
           });
           break;
         case "community":
-          let evs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Community"}).fetch();
+          let evs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Community", deleted: {$ne: true}}).fetch();
           let remaining = evs.filter(function(i) {return featured.indexOf(i) < 0;});
           for (var i = 0; i < remaining.length; i += 2) {
             let ev1 = remaining[i];
@@ -136,7 +136,7 @@ export default class EmailBody {
           }
           break;
         case "smallgroup":
-          let sgs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Small Group"}).fetch();
+          let sgs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Small Group", deleted: {$ne: true}}).fetch();
           for (var i = 0; i < sgs.length; i += 2) {
             let sg1 = sgs[i];
             let start1 = sg1.start;
@@ -219,10 +219,6 @@ export default class EmailBody {
             }
           }
           break;
-        default:
-          thumbnail = this.EmailThumbImage.renderHTML(process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
-          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),module.type,"text",thumbnail);
-          d = d + 1;
       }
 
 		});
