@@ -251,7 +251,11 @@ Meteor.publish("userContacts", function(){
 		}
 	};
 	return Meteor.users.find(selector);
-})
+});
+
+Meteor.publish("deletedUsers", function(){
+	return Meteor.users.find({status: "Deleted"});
+});
 
 Meteor.publish("allContacts", function(filtr, srt){
 

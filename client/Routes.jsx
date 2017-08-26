@@ -78,6 +78,7 @@ import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 import OverviewWrapper from './admin/overview/OverviewWrapper.jsx';
+import JobManagerWrapper from '/client/jobs/JobManagerWrapper.jsx';
 //*****************************
 
 // ****   Groups   ********
@@ -254,6 +255,22 @@ adminRoutes.route('/', {
 		}
 	});
 	//****************************************
+	//****************************************
+ 	let jobmanagerRoutes = adminRoutes.group({
+ 		prefix: "/jobmanager",
+ 		name: "jobmanager"
+ 	});
+
+ 	jobmanagerRoutes.route('/', {
+ 		name: "jobmanager",
+ 		action() {
+ 			mount(MainLayout, {
+ 				header: "Job Manager",
+ 				content: (<JobManagerWrapper />)
+ 			})
+ 		}
+ 	});
+ 	//****************************************
 
 // *********   ./ Admin Routes     ***********
 // ***********   People Routes   *************
