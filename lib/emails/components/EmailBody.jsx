@@ -52,7 +52,8 @@ export default class EmailBody {
       switch (module.type) {
         case "intro":
           let intro = module.desc;
-          bodyHTML = bodyHTML + this.EmailText.renderHTML("",intro);
+          let header = module.title;
+          bodyHTML = bodyHTML + this.EmailText.renderHTML(header,intro);
           break;
         case "misvision":
           let misvision = module.desc;
@@ -60,6 +61,13 @@ export default class EmailBody {
           break;
         case "largegroup":
           let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group", deleted: {$ne: true}});
+          if (!!lg) {
+            for (i = 0; i < lg.length; ++i) {
+              if (featured.includes(lg[i]._id)) {
+                lg.splice(i--, 1);
+              }
+            }
+          }
           if (!!lg) {
             let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
             let details = this.EmailDetails.renderHTML(lg.start, lg.location);
@@ -70,6 +78,13 @@ export default class EmailBody {
         case "core":
           let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core", deleted: {$ne: true}});
           if (!!cr) {
+            for (i = 0; i < cr.length; ++i) {
+              if (featured.includes(cr[i]._id)) {
+                cr.splice(i--, 1);
+              }
+            }
+          }
+          if (!!cr) {
             let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/coretammy.jpg");
             let details = this.EmailDetails.renderHTML(cr.start, cr.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), cr.name, details + cr.description, thumbnail);
@@ -78,7 +93,11 @@ export default class EmailBody {
           break;
         case "prayer":
           let prs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer", deleted: {$ne: true}}).fetch();
-          console.log(prs);
+          for (i = 0; i < prs.length; ++i) {
+            if (featured.includes(prs[i]._id)) {
+              prs.splice(i--, 1);
+            }
+          }
           if (prs.length >= 1) {
             let pr1 = prs[0];
             let start1 = pr1.start;
@@ -104,6 +123,11 @@ export default class EmailBody {
           break;
         case "conference":
           let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < cfs.length; ++i) {
+            if (featured.includes(cfs[i]._id)) {
+              cfs.splice(i--, 1);
+            }
+          }
           cfs.forEach( (cf) => {
             details = this.EmailDetails.renderHTML(cf.start, cf.location);
             bodyHTML = bodyHTML + this.EmailFeature.renderHTML(cf.pic, cf.name, details + cf.description);
@@ -111,7 +135,12 @@ export default class EmailBody {
           break;
         case "community":
           let evs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Community", deleted: {$ne: true}}).fetch();
-          let remaining = evs.filter(function(i) {return featured.indexOf(i) < 0;});
+          for (i = 0; i < evs.length; ++i) {
+            if (featured.includes(evs[i]._id)) {
+              evs.splice(i--, 1);
+            }
+          }
+          let remaining = evs;
           for (var i = 0; i < remaining.length; i += 2) {
             let ev1 = remaining[i];
             let start1 = ev1.start;
@@ -137,6 +166,11 @@ export default class EmailBody {
           break;
         case "smallgroup":
           let sgs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Small Group", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < sgs.length; ++i) {
+            if (featured.includes(sgs[i]._id)) {
+              sgs.splice(i--, 1);
+            }
+          }
           for (var i = 0; i < sgs.length; i += 2) {
             let sg1 = sgs[i];
             let start1 = sg1.start;
@@ -195,18 +229,20 @@ export default class EmailBody {
               let heading = "";
               let content = "";
               let img = "";
+              let details = "";
               if(!module.eid == ""){
           			let feat = Events.findOne(module.eid);
                 heading = feat.name;
                 content = feat.description;
                 img = feat.pic;
+                details = this.EmailDetails.renderHTML(feat.start,feat.location);
           		}
               if(!module.img == ""){
                 img = module.img;
               }
               heading = heading + module.title;
               content = content + module.desc;
-              bodyHTML = bodyHTML + this.EmailFeature.renderHTML(img,heading,content);
+              bodyHTML = bodyHTML + this.EmailFeature.renderHTML(img, heading, details + content);
               break;
             }
             case "thumbnail": {
