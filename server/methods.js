@@ -2,6 +2,9 @@ import { Accounts } from 'meteor/accounts-base';
 import { runDbMigration } from '/server/utils.js';
 
 Meteor.methods({
+  getRootURL() {
+    return process.env.ROOT_URL;
+  },
   enrollUser(id){
     if(!this.isSimulation){
       Accounts.sendEnrollmentEmail(id);
@@ -44,7 +47,6 @@ Meteor.methods({
     var users = Meteor.users.find({_id: {$in: group.users}}).fetch();
     var emails = [];
     users.forEach(function(contact){
-      //var contact = Meteor.users.findOne(user.contact);
       contact = new Contact(contact);
       emails.push(contact.getEmail());
     });
@@ -258,32 +260,54 @@ Meteor.methods({
     }
     var mults = Groups.findOne("multipliers").users;
     let user = Meteor.users.findOne(uid);
-      if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
-        Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
-      } else if (Groups.find({leader : uid}).fetch().length > 0) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
-      } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
-      } else if (user.member) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
-      } else {
-        var count = 0;
+    if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
+      Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
+    } else if (Groups.find({leader : uid}).fetch().length > 0) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
+    } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
+    } else if (user.member) {
+      Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
+    } else {
+      var count = 0;
 
-        eventsPerInterval.forEach((intvl)=>{
+      eventsPerInterval.forEach((intvl)=>{
 
-          if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
-            count++
-          }
-        });
-
-        if (count>=threshold) {
-          Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
-        } else {
-
-          Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
+        if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
+          count++
         }
+      });
+
+      if (count>=threshold) {
+        Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
+      } else {
+
+        Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
       }
-  }
+		}
+  },
+	addEmailModuleLabels(){
+		const types = Options.findOne("emailtypes");
+		let typeDict = {};
+		types.vals.forEach( (type)=>{
+			typeDict[type.value] = type.name;
+		});
+
+		const emails = Emails.find().fetch();
+		emails.forEach((email)=>{
+			let modules = email.modules;
+
+			modules.map((module)=>{
+				if(!module.hasOwnProperty('label')){
+					module.label = typeDict[module.type];
+				}
+			});
+
+			Emails.update(email._id, {$set: {modules: modules}});
+
+		});
+
+	}
 
 
 });

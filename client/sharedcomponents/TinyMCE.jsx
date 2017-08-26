@@ -20,12 +20,13 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 		tinymce.init({
 			selector: "#"+ id,
 			branding: false,
+      statusbar: false,
 			theme: "modern",
 			height: 300,
-			plugins: "paste contextmenu hr searchreplace",
+			plugins: "paste lists code contextmenu hr searchreplace",
 			elementpath: false,
 			menubar: "",
-			toolbar: ['bold italic underline strikethrough subscript superscript emoveformat'],
+			toolbar: ['bold italic underline strikethrough bullist numlist', 'alignleft aligncenter alignright alignjustify removeformat'],
 			browser_spellcheck: true,
 			setup : (editor) => {
 				editor.on('change', (e) => {

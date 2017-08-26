@@ -5,9 +5,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class InfoBar extends TrackerReact(React.Component) {
 	constructor(){
 		super();
-		// if(!Session.get("infobar")){
-		// 	Session.set("infobar",true);
-		// }
+		
 	}
 
 	stopit(event){

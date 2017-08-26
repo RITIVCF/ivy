@@ -14,28 +14,14 @@ export default class EmailCTA {
     this.buttonColor = color;
   }
 
-  renderHTML(content,btnText,btnTarget,heading="") {
-    let headingtext = "";
-    if (heading != "") {
-      headingtext = `<tr>
-        <td style="padding: 40px 40px 20px; text-align: center;">
-            <h1 style="margin: 0; font-family: sans-serif; font-size: 24px; line-height: 27px; color: #333333; font-weight: normal;">` + heading + `</h1>
-        </td>
-      </tr>`;
-    }
+  renderHTML(btnText,btnTarget) {
     return (
-      `<tr>
-        <td bgcolor="` + this.backgroundColor + `">
-          <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">`
-            + headingtext +
-            `
+    `<tr class="module" content="cta">
+      <td bgcolor="#ffffff">
+        <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <tbody>
             <tr>
-              <td style="padding: 0 40px 10px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;">
-                <p style="margin: 0;">` + content + `</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+              <td style="padding: 0 20px 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                 <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                   <tr>
                     <td style="border-radius: 3px; background: ` + this.buttonColor + `; text-align: center;" class="button-td">
@@ -44,12 +30,13 @@ export default class EmailCTA {
                       </a>
                     </td>
                   </tr>
+                </table>
               </td>
             </tr>
-
-          </table>
-        </td>
-      </tr>`
+          </tbody>
+        </table>
+      </td>
+    </tr>`
     );
   }
 }

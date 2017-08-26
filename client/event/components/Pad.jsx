@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 
 var updWorkpad = _.throttle(
   function(eid, pad, value)
-  {//console.log("updWorkpad", value);
+  {
     Meteor.call("updateEventWorkpad", eid, pad, value);
     Meteor.call("EventWorkpadLock", eid, pad, true);
   },500);
 
 var setWorkPadFalse = _.debounce(function(thiz, pad, eid){
-  //console.log("set false",thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventWorkpadLock", eid, pad, false);
 }, 1000);
@@ -24,11 +23,6 @@ export default class Pad extends Component {
   componentDidMount(){
     var thiz = this;
     var id = "#"+this.props.pad.name.replace(" ","");
-    // console.log("Ref",this.refs[this.props.pad.name]);
-    // console.log("#"+this.props.pad.name.replace(" ",""));
-    // console.log(id);
-    // console.log($(id));
-    // console.log(this);
     tinymce.init({
 			//selector: "#mytextarea",
 
@@ -44,25 +38,19 @@ export default class Pad extends Component {
       browser_spellcheck: true,
 			setup : function(editor) {
         editor.on('change', function(e) {
-            //console.log(tinymce.activeEditor);
             try{
               thiz.setState({editting: true});
-              //console.log('key event', e);
               updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
-              ////console.log(this);
               setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
               //
             }catch (err){
-              console.log(err);
+              console.error(err);
             }
 
         });
 				editor.on('keyup', function(e) {
-            //console.log(tinymce.activeEditor);
             thiz.setState({editting: true});
-            //console.log('key event', e);
 						updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
-				    ////console.log(this);
 				    setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
             //
         });
@@ -87,23 +75,17 @@ export default class Pad extends Component {
   			menubar: "edit insert view format table",
   			setup : function(editor) {
   				editor.on('keyup', function(e) {
-              //console.log(tinymce.activeEditor);
               thiz.setState({editting: true});
-              //console.log('key event', e);
   					  updWorkpad(thiz.props.eid, thiz.props.pad.name, tinymce.get(thiz.props.pad.name.replace(" ","")+"pad").getContent());
-  				    ////console.log(this);
   				    setWorkPadFalse(thiz, thiz.props.pad.name, thiz.props.eid);
-              //
           });
       }
     	});
     }
-    //console.log("DidUpdate");
 
   }
 
   shouldComponentUpdate(nextProps, nextState){
-    //console.log(this.props.pad,nextProps.pad);
     if((this.props.pad.content==nextProps.pad.content)&&
         (this.props.pad.lock==nextProps.pad.lock)&&
         (this.state.editting==nextState.editting)){
@@ -119,21 +101,14 @@ export default class Pad extends Component {
   }
 
   componentWillUpdate(nextProps, nextState){
-    console.log("Pad Name", this.props.pad.name);
-    console.log("This state",this.state.editting);
-    console.log("Next State",nextState.editting);
     if(!nextState.editting){
-      console.log("setting content");
       tinymce.get(this.props.pad.name.replace(" ","")+"pad").setContent(nextProps.pad.content);
       if(nextProps.pad.lock){
-        console.log(this.props.pad.name, "lock");
         tinymce.get(this.props.pad.name.replace(" ","")+"pad").setMode("readonly");
       }
       else{
-        console.log(this.props.pad.name, "unlock?");
         tinymce.get(this.props.pad.name.replace(" ","")+"pad").setMode();
       }
-      //tinymce.get(this.props.pad.name.replace(" ","")+"pad").selection.setCursorLocation(-1);
       tinyMCE.get(this.props.pad.name.replace(" ","")+"pad").selection.select(tinyMCE.get(this.props.pad.name.replace(" ","")+"pad").getBody(), true);
       tinyMCE.get(this.props.pad.name.replace(" ","")+"pad").selection.collapse(false);
     }

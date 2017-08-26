@@ -8,11 +8,10 @@ import NoPerm from '../NoPerm.jsx';
 import Modal from '../sharedcomponents/Modal.jsx';
 import RecurringModal from './RecurringModal.jsx';
 import {anyUnpublishedRecurring} from '/lib/events.js';
+import EventImageControl from './components/EventImageControl';
 
 import Event from '/lib/classes/Event.js';
 
-
-//Options = new Mongo.Collection("options");
 
 getUserGroupPermission = function(){
 	var grps = Groups.find({users: Meteor.userId()}).fetch();
@@ -166,6 +165,19 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		return this.state.groups.indexOf(id)>-1;
 	}
 
+	getSubheader(ev, perm){
+		return (
+			<ul>
+				<li>
+					<a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set recurrence" onClick={this.repeatEvent.bind(this)}>
+						<i className="material-icons black-text">content_copy</i>
+					</a>
+				</li>
+				<EventImageControl key={2} ref="" ev={ev} perm={perm} />
+			</ul>
+		)
+	}
+
 	render() {
 		if(!this.state.ready){
 			return (<LoaderCircle />);
@@ -213,26 +225,27 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 							id={"RepeatEventModal"}
 							ref="modal"
 							content={recurTrue?<div>{
-									anyUnpublishedRecurring(ev.recurId)?<a className="btn" onClick={this.publishAllRecur.bind(this)}>Publish All</a>:
-									<a className="btn" onClick={this.unpublishAllRecur.bind(this)}>Unpublish All</a>
-									}
-				        	<a className="btn red" onClick={this.deleteAllRecur.bind(this)}>Delete All</a>
-								</div>:
-								<RecurringModal ev={ev} perm={perms.edit} defaultEndDate={this.state.enddate} group={(newValue) => {this.setState({recurGroup: newValue})}} onpick={(newValue) => {this.setState({enddate: newValue})}} />}
+								anyUnpublishedRecurring(ev.recurId)?<a className="btn" onClick={this.publishAllRecur.bind(this)}>Publish All</a>:
+								<a className="btn" onClick={this.unpublishAllRecur.bind(this)}>Unpublish All</a>
+							}
+								<a className="btn red" onClick={this.deleteAllRecur.bind(this)}>Delete All</a>
+							</div>:
+							<RecurringModal ev={ev} perm={perms.edit} defaultEndDate={this.state.enddate} group={(newValue) => {this.setState({recurGroup: newValue})}} onpick={(newValue) => {this.setState({enddate: newValue})}} />}
 							onClose={this.closeRecur.bind(this)}
 							type={recurTrue?'':"fixed-footer"}
 							footer={recurTrue?<div>
 								<a className="btn modal-action modal-close" ref="closebtn" onClick={this.cancelRecur.bind(this)}>Close</a>
 							</div>:<div>
-									<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
-				        	<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
-								</div>
+								<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
+								<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
+							</div>
 							}
-						/>]}
-					subheader={<ul><li><a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set recurrence" onClick={this.repeatEvent.bind(this)}><i className="material-icons black-text">content_copy</i></a></li></ul>}
+						/>
+					]}
+					subheader={this.getSubheader(ev, perms.edit)}
 					showinfobar={true}
 					infobar={<WorkspacePanel perm={perms.edit} ev={ev} />}
-					/>
+				/>
 		)
 	}
 }

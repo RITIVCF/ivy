@@ -284,7 +284,7 @@ let options = [
 	    {
 	      "value": "cta",
 				"name": "Call to Action",
-	      "isUserAccessible": false
+	      "isUserAccessible": true
 	    },
 	    {
 	      "value": "grid",
@@ -302,8 +302,13 @@ let options = [
 	      "isUserAccessible": true
 	    },
 	    {
-	      "value": "banner",
-				"name": "Banner",
+	      "value": "spacer",
+				"name": "Spacer",
+	      "isUserAccessible": true
+	    },
+	    {
+	      "value": "divider",
+				"name": "Divider",
 	      "isUserAccessible": true
 	    }
 	  ]
@@ -388,20 +393,20 @@ let options = [
 	          "permission": "admin",
 	          "children": []
 	        },
-	        // {
-	        //   "id": "feedback",
-	        //   "icon": "swap_vert",
-	        //   "text": "Feedback",
-	        //   "permission": "feedback",
-	        //   "children": []
-	        // },
 	        {
 	          "id": "overview",
 	          "icon": "assessment",
 	          "text": "Chapter Overview",
 	          "permission": "admin",
 	          "children": []
-	        }
+	        },
+					{
+			      "id": "jobmanager",
+			      "icon": "dashboard",
+			      "text": "Job Manager",
+			      "permission": "sysadmin",
+			      "children": []
+			    }
 	      ]
 	    }
 	  ]
@@ -414,6 +419,13 @@ let options = [
 				"name": "Intro",
 				"defaultLayout": "text",
 				"defaultDesc": "",
+	      "canChooseLayout": false
+	    },
+			{
+	      "value": "misvision",
+				"name": "Mission\\Vision",
+				"defaultLayout": "text",
+				"defaultDesc": "In response to God's love, grace, and truth, we want to see LIVES TRANSFORMED, CAMPUSES RENEWED, AND WORLD CHANGERS DEVELOPED",
 	      "canChooseLayout": false
 	    },
 	    {
@@ -445,16 +457,9 @@ let options = [
 	      "canChooseLayout": false
 	    },
 	    {
-	      "value": "nso",
-				"name": "NSO",
+	      "value": "community",
+				"name": "Community",
 				"defaultLayout": "grid",
-				"defaultDesc": "",
-	      "canChooseLayout": false
-	    },
-	    {
-	      "value": "social",
-				"name": "Social",
-				"defaultLayout": "feature",
 				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
@@ -477,7 +482,7 @@ let options = [
 					<li>Be an MC at Large Group</li>
 					<li>Small Groups – join one and/or lead one</li>
 					<li>Large Group – attend and/or help plan</li>
-					Resource Team – make sure our club functions :)</li>
+					<li>Resource Team – make sure our club functions :)</li>
 					<li>Strategy Team – plan and/or lead events</li>
 					<li>Welcome – say ‘hi’ to people as they sign in to Large Group!
 					Sound Team</li>
@@ -523,14 +528,39 @@ let options = [
 ];
 
 options.forEach( (option) => {
-	if(!Options.findOne(option._id)){
+	const currOptions = Options.findOne(option._id);
+	if(!currOptions){
 		Options.insert(option);
+	} else {
+		if(option._id == "emailtypes"){
+			// do not overwrite existing modules
+			// Add new modules
+			// Remove modules not in db init
+
+
+			let moduleValues = [];
+
+			option.vals.forEach( (module) =>{
+				if(!Options.findOne({_id: option._id, "vals.value": module.value})){
+					Options.update(option._id, {$addToSet: {modules: module}});
+				}
+
+				moduleValues.push(module.value);
+			});
+
+			// Remove any modules that are not in the dbinit
+			Options.update(option._id, {$pull: {vals: {value: {$nin: moduleValues}}}});
+
+
+
+		}
 	}
 	// else{
 	// 	Options.remove({_id: option._id});
 	// 	Options.insert(option);
 	// }
 });
+
 
 
 // Intialize Email Templates
@@ -548,13 +578,11 @@ let emailTemplates = [
 	  "title": "Newsletter",
 	  "modules": [
 			newEmailModule("intro"),
-			newEmailModule("salutation"),
-			newEmailModule("nso"),
-			newEmailModule("social"),
+			newEmailModule("misvision"),
+			newEmailModule("community"),
 			newEmailModule("largegroup"),
 			newEmailModule("smallgroup"),
 			newEmailModule("prayer"),
-			newEmailModule("core"),
 			newEmailModule("conference"),
 			newEmailModule("becomeamember"),
 			newEmailModule("getinvolved")
@@ -573,6 +601,7 @@ let emailTemplates = [
 	  "title": "Event Follow Up",
 	  "modules": [
 			newEmailModule("salutation"),
+			newEmailModule("misvision"),
 			newEmailModule("custom")
 		]
 	},

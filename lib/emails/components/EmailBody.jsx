@@ -37,7 +37,7 @@ export default class EmailBody {
     }
   }
 
-  constructBody(modules, when) {
+  constructBody(modules, when=new Date()) {
 		let bodyHTML = "";
     let n = addDays(when, 7);
     let d = 0;
@@ -50,184 +50,211 @@ export default class EmailBody {
     });
 		modules.forEach( (module) => {
       switch (module.type) {
-        /*
-
-  "_id": "jZMScihckccxPMcSe",
-  "uid": "3h3jjuBRYCZ39Z3ki",
-  "sent": false,
-  "to": {
-    "users": [
-      "3h3jjuBRYCZ39Z3ki"
-    ],
-    "groups": [],
-    "emails": []
-  },
-  "from": "weeksseth@gmail.com",
-  "subject": "IVCF Chapter Newsletter",
-  "modules": [
-    {
-      "_id": "PG7hiGEWBk7FX2MikTBxjYKt6",
-      "title": "",
-      "type": "intro",
-      "eid": "",
-      "desc": "
-Hey everyone!
-
-\n
-Welcome to week 9! I hope you have had an amazing time!
-
-\n
--Jess
-
-",
-      "img": "",
-      "layout": ""
-    },
-    {
-      "_id": "rpZe66Tts2YSicbfmhcWFgnzE",
-      "title": "",
-      "type": "smallgroup",
-      "eid": "",
-      "desc": "",
-      "img": "",
-      "layout": ""
-    },
-    {
-      "_id": "RsJbKNGQCaD6vMpHPJCX72Pgw",
-      "title": "",
-      "type": "prayer",
-      "eid": "",
-      "desc": "",
-      "img": "",
-      "layout": ""
-    },
-    {
-      "_id": "xMHsnG3SBDXxNTxMfqHNMgTiP",
-      "title": "Custom",
-      "type": "custom",
-      "eid": "",
-      "desc": "",
-      "img": "",
-      "layout": "feature"
-    }
-  ],
-  "when": "2017-06-20T04:14:57.358Z",
-  "template": "newsletter",
-  "staged": false
-}
-*/
-
         case "intro":
-          bodyHTML = bodyHTML + this.EmailText.renderHTML("",module.desc);
-          console.log("Intro module");
+          let intro = module.desc;
+          let header = module.title;
+          bodyHTML = bodyHTML + this.EmailText.renderHTML(header,intro);
+          break;
+        case "misvision":
+          let misvision = module.desc;
+          bodyHTML = bodyHTML + this.EmailText.renderHTML("",misvision);
           break;
         case "largegroup":
-          let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group"});
+          let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group", deleted: {$ne: true}});
           if (!!lg) {
-            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
-            details = this.EmailDetails.renderHTML(lg.start, lg.location);
+            for (i = 0; i < lg.length; ++i) {
+              if (featured.includes(lg[i]._id)) {
+                lg.splice(i--, 1);
+              }
+            }
+          }
+          if (!!lg) {
+            let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
+            let details = this.EmailDetails.renderHTML(lg.start, lg.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), lg.name, details + lg.description, thumbnail);
             d = d + 1;
           }
           break;
         case "core":
-          let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core"});
+          let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core", deleted: {$ne: true}});
           if (!!cr) {
-            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/coretammy.jpg");
-            details = this.EmailDetails.renderHTML(cr.start, cr.location);
+            for (i = 0; i < cr.length; ++i) {
+              if (featured.includes(cr[i]._id)) {
+                cr.splice(i--, 1);
+              }
+            }
+          }
+          if (!!cr) {
+            let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/coretammy.jpg");
+            let details = this.EmailDetails.renderHTML(cr.start, cr.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), cr.name, details + cr.description, thumbnail);
             d = d + 1;
           }
-          console.log("Core module");
           break;
         case "prayer":
-          let pr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer"});
-          if (!!pr) {
-            thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/basileiaworship.jpg");
-            details = this.EmailDetails.renderHTML(pr.start, pr.location);
-            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), pr.name, details + pr.description, thumbnail);
-            d = d + 1;
+          let prs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < prs.length; ++i) {
+            if (featured.includes(prs[i]._id)) {
+              prs.splice(i--, 1);
+            }
           }
-          console.log("Prayer module");
+          if (prs.length >= 1) {
+            let pr1 = prs[0];
+            let start1 = pr1.start;
+            let loc1 = pr1.location;
+            let name1 = pr1.name;
+            let desc1 = pr1.description;
+            let details1 = this.EmailDetails.renderHTML(start1, loc1);
+            let start2 = "";
+            let loc2 = "";
+            let name2 = "";
+            let desc2 = "";
+            let details2 = "";
+            if (prs.length > 1) {
+              pr2 = prs[1];
+              start2 = pr2.start;
+              loc2 = pr2.location;
+              name2 = pr2.name;
+              desc2 = pr2.description;
+              details2 = this.EmailDetails.renderHTML(start2, loc2);
+            }
+            bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2,"border: 2px solid transparent;");
+          }
           break;
         case "conference":
-          let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference"}).fetch();
+          let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < cfs.length; ++i) {
+            if (featured.includes(cfs[i]._id)) {
+              cfs.splice(i--, 1);
+            }
+          }
           cfs.forEach( (cf) => {
             details = this.EmailDetails.renderHTML(cf.start, cf.location);
-            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", cf.name, details + cf.description);
+            bodyHTML = bodyHTML + this.EmailFeature.renderHTML(cf.pic, cf.name, details + cf.description);
           });
           break;
-        case "nso":
-          let nsos = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "NSO"}).fetch();
-          remaining = nsos.filter(function(i) {return featured.indexOf(i) < 0;});
+        case "community":
+          let evs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Community", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < evs.length; ++i) {
+            if (featured.includes(evs[i]._id)) {
+              evs.splice(i--, 1);
+            }
+          }
+          let remaining = evs;
           for (var i = 0; i < remaining.length; i += 2) {
-            nso1 = remaining[i];
-            start1 = nso1.start;
-            loc1 = nso1.location;
-            name1 = nso1.name;
-            desc1 = nso1.description;
-            details1 = this.EmailDetails.renderHTML(start1, loc1);
-            start2 = "";
-            loc2 = "";
-            name2 = "";
-            desc2 = "";
-            details2 = "";
-            if (i + 1 < nsos.length) {
-              nso2 = remaining[i + 1];
-              start2 = nso2.start;
-              loc2 = nso2.location;
-              name2 = nso2.name;
-              desc2 = nso2.description;
+            let ev1 = remaining[i];
+            let start1 = ev1.start;
+            let loc1 = ev1.location;
+            let name1 = ev1.name;
+            let desc1 = ev1.description;
+            let details1 = this.EmailDetails.renderHTML(start1, loc1);
+            let start2 = "";
+            let loc2 = "";
+            let name2 = "";
+            let desc2 = "";
+            let details2 = "";
+            if (i + 1 < remaining.length) {
+              ev2 = remaining[i + 1];
+              start2 = ev2.start;
+              loc2 = ev2.location;
+              name2 = ev2.name;
+              desc2 = ev2.description;
               details2 = this.EmailDetails.renderHTML(start2, loc2);
             }
             bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2);
           }
           break;
-        case "social":
-          let scss = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Social"}).fetch();
-          remaining = scss.filter(function(i) {return featured.indexOf(i) < 0;});
-          for (var i = 0; i < remaining.length; i += 2) {
-            scs1 = remaining[i];
-            start1 = scs1.start;
-            loc1 = scs1.location;
-            name1 = scs1.name;
-            desc1 = scs1.description;
-            details1 = this.EmailDetails.renderHTML(start1, loc1);
-            start2 = "";
-            loc2 = "";
-            name2 = "";
-            desc2 = "";
-            details2 = "";
-            if (i + 1 < scss.length) {
-              scs2 = remaining[i + 1];
-              start2 = scs2.start;
-              loc2 = scs2.location;
-              name2 = scs2.name;
-              desc2 = scs2.description;
+        case "smallgroup":
+          let sgs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Small Group", deleted: {$ne: true}}).fetch();
+          for (i = 0; i < sgs.length; ++i) {
+            if (featured.includes(sgs[i]._id)) {
+              sgs.splice(i--, 1);
+            }
+          }
+          for (var i = 0; i < sgs.length; i += 2) {
+            let sg1 = sgs[i];
+            let start1 = sg1.start;
+            let loc1 = sg1.location;
+            let name1 = sg1.name;
+            let desc1 = sg1.description;
+            let details1 = this.EmailDetails.renderHTML(start1, loc1);
+            let start2 = "";
+            let loc2 = "";
+            let name2 = "";
+            let desc2 = "";
+            let details2 = "";
+            if (i + 1 < sgs.length) {
+              sg2 = sgs[i + 1];
+              start2 = sg2.start;
+              loc2 = sg2.location;
+              name2 = sg2.name;
+              desc2 = sg2.description;
               details2 = this.EmailDetails.renderHTML(start2, loc2);
             }
-            bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2);
+            bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2,"border: 2px dotted #1a3d6d;");
           }
           break;
-        /*case "smallgroup":
-          let scs = Events.find({start: {$gt: when}, status: "Published", tags: "Small Group"}).fetch();
-          scs.forEach( (sc) => {
-            details = this.EmailDetails.renderHTML(sc.start, sc.location);
-            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://localhost:3000/images/basileiachapter.jpg", sc.name, details + sc.description);
-          });
-          */
         case "becomeamember":
-          memberpitch = module.desc;
-          bodyHTML = bodyHTML + this.EmailCTA.renderHTML(memberpitch,"Become a Member","http://ivcf.rit.edu/becomeamember");
+          let memberpitch = module.desc;
+          bodyHTML = bodyHTML + this.EmailText.renderHTML("",memberpitch);
+          bodyHTML = bodyHTML + this.EmailCTA.renderHTML("Become a Member","http://ivcf.rit.edu/becomeamember");
           break;
         case "getinvolved":
-          list = module.desc;
+          let list = module.desc;
           bodyHTML = bodyHTML + this.EmailText.renderHTML("Get Involved",list);
           break;
-        default:
-          thumbnail = this.EmailThumbImage.renderHTML("http://localhost:3000/images/EmailLargeGroup.jpg");
-          bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),module.type,"text",thumbnail);
-          d = d + 1;
+        case "custom":
+          switch (module.layout) {
+            case "spacer": {
+              bodyHTML = bodyHTML + `<tr class="module" content="spacer"><td bgcolor="#ffffff" style="padding: 20px; color: #1a3d6d;"></td></tr>`;
+              break;
+            }
+            case "divider": {
+              bodyHTML = bodyHTML + `<tr class="module" content="divider"><td bgcolor="#ffffff" style="padding: 10px 20px; color: #1a3d6d;"><hr style="color: #1a3d6d;"></td></tr>`;
+              break;
+            }
+            case "text": {
+              let heading = module.title;
+              let content = module.desc;
+              bodyHTML = bodyHTML + this.EmailText.renderHTML(heading,content);
+              break;
+            }
+            case "cta": {
+              let url = module.url;
+              let content = module.title;
+              bodyHTML = bodyHTML + this.EmailCTA.renderHTML(content,url);
+              break;
+            }
+            case "feature": {
+              let heading = "";
+              let content = "";
+              let img = "";
+              let details = "";
+              if(!module.eid == ""){
+          			let feat = Events.findOne(module.eid);
+                heading = feat.name;
+                content = feat.description;
+                img = feat.pic;
+                details = this.EmailDetails.renderHTML(feat.start,feat.location);
+          		}
+              if(!module.img == ""){
+                img = module.img;
+              }
+              heading = heading + module.title;
+              content = content + module.desc;
+              bodyHTML = bodyHTML + this.EmailFeature.renderHTML(img, heading, details + content);
+              break;
+            }
+            case "thumbnail": {
+              let thumbnail = this.EmailThumbImage.renderHTML(module.img);
+              let heading = module.title;
+              let content = module.desc;
+              bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),heading,content,thumbnail);
+              d = d + 1;
+              break;
+            }
+          }
+          break;
       }
 
 		});

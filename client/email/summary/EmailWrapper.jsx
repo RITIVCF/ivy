@@ -54,6 +54,10 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     Meteor.call("toggleEmailsInfoBar");
   }
 
+  goToNewsletter(){
+
+  }
+
   getSubHeader(){
     return [<ul className="left" key="0">
       <li onClick={this.openModal.bind(this)}><a>
@@ -64,7 +68,19 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 			<li onClick={this.toggleInfoBar.bind(this)}><a>
         <i className="material-icons black-text">{Meteor.user().preferences.emails_infobar?"info":"info_outline"}</i></a>
       </li>
-		</ul>]
+		</ul>,
+    <ul key="2" style={{marginRight: "20px"}} className="right">
+      <li>
+        <a href="/emails/workspace/newsletter" className="black-text">
+					Edit Newsletter Template
+				</a>
+			</li>
+			<li>
+				<a href="/emails/workspace/eventfollowup" className="black-text">
+					Edit Event Follow Up Template
+				</a>
+			</li>
+    </ul>]
   }
 
 	getSelectEmail(){

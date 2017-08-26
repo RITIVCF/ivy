@@ -10,8 +10,16 @@ export default class EmailThumbnail {
 
 
   renderHTML(direction,heading,content,thumbnail) {
+    let headingStr = "";
+    if (heading != "") {
+      headingStr = `<tr align="center">
+        <td style="padding: 0 10px;">
+            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.replace("\n","</br>").toUpperCase() + `</h1>
+        </td>
+      </tr>`;
+    }
     return (
-      `<tr>
+      `<tr class="module" content="thumbnail">
         <td dir="` + direction + `" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0;">
           <!--[if mso]>
                       <table role="presentation" aria-hidden="true" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
@@ -19,11 +27,7 @@ export default class EmailThumbnail {
                       <td align="center" valign="top" width="660">
                       <![endif]-->
           <table role="presentation" aria-hidden="true" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
-            <tr align="center">
-              <td style="padding: 0 20px;">
-                  <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.toUpperCase() + `</h1>
-              </td>
-            </tr>
+            ` + headingStr + `
             <tr>
               <td align="center" valign="top" style="font-size:0; padding: 10px 0;">
                 <!--[if mso]>

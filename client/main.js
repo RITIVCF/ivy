@@ -1,9 +1,4 @@
 import { Accounts } from 'meteor/accounts-base';
-// if(!Meteor.userId()){
-//   console.log(FlowRouter.getRouteName());
-//   console.log(FlowRouter.current());
-//   FlowRouter.go("/login");
-// }
 
 document.title="Ivy";
 
@@ -46,3 +41,12 @@ if ($) {
 else {
   Vel = Velocity; // change value with jQuery.Velocity
 }
+
+Meteor.call("getRootURL", (error, ROOT_URL) => {
+	if (error) {
+		console.log("Could not get root url");
+	} else {
+		process.env.ROOT_URL = ROOT_URL;
+	}
+
+})

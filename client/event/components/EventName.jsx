@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 
 var updName = _.throttle(
   function(eid, value)
-  {//console.log(value);
+  {
     Meteor.call("updateEventName", eid, value);
     Meteor.call("EventNameLock", eid, true);
   },500);
 
 var setNameFalse = _.debounce(function(thiz, eid){
-  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("EventNameLock", eid, false);
 }, 1000);
@@ -25,19 +24,14 @@ export default class EventName extends Component {
   }
   updateName(event){
 		event.preventDefault();
-		//console.log("Name: "+this.refs.name);
 		Meteor.call("updateEventName", this.props.ev._id, this.refs.name.value);
-		//this.state.value = this.refs.name;
     this.toggle();
 	}
 
   handleNameChange(event){ // need one of these for each component
     this.setState({name:event.target.value});
-    // //console.log("Event.target.value");
-    // //console.log(event.target.value);
     this.setState({editting: true});
     updName(this.props.ev._id, event.target.value);
-    ////console.log(this);
     setNameFalse(this, this.props.ev._id);
   }
 
@@ -63,8 +57,6 @@ export default class EventName extends Component {
   }
 
   getEvent(){
-		////console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}
 
@@ -73,7 +65,7 @@ export default class EventName extends Component {
     let editstate = this.state.editstate;
     if(!this.state.editstate){
       return <span className="card-title">{this.state.name}
-        {this.props.perm&&<i className="tiny material-icons black-text" onClick={this.toggle.bind(this)}>edit</i>}
+        {this.props.perm&&<i className="tiny material-icons white-text" onClick={this.toggle.bind(this)}>edit</i>}
       </span>
     }
     return(

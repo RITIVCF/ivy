@@ -1,9 +1,11 @@
 import React from 'react';
 import {mount} from 'react-mounter';
+import LZString from 'lz-string';
 
 //Layouts
 import {MainLayout} from './layouts/MainLayout.jsx';
 import {FormLayout} from './layouts/FormLayout.jsx';
+import {BlankLayout} from './layouts/BlankLayout.jsx';
 import {EmailTemplateViewLayout} from '/client/layouts/EmailTemplateViewLayout.jsx';
 import {ErrorLayout} from './layouts/ErrorLayout.jsx';
 
@@ -76,6 +78,7 @@ import UserManagementWrapper from './admin/users/UserManagementWrapper.jsx';
 import FeedbackWrapper from './feedback/FeedbackWrapper.jsx';
 import DuplicateContactWrapper from './admin/dupcontacts/DuplicateContactWrapper.jsx';
 import OverviewWrapper from './admin/overview/OverviewWrapper.jsx';
+import JobManagerWrapper from '/client/jobs/JobManagerWrapper.jsx';
 //*****************************
 
 // ****   Groups   ********
@@ -85,6 +88,7 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ****  Email  ***************
 import EmailWrapper from './email/summary/EmailWrapper.jsx';
 import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
+import UnsubscribeForm from './email/UnsubscribeForm.jsx'
 // ****************************
 
 // **** Forms  ***************
@@ -93,7 +97,8 @@ import FormWrapper from './forms/FormWrapper.jsx';
 
 
 function signInForceCheck(context) {
-	if(context.route.group.name != "public"){
+	const exclude = ["public", "unsubscribe"]
+	if(!exclude.includes(context.route.group.name)){
 		if(!Meteor.userId()){
 			routeTo('login', {}, {r: context.path});
 		}
@@ -252,6 +257,22 @@ adminRoutes.route('/', {
 		}
 	});
 	//****************************************
+	//****************************************
+ 	let jobmanagerRoutes = adminRoutes.group({
+ 		prefix: "/jobmanager",
+ 		name: "jobmanager"
+ 	});
+
+ 	jobmanagerRoutes.route('/', {
+ 		name: "jobmanager",
+ 		action() {
+ 			mount(MainLayout, {
+ 				header: "Job Manager",
+ 				content: (<JobManagerWrapper />)
+ 			})
+ 		}
+ 	});
+ 	//****************************************
 
 // *********   ./ Admin Routes     ***********
 // ***********   People Routes   *************
@@ -425,15 +446,11 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 		Meteor.call("getEvent", params.eid, function(error,result){
 			if(result){
 				let ev = result;
-				console.log("Event: ", ev);
 				if(Meteor.userId()==ev.owner){
 					Meteor.call("addEventUserPerm",params.eid,params.uid);
-					console.log("Added perm");
 					if(params.vore=="edit"){
-						console.log("Add edit perm");
 						Meteor.call("updateEventUserPerm", params.eid, params.uid, true );
 					}
-					console.log("Perms added, go to dahsboard");
 					FlowRouter.go("/");
 				}else{
 					FlowRouter.go("/event/workspace/"+params.vore+"/"+params.eid+"/"+params.uid);
@@ -596,6 +613,38 @@ formRoutes.route('/signin/:eid', {
 // 	}
 // });
 
+const emailrenderRoutes = FlowRouter.group({
+	prefix: "/emailrender",
+	name: "emailrender"
+});
+
+emailrenderRoutes.route('/:compressedHTML', {
+	name: "emailrender",
+	action(params) {
+		var decompressedHTML = LZString.decompressFromEncodedURIComponent(params.compressedHTML);
+		mount(BlankLayout, {
+			content: (decompressedHTML)
+		})
+	}
+});
+
+
+const unsubRoutes = FlowRouter.group({
+	prefix: "/unsubscribe",
+	name: "unsubscribe"
+});
+
+unsubRoutes.route('/:subid', {
+	name: "unsubscribe",
+	action(params) {
+		var uid = LZString.decompressFromEncodedURIComponent(params.subid);
+		Meteor.call("updateNewsletter", uid, false);
+		mount(FormLayout, {
+				content: (<UnsubscribeForm token={params.subid} />)
+			}
+		)
+	}
+});
 
 FlowRouter.notFound = {
   action() {

@@ -22,46 +22,20 @@ export default class EventTags extends TrackerReact(React.Component) {
 		Meteor.call("updateEventTags", this.props.ev._id, tags);  // write over array in database
 	}
 
-
-
   getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}
 
-  getTags(){
-
-    //return Options.findOne({_id:"eventtags"}).vals;
-  }
-
   submit(tag){
-    //event.preventDefault();
-    console.log("submitted");
-    console.log(tag.target.value);
-
     Meteor.call("addEventTag", this.props.ev._id, tag.target.value);
-    //this.refs.tag.initialValue="";
-    //this.setState({value: ""});
-
-
   }
 
   fillTags() {
     return Options.findOne("eventtags").vals;
   }
 
-  // setTextValue(txt){
-  //   this.setState({value: txt});
-  // }
-
-  unset(){
-
-  }
-
-
   render(){
-    let ev = this.props.ev;//this.getEvent();
+    let ev = this.props.ev;
 
     //browser-default
 
@@ -70,9 +44,9 @@ export default class EventTags extends TrackerReact(React.Component) {
       <div>
         {this.props.perm&&
           <select ref="tag" className="browser-default" value={tags[0]} onChange={this.submit.bind(this)}>
-              <option value={""}>Select an event type</option>
-              {this.fillTags().map( (val) => {
-                return (<option value={val.tag}>{val.tag}</option>)
+						<option value={""}>Select an event type</option>
+						{this.fillTags().map( (val) => {
+							return (<option key={val.tag} value={val.tag}>{val.tag}</option>)
               })}
           </select>
 
