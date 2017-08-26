@@ -42,7 +42,7 @@ export default class EmailWorkspace extends TrackerReact(React.Component){
       <div>
 				<iframe
 					ref="emailtemplate"
-					style={{maxWidth: "100%", height: "100%", border: "none", resize: "horizontal"}}
+					style={{width: "100%", height: "100%", border: "none", resize: "none"}}
 					>
 				</iframe>
 			</div>
