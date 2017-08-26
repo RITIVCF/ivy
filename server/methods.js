@@ -2,6 +2,9 @@ import { Accounts } from 'meteor/accounts-base';
 import { runDbMigration } from '/server/utils.js';
 
 Meteor.methods({
+  getRootURL() {
+    return process.env.ROOT_URL;
+  },
   enrollUser(id){
     if(!this.isSimulation){
       Accounts.sendEnrollmentEmail(id);

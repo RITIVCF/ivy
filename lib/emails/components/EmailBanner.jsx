@@ -4,7 +4,7 @@ export default class EmailBanner {
   renderHTML(imgURL,content,bgcolor='#222222') {
     return (
       `<tr>
-        <td background="` + imgURL + `" bgcolor="` + bgcolor + `" valign="middle" style="text-align: center; background-image: url(http://localhost:3000/light-bl.svg), url(http://localhost:3000/light-br.svg), url(` + imgURL + `); background-repeat: no-repeat, no-repeat, no-repeat; background-position: bottom left, bottom right, center center; background-size: 12rem, 12rem, cover;">
+        <td background="` + imgURL + `" bgcolor="` + bgcolor + `" valign="middle" style="text-align: center; background-image: url(`+ process.env.ROOT_URL +`light-bl.svg), url(`+ process.env.ROOT_URL +`light-br.svg), url(` + imgURL + `); background-repeat: no-repeat, no-repeat, no-repeat; background-position: bottom left, bottom right, center center; background-size: 12rem, 12rem, cover;">
           <!--[if gte mso 9]>
                       <v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:680px;height:175px; background-position: center center !important;">
                       <v:fill type="tile" src="` + imgURL + `" color="` + bgcolor + `" />

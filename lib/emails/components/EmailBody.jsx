@@ -61,7 +61,7 @@ export default class EmailBody {
         case "largegroup":
           let lg = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Large Group"});
           if (!!lg) {
-            let thumbnail = this.EmailThumbImage.renderHTML("http://ivy.rit.edu/images/EmailLargeGroup.jpg");
+            let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
             let details = this.EmailDetails.renderHTML(lg.start, lg.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), lg.name, details + lg.description, thumbnail);
             d = d + 1;
@@ -70,26 +70,43 @@ export default class EmailBody {
         case "core":
           let cr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Core"});
           if (!!cr) {
-            let thumbnail = this.EmailThumbImage.renderHTML("http://ivy.rit.edu/images/coretammy.jpg");
+            let thumbnail = this.EmailThumbImage.renderHTML( process.env.ROOT_URL + "images/coretammy.jpg");
             let details = this.EmailDetails.renderHTML(cr.start, cr.location);
             bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), cr.name, details + cr.description, thumbnail);
             d = d + 1;
           }
           break;
         case "prayer":
-          let pr = Events.findOne({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer"});
-          if (!!pr) {
-            thumbnail = this.EmailThumbImage.renderHTML("http://ivy.rit.edu/images/basileiaworship.jpg");
-            details = this.EmailDetails.renderHTML(pr.start, pr.location);
-            bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d), pr.name, details + pr.description, thumbnail);
-            d = d + 1;
+          let prs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Prayer"}).fetch();
+          console.log(prs);
+          if (prs.length >= 1) {
+            let pr1 = prs[0];
+            let start1 = pr1.start;
+            let loc1 = pr1.location;
+            let name1 = pr1.name;
+            let desc1 = pr1.description;
+            let details1 = this.EmailDetails.renderHTML(start1, loc1);
+            let start2 = "";
+            let loc2 = "";
+            let name2 = "";
+            let desc2 = "";
+            let details2 = "";
+            if (prs.length > 1) {
+              pr2 = prs[1];
+              start2 = pr2.start;
+              loc2 = pr2.location;
+              name2 = pr2.name;
+              desc2 = pr2.description;
+              details2 = this.EmailDetails.renderHTML(start2, loc2);
+            }
+            bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2,"border: 2px solid transparent;");
           }
           break;
         case "conference":
           let cfs = Events.find({start: {$gt: when}, status: "Published", tags: "Conference"}).fetch();
           cfs.forEach( (cf) => {
             details = this.EmailDetails.renderHTML(cf.start, cf.location);
-            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://ivy.rit.edu/images/basileiachapter.jpg", cf.name, details + cf.description);
+            bodyHTML = bodyHTML + this.EmailFeature.renderHTML(cf.pic, cf.name, details + cf.description);
           });
           break;
         case "community":
@@ -107,7 +124,7 @@ export default class EmailBody {
             let name2 = "";
             let desc2 = "";
             let details2 = "";
-            if (i + 1 < evs.length) {
+            if (i + 1 < remaining.length) {
               ev2 = remaining[i + 1];
               start2 = ev2.start;
               loc2 = ev2.location;
@@ -118,13 +135,31 @@ export default class EmailBody {
             bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2);
           }
           break;
-        /*case "smallgroup":
-          let scs = Events.find({start: {$gt: when}, status: "Published", tags: "Small Group"}).fetch();
-          scs.forEach( (sc) => {
-            details = this.EmailDetails.renderHTML(sc.start, sc.location);
-            bodyHTML = bodyHTML + this.EmailFeature.renderHTML("http://ivy.rit.edu/images/basileiachapter.jpg", sc.name, details + sc.description);
-          });
-          */
+        case "smallgroup":
+          let sgs = Events.find({start: {$gt: when, $lt: n}, status: "Published", tags: "Small Group"}).fetch();
+          for (var i = 0; i < sgs.length; i += 2) {
+            let sg1 = sgs[i];
+            let start1 = sg1.start;
+            let loc1 = sg1.location;
+            let name1 = sg1.name;
+            let desc1 = sg1.description;
+            let details1 = this.EmailDetails.renderHTML(start1, loc1);
+            let start2 = "";
+            let loc2 = "";
+            let name2 = "";
+            let desc2 = "";
+            let details2 = "";
+            if (i + 1 < sgs.length) {
+              sg2 = sgs[i + 1];
+              start2 = sg2.start;
+              loc2 = sg2.location;
+              name2 = sg2.name;
+              desc2 = sg2.description;
+              details2 = this.EmailDetails.renderHTML(start2, loc2);
+            }
+            bodyHTML = bodyHTML + this.EmailGrid.renderHTML(name1, details1 + desc1, name2, details2 + desc2,"border: 2px dotted #1a3d6d;");
+          }
+          break;
         case "becomeamember":
           let memberpitch = module.desc;
           bodyHTML = bodyHTML + this.EmailText.renderHTML("",memberpitch);
@@ -135,12 +170,13 @@ export default class EmailBody {
           bodyHTML = bodyHTML + this.EmailText.renderHTML("Get Involved",list);
           break;
         case "custom":
-          switch(module.layout) {
+          switch (module.layout) {
             case "spacer": {
-
+              bodyHTML = bodyHTML + `<tr class="module" content="spacer"><td bgcolor="#ffffff" style="padding: 20px; color: #1a3d6d;"></td></tr>`;
               break;
             }
             case "divider": {
+              bodyHTML = bodyHTML + `<tr class="module" content="divider"><td bgcolor="#ffffff" style="padding: 10px 20px; color: #1a3d6d;"><hr style="color: #1a3d6d;"></td></tr>`;
               break;
             }
             case "text": {
@@ -150,17 +186,31 @@ export default class EmailBody {
               break;
             }
             case "cta": {
-              let url = module.title;
-              let content = module.desc;
+              let url = module.url;
+              let content = module.title;
               bodyHTML = bodyHTML + this.EmailCTA.renderHTML(content,url);
               break;
             }
             case "feature": {
-
+              let heading = "";
+              let content = "";
+              let img = "";
+              if(!module.eid == ""){
+          			let feat = Events.findOne(module.eid);
+                heading = feat.name;
+                content = feat.description;
+                img = feat.pic;
+          		}
+              if(!module.img == ""){
+                img = module.img;
+              }
+              heading = heading + module.title;
+              content = content + module.desc;
+              bodyHTML = bodyHTML + this.EmailFeature.renderHTML(img,heading,content);
               break;
             }
             case "thumbnail": {
-              let thumbnail = module.img;
+              let thumbnail = this.EmailThumbImage.renderHTML(module.img);
               let heading = module.title;
               let content = module.desc;
               bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),heading,content,thumbnail);
@@ -168,8 +218,9 @@ export default class EmailBody {
               break;
             }
           }
+          break;
         default:
-          thumbnail = this.EmailThumbImage.renderHTML("http://ivy.rit.edu/images/EmailLargeGroup.jpg");
+          thumbnail = this.EmailThumbImage.renderHTML(process.env.ROOT_URL + "images/EmailLargeGroup.jpg");
           bodyHTML = bodyHTML + this.EmailThumbnail.renderHTML(this.tdir(d),module.type,"text",thumbnail);
           d = d + 1;
       }

@@ -459,7 +459,7 @@ let options = [
 	    {
 	      "value": "community",
 				"name": "Community",
-				"defaultLayout": "feature",
+				"defaultLayout": "grid",
 				"defaultDesc": "",
 	      "canChooseLayout": false
 	    },
@@ -578,8 +578,7 @@ let emailTemplates = [
 	  "modules": [
 			newEmailModule("intro"),
 			newEmailModule("misvision"),
-			newEmailModule("nso"),
-			newEmailModule("social"),
+			newEmailModule("community"),
 			newEmailModule("largegroup"),
 			newEmailModule("smallgroup"),
 			newEmailModule("prayer"),

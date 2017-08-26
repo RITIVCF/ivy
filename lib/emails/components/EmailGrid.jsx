@@ -1,8 +1,18 @@
 export default class EmailGrid {
 
-  secondEvent(h2,c2) {
+  constructor() {
+
+    this.border = "border: 2px dashed #FCB816;";
+
+  }
+
+  setBorder(border) {
+    this.border = border;
+  }
+
+  secondEvent(h2,c2,border) {
     if (h2 != "") {
-      return `<div style="height: 100%; margin: 0; border: 2px dashed #FCB816; border-collapse: separate !important; padding: 5px;">
+      return `<div style="height: 100%; margin: 0; ` + border + ` border-collapse: separate !important; padding: 5px;">
       <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
           <td style="padding: 2px 2px;">
@@ -28,9 +38,13 @@ export default class EmailGrid {
     return ""
   }
 
-  renderHTML(h1,c1,h2="",c2="") {
+  renderHTML(h1,c1,h2="",c2="",border="") {
+    let modborder = "border: 2px dashed #FCB816;";
+    if (!border == "") {
+      modborder = border;
+    }
     return (
-      `<tr>
+      `<tr class="module" content="grid">
         <td bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%">
           <!--[if mso]>
                       <table role="presentation" aria-hidden="true" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
@@ -47,7 +61,7 @@ export default class EmailGrid {
                                     <td align="left" valign="top" width="330">
                                     <![endif]-->
                   <div style="display:table-cell; margin: 0 -2px; height: 100%; padding: 1px; min-width:200px; max-width:324px; vertical-align:top; width:50%;" class="stack-column">
-                    <div style="height: 100%; margin: 0; border: 2px dashed #FCB816; border-collapse: separate !important; padding: 5px;">
+                    <div style="height: 100%; margin: 0;` + modborder + `border-collapse: separate !important; padding: 5px;">
                       <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
                         <tr>
                           <td style="padding: 2px 2px;">
@@ -75,7 +89,7 @@ export default class EmailGrid {
                                     <td align="left" valign="top" width="330">
                                     <![endif]-->
                   <div style="display:table-cell; height: 100%; margin: 0 -2px; padding: 1px; min-width:200px; max-width:324px; vertical-align:top; width:50%;" class="stack-column">
-                    ` + this.secondEvent(h2,c2) + `
+                    ` + this.secondEvent(h2,c2,modborder) + `
                   </div>
                   <!--[if mso]>
                                     </td>

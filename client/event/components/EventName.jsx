@@ -65,7 +65,7 @@ export default class EventName extends Component {
     let editstate = this.state.editstate;
     if(!this.state.editstate){
       return <span className="card-title">{this.state.name}
-        {this.props.perm&&<i className="tiny material-icons black-text" onClick={this.toggle.bind(this)}>edit</i>}
+        {this.props.perm&&<i className="tiny material-icons white-text" onClick={this.toggle.bind(this)}>edit</i>}
       </span>
     }
     return(
