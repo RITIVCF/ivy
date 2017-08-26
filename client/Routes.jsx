@@ -87,6 +87,7 @@ import GroupsWrapper from './groups/GroupsWrapper.jsx';
 // ****  Email  ***************
 import EmailWrapper from './email/summary/EmailWrapper.jsx';
 import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
+import UnsubscribeForm from './email/UnsubscribeForm.jsx'
 // ****************************
 
 // **** Forms  ***************
@@ -95,7 +96,8 @@ import FormWrapper from './forms/FormWrapper.jsx';
 
 
 function signInForceCheck(context) {
-	if(context.route.group.name != "public"){
+	const exclude = ["public", "unsubscribe"]
+	if(!exclude.includes(context.route.group.name)){
 		if(!Meteor.userId()){
 			routeTo('login', {}, {r: context.path});
 		}
@@ -594,8 +596,13 @@ formRoutes.route('/signin/:eid', {
 // 	}
 // });
 
+const emailrenderRoutes = FlowRouter.group({
+	prefix: "/emailrender",
+	name: "emailrender"
+});
 
-FlowRouter.route('/emailrender/:compressedHTML', {
+emailrenderRoutes.route('/:compressedHTML', {
+	name: "emailrender",
 	action(params) {
 		var decompressedHTML = LZString.decompressFromEncodedURIComponent(params.compressedHTML);
 		mount(BlankLayout, {
@@ -604,11 +611,21 @@ FlowRouter.route('/emailrender/:compressedHTML', {
 	}
 });
 
-FlowRouter.route('/unsubscribe/:subid', {
+
+const unsubRoutes = FlowRouter.group({
+	prefix: "/unsubscribe",
+	name: "unsubscribe"
+});
+
+unsubRoutes.route('/:subid', {
+	name: "unsubscribe",
 	action(params) {
+		var uid = LZString.decompressFromEncodedURIComponent(params.subid);
+		Meteor.call("updateNewsletter", uid, false);
 		mount(FormLayout, {
-			content: (<UnsubscribeForm token={params.subid} />)
-		})
+				content: (<UnsubscribeForm token={params.subid} />)
+			}
+		)
 	}
 });
 

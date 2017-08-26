@@ -34,8 +34,7 @@ export default class EventWorkspace extends React.Component {
 				<div className="row" style={{height: "100%"}}>
 					<div className="col s12">
 						<div className="card">
-							<div className="card-image">
-								<img src={imgPath} />
+							<div className="eventImage" style={{backgroundImage: `url(${imgPath})`}}>
 								<EventName ev={ev} perm={perm} />
 							</div>
 							<div className="card-content">

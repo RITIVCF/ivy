@@ -16,12 +16,12 @@ export default class EmailCTA {
 
   renderHTML(btnText,btnTarget) {
     return (
-    `<tr>
+    `<tr class="module" content="cta">
       <td bgcolor="#ffffff">
         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
           <tbody>
             <tr>
-              <td style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+              <td style="padding: 0 20px 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
                 <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto;">
                   <tr>
                     <td style="border-radius: 3px; background: ` + this.buttonColor + `; text-align: center;" class="button-td">

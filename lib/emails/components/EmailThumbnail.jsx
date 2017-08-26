@@ -14,12 +14,12 @@ export default class EmailThumbnail {
     if (heading != "") {
       headingStr = `<tr align="center">
         <td style="padding: 0 10px;">
-            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.toUpperCase() + `</h1>
+            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.replace("\n","</br>").toUpperCase() + `</h1>
         </td>
       </tr>`;
     }
     return (
-      `<tr>
+      `<tr class="module" content="thumbnail">
         <td dir="` + direction + `" bgcolor="#ffffff" align="center" height="100%" valign="top" width="100%" style="padding: 10px 0;">
           <!--[if mso]>
                       <table role="presentation" aria-hidden="true" border="0" cellspacing="0" cellpadding="0" align="center" width="660">

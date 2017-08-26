@@ -1,21 +1,24 @@
 export default class EmailFeature {
   renderHTML(imgURL,heading,content) {
+    let headingStr = "";
+    if (heading != "") {
+      headingStr = `<tr align="center">
+        <td style="padding: 0 10px;">
+            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.replace("\n","</br>").toUpperCase() + `</h1>
+        </td>
+      </tr>`;
+    }
     return (
-      `<tr>
-        <td bgcolor="#ffffff" style="padding: 0 20px 10px; text-align: center;">
-            <h1 style="margin: 0; font-family: sans-serif; font-size: 20px; line-height: 22px; color: #FCB816; font-weight: bold;">` + heading.toUpperCase() + `</h1>
-        </td>
-      </tr>
-      <tr>
+      `<tr class="module" content="cta">
         <td bgcolor="#ffffff">
-          <img src="` + imgURL + `" aria-hidden="true" width="680" height="" alt="alt_text" border="0" align="center" class="fluid" style="width: 100%; max-width: 680px; height: auto; background: #dddddd; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;" class="g-img">
-        </td>
-      </tr>
-      <tr>
-        <td bgcolor="#ffffff">
-          <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
+          <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">`
+          + headingStr +
+          `
             <tr>
-              <td style="padding: 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;">
+              <td bgcolor="#222222" valign="middle" style="height: 200px; text-align: center; background-image: url(` + imgURL + `); background-repeat: no-repeat; background-position: center center; background-size: cover;"></td>
+            </tr>
+            <tr>
+              <td style="padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: justify;">
                 <p style="margin: 0 0 10px 0;">` + content + `</p>
               </td>
             </tr>
