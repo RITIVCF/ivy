@@ -1,5 +1,6 @@
 import { Accounts } from 'meteor/accounts-base';
 import { runDbMigration } from '/server/utils.js';
+import Contact from '/lib/classes/Contact.js';
 
 Meteor.methods({
   getRootURL() {
