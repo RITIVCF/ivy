@@ -30,7 +30,7 @@ export default class DebriefForm extends TrackerReact(React.Component) {
 		if(!debrief._id){
 			Meteor.call("insertDebriefDraft", this.props.eid, (error, result) => {
 				if(error){
-					console.log(error);
+					console.error(error);
 				}else{
 					this.setState({debrief: new Debrief(this.props.eid)});
 				}

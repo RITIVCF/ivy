@@ -15,7 +15,6 @@ export default class Address extends Component {
     if(this.props.disabled){
       return;
     }
-    //console.log("Begin edit.");
     this.setState({
       editting: true
     });
@@ -71,26 +70,25 @@ export default class Address extends Component {
   render(){
     return(
       <li className="collection-item" id="showhim">
-    {this.state.editting==true ?
-      <form>
-        {/*}<input type="hidden" ref="id" value={this.props.address._id} />*/}
-        <input type="text" ref="line1" value={this.props.address.line1} placeholder="Line 1" onChange={this.handleLine1Change} />
-        <input type="text" ref="line2" value={this.props.address.line2} placeholder="Line 2"  onChange={this.handleLine2Change} />
-        <input type="text" ref="line3" value={this.props.address.line3} placeholder="Line 3" onChange={this.handleLine3Change} />
-        <input type="text" ref="city" value={this.props.address.city} placeholder="City" onChange={this.handleCityChange} />
-        <input type="text" ref="state" value={this.props.address.state} placeholder="State" onChange={this.handleStateChange} />
-        <input type="text" ref="zip" value={this.props.address.zip} placeholder="ZIP" onChange={this.handleZIPChange} />
-        <button onClick={this.closeedit.bind(this)}>Save</button>
-        <button onClick={this.close.bind(this)}>Close</button>
-      </form>
-      :
-      <div onClick={this.edit.bind(this)}>
-        {!this.props.disabled&&
-        <a className="btn right" id="showme" onClick={this.remove.bind(this)}>Remove</a>}
-        <div>{this.props.address.line1}</div>
-        <div>{this.props.address.line2}</div>
-        <div>{this.props.address.line3}</div>
-        <div>{this.props.address.city}, {this.props.address.state} {this.props.address.zip}</div>
+				{this.state.editting==true ?
+					<form>
+						<input type="text" ref="line1" value={this.props.address.line1} placeholder="Line 1" onChange={this.handleLine1Change} />
+						<input type="text" ref="line2" value={this.props.address.line2} placeholder="Line 2"  onChange={this.handleLine2Change} />
+						<input type="text" ref="line3" value={this.props.address.line3} placeholder="Line 3" onChange={this.handleLine3Change} />
+						<input type="text" ref="city" value={this.props.address.city} placeholder="City" onChange={this.handleCityChange} />
+						<input type="text" ref="state" value={this.props.address.state} placeholder="State" onChange={this.handleStateChange} />
+						<input type="text" ref="zip" value={this.props.address.zip} placeholder="ZIP" onChange={this.handleZIPChange} />
+						<button onClick={this.closeedit.bind(this)}>Save</button>
+						<button onClick={this.close.bind(this)}>Close</button>
+					</form>
+				:
+				<div onClick={this.edit.bind(this)}>
+					{!this.props.disabled&&
+						<a className="btn right" id="showme" onClick={this.remove.bind(this)}>Remove</a>}
+					<div>{this.props.address.line1}</div>
+					<div>{this.props.address.line2}</div>
+					<div>{this.props.address.line3}</div>
+					<div>{this.props.address.city}, {this.props.address.state} {this.props.address.zip}</div>
       </div>
     }
 

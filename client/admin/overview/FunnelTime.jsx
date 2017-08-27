@@ -88,28 +88,6 @@ export default class FunnelTime extends TrackerReact(React.Component) {
 	    }
 			});
 		});
-		/*var dateSlider = $("#daterange")[0];
-		console.log(dateSlider);
-	  noUiSlider.create(dateSlider, {
-	   start: [new moment().subtract(1,"week")._d.getTime(),new Date().getTime()],
-	   connect: true,
-	   step: 24 * 60 * 60 * 1000,
-	   range: {
-	     'min': new Date('2017').getTime(),
-	     'max': new Date().getTime()
-	   },
-	   format:{
-			 	to: function(value){
-					return ""//new moment(value).format('dddd Do MMM YYYY')
-				},
-				from: function(value){
-					return ""//new moment(value).format('dddd Do MMM YYYY')
-				}
-			}
-	  });
-		dateSlider.noUiSlider.on('update', function( values, handle ) {
-			console.log(handle);
-		});*/
 
 	}
 

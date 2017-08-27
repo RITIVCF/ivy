@@ -24,22 +24,10 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
 
   }
 
-  sendToMe() {
-    Meteor.call("sendToMe", this.props.emid, (error) => {
-			if(error) {
-				Materialize.toast("Could not send email", 2000);
-			} else {
-				Materialize.toast("Sent to you", 2000);
-			}
-		});
-  }
-
   getSubHeader(email) {
     return [<ul key="0" style={{marginLeft: "20px"}} className="left black-text">{email.subject}</ul>,
-    <ul key="1" style={{marginRight: "20px"}} className="right">
-      <li onClick={this.sendToMe.bind(this)}>
-        <a className="black-text">Send to me</a></li>
-    </ul>]
+		<SendToMe key={1} style={{marginRight: "20px"}} right={true} emid={this.props.emid} />
+    ]
   }
 
   componentWillUnmount() {
@@ -70,4 +58,60 @@ export default class EmailWorkspaceWrapper extends TrackerReact(React.Component)
         />
     )
   }
+}
+
+
+
+
+
+
+export class SendToMe extends React.Component {
+	constructor(){
+		super();
+
+		this.state = {
+			loading: false
+		}
+
+	}
+
+	render(){
+		return (
+			<Navbar
+				right={this.props.right}
+				style={this.props.style}
+			>
+				{
+					this.state.loading&&
+					<li>
+						<LoaderCircle style={{"paddingTop": "0px"}} />
+					</li>
+				}
+				<NavbarItem>
+					<Button
+						onClick={this.sendToMe.bind(this)}
+						disabled={this.state.loading}
+					>
+						Send To Me
+					</Button>
+				</NavbarItem>
+			</Navbar>
+		)
+
+	}
+
+	sendToMe() {
+		this.setState({loading: true});
+    Meteor.call("sendToMe", this.props.emid, (error) => {
+			if(error) {
+				Materialize.toast("Could not send email", 2000);
+				this.setState({loading: false});
+			} else {
+				this.setState({loading: false});
+				Materialize.toast("Sent to you", 2000);
+			}
+		});
+  }
+
+
 }

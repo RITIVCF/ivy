@@ -32,6 +32,7 @@ Button = function(props){
 	}
 	return (
 		<button
+			disabled={props.disabled}
 			className={className}
 			onClick={props.onClick}>
 			{props.children}
@@ -40,14 +41,24 @@ Button = function(props){
 }
 
 Navbar = function(props) {
-	return <ul className={props.right?"right":""}>
+	return <ul style={props.style} className={props.right?"right":""}>
 		{props.children}
 	</ul>
 }
 
 NavbarItem = function(props) {
+	const hover = (props.onClick||props.href);
 	return (
-		<li onClick={props.onClick}><a href={props.href}>{props.children}</a></li>
+		<li onClick={props.onClick}>
+			{
+				hover ? 
+					<a href={props.href}>
+						{props.children}
+					</a>
+				:
+				props.children
+			}
+		</li>
 	)
 }
 

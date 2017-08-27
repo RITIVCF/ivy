@@ -19,18 +19,6 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 		return Options.find({_id:{$nin:["ticketstatuses","ticketcontact","ticketeventrequest"]}}).fetch();
 	}
 
-	merge(){
-		/*Meteor.call("migrateDatabase", function(error){
-			if(error){
-				console.log("Error:");
-				console.log(error);
-			}
-			else{
-				console.log("success");
-			}
-		});*/
-	}
-
 	getContactGroupDefault(){
 		return Groups.findOne(Options.findOne("ticketcontact").gid).name;
 	}
@@ -59,70 +47,41 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 
 	render() {
 		return (
-			<div >
-				<div className="row" >
-					<div className="col s6" >
-						<div className="divider"></div>
-						<div className="card">
-							<div className="card-content">
-								<span className="card-title">Default Ticket Groups Configuration</span>
-									<br/>
+			<Row>
+				<div className="col s6" >
+					<div className="divider"></div>
+					<div className="card">
+						<div className="card-content">
+							<span className="card-title">Default Ticket Groups Configuration</span>
+							<br/>
 
-										<SelectTeam
-										 parent={this}
-										 id={"contacttype"}
-										 label={"Default Contact Type Team"}
-										 unset={this.unset.bind(this)}
-										 updateContact={this.updateContactGroup.bind(this)}
-										 initialValue={this.getContactGroupDefault()}
-										 ref={"contacttype"}
-										 />
-									 {this.getTypes().map((type)=>{
-										 return <SelectTeam
-															  parent={this}
-															  id={type.label+"type"}
-															  label={"Default "+type.label+" Event Request Team"}
-															  unset={this.unset.bind(this)}
-															  updateContact={this.updateEventRequestGroup.bind(this, type)}
-															  initialValue={this.getTypeGroup(type.gid)}
-															  />
-									 })}
-
-									 {/*}<label>Default Event Calendar View</label>
-										<select
-											value={Options.findOne("calendarview").val}
-											onChange={this.changeCalendarView.bind(this)}
-											className="form-control"
-											ref="defaultView"
-											>
-											<option value={"agendaWeek"}>Week Agenda</option>
-											<option value={"month"}>Month</option>
-											<option value={"agendaDay"}>Day Agenda</option>
-										</select>*/}
-							</div>
+							<SelectTeam
+								parent={this}
+								id={"contacttype"}
+								label={"Default Contact Type Team"}
+								unset={this.unset.bind(this)}
+								updateContact={this.updateContactGroup.bind(this)}
+								initialValue={this.getContactGroupDefault()}
+								ref={"contacttype"}
+							/>
+							{this.getTypes().map((type)=>{
+								return <SelectTeam
+									parent={this}
+									id={type.label+"type"}
+									label={"Default "+type.label+" Event Request Team"}
+									unset={this.unset.bind(this)}
+									updateContact={this.updateEventRequestGroup.bind(this, type)}
+									initialValue={this.getTypeGroup(type.gid)}
+											 />
+							})}
 						</div>
 					</div>
-					<div className="col s6" >
-						<div className="divider"></div>
-						<EventTagForm />
-					</div>
-					{/*<div className="row">
-						<div className="col s12">
-							<h2>All Options</h2>
-								{this.getOptions().map( (option) => {
-									return <Option key={option._id} option={option} />
-								})}
-						</div>
-					</div>*/}
 				</div>
-				{/*checkPermission("removecontact")?
-				<div className="row">
-					<div className="col s6">
-						<p>Perform User & Contact Merge</p>
-						<a className="btn flat" onClick={this.merge.bind(this)}>Merge</a>
-					</div>
-				</div>:""*/}
-			</div>
+				<div className="col s6" >
+					<div className="divider"></div>
+					<EventTagForm />
+				</div>
+			</Row>
 		)
 	}
 }

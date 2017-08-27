@@ -94,7 +94,7 @@ export default class NewContactForm extends TrackerReact(React.Component){
 
     Meteor.call("createNewContact", newContact, (error) => {
       if(error){
-        console.log("Handle new contact error: ", error);
+        console.error("Handle new contact error: ", error);
 				if(error.reason == "Email already exists."){
 					window.alert("Email already exists.");
 				}
@@ -127,39 +127,6 @@ export default class NewContactForm extends TrackerReact(React.Component){
     });
   }
 
-  update(contt){
-    //console.log("Suggestion Selected. Print autosuggest return object.");
-    //console.log(contt);
-    //this.state.contact = contt;
-    // this.setState({user: contt});
-    // //this.state.new = false;
-    // this.setState({new: false});
-    // //console.log("print state");
-    // //console.log(this.state);
-    // this.refs.email.value = contt.emails[0].address;
-    // this.refs.email.disabled = true;
-    // this.refs.phone.value = contt.phone;
-    // this.refs.phone.disabled = true;
-    // this.refs.major.value = contt.major;
-    // this.refs.major.disabled = true;
-    // this.refs.howhear.refs.howhear.value = contt.howhear;
-    // this.refs.howhear.refs.howhear.disabled = true;
-    // this.refs.newsletter.checked = contt.newsletter;
-    // this.refs.newsletter.disabled = true;
-    // this.refs.learnmore.checked = contt.learnmore;
-    // this.refs.learnmore.disabled = true;
-    // $('select').material_select();
-    // Materialize.updateTextFields();
-    //this.refs.phone.value = this.state.contact.phone;
-    //this.refs.newsletter.checked = this.state.contact.newsletter;
-    //this.setState({contact:contt});
-    ////console.log(this);
-  }
-
-  log(){
-    //console.log(this.state);
-  }
-
   setNew(){
     if(!this.state.user){
       this.state.new = true;
@@ -167,9 +134,6 @@ export default class NewContactForm extends TrackerReact(React.Component){
   }
 
   unset(){
-    //console.log(this);
-    //this.state.contact = false;
-    // this.setState({new: true});
     this.setState({name: ''});
     this.refs.email.value = "";
     this.refs.email.disabled = false;
@@ -186,12 +150,6 @@ export default class NewContactForm extends TrackerReact(React.Component){
     this.refs.learnmore.disabled = false;
     $('select').material_select();
     Materialize.updateTextFields();
-
-    // this.refs.phone.value="";
-    // this.refs.newsletter.checked=false;
-    // this.refs.major.value="";
-    //this.state.new=false;
-    //this.clearFields.bind(this);
   }
 
   changeName(event){
@@ -232,7 +190,6 @@ export default class NewContactForm extends TrackerReact(React.Component){
 								<input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
 								<label htmlFor="more">I would like to learn more about IV</label>
 
-								{/*}<a onClick={this.circle.bind(this)}>expand</a>*/}
 
 								<button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
 									<span id="sign-in-button">

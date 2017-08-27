@@ -140,9 +140,6 @@ shouldJobCalculate = function(testVal, numberOfValidIntervals){
 }
 
 export function failJob(job, reason){
-	console.log("Failing Job");
-	console.log(job);
-	console.log("Reason: ", reason);
 	job.fail(
 	  {
 	    reason: reason
@@ -230,7 +227,7 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 	} catch (e) {
 		let user = Meteor.users.findOne(job.data.uid);
-		console.log("Error in checkFunnelStatus job ("+job._id+"): ", e);
+		console.error("Error in checkFunnelStatus job ("+job._id+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
 			"checkFunnelStatus Job " + user.name,
@@ -260,7 +257,7 @@ Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
 		cb();
 
 	} catch (e) {
-		console.log("Error in sendNewsletter job (emid: "+job.data.emid+"): ", e);
+		console.error("Error in sendNewsletter job (emid: "+job.data.emid+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
 			"sendNewsletter Job",
@@ -286,7 +283,7 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 		cb();
 
 	} catch (e) {
-		console.log("Error in sendEventFollowUpEmail job ("+job._id+"): ", e);
+		console.error("Error in sendEventFollowUpEmail job ("+job._id+"): ", e);
 		let user = Meteor.users.findOne(data.uid);
 		failJob(job, e);
 		sendErrorEmail(
@@ -309,7 +306,7 @@ Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
 		cb();
 
 	} catch (e) {
-		console.log("Error in processExpiredContacts job ("+job._id+"): ", e);
+		console.error("Error in processExpiredContacts job ("+job._id+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
 			"processExpiredContacts job ",

@@ -3,7 +3,6 @@ export default class EmailFooter extends React.Component {
 
 
   renderHTML(uid) {
-    console.log("footer says: ", uid);
     return (
       `<table  role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" bgcolor="#ffffff" border="0" align="center" width="100%" style="max-width: 680px; background: #1a3d6d;">
         <tr><td>

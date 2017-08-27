@@ -73,7 +73,6 @@ export default class ContactSummary extends TrackerReact(React.Component) {
 
   handleCheck(id){
     var array = Session.get("contactstatusfilter");
-    console.log(array);
     if(array.includes(id)){
         array.splice(array.indexOf(id), 1);
     }else{

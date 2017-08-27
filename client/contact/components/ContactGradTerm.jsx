@@ -12,7 +12,6 @@ export default class ContactGradTerm extends TrackerReact(React.Component) {
   update(event){
 		event.preventDefault();
     this.setState({value: event.target.value});
-    //console.log(event.target.value);
     this.props.contact.setGradTerm(event.target.value.trim());
 	}
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import LoaderCircle from '/client/LoaderCircle.jsx';
 import TextInput from '/client/sharedcomponents/TextInput';
 import TinyMCE from '/client/sharedcomponents/TinyMCE';
 
@@ -8,6 +9,7 @@ export default class ToDoEmailForm extends TrackerReact(React.Component) {
     super();
 
 		this.state = {
+			sending: false,
 			subject: "",
 			message: ""
 		};
@@ -19,10 +21,25 @@ export default class ToDoEmailForm extends TrackerReact(React.Component) {
 
 	submit(event){
 		event.preventDefault();
-		Meteor.call("sendToDoEmail", this.props.customerId, this.state.subject.trim(), this.state.message, this.props.ticketId);
-		this.setState({subject: "", message: ""});
-		if(this.props.onSubmit){
-			this.props.onSubmit();
+		this.setState({sending: true});
+		Meteor.call("sendToDoEmail", this.props.customerId, this.state.subject.trim(), this.state.message, this.props.ticketId, (error)=>{
+			this.handleCallBack(error);
+		});
+	}
+
+	handleCallBack(error){
+		if ( error ) {
+			Materialize.toast("Could not send email. Please try again", 2000);
+			this.setState({sending: false});
+		}
+		else {
+			Materialize.toast("Email sent successfully!", 2000);
+			this.setState({subject: "", message: "", sending: false});
+
+			if(this.props.onSubmit){
+				this.props.onSubmit();
+			}
+
 		}
 	}
 
@@ -59,6 +76,7 @@ export default class ToDoEmailForm extends TrackerReact(React.Component) {
 					>
 						Send
 					</button>
+					{this.state.sending&&<LoaderCircle/>}
 				</form>
 			</div>
 		)

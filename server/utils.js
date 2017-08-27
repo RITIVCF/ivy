@@ -5,7 +5,6 @@ export {
 };
 
 sendErrorEmail = function(subject, html){
-	console.log(subject, html);
 	Email.send({
 		to: "awe6013@rit.edu",
 		from: "no-reply@ivy.rit.edu",

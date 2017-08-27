@@ -25,7 +25,7 @@ export default class UserRow extends TrackerReact(React.Component) {
 		if(window.confirm("Are you sure?")){
 			Meteor.call("passReset", this.props.uid, function(error,result){
 				if(error){
-					console.log(error);
+					console.error(error);
 					Materialize.toast('Oops! Looks like something went wrong. Try again later. If the problem persists, '
 						+ 'contact support.', 4000);
 				}

@@ -16,8 +16,6 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
       subscription: {
         Tickets: Meteor.subscribe("allActiveTickets"),
         options: Meteor.subscribe("allOptions"),
-      //  events: Meteor.subscribe("allEvents"),
-        //users: Meteor.subscribe("allUsers"),
         contacts: Meteor.subscribe("allContacts")
       },
       filter: "assigneduser",
@@ -28,18 +26,14 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 
   componentWillUnmount() {
     this.state.subscription.Tickets.stop();
-    //this.state.subscription.users.stop();
     this.state.subscription.contacts.stop();
     this.state.subscription.options.stop();
-  //  this.state.subscription.events.stop();
   }
 
   checkSubs(){
     return this.state.subscription.Tickets.ready()&&
-    //this.state.subscription.users.ready()&&
     this.state.subscription.contacts.ready()&&
     this.state.subscription.options.ready();
-  //  this.state.subscription.events.ready();
   }
 
   openNew(){
@@ -57,7 +51,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
     var right = <ul className="right" key={2}>
       <li onClick={this.toggleView.bind(this)}><a><i className="material-icons black-text">
         {Meteor.user().preferences.tickets_infobar?"info":"info_outline"}
-        </i></a></li>
+			</i></a></li>
     </ul>;
     return [left,right];
   }
@@ -71,18 +65,16 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
     if(!checkPermission("tickets")){
 			return <NoPerm />
 		}
-    //var ticket = Tickets.findOne(this.state.ticketId);
     var subsready = this.checkSubs();
-    console.log(subsready);
 		return (
 
       <MainBox
         content={<div className="row">
-            <div className="col s12">
-                  <TicketSummary sub={subsready} />
-                  <NewTicketWindow ref="newticketwindow" />
-            </div>
-          </div>}
+					<div className="col s12">
+						<TicketSummary sub={subsready} />
+						<NewTicketWindow ref="newticketwindow" />
+					</div>
+				</div>}
         subheader={this.getSubHeader()}
         infobar={<TicketPreview tkt={Tickets.findOne(Session.get("ticselected"))} />}
         showinfobar={Meteor.user().preferences.tickets_infobar}

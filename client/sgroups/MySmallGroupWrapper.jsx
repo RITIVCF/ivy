@@ -29,10 +29,6 @@ export default class MySmallGroupWrapper extends TrackerReact(React.Component) {
   }
 
   getSubHeader(){
-    /*<ul className="right">
-    }<li className="active" onClick={this.toggleInfoBar.bind(this)}><a className="waves-effect waves-light">
-      <i className="material-icons black-text">{Meteor.user().preferences.groups_infobar?"info":"info_outline"}</i></a></li>
-  </ul>*/
     // Mailing list
     // Strategic Groups
     // Roles
@@ -42,15 +38,15 @@ export default class MySmallGroupWrapper extends TrackerReact(React.Component) {
       <ul className="tabs">
         <li className="tab col s4">
           <a onClick={this.setPage.bind(this,"Summary")}
-            className="active">{this.getSG().name}</a>
+					className="active">{this.getSG().name}</a>
         </li>
         <li className="tab col s4">
           <a onClick={this.setPage.bind(this,"Gatherings")}
-            className="">Upcoming Gatherings</a>
+					className="">Upcoming Gatherings</a>
         </li>
         <li className="tab col s4">
           <a onClick={this.setPage.bind(this,"Members")}
-            className="">Members</a>
+					className="">Members</a>
         </li>
       </ul>)
 
@@ -58,7 +54,6 @@ export default class MySmallGroupWrapper extends TrackerReact(React.Component) {
 
   getSG(){
     var grps = Groups.find({$or:[{leader: Meteor.userId()},{users: Meteor.userId()}], type:"Small Group"}).fetch();
-    console.log(grps);
     return grps[0];
   }
 
@@ -84,7 +79,7 @@ export default class MySmallGroupWrapper extends TrackerReact(React.Component) {
         subheader={this.getSubHeader()}
         showinfobar={false}
         infobar={<div></div>}
-        />
+			/>
 
     )
 	}

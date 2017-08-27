@@ -18,9 +18,7 @@ export default class ChurchName extends Component {
 
   updateName(event){
 		event.preventDefault();
-		//console.log("Name: "+this.refs.name);
 		this.props.ch.setName(this.refs.name.value.trim());
-		//this.state.value = this.refs.name;
     this.setState({editting: !this.state.editting});
 	}
 

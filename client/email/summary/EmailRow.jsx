@@ -5,13 +5,6 @@ export default class EmailSummary extends TrackerReact(React.Component){
 	constructor() {
 		super();
 
-		this.state = {
-			subscription: {
-
-			}
-		};
-
-
 	}
 
 	componentWillUnmount() {
@@ -33,18 +26,12 @@ export default class EmailSummary extends TrackerReact(React.Component){
 	getTo(){
 		var to = "";
 		var groups = Groups.find({_id: {$in: this.props.email.to.groups}}).fetch();
-		console.log(groups);
 		var users = Meteor.users.find({_id: {$in: this.props.email.to.users}}).fetch();
-		console.log("User in Email: ", this.props.email.to.users);
-		console.log(users);
 		var emails = this.props.email.to.emails;
-		console.log(emails);
 		if(groups.length> 0){
 			to += groups[0].name;
-			console.log("Adding first group",groups[0].name);
 			if(groups.length>1){
 				to += "(+"+ (groups.length-1).toString() +"), ";
-				console.log("Adding extra groups...", groups.length-1);
 			}
 			else{
 				to += ", ";
@@ -52,10 +39,8 @@ export default class EmailSummary extends TrackerReact(React.Component){
 		}
 		if(users.length> 0){
 			to += users[0].name;
-			console.log("Adding first user",users[0].name);
 			if(users.length>1){
 				to += "(+"+ (users.length-1).toString() +"), ";
-				console.log("Adding extra users...", users.length-1);
 			}
 			else{
 				to += ", ";
@@ -63,18 +48,14 @@ export default class EmailSummary extends TrackerReact(React.Component){
 		}
 		if(emails.length> 0){
 			to += emails[0];
-			console.log("Adding first email",emails[0].name);
 			if(emails.length>1){
 				to += "(+"+ (emails.length-1).toString() +"), ";
-				console.log("Adding extra emails...", emails.length-1);
 			}
 			else{
 				to += ", ";
 			}
 		}
-		console.log("Before", to);
 		to = to.replace(/,\s*$/, "");
-		console.log("After", to);
 
 		return to;
 	}

@@ -8,56 +8,30 @@ export default class SideBar extends TrackerReact(React.Component) {
 		super();
 
 		this.state = {
-			navCollapsed: false,
-			subscription: {
-
-			}
+			navCollapsed: false
 		}
-
 
 	}
 
 	componentDidMount(){
-		// $(".dropdown-button").dropdown({
-		// 	alignment: 'right',
-		// 	beloworigin: true
-		// });
 		$('.collapsible').collapsible();
 	}
 
 	componentDidUpdate(){
-		// $(".dropdown-button").dropdown({
-		// 	alignment: 'right',
-		// 	belowOrigin: true
-		// });
 		$('.collapsible').collapsible();
 	}
 
 	toggleCollapse(){
 		this.setState({navCollapsed:!this.state.navCollapsed});
-		/*$('#adminfull').toggleClass('collapsible');
-		$('#adminfull').toggleClass('collapsible-accordion');
-		$('#adminfullheader').toggleClass('collapsible-header');
-		$('#adminfullheader').toggleClass('dropdown-button');
-		setTimeout(function() {
-			if(this.state.navCollapsed) {
-				$(".dropdown-button").dropdown({
-					alignment: 'right',
-					belowOrigin: true
-				});
-			} else {
-				$('.collapsible').collapsible();
-			}
-		}, 500);*/
 		setTimeout(function() {
 			$('main').toggleClass('nav-collapsed');
-			//$('.nav-label').toggleClass('nav-collapsed');
+
 			$('#nav-collapse-button').toggleClass('nav-collapsed');
-			//$('.side-nav').toggleClass('nav-collapsed');
+
 			$('.hide-scroll').toggleClass('nav-collapsed');
     }, this.state.navCollapsed?0:200);
 		setTimeout(function() {
-      //$('#drop-nav').toggleClass('nav-collapsed');
+
     }, this.state.navCollapsed?200:0);
 	}
 

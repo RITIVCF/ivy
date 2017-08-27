@@ -29,14 +29,12 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 	}
 
 	componentWillUnmount() {
-		//console.log(this.state);
 		this.state.subscription.Ethnicities.stop();
 		this.state.subscription.user.stop();
     this.state.subscription.contact.stop();
 		this.state.subscription.options.stop();
 		this.state.subscription.ticket.stop();
 		this.state.subscription.Events.stop();
-		//console.log("Wrapper unmounted");
   }
 
 
@@ -58,7 +56,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 
 		let contact = this.getContact();
 
-		document.title = "Ivy - "+contact.getName()+"'s Profile";
+		setDocumentTitle(contact.getName()+"'s Profile");
 
 		return (
 		<div className="container" >

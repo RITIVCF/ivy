@@ -3,18 +3,10 @@ import Time from './Time.jsx';
 
 export default class ChurchTimes extends Component {
   // props are: address list from user object
-  /*
-  addresses(){
-    console.log(this.props.addresses);
-    return this.props.addresses;
-  }*/
 
   add(){
-    //Meteor.call('addMailingAddress');
     this.props.ch.addTime();
   }
-
-
 
   render(){
     return (

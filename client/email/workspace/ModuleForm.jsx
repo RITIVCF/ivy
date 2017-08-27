@@ -62,20 +62,9 @@ export default class ModuleForm extends TrackerReact(React.Component){
 		const eid = this.props.module.getEventID();
 		const event = Events.findOne(eid);
 
-		if(this.props.module.layout == "feature" && this.props.module.type == "custom"){
-			console.log("Eid: ", eid);
-			console.log("Event: ", event);
-		}
 		if(!!event){
-			if(this.props.module.layout == "feature" && this.props.module.type == "custom"){
-				console.log("Event exists. Return name");
-			}
-
 			return event.name;
 		} else {
-			if(this.props.module.layout == "feature" && this.props.module.type == "custom"){
-				console.log("Event does not exist. Do not return name");
-			}
 			return "";
 		}
 	}

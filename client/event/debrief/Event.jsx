@@ -27,7 +27,6 @@ export default class DebriefSummary extends React.Component {
 	}
 
 	leader(){
-		console.log(this.props.ev.owner);
 		let owner = Meteor.users.findOne(this.props.ev.owner);
 		return <a href={"/people/"+owner._id} >{owner.name}</a>;
 	}

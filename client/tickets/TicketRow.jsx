@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-// props:
-//    tkt:  ticket
 export default class TicketRow extends Component {
   getUser(){
     if(this.props.tkt.assigneduser==""){
@@ -25,7 +23,6 @@ export default class TicketRow extends Component {
     if(this.props.tkt.customer==""){
       return {name: ""};
     }
-    console.log(this.props.tkt.customer);
 		let user = Meteor.users.findOne({_id:this.props.tkt.customer});
 
 		if ( user ) {
@@ -38,34 +35,29 @@ export default class TicketRow extends Component {
 
   go(){
     FlowRouter.go("/tickets/"+ this.props.tkt._id);
-    //this.props.parent.editTicket(this.props.tkt._id);
   }
 
   selectThis(event){
     event.stopPropagation();
     Session.set("ticselected", this.props.tkt._id);
-    //this.props.select(this.props.tkt._id);
   }
 
   render() {
     var status="";
     let ticket = this.props.tkt;
     if(ticket.status == "Closed"){
-      //status = "material-icons green-text";
       status = "ticket-closed";
       if(!ticket.assigneduser){
         status += " unassignedclosed";
       }
     }
     else if(ticket.status == "Pending"||ticket.status=="In Progress"){
-      //status = "material-icons gold-text";
       status = "ticket-pending";
       if(!ticket.assigneduser){
         status += " unassignedpending";
       }
     }
     else {
-      //status = "material-icons red-text";
       status = "ticket-open";
       if(!ticket.assigneduser){
         status += " unassignedopen";

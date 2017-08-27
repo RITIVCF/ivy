@@ -14,28 +14,24 @@ export default class JobManager extends React.Component {
 				<Column>
 					{
 						this.getOtherJobs().map( (job) => {
-							console.log(job);
 							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
 						})
 					}
 					<hr />
 					{
 						this.getFailedJobs().map( (job) => {
-							console.log(job);
 							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
 						})
 					}
 					<hr />
 					{
 						this.getRunningJobs().map( (job) => {
-							console.log(job);
 							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
 						})
 					}
 					<hr />
 					{
 						this.getWaitingJobs().map( (job) => {
-							console.log(job);
 							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
 						})
 					}
@@ -104,11 +100,9 @@ class Job extends React.Component {
 						</Row>
 					</Column>
 					<Column width="s6">
-						{/* <label>Log</label> */}
 						<MaterialCollection
 							values={this.getLog()}
 						/>
-						{/* level, message, time  */}
 					</Column>
 				</Row>
 			</Card>

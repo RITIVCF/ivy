@@ -17,7 +17,6 @@ export default class NewEventModal extends TrackerReact(React.Component) {
 
   open(){
     $('#neweventmodal').appendTo("body").modal('open');
-    //$('#newname').focus();
     this.refs.newname.focus();
   }
 
@@ -33,7 +32,7 @@ export default class NewEventModal extends TrackerReact(React.Component) {
     }
     Meteor.call('addEvent', this.refs.newname.value, newevent.start._d, function(error, result){
       if(error){
-        console.log(error.reason);
+        console.error(error.reason);
         return;
       }
       if(go){
@@ -70,11 +69,11 @@ export default class NewEventModal extends TrackerReact(React.Component) {
         <div className="modal-footer">
           <a onClick={this.createNew.bind(this,false)} ref="createevent"
             className={this.state.createdisabled?"modal-action waves-effect waves-green btn-flat disabled":
-              "modal-action waves-effect waves-green btn-flat"}>Create
+						"modal-action waves-effect waves-green btn-flat"}>Create
           </a>
           <a onClick={this.createNew.bind(this,true)} ref="editevent"
             className={this.state.createdisabled?"modal-action modal-close waves-effect waves-green btn-flat disabled":
-              "modal-action modal-close waves-effect waves-green btn-flat"}>Edit Event
+						"modal-action modal-close waves-effect waves-green btn-flat"}>Edit Event
           </a>
           <a className="modal-action modal-close waves-effect waves-light btn-flat" >Cancel</a>
         </div>

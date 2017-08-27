@@ -17,7 +17,6 @@ export default class Time extends Component {
   }
 
   edit(event){
-    console.log("Begin edit.");
     this.setState({
       editting: true
     });
@@ -36,8 +35,6 @@ export default class Time extends Component {
     else{
       this.props.ch.updateTime(this.props.i, day, time)
     }
-
-    //console.log(this.refs.time.state.value);
 
   }
 
@@ -86,14 +83,18 @@ export default class Time extends Component {
           </select>:this.props.time.day}</td>
         <td>{this.state.editting?
           <SelectTime ref="time"  initialValue={this.props.time.time} />
-            :this.props.time.time}</td>
-          <td>{this.state.editting?<span>
-          <button onClick={this.closeedit.bind(this)}>Save</button>
-          <button onClick={this.close.bind(this)}>Close</button></span>
-          :<i onClick={this.remove.bind(this)}
-             className="material-icons right">close</i>}</td>
-
-
+				:this.props.time.time}</td>
+				<td>
+					{this.state.editting?
+						<span>
+							<button onClick={this.closeedit.bind(this)}>Save</button>
+							<button onClick={this.close.bind(this)}>Close</button>
+						</span>
+					:
+					<i onClick={this.remove.bind(this)}
+					className="material-icons right">close</i>
+					}
+				</td>
 
     </tr>
     )

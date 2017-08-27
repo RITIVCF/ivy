@@ -5,12 +5,8 @@ export default class ButtonDelete extends Component {
     event.preventDefault();
     var result = window.confirm("Are you sure you want to delete SG? *This action cannot be undone.*");
     if(result == true){
-      console.log("you clicked 'yes'.");
       Meteor.call('deleteSG',this.props.gid);
       location.assign("/sg");
-    }
-    else{
-      console.log("you clicked 'no'.");
     }
   }
 
