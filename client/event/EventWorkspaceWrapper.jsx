@@ -30,9 +30,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
       subscription: {
         Event: Meteor.subscribe("thisEvent", props.eid, function(){thiz.setState({ready: true})}),
 				tickets: Meteor.subscribe("eventTickets", props.eid),
-				//users: Meteor.subscribe("allUsers"),
-				contacts: Meteor.subscribe("allContacts"),
-			//	options: Meteor.subscribe("allOptions")
+				contacts: Meteor.subscribe("allContacts")
 		},
 		groups: getUserGroupPermission(),
 		ready: false,
@@ -45,9 +43,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
   componentWillUnmount() {
     this.state.subscription.Event.stop();
 		this.state.subscription.tickets.stop();
-		//this.state.subscription.users.stop();
 		this.state.subscription.contacts.stop();
-	//	this.state.subscription.options.stop();
   }
 
 	componentDidMount() {
@@ -143,7 +139,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		Meteor.call("eventRequestPerm", this.props.eid, function(error){
 			if(error){
 				window.alert(error);
-				console.log(error);
+				console.error(error);
 			}else{
 				thiz.setState({submitted: true});
 			}
@@ -151,17 +147,11 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		});
 	}
 
-
 	getEvent(){
-		////console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
-
 		return new Event(Events.findOne(this.props.eid));
 	}
 
 	checkGroup(id){
-		//console.log(this.state.groups);
-		//console.log(this.state.groups.indexOf(id));
 		return this.state.groups.indexOf(id)>-1;
 	}
 
@@ -187,7 +177,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		}
 		let ev = this.getEvent();
 
-		document.title = "Ivy - "+ ev.name;
+		setDocumentTitle(ev.name);
 		var perms = checkEventPermission(ev);
 		if(!perms.view){
 			return(<div className="center-align" style={{paddingTop:"50px"}}>
@@ -215,7 +205,6 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		if (!!ev.recurId) {
 			recurTrue = true;
 			let recurId = ev.recurId;
-			console.log("I got here");
 		}
 		return (
 				<MainBox

@@ -4,7 +4,7 @@ export {
 	convertStatusArchitecture
 }
 
-if (Meteor.isDevelopment) {
+if(Meteor.settings.mail_url){
 	process.env.mail_url= Meteor.settings.mail_url;
 }
 

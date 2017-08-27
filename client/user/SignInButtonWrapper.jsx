@@ -5,18 +5,15 @@ export default class LoginWrapper extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
 
-    this.state = {};
   }
 
   logout(){
     event.preventDefault();
-      Meteor.logout();
-      routeTo("login");
+    Meteor.logout();
+    routeTo("login");
   }
 
   render(){
-
-          return(<a onClick={this.logout}>Logout</a>)
-
+    return(<a onClick={this.logout}>Logout</a>)
   }
 }

@@ -5,9 +5,11 @@ import EditGroupModal from './EditGroupModal.jsx';
 export default class GroupsSingle extends Component {
   constructor() {
     super();
+
     this.state = {
       editting: false
     };
+
   }
 
   componentDidMount(){
@@ -17,21 +19,8 @@ export default class GroupsSingle extends Component {
 
   edit(event){
     event.preventDefault();
-    //this.setState({editting: true});
-    // $('.modal').modal();
-    // console.log("Editting");
-    // var id = "#"+this.props.group._id;
-    // console.log(id);
-    // $("#"+this.props.group._id).modal('open');
-    //Session.set("groupselected",this.props.group._id);
     this.refs.modal.open();
   }
-
-  // close(event){
-  //   event.preventDefault();
-  //   console.log("Closing");
-  //   $("#"+this.props.group._id).modal('close');
-  // }
 
   getMembers(){
     return Meteor.users.find({_id: {$in: this.props.group.users}}).fetch();
@@ -44,19 +33,7 @@ export default class GroupsSingle extends Component {
     for (var i = 1; i < leaders.length; i++) {
       leaderstring = leaderstring + ', ' + leaders[i].name;
     }
-    return leaderstring
-
-    /*if(this.props.group.leader==""){
-      return "";
-    }
-    var leader = Meteor.users.findOne(this.props.group.leader);
-    console.log(leader);
-    if(!leader){
-      return "No Leader";
-    }
-    else{
-      return leader.name;
-    }*/
+    return leaderstring;
   }
 
   render() {
@@ -68,19 +45,12 @@ export default class GroupsSingle extends Component {
           <div className="card-content">
             <span className="card-title">{this.props.group.name}</span>
             <p>{isSG&&<b>Leader:</b>}&nbsp;{isSG&&this.getLeaders()}</p>
-            {/*?
-              <p><b>Leader:</b> {this.getLeader()}</p>:""
-            }*/}
-            {/*}<p>
-              {this.getMembers().map((member)=>{
-                return member.name;
-              })}
-            </p>*/}
+
           </div>
         </div>
         <EditGroupModal ref="modal" group={this.props.group} />
       </div>
 
-          )
+    )
   }
 }

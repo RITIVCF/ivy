@@ -26,7 +26,6 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		csvContent += "Event Name:,"+this.props.ev.name+"\n";
 		csvContent += "Name, Email, Phone, First Time?, Learn More?, How did you hear about us?, Newsletter, Status\n";
 		 this.getAttendees().forEach(function(contact){
-			 //console.log(contact);
 			 var dataString = "";
 			 dataString += contact.name + "," + contact.emails[0].address + "," + contact.phone  + ",";
 			 dataString += contact.firsttime ? "Yes":"No";
@@ -53,44 +52,33 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 
 	getAttendees(){
-		//var attendees = this.state.ev.attendees.filter(attendee =>
-			//attendee[this.state.filter])
-			//if(this.state.sort=="Name"){
-			console.debug(this.props.ev.attendees);
-			let attendees = [];
-			this.props.ev.attendees.forEach((attendee)=>{
-				contact = new Contact(Meteor.users.findOne(attendee._id));
-				for(var key in attendee){
-					contact[key] = attendee[key];
-				}
-				attendees.push(contact);
-			})
+		let attendees = [];
+		this.props.ev.attendees.forEach((attendee)=>{
+			contact = new Contact(Meteor.users.findOne(attendee._id));
+			for(var key in attendee){
+				contact[key] = attendee[key];
+			}
+			attendees.push(contact);
+		});
 
-				attendees.sort(function(a, b) {
+		attendees.sort(function(a, b) {
+		  var nameA = a.getName().toUpperCase(); // ignore upper and lowercase
+		  var nameB = b.getName().toUpperCase(); // ignore upper and lowercase
+		  if (nameA < nameB) {
+		    return -1;
+		  }
+		  if (nameA > nameB) {
+		    return 1;
+		  }
 
-					console.log("a",a);
-					console.log("b", b);
-				  var nameA = a.getName().toUpperCase(); // ignore upper and lowercase
-				  var nameB = b.getName().toUpperCase(); // ignore upper and lowercase
-				  if (nameA < nameB) {
-				    return -1;
-				  }
-				  if (nameA > nameB) {
-				    return 1;
-				  }
-
-				  // names must be equal
-				  return 0;
+		  // names must be equal
+		  return 0;
+		});
+		if(this.state.sort=="First Time"){
+			attendees.sort(function(x, y) {
+					return y.firsttime-x.firsttime;
 			});
-	//	}
-			if(this.state.sort=="First Time"){
-					attendees.sort(function(x, y) {
-					    //return (x.firsttime === y.firsttime)? 0 : x.firsttime? -1 : 1;
-							return y.firsttime-x.firsttime;
-					});
 		}
-
-		//console.log(attendees);
 
 		if(this.state.filter=="Yes"){
 			return attendees.filter(attendee => attendee.firsttime == true);
@@ -104,69 +92,63 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	getCountNew(){
 		var count = 0;
 		for(i=0;i < this.props.ev.attendees.length;i++){
-			//console.log(this.props.ev.attendees[i]);
+
 			if(this.props.ev.attendees[i].firsttime){
 				count += 1;
 			}
+
 		}
+
 		return count;
 	}
 
 	changeFilter(){
-		//this.state.filter = this.refs.filter.value;
 		this.setState({filter: this.refs.filter.value});
 	}
 
 	changeSort(){
-		//this.state.sort = this.refs.sort.value;
 		this.setState({sort: this.refs.sort.value});
 	}
 
 	getEvent(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
 		return Events.findOne(this.props.eid);
 	}
 
 	render() {
 
 	let ev = this.props.ev;
-	console.log("Event Details ev: ", ev);
-	//this.state.ev= ev;
-	/*
-	if(!ev){
-		return (<div>Loading...</div>);
-	}*/
-	document.title = (!ev) ? "Ivy - Event Detail - ": "Ivy - Event Detail - " + ev.name;
-		return (
+	const showTicketColumn = checkPermission("tickets");
 
+	const title = (!ev) ? "Event Detail - ": "Event Detail - " + ev.name;
+	setDocumentTitle(title);
+	const imgPath = ev.pic?ev.pic:"/images/defaultEventSmall.png";
+
+	return (
 		<div className="card">
-			<div className="card-image">
-				<img src="/images/defaultEventSmall.png" />
-				<span className="card-title">{!ev ? "":ev.name}</span>
+			<div className="eventImage" style={{backgroundImage: `url(${imgPath})`}}>
+				<span className="card-title">{!!ev && ev.name}</span>
 			</div>
 			<div className="card-content">
-				<p>Event Description: <br/>{!ev ? "": ev.description}</p>
-				<p><b>Event Start:</b> {!!ev ? moment(ev.start.toISOString()).format("DD MMM @ h:mmA"):""}</p>
-				<p><b>Event End:</b> {!!ev ? moment(ev.end.toISOString()).format("DD MMM @ h:mmA"):""}</p>
+				<p>Event Description: <br/>{!!ev && ev.description}</p>
+				<p><b>Event Start:</b> {!!ev && moment(ev.start.toISOString()).format("DD MMM @ h:mmA")}</p>
+				<p><b>Event End:</b> {!!ev && moment(ev.end.toISOString()).format("DD MMM @ h:mmA")}</p>
 				<hr/>
 				<h4>Attendees
 					<a onClick={this.export.bind(this)} className="btn tooltipped right" data-position="bottom"
-						data-delay="50" data-tooltip="Export Attendance">
+					data-delay="50" data-tooltip="Export Attendance">
 						<i className="material-icons">play_for_work</i></a>
 				</h4>
 				<div className="row">
 					<div className="col s12 m5">
 						<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-								<option value={"All"}>All</option>
-								<option value={"Yes"}>Yes</option>
-								<option value={"No"}>No</option>
-							</select></label>
+							<option value={"All"}>All</option>
+							<option value={"Yes"}>Yes</option>
+							<option value={"No"}>No</option>
+						</select></label>
 						<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-								<option value={"Name"}>Name</option>
-								<option value={"First Time"}>First Time</option>
-							{/*}	<option value={"Status"}>Status</option> */}
-							</select></label>
+							<option value={"Name"}>Name</option>
+							<option value={"First Time"}>First Time</option>
+						</select></label>
 					</div>
 					<div className="col s4 m4">
 
@@ -191,29 +173,26 @@ export default class EventDetail extends TrackerReact(React.Component) {
 						</table>
 					</div>
 				</div>
-
-
 			</div>
-				<table className={checkPermission("contacts")?"highlight responsive-table":"responsive-table"}>
-					<thead>
-						<tr>
-							<th></th>
-							<th>Name</th>
-							<th>Email</th>
-							<th>Phone</th>
-							<th>First Time?</th>
-							<th>Learn More?</th>
-							<th>How hear about us?</th>
-							{checkPermission("tickets") ?
-							<th>Ticket</th>:"" }
-						</tr>
-					</thead>
-					<tbody>
-						{this.getAttendees().map( (contact)=>{
-								return <Attendee key={contact._id} contact={contact} />
-						})}
-					</tbody>
-				</table>
+			<table className={checkPermission("contacts")?"highlight responsive-table":"responsive-table"}>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+						<th>First Time?</th>
+						<th>Learn More?</th>
+						<th>How hear about us?</th>
+						{showTicketColumn && <th>Ticket</th>}
+					</tr>
+				</thead>
+				<tbody>
+					{this.getAttendees().map( (contact)=>{
+						return <Attendee key={contact._id} contact={contact} showTicketColumn={showTicketColumn} />
+					})}
+				</tbody>
+			</table>
 		</div>
 		)
 	}

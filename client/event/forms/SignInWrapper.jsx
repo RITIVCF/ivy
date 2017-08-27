@@ -31,20 +31,8 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     if(!ev){
       return(<div></div>)
     }
+		
     document.title = "Ivy - " + ev.name + " Sign In";
-    //var contacts =[];
-    //let tempcontacts = this.getContacts();
-    //let contacts = this.getContacts();
-    //if(!tempcontacts){
-    // if(!this.state.subscription.Contacts.ready()){
-    //   return(<div></div>)
-    // }
-    //tempcontacts.forEach(function(contact){
-      //contacts.push({"name":contact.name+" "+contact.email,"value":contact._id});  for Select Search
-    //});
-
-    //console.log(contacts);
-
 
     return (
       <div key={this.state.id}>

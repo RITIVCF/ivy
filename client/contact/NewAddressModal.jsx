@@ -39,7 +39,6 @@ export default class NewAddressModal extends TrackerReact(React.Component) {
 }
 
   checkValue(event){
-    console.log(this.refs);
     if(this.refs.line1.value==""||
         this.refs.city.value==""||
         this.refs.state.value==""||

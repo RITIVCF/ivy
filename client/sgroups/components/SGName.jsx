@@ -5,9 +5,8 @@ import React, {Component} from 'react';
 export default class SGName extends Component {
   updateName(event){
 		event.preventDefault();
-		console.log("Name: "+this.refs.name);
 		Meteor.call("updateSGName", this.props.gid, this.refs.name.value);
-		//this.state.value = this.refs.name;
+
 	}
 
   handleNameChange(event){ // need one of these for each component
@@ -15,8 +14,6 @@ export default class SGName extends Component {
   }
 
   getSG(){
-		//console.log(Events.find({_id: this.props.eid}).fetch());
-		//return Events.find({_id: this.props.eid}).fetch();
 		return Groups.findOne(this.props.gcid);
 	}
 

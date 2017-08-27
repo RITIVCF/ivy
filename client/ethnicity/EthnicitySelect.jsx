@@ -12,14 +12,8 @@ export default class EthnicitySelect extends TrackerReact(React.Component) {
   update(event){
 		event.preventDefault();
     this.setState({value: event.target.value});
-    //console.log(event.target.value);
     if(!this.props.intl.checked){  // save ethnicity
-      //console.log(this.state.value);
       Meteor.call("updateEthnicity", this.props.contact._id, event.target.value);
-    }
-    else{
-        //Meteor.call("updateContactIntl", this.refs.intl.checked);
-        //Meteor.call("updateEthnicity", "");
     }
 
 	}

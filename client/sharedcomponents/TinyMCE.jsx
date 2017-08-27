@@ -33,7 +33,7 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 						try{
 							this.handleChange(tinymce.get(id).getContent());
 						}catch (err){
-							console.log(err);
+							console.error(err);
 						}
 
 				});
@@ -41,7 +41,7 @@ export default class TinyMCE extends TrackerReact(React.Component) {
 					try{
 						this.handleChange(tinymce.get(id).getContent());
 					}catch (err){
-						console.log(err);
+						console.error(err);
 					}
 				});
 		}

@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 
 var updSub = _.throttle(
   function(tid, value){
-    //console.log(value);
-    //Meteor.call("updateTicketSubject", tid, value);
     Meteor.call("TicketSubjectLock", tid, true);
   },500);
 
 var setSubFalse = _.debounce(function(thiz, tid, value){
-  //console.log(thiz.state.editting);
   thiz.setState({editting: false});
   Meteor.call("updateTicketSubject", tid, value);
   Meteor.call("TicketSubjectLock", tid, false);
@@ -26,10 +23,7 @@ export default class TicketSubject extends Component {
 
   handleSubjectChange(event){ // need one of these for each component
     this.setState({subject:event.target.value});
-    // console.log("Event.target.value");
-    // console.log(event.target.value);
     this.setState({editting: true});
-    //console.log(this);
     setSubFalse(this, this.props.ticket._id, event.target.value);
     updSub(this.props.ticket._id, event.target.value);
   }

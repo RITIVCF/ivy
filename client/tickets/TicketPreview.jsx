@@ -5,14 +5,12 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 //    tkt:  ticket
 
 export default class TicketsPreview extends TrackerReact(React.Component) {
-  constructor(props){
-    super(props);
-
+  constructor(){
+    super();
 
   }
 
   getUser(){
-    //console.log(this);
     if(this.props.tkt.assigneduser==""){
       return {name:""};
     }
@@ -28,19 +26,18 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
       return {name: ""};
     }
     if(this.props.tkt.type == "Contact"){
-      return {name: ""};//Contacts.findOne(this.props.tkt.customer).name;
+      return {name: ""};
     }
     return Meteor.users.findOne({_id:this.props.tkt.customer});
   }
 
   go(){
     FlowRouter.go("/tickets/"+ this.props.tkt._id);
-    //this.props.parent.editTicket(this.props.tkt._id);
   }
 
   render() {
     let tkt = this.props.tkt;
-    
+
     if(!tkt){
       return <p>Please select a ticket to view the details...</p>
     }
@@ -64,12 +61,12 @@ export default class TicketsPreview extends TrackerReact(React.Component) {
             return <div key={i}></div>
           }
           return <div key={i} className="card">
-              <div className="card-content">
-                <span className="card-title">Type: {activity.type}</span>
-                <p>{activity.desc}<br/>
-              {new moment(activity.createdAt.toISOString()).format("DD MMM @ h:mmA")}</p>
-              </div>
-            </div>
+						<div className="card-content">
+							<span className="card-title">Type: {activity.type}</span>
+							<p>{activity.desc}<br/>
+								{new moment(activity.createdAt.toISOString()).format("DD MMM @ h:mmA")}</p>
+						</div>
+					</div>
         })}
       </div>
     )

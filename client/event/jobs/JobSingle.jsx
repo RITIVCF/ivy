@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 
 export default class JobSingle extends Component {
   getUser(){
-    //console.log(this);
-
     return  Meteor.users.findOne(this.props.job.uid);
   }
 

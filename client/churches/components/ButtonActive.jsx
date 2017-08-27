@@ -8,7 +8,6 @@ export default class ButtonActive extends Component {
 		event.preventDefault();
     this.props.parent.close();
 		this.props.ch.toggleActive();
-		//console.log(this);
 	}
 
   render(){

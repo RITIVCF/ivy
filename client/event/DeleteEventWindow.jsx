@@ -36,21 +36,12 @@ export default class NewEventWindow extends Component
 
     closeOverlay(){
       this.setState({overlayState:"hidden"});
-      //console.log(this.state.id);
     }
 
     delete(){
       Meteor.call("deleteEvent", this.state.id);
       FlowRouter.go("/events");
     }
-
-    /*getEvent(){
-  		////console.log(Events.find({_id: this.props.eid}).fetch());
-  		//return Events.find({_id: this.props.eid}).fetch();
-  		return Events.findOne(this.props.eid);
-  	}*/
-
-
 
     render()
     {

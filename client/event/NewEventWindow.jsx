@@ -34,10 +34,9 @@ export default class NewEventWindow extends Component
       var component = this;
       Meteor.call("addBlankEvent", function(error, result){
         if(error){
-          //console.log(error.reason);
+          console.error(error);
           return;
         }
-        //console.log("Event ID:" + result);
         component.setState({"id":result});
       });
       this.setState({overlayState:""});
@@ -48,14 +47,6 @@ export default class NewEventWindow extends Component
       this.setState({overlayState:"hidden"});
     }
 
-    /*getEvent(){
-  		////console.log(Events.find({_id: this.props.eid}).fetch());
-  		//return Events.find({_id: this.props.eid}).fetch();
-  		return Events.findOne(this.props.eid);
-  	}*/
-
-
-
     render()
     {
         return (
@@ -64,15 +55,14 @@ export default class NewEventWindow extends Component
               <div id="newEventPopup" className={this.state.overlayState}>
                 <label>Name<input type="text" ref="evname" placeholder="Event Name" required/></label>
                 <br />
-                {/*<label>Reoccuring: <input type="checkbox" name="reoccuring" ref="reoccuring" /></label>*/}
                 <div id="btnsCreateCancel">
                   {this.state.id != "" ?<div>
                     <a href={"/events/workspace/"+this.state.id}>
                       <button>Create</button>
                     </a>
-                      <button onClick={this.closeOverlay.bind(this)}>Cancel</button></div>
+										<button onClick={this.closeOverlay.bind(this)}>Cancel</button></div>
                   :
-                    <button onClick={this.closeOverlay.bind(this)}>Cancel</button>
+									<button onClick={this.closeOverlay.bind(this)}>Cancel</button>
                   }
 
                 </div>

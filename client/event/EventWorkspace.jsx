@@ -18,14 +18,6 @@ export default class EventWorkspace extends React.Component {
 
   }
 
-
-
-	// openReoccuring(event){
-	// 	event.preventDefault();
-	// 	this.refs.reoccuringOverlay.openOverlay();
-	// }
-
-
 	render() {
 		let ev = this.props.ev;
 		let perm = this.props.perm;

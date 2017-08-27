@@ -33,8 +33,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   filterChange(event){
     event.preventDefault();
     event.stopPropagation();
-    console.log(event.target.value);
-    //this.setState({filter: this.refs.filter.value});
     Session.set("ticketfilter",event.target.value);
   }
 
@@ -52,7 +50,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
   editTicket(tid){
 		event.preventDefault();
-    //this.state.ticketId = tid;
   	this.refs.editticketoverlay.openOverlay(tid);
   }
 
@@ -61,12 +58,8 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
   tickets(filter){
     // pulls upcoming, published events
     var query ={};
-    if(filter==""){
-      //return Tickets.find().fetch();
-    }
     if(filter=="assigneduser"){
       query.assigneduser = Meteor.userId();
-      //return Tickets.find({assigneduser:Meteor.userId()});
     }
     if(filter=="assignedgroup"){
       var grps = Groups.find({users: Meteor.userId()}).fetch();
@@ -74,10 +67,8 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       grps.forEach(function(group){
         ids.push(group._id);
       });
-      console.log("GGroups:");
-      console.log(ids);
+
       query.assignedgroup = {$in: ids};
-      //return Tickets.find({"assignedgroup": {$in: ids}});
     }
     if(this.state.textfilter!=""){
 
@@ -87,7 +78,6 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
       //   filter[field] = textfilter
     }
     query.type = {$in: Session.get("tickettypefilter")};
-    console.log(query);
     return Tickets.find(query, {sort: {ticketnum: 1}}).fetch();
   }
 
@@ -101,16 +91,14 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
 
   handleCheck(id){
     var array = Session.get("tickettypefilter");
-    console.log(array);
+
     if(array.includes(id)){
         array.splice(array.indexOf(id), 1);
     }else{
         array.push(id);
     }
     Session.set("tickettypefilter", array);
-    // var state = {};
-    // state[id]=!this.state[id];
-    // this.setState(state);
+
   }
 
   stopPropa(event){
@@ -121,13 +109,10 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
     Session.set("ticselected","");
   }
 
-
-
-
 	render() {
     var types = Session.get("tickettypefilter");
     let isAdmin = Groups.find({_id:"admin",users: Meteor.userId()}).fetch().length==1;
-    //console.log(this.props.sub);
+
 		return (
       <div onClick={this.unselect.bind(this)}>
         <div className="card" onClick={this.stopPropa.bind(this)}>
@@ -136,21 +121,21 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
               <div className="input-field col s12 m6">
                 <select ref="filter" className="browser-default" value={Session.get("ticketfilter")}
                   onChange={this.filterChange.bind(this)}>
-                    <option value={"assigneduser"}>My Active Tickets</option>
-                    <option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
-                    <option value={""}>All Active Tickets</option>
-                  </select>
+									<option value={"assigneduser"}>My Active Tickets</option>
+									<option value={"assignedgroup"}>{"My Groups' Active Tickets"}</option>
+									<option value={""}>All Active Tickets</option>
+								</select>
               </div>
               <div className="input-field col s4 m2">
                 <select ref="textfilter" className="browser-default" value={Session.get("tickettextfilter")}
                   onChange={this.textFilterChange.bind(this)}>
-                    <option value={"subject"}>Subject</option>
-                    {/*}<option value={"assigneduser"}>Assigned User</option>
+									<option value={"subject"}>Subject</option>
+									{/*}<option value={"assigneduser"}>Assigned User</option>
                     <option value={"assignedgroup"}>Assigned Group</option>
                     /* FINISH THIS AREA HERE YOU ARE ADDING TYPES, then you need to
                     check the functions to mke sure the session variable is set
                     correctly.  AM I MAYBE CHANGING OUT THE INPUT TYPE TO select
-                    FOR SOME OF THESE CHOICES?  I WOULD LIKE TO*/}
+									FOR SOME OF THESE CHOICES?  I WOULD LIKE TO*/}
                 </select>
               </div>
               <div className="input-field col s8 m4">
@@ -161,15 +146,15 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
             <div className="row">
               <div className="col s12">
                 <p>Type Filter:
-                <input type="checkbox" id="contacttype" checked={types.includes("Contact")} onChange={this.handleCheck.bind(this,"Contact")} />
+									<input type="checkbox" id="contacttype" checked={types.includes("Contact")} onChange={this.handleCheck.bind(this,"Contact")} />
                   <label htmlFor="contacttype">Contact</label>
-                <input type="checkbox" id="requesttype" checked={types.includes("Event Request")} onChange={this.handleCheck.bind(this,"Event Request")} />
+									<input type="checkbox" id="requesttype" checked={types.includes("Event Request")} onChange={this.handleCheck.bind(this,"Event Request")} />
                   <label htmlFor="requesttype">Event Request</label>
-                <input type="checkbox" id="prayertype"  checked={types.includes("Prayer")}  onChange={this.handleCheck.bind(this,"Prayer")} />
+									<input type="checkbox" id="prayertype"  checked={types.includes("Prayer")}  onChange={this.handleCheck.bind(this,"Prayer")} />
                   <label htmlFor="prayertype" >Prayer Request</label>
-                {isAdmin&&<input type="checkbox" id="feedbacktype"   checked={types.includes("Feedback")}   onChange={this.handleCheck.bind(this,"Feedback")} />}
+									{isAdmin&&<input type="checkbox" id="feedbacktype"   checked={types.includes("Feedback")}   onChange={this.handleCheck.bind(this,"Feedback")} />}
                   {isAdmin&&<label htmlFor="feedbacktype"  >Feedback</label>}
-                <input type="checkbox" id="othertype"   checked={types.includes("Other")}   onChange={this.handleCheck.bind(this,"Other")} />
+									<input type="checkbox" id="othertype"   checked={types.includes("Other")}   onChange={this.handleCheck.bind(this,"Other")} />
                   <label htmlFor="othertype"  >Other</label>
                 </p>
               </div>
@@ -177,36 +162,36 @@ export default class TicketsSummary extends TrackerReact(React.Component) {
           </div>
         </div>
         <div className="card">
-            <table className="bordered highlight responsive-table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Ticket ID</th>
-                  <th>Subject</th>
-                  <th>Customer</th>
-                  <th>Ticket Type</th>
-                  <th>Request Type</th>
-                  <th>Assigned User</th>
-                  <th>Assigned Group</th>
-                  <th>Status</th>
-                  <th>Last Updated</th>
-                </tr>
-              </thead>
-              {!this.props.sub ? <tbody></tbody>:
-              <tbody>
-                {this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
-                    return <TicketRow key={ticket._id} tkt={ticket}
-                      selected={Session.get("ticselected")==ticket._id}
-                      select={this.select.bind(this)} parent={this} />
-                })}
-              </tbody>}
-            </table>
+					<table className="bordered highlight responsive-table">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Ticket ID</th>
+								<th>Subject</th>
+								<th>Customer</th>
+								<th>Ticket Type</th>
+								<th>Request Type</th>
+								<th>Assigned User</th>
+								<th>Assigned Group</th>
+								<th>Status</th>
+								<th>Last Updated</th>
+							</tr>
+						</thead>
+						{!this.props.sub ? <tbody></tbody>:
+						<tbody>
+							{this.tickets(Session.get("ticketfilter")).map( (ticket)=>{
+								return <TicketRow key={ticket._id} tkt={ticket}
+									selected={Session.get("ticselected")==ticket._id}
+									select={this.select.bind(this)} parent={this} />
+							})}
+						</tbody>}
+					</table>
         </div>
 
-        {(this.props.sub) ?
-        <NewTicketWindow ref="newticketoverlay" parent={this} /> : ""// Make this into a modal
+        {(this.props.sub) &&
+					<NewTicketWindow ref="newticketoverlay" parent={this} />// Make this into a modal
         }
-    </div>
+			</div>
   )
 	}
 }

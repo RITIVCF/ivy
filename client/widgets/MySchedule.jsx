@@ -34,7 +34,6 @@ export default class MySchedule extends TrackerReact(React.Component) {
   }
 
 	getJobs(){
-		//console.log(Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch());
 		var jobs = [];
 		var evs = Events.find({"jobs.uid": Meteor.userId(), end: {$gte: new Date()}, "jobs.status": {$ne: "Declined"}}).fetch();
 		evs.forEach((ev)=>{
@@ -48,7 +47,6 @@ export default class MySchedule extends TrackerReact(React.Component) {
 				jobs.push(job);
 			});
 		});
-		//console.log(jobs);
 		return jobs;
 	}
 
@@ -59,7 +57,7 @@ export default class MySchedule extends TrackerReact(React.Component) {
 			<div className="card">
 				<div className="card-content">
 					<span className="card-title">My Schedule</span>
-						{!this.state.subscription.events.ready()?
+					{!this.state.subscription.events.ready()?
 						<LoaderCircle />:
 						<ul className="collection">
 							{(this.getJobs().length!=0)?this.getJobs().map((job)=>{

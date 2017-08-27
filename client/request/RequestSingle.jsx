@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 export default class RequestSingle extends Component {
   getUser(){
-    //console.log(this);
     if(this.props.request.assigneduser==""){
       return {name:"-"};
     }
@@ -11,7 +10,7 @@ export default class RequestSingle extends Component {
 
   go(){
     if(checkPermission("tickets")){
-        FlowRouter.go("/tickets/"+this.props.request._id);
+      FlowRouter.go("/tickets/"+this.props.request._id);
     }
   }
 

@@ -7,19 +7,18 @@ export default class ButtonActive extends Component {
   toggleActiveSG(event){
 		event.preventDefault();
 		Meteor.call("toggleActiveSG", this.props.gid, this.props.active);
-		console.log(this);
 	}
 
   render(){
     return(
       <div>
-      {this.props.active ?
-        <button
-          onClick={this.toggleActiveSG.bind(this)}
-          ref="togglePublish"
-          value={true} >
-          Make Inactive
-        </button>
+				{this.props.active ?
+					<button
+						onClick={this.toggleActiveSG.bind(this)}
+						ref="togglePublish"
+						value={true} >
+						Make Inactive
+					</button>
         :
         <button
           ref="togglePublish"
@@ -27,8 +26,8 @@ export default class ButtonActive extends Component {
           value={false} >
           Make Active
         </button>
-      }
-    </div>
+				}
+			</div>
     )
   }
 }

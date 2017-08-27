@@ -30,7 +30,6 @@ export default class EventImageControl extends Component {
 
 	updateURL(event){
 		event.preventDefault();
-		console.log("this: ", this);
 		Meteor.call("updateEventImage", this.props.ev._id, this.state.value);
 		this.toggleEdit();
 	}
@@ -53,7 +52,6 @@ export default class EventImageControl extends Component {
 						</form>
 					:
 					<p>
-						{/* {ev.pic} */}
 						<Button onClick={this.toggleEdit}>Edit</Button>
 					</p>
 					}

@@ -148,8 +148,6 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 
     changeOwner(newowner)
     {
-        //var newOwnerId = this.refs.ownerSelect.value;
-        //newOwnerId = newOwnerId.substring(0, newOwnerId.lastIndexOf("_"));
         if(confirm("Once the owner changes, you will not be able to make additional changes. Are you sure you want to continue?"))
         {
           if(newowner.emails[0].verified==false){
@@ -160,7 +158,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
           else{
             Meteor.call("changeEventOwner", this.props.ev._id, newowner._id);
           }
-            //this.toggleOverlay();
+
         }
     }
 
@@ -172,91 +170,83 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 
     render()
     {
-      // if(!Contacts.findOne(Meteor.userId())){
-      //   return <div></div>
-      // }
-        var event = this.props.ev; //parent.getEvent();
-        var owner = Meteor.users.findOne(event.owner);//event.username;
-        //console.log("Event Owner: "+ event.owner);
-        //console.log("Event Owner: "+ owner.contact);
-        //var name = Contacts.findOne(owner.contact).name;
-        //console.log(name);
-        var permUsers = event.permUser;
-        var permGroups = event.permGroup;
+      var event = this.props.ev;
+      var owner = Meteor.users.findOne(event.owner);
 
-        return (
-          <div id="permwindow" className="modal modal-fixed-footer bottom-sheet">
-            <div className="modal-content">
-              {/*}<h3>Edit {event.name} Permissions</h3>*/}
-              <div className="row">
-                <div className="col s12 m5 l3">
-                  <SelectUser
-                      parent={this}
-                      id={"owner"}
-                      label="Event Leader"
-                      unset={this.unset.bind(this)}
-                      updateUser={this.changeOwner.bind(this)}
-                      initialValue={owner.name}
-                      ref={"owner"}
-                      />
-                </div>
-                <div className="col s12 m2 l6"></div>
-                <div className="col s12 m5 l3">
-                  <label>Add Group:
-                  <SelectTeam
-                    parent={this}
-                    id={"group"}
-                    unset={this.unset.bind(this)}
-                    updateContact={this.addGroupPerm.bind(this)}
-                    initialValue={""}
-                    ref={"group"}
-                    /></label><br/>
+      var permUsers = event.permUser;
+      var permGroups = event.permGroup;
 
-                  <SelectUser
-                      parent={this}
-                      id={"user"}
-                      label="Add User"
-                      unset={this.unset.bind(this)}
-                      updateUser={this.addUserPerm.bind(this)}
-                      initialValue={""}
-                      ref={"user"}
-                      />
-                </div>
+      return (
+        <div id="permwindow" className="modal modal-fixed-footer bottom-sheet">
+          <div className="modal-content">
+
+            <div className="row">
+              <div className="col s12 m5 l3">
+                <SelectUser
+									parent={this}
+									id={"owner"}
+									label="Event Leader"
+									unset={this.unset.bind(this)}
+									updateUser={this.changeOwner.bind(this)}
+									initialValue={owner.name}
+									ref={"owner"}
+								/>
               </div>
+              <div className="col s12 m2 l6"></div>
+              <div className="col s12 m5 l3">
+                <label>Add Group:
+									<SelectTeam
+										parent={this}
+										id={"group"}
+										unset={this.unset.bind(this)}
+										updateContact={this.addGroupPerm.bind(this)}
+										initialValue={""}
+										ref={"group"}
+                  /></label><br/>
 
-              <div className="row">
-                <div className="col s12">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Remove</th>
-                        <th>Group/User Name</th>
-                        <th>Edit</th>
-                        <th>View Only</th>
-                        {/*}<th>Delete</th>*/}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {event.permGroup.map( (perm,i)=>{
-                        return <Permission key={perm.id+"group"+i} perm={perm} eid={this.props.ev._id} type={"groups"} />
-                      })}
-                      {event.permUser.map( (perm,i)=>{
-                        return <Permission key={perm.id+"user"+i} perm={perm} eid={this.props.ev._id} type={"users"} />
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                <SelectUser
+									parent={this}
+									id={"user"}
+									label="Add User"
+									unset={this.unset.bind(this)}
+									updateUser={this.addUserPerm.bind(this)}
+									initialValue={""}
+									ref={"user"}
+								/>
               </div>
-              <div className="row">
+            </div>
 
+            <div className="row">
+              <div className="col s12">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Remove</th>
+                      <th>Group/User Name</th>
+                      <th>Edit</th>
+                      <th>View Only</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {event.permGroup.map( (perm,i)=>{
+                      return <Permission key={perm.id+"group"+i} perm={perm} eid={this.props.ev._id} type={"groups"} />
+                    })}
+                    {event.permUser.map( (perm,i)=>{
+                      return <Permission key={perm.id+"user"+i} perm={perm} eid={this.props.ev._id} type={"users"} />
+                    })}
+                  </tbody>
+                </table>
               </div>
-
+            </div>
+            <div className="row">
 
             </div>
-            <div className="modal-footer">
-              <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-            </div>
+						
           </div>
-        );
+          <div className="modal-footer">
+            <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+          </div>
+        </div>
+      );
     }
 }

@@ -2,8 +2,6 @@ import Autosuggest from 'react-autosuggest';
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
-
-
 function getTimes(){
     return [
       "4:00am",
@@ -116,10 +114,6 @@ function shouldRenderSuggestions(value) {
   return value.trim().length > 0;
 }
 
-
-
-
-
 export default class SelectTime extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
@@ -140,19 +134,12 @@ export default class SelectTime extends TrackerReact(React.Component) {
 
 
   onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method }){
-    /*
-    //console.log(suggestion);
-    suggestion.component = this;
-    this.props.updateTime(suggestion);
-    */
+
   }
 
 
   onChange(event, { newValue, method }) {
-    //console.log(method);
-    /*if(method != 'tab'){
-      this.props.unset();
-    }*/
+
     this.setState({
       value: newValue
     });
@@ -169,7 +156,7 @@ export default class SelectTime extends TrackerReact(React.Component) {
     this.setState({
       suggestions: getSuggestions(value)
     });
-  }; 
+  };
 
   onSuggestionsClearRequested(){
     this.setState({
@@ -188,16 +175,16 @@ export default class SelectTime extends TrackerReact(React.Component) {
 
     return (
       <Autosuggest suggestions={suggestions}
-                   onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                   getSuggestionValue={getSuggestionValue}
-                   focusFirstSuggestion={true}
-                   onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                   onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                   onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                   focusInputOnSuggestionClick={false}
-                   shouldRenderSuggestions={shouldRenderSuggestions}
-                   renderSuggestion={renderSuggestion}
-                   inputProps={inputProps} />
+				onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+				getSuggestionValue={getSuggestionValue}
+				focusFirstSuggestion={true}
+				onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+				onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+				onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+				focusInputOnSuggestionClick={false}
+				shouldRenderSuggestions={shouldRenderSuggestions}
+				renderSuggestion={renderSuggestion}
+				inputProps={inputProps} />
     );
   }
 }

@@ -98,7 +98,7 @@ export default class SignIn extends TrackerReact(React.Component){
 
     Meteor.call("handleEventSignIn", signInObj, function(error){
       if(error){
-        console.log("Handle signin error: ", error);
+        console.error("Handle signin error: ", error);
         window.alert("Oops. Something went wrong. Please try again.");
       }
     });
@@ -128,14 +128,11 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   update(contt){
-    //console.log("Suggestion Selected. Print autosuggest return object.");
-    //console.log(contt);
-    //this.state.contact = contt;
+
     this.setState({user: contt});
-    //this.state.new = false;
+
     this.setState({new: false});
-    //console.log("print state");
-    //console.log(this.state);
+
     this.refs.email.value = contt.emails[0].address;
     this.refs.email.disabled = true;
     this.refs.phone.value = contt.phone;
@@ -150,14 +147,11 @@ export default class SignIn extends TrackerReact(React.Component){
     this.refs.learnmore.disabled = true;
     $('select').material_select();
     Materialize.updateTextFields();
-    //this.refs.phone.value = this.state.contact.phone;
-    //this.refs.newsletter.checked = this.state.contact.newsletter;
-    //this.setState({contact:contt});
-    ////console.log(this);
+
   }
 
   log(){
-    //console.log(this.state);
+
   }
 
   setNew(){
@@ -167,8 +161,6 @@ export default class SignIn extends TrackerReact(React.Component){
   }
 
   unset(){
-    //console.log(this);
-    //this.state.contact = false;
     this.setState({new: true});
     this.setState({user: false});
     this.refs.email.value = "";
@@ -187,11 +179,6 @@ export default class SignIn extends TrackerReact(React.Component){
     $('select').material_select();
     Materialize.updateTextFields();
 
-    // this.refs.phone.value="";
-    // this.refs.newsletter.checked=false;
-    // this.refs.major.value="";
-    //this.state.new=false;
-    //this.clearFields.bind(this);
   }
 
   changeName(event){
@@ -236,8 +223,6 @@ export default class SignIn extends TrackerReact(React.Component){
 								<input type="checkbox" ref="learnmore" id="more" name="more" value="Yes" />
 								<label htmlFor="more">I would like to learn more about IV</label>
 
-								{/*}<a onClick={this.circle.bind(this)}>expand</a>*/}
-
 								<button id="submit-circle" className="btn-floating btn-large iv-blue waves-effect waves-light right" type="submit" name="action">
 									<span id="sign-in-button">
 										<i className="material-icons">send</i>
@@ -246,8 +231,8 @@ export default class SignIn extends TrackerReact(React.Component){
 								<div id="welcome-message">
 									<h1>Welcome to {this.props.ev.name}!</h1>
 									<h2>Thank you for signing in!</h2>
-                  </div>
-                  <div className="clear-fix"></div>
+								</div>
+								<div className="clear-fix"></div>
               </form>
             </div>
           </div>

@@ -20,7 +20,6 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
   }
 
   setContact(contt){
-    //this.state.contact = contact;
     this.setState({contact: contt});
   }
 
@@ -37,7 +36,7 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
     Meteor.call("enrollUser", this.state.contact._id, function(error){
       if(error){
         window.alert("Sorry something went wrong. Please try again.");
-        console.log(error);
+        console.error(error);
       }
       else{
         thiz.setState({submitted: true});
@@ -65,13 +64,13 @@ export default class SelectContactWrapper extends TrackerReact(React.Component){
 						initialValue={""}
 						updateUser={this.setContact.bind(this)}
 					ref="contact"  />
-					{!this.state.contact?
+					{!this.state.contact&&
 						<p>If your name does not show up, go <a href="/public/newcontact">here</a> to create a new contact card.</p>
-              :""}
+					}
         </div>
         {!this.state.contact?"":
         <div className="card-action">
-            <a className="waves-effect waves-light btn" onClick={this.submit.bind(this)} >Send Confirmation</a>
+					<a className="waves-effect waves-light btn" onClick={this.submit.bind(this)} >Send Confirmation</a>
         </div>}
       </div>
     )

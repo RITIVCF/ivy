@@ -5,21 +5,10 @@ import fullcalendar from 'fullcalendar';
 import EventContent from './EventContent.jsx';
 import NewEventModal from './NewEventModal.jsx';
 
-//import EventModal from './components.jsx';
-//import {Tracker} from 'meteor/tracker';
-
-//    Order:
-//        - will mount
-//        - render
-//        - did mount
-//
-
 export default class EventCalendar extends TrackerReact(React.Component) {
   constructor(){
     super();
-    // if(!Session.get("calendarview")){
-    //   Session.set("calendarview",Options.findOne("calendarview").val);
-    // }
+
     if(!Session.get("calendardate")){
       Session.set("calendardate", moment()._d.toISOString());
     }
@@ -36,29 +25,22 @@ export default class EventCalendar extends TrackerReact(React.Component) {
     }
   }
 
-  componentWillMount(){
-
-  }
-
-
-
   renderPopoverContent(event) {
     div = $("<div></div>")[0];
     ReactDOM.render((<div id={event._id} className="modal">
-        <div className="modal-content">
-          <h4>Modal Header</h4>
-          <p>A bunch of text</p>
-        </div>
-        <div className="modal-footer">
-          <a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-        </div>
-      </div>), div);
+			<div className="modal-content">
+				<h4>Modal Header</h4>
+				<p>A bunch of text</p>
+			</div>
+			<div className="modal-footer">
+				<a href="#!" className=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+			</div>
+		</div>), div);
     return div;
   }
 
   componentDidMount(){
     var thiz = this;
-    console.log(Session.get("calendardate"));
     var mq = window.matchMedia( "only screen and (max-width: 992px)" );
     var calView = "listWeek";
     if (mq.matches) {
@@ -80,8 +62,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
         thiz.props.settitle();
-        //After Update Tue Nov 29 2016 23:00:00 GMT-0500 (Eastern Standard Time)
-        //Session.set("calendarview", view.name);
         Meteor.call("setCalendarView", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
         var height = $('#mainbox > div').height();
@@ -89,12 +69,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       },
       defaultDate: Session.get("calendardate"),
       eventClick: (calEvent, jsevent, view) => {
-        //FlowRouter.go("/attendance/event/"+calEvent._id);
-        // if(!calEvent.name){
-        //   return;
-        // }
-        //Session.set("infobar",true);
-
         var mq = window.matchMedia( "only screen and (max-width: 992px)" );
 
         if (mq.matches) {
@@ -104,9 +78,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         }
 
         Session.set("evselected",calEvent._id);
-        //$('.modal').modal();
-        //console.log(calEvent._id);
-        //$('#'+calEvent._id).modal('open');
       },
       eventDrop: function(event, delta, revertFunc) {
         var start = new moment(event.start.toISOString());
@@ -142,12 +113,11 @@ export default class EventCalendar extends TrackerReact(React.Component) {
           date.add(5, "hours");
         }
         newevent = {start: date};
-      //  $('#neweventmodalstart')[0].innerHTML="Start: "+ date.subtract(5,"hours").format("Do MMM h:mmA");
+
         thiz.refs.newevmodal.setStart(date.subtract(5,"hours"));
-        //$('.modal').modal();
+
         date.add(5,"hours");
-        //console.log($('#neweventmodalstart'));
-        //console.log(newevent);
+
         thiz.refs.newevmodal.open();
       },
       eventAfterAllRender(view){
@@ -163,7 +133,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
   }
 
   getPublishedEvents(){
-    //return Events.aggregate({ $project : { title:"$name", start: 1, end: 1 }});
     let tags = Options.findOne("eventtags").vals;
     var events = Events.find({$or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []}], $or: [{status: "Published"},{status: "Reviewed"}]}).fetch();
     events.forEach((event)=>{
@@ -176,8 +145,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       event.tags=newcolors;
     });
 
-
-    //console.log(Groups.find({users: Meteor.userId()}).fetch());
     var grps = Groups.find({users: Meteor.userId()}).fetch();
   	var ids = [];
   	grps.forEach(function(group){
@@ -197,7 +164,6 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       var events = Events.find({
         $or:[{tags: {$in: Session.get("calendartagfilter")}},{tags: []},{tags: undefined}],
         status: "Unpublished",
-        //$or:[{"permUser.id": Meteor.userId()},{"permGroup.id": {$in: getUserGroupPermission()}}]
       }).fetch();
       return this.addTagToUnPublishedEvents(events);
     }
@@ -236,36 +202,22 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       }
     );
     $(calendar).fullCalendar( 'rerenderEvents');
-    //$('.modal').modal(); r
 
   }
 
   test(){
     $('.modal').modal();
-    //console.log($('#XynJraXPfs46EXMGP'));
     $('#XynJraXPfs46EXMGP').modal('open');
   }
-
-
-
-
 
   render() {
     if(this.state.mounted){ // This reactively
       this.refresh();
     }
 
-
-
     return (
       <div>
         <div ref="calendar" id="calendar"></div>
-        {/*{this.getPublishedEvents().map((event)=>{
-          return <EventContent key={event._id} event={event} />
-					})}
-					{this.getUnPublishedEvents().map((event)=>{
-          return <EventContent key={event._id} event={event} />
-        })}*/}
         {checkPermission("events")&&<NewEventModal ref="newevmodal" />}
       </div>
     );

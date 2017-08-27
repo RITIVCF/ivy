@@ -9,8 +9,6 @@ export default class CommLifetag extends TrackerReact(React.Component){
 	}
 
   addRemove(event){
-    console.log(event.target.value);
-    console.log(this.refs[this.props.tag].checked);
     if(this.refs[this.props.tag].checked){
       this.props.contact.addCommunityLifeTag(this.props.tag);
     }
@@ -22,7 +20,6 @@ export default class CommLifetag extends TrackerReact(React.Component){
 
   render(){
     let tag = this.props.tag;
-  	//var tags = this.props.contact.communitylife;
     return(
       <div>
         <input
@@ -35,7 +32,7 @@ export default class CommLifetag extends TrackerReact(React.Component){
           onClick={this.addRemove.bind(this)}
           checked={this.props.checked}
         />
-      <label  htmlFor={tag}>{tag}:</label>
+				<label  htmlFor={tag}>{tag}</label>
     </div>
   )
   }

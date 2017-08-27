@@ -5,10 +5,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 
 
 function getList(){
-
-      return Contacts.find({user: {$ne: true}}).fetch();
-
-
+  return Contacts.find({user: {$ne: true}}).fetch();
 }
 
 function getSuggestions(value) {
@@ -39,9 +36,6 @@ function shouldRenderSuggestions(value) {
 }
 
 
-
-
-
 export default class SelectContactNoUser extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
@@ -51,59 +45,38 @@ export default class SelectContactNoUser extends TrackerReact(React.Component) {
         suggestions: getSuggestions('')
       };
 
-
-    //console.log(this.state.value);
-    //console.log(props.initialValue);
-    //console.log(props.id);
     if(props.initialValue){
-      //this.setState({value:this.props.initialValue});
       this.state.value = props.initialValue;
-      //this.state.initialValue = props.initialValue;
     }
-    //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
 shouldComponentUpdate(nextProps, nextState){
-  ////console.log("this state: "+ this.state.value);
-  ////console.log("next state: "+ nextState.value)
   if(this.state.value=nextState.value){
-    //console.log(this.props.initialValue);
-    //if(!(this.state.initialValue == this.props.initialValue)){
-      this.state.value=nextProps.initialValue;
-      ////console.log("Component updated");
-    //}
+    this.state.value=nextProps.initialValue;
   }
   return true;
 }
 
   onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method }){
-    // I need to do something with suggestion. This holds the contact info.
-    //console.log(suggestion);
-    //this.setState({value:suggestion.name});
     suggestion.component = this;
     this.props.updateContact(suggestion);
   }
 
 
   onChange(event, { newValue, method }) {
-    //console.log(method);
     if(method != 'tab'){
       this.props.unset();
     }
     const value = event.target.value;
-    //console.log("value");
-    //console.log(value);
+
     if(typeof newValue !== 'undefined') {
         this.setState({
             value: newValue
         });
     }
-    // this.setState({
-    //   value: newValue
-    // });
   }
 
   onSuggestionsFetchRequested({ value }){
@@ -137,30 +110,30 @@ shouldComponentUpdate(nextProps, nextState){
     if(this.props.id){
       return (
         <Autosuggest id={this.props.id}
-                    suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                     getSuggestionValue={getSuggestionValue}
-                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     focusInputOnSuggestionClick={false}
-                     shouldRenderSuggestions={shouldRenderSuggestions}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+					suggestions={suggestions}
+					onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+					getSuggestionValue={getSuggestionValue}
+					onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+					onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+					onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+					focusInputOnSuggestionClick={false}
+					shouldRenderSuggestions={shouldRenderSuggestions}
+					renderSuggestion={renderSuggestion}
+					inputProps={inputProps} />
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                     getSuggestionValue={getSuggestionValue}
-                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     focusInputOnSuggestionClick={false}
-                     shouldRenderSuggestions={shouldRenderSuggestions}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps} />
+					onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+					getSuggestionValue={getSuggestionValue}
+					onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+					onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+					onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+					focusInputOnSuggestionClick={false}
+					shouldRenderSuggestions={shouldRenderSuggestions}
+					renderSuggestion={renderSuggestion}
+					inputProps={inputProps} />
       );
     }
 

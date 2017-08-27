@@ -39,9 +39,6 @@ function shouldRenderSuggestions(value) {
 }
 
 
-
-
-
 export default class SelectContact extends TrackerReact(React.Component) {
   constructor(props) {
     super(props);
@@ -51,59 +48,41 @@ export default class SelectContact extends TrackerReact(React.Component) {
         suggestions: getSuggestions('')
       };
 
-
-    //console.log(this.state.value);
-    //console.log(props.initialValue);
-    //console.log(props.id);
     if(props.initialValue){
-      //this.setState({value:this.props.initialValue});
+
       this.state.value = props.initialValue;
-      //this.state.initialValue = props.initialValue;
+
     }
-    //console.log(this.state.value);
 
     this.onChange = this.onChange.bind(this);
     this.onSuggestionsUpdateRequested = this.onSuggestionsUpdateRequested.bind(this);
   }
 
-shouldComponentUpdate(nextProps, nextState){
-  ////console.log("this state: "+ this.state.value);
-  ////console.log("next state: "+ nextState.value)
-  if(this.state.value=nextState.value){
-    //console.log(this.props.initialValue);
-    //if(!(this.state.initialValue == this.props.initialValue)){
-      this.state.value=nextProps.initialValue;
-      ////console.log("Component updated");
-    //}
-  }
-  return true;
-}
+	shouldComponentUpdate(nextProps, nextState){
+	  if(this.state.value=nextState.value){
+	    this.state.value=nextProps.initialValue;
+	  }
+	  return true;
+	}
 
   onSuggestionSelected(event, { suggestion, suggestionValue, sectionIndex, method }){
-    // I need to do something with suggestion. This holds the contact info.
-    //console.log(suggestion);
-    //this.setState({value:suggestion.name});
     suggestion.component = this;
     this.props.updateContact(suggestion);
   }
 
 
   onChange(event, { newValue, method }) {
-    //console.log(method);
     if(method != 'tab'){
       this.props.unset();
     }
     const value = event.target.value;
-    //console.log("value");
-    //console.log(value);
+
     if(typeof newValue !== 'undefined') {
         this.setState({
             value: newValue
         });
     }
-    // this.setState({
-    //   value: newValue
-    // });
+
   }
 
   onSuggestionsFetchRequested({ value }){
@@ -136,37 +115,35 @@ shouldComponentUpdate(nextProps, nextState){
       value,
       onChange: this.onChange
     };
-    console.log("rendering:");
     if(this.props.id){
       return (
         <Autosuggest id={this.props.id}
-                    suggestions={suggestions}
-                     onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
-                     getSuggestionValue={getSuggestionValue}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     focusInputOnSuggestionClick={false}
-                     shouldRenderSuggestions={shouldRenderSuggestions}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps}
-                      onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                      onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                      />
-
+					suggestions={suggestions}
+					onSuggestionsUpdateRequested={this.onSuggestionsUpdateRequested}
+					getSuggestionValue={getSuggestionValue}
+					onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+					focusInputOnSuggestionClick={false}
+					shouldRenderSuggestions={shouldRenderSuggestions}
+					renderSuggestion={renderSuggestion}
+					inputProps={inputProps}
+					onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+					onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+				/>
 
       );
     }
     else{
       return (
         <Autosuggest suggestions={suggestions}
-                     getSuggestionValue={getSuggestionValue}
-                     onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-                     focusInputOnSuggestionClick={false}
-                     shouldRenderSuggestions={shouldRenderSuggestions}
-                     renderSuggestion={renderSuggestion}
-                     inputProps={inputProps}
-                     onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                     onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                      />
+					getSuggestionValue={getSuggestionValue}
+					onSuggestionSelected={this.onSuggestionSelected.bind(this)}
+					focusInputOnSuggestionClick={false}
+					shouldRenderSuggestions={shouldRenderSuggestions}
+					renderSuggestion={renderSuggestion}
+					inputProps={inputProps}
+					onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
+					onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
+				/>
       );
     }
 

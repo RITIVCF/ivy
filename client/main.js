@@ -27,7 +27,6 @@ routeTo = function(routeName, params, queryParams){
 
 
 Accounts.onEnrollmentLink(function(token,done){
-  //Accounts.resetPassword()
   FlowRouter.go("/public/signup/"+token);
 });
 
@@ -44,7 +43,7 @@ else {
 
 Meteor.call("getRootURL", (error, ROOT_URL) => {
 	if (error) {
-		console.log("Could not get root url");
+		console.error("Could not get root url");
 	} else {
 		process.env.ROOT_URL = ROOT_URL;
 	}

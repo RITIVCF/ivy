@@ -28,7 +28,7 @@ export default class AffiliationsTag extends TrackerReact(React.Component){
           onClick={this.addRemove.bind(this)}
           checked={this.props.checked}
         />
-      <label  htmlFor={tag}>{tag}:</label>
+				<label  htmlFor={tag}>{tag}</label>
     </div>
   )
   }

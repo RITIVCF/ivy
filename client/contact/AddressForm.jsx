@@ -4,18 +4,8 @@ import NewAddressModal from './NewAddressModal.jsx';
 
 export default class AddressForm extends Component {
   // props are: address list from contact object
-  /*
-  addresses(){
-    console.log(this.props.addresses);
-    return this.props.addresses;
-  }*/
-
 
   addAddress(){
-    //Meteor.call('addMailingAddress');
-    //Meteor.call('addMailingAddress', this.props.contact._id);
-    // console.log($('#newaddressmodal'));
-    // $('#newaddressmodal').modal('open');
     this.refs.modal.open();
   }
 

@@ -62,7 +62,7 @@ export default class EventContent extends TrackerReact(React.Component) {
 
     var perms = checkEventPermission(this.props.event);
     var isformopen = (this.props.event.start<(new moment(new Date).add(2,"hours")));
-    /*console.log(perms);*/
+
     return (
       <div id={this.props.event._id} className="modal">
         <div className="modal-content">
@@ -76,14 +76,14 @@ export default class EventContent extends TrackerReact(React.Component) {
             <a href={"/events/workspace/"+this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">
               {perms.edit?"Edit Event":"View Event"}
             </a>
-            :<div></div>
+					:<div></div>
           }
           {checkPermission('attendance')&&(this.props.event.published)&&isformopen?
-          <a href={"/attendance/event/"+this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">View Attendance</a>
+						<a href={"/attendance/event/"+this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">View Attendance</a>
           :<div></div>}
           {(this.props.event.published)&&isformopen?
             <a href={"/forms/signin/" + this.props.event._id} className=" modal-action modal-close waves-effect waves-green btn-flat">Open Form</a>
-            :<div></div>
+					:<div></div>
           }
         </div>
       </div>
@@ -98,7 +98,6 @@ export default class EventContent extends TrackerReact(React.Component) {
     return (
       <div>
         {this.renderContent()}
-        {/*}<a href={"/forms/rsvp/"+ this.props.event._id}><button>RSVP</button></a>*/}
       </div>
     )
   }

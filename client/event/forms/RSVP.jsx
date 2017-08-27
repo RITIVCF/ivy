@@ -56,7 +56,6 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
     this.state.contact = contt;
     this.refs.email.value = this.state.contact.email;
     this.refs.phone.value = this.state.contact.phone;
-    //console.log(this);
   }
 
   unset(){
@@ -71,10 +70,9 @@ export default class RSVPWrapper extends TrackerReact(React.Component){
       return(<div></div>)
     }
     document.title = "Ivy - " + event.name + " RSVP";
-    //var users =[];
-    //let tempusers = this.getUsers();
+
     let contacts = this.getContacts();
-    //if(!tempcontacts){
+
     if(!contacts){
       return(<div></div>)
     }

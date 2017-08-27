@@ -59,7 +59,6 @@ shouldComponentUpdate(nextProps, nextState){
 
 
   onSuggestionsFetchRequested({ value }) {
-		console.log("Value: ", value);
     this.setState({
       suggestions: getSuggestions(this.props.find, value)
     });
@@ -77,7 +76,6 @@ shouldComponentUpdate(nextProps, nextState){
   }
 
   render() {
-		console.log("renderSuggestion: ", this.props.renderSuggestion);
     const { value, suggestions } = this.state;
     const inputProps = {
       label: this.props.label?this.props.label:"Name",
@@ -109,7 +107,6 @@ shouldComponentUpdate(nextProps, nextState){
 
 
 const getSuggestions = (find, value) => {
-	console.log("Collection: ", find);
 	if(!value){
 		value = "";
 	}
