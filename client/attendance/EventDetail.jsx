@@ -52,7 +52,6 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 
 	getAttendees(){
-		console.debug(this.props.ev.attendees);
 		let attendees = [];
 		this.props.ev.attendees.forEach((attendee)=>{
 			contact = new Contact(Meteor.users.findOne(attendee._id));
@@ -122,12 +121,11 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 	const title = (!ev) ? "Event Detail - ": "Event Detail - " + ev.name;
 	setDocumentTitle(title);
+	const imgPath = ev.pic?ev.pic:"/images/defaultEventSmall.png";
 
 	return (
-
 		<div className="card">
-			<div className="card-image">
-				<img src={ev.pic?ev.pic:"/images/defaultEventSmall.png"} />
+			<div className="eventImage" style={{backgroundImage: `url(${imgPath})`}}>
 				<span className="card-title">{!!ev && ev.name}</span>
 			</div>
 			<div className="card-content">
