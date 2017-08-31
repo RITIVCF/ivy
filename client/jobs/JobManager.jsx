@@ -1,10 +1,15 @@
 import React from 'react';
 import { getUser } from '/lib/users.js';
+import Checkbox from '/client/contact/Checkbox.jsx';
 import MaterialCollection from '/client/sharedcomponents/MaterialCollection/MaterialCollection.jsx';
 
 export default class JobManager extends React.Component {
 	constructor(){
 		super();
+
+		this.state = {
+			statuses: ["successful", "waiting", "ready", "running", "failed"]
+		}
 
 	}
 
@@ -12,26 +17,32 @@ export default class JobManager extends React.Component {
 		return (
 			<Row>
 				<Column>
+					<Card>
+						<CardContent>
+							<Row>
+								<Column width={"s6"}>
+									{this.state.statuses.map((status)=>{
+										return <Checkbox key={status}
+											label={status}
+											onChange={this.handleCheck.bind(this, status)}
+											checked={this.state.statuses.includes(status)} />
+									})}
+								</Column>
+								<Column width={"s6"}>
+									<select onChange={this.handleFilterChange.bind(this)} className="browser-default">
+										<option value="sendNewsletter">Send Newsletter</option>
+										<option value="sendEventFollowUpEmail">Send Event Follow Up</option>
+										<option value="checkFunnelStatus">Check Funnel Status</option>
+										<option value="processExpiredContacts">Process Expired Contacts</option>
+									</select>
+								</Column>
+							</Row>
+
+
+						</CardContent>
+					</Card>
 					{
-						this.getOtherJobs().map( (job) => {
-							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
-						})
-					}
-					<hr />
-					{
-						this.getFailedJobs().map( (job) => {
-							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
-						})
-					}
-					<hr />
-					{
-						this.getRunningJobs().map( (job) => {
-							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
-						})
-					}
-					<hr />
-					{
-						this.getWaitingJobs().map( (job) => {
+						this.getJobs().map( (job) => {
 							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
 						})
 					}
@@ -40,21 +51,19 @@ export default class JobManager extends React.Component {
 		)
 	}
 
-	getWaitingJobs(){
-		return this.props.jobs.filter(job=>job.status=="waiting");
+	getJobs(){
+		return this.props.jobs;
 	}
 
-	getRunningJobs(){
-		return this.props.jobs.filter(job=>job.status=="running");
+	handleCheck(status){
+		this.props.onToggleStatus(status);
 	}
 
-	getFailedJobs(){
-		return this.props.jobs.filter(job=>job.status=="failed");
+	handleFilterChange(event){
+		this.props.onFilterChange(event.target.value);
 	}
 
-	getOtherJobs(){
-		return this.props.jobs.filter(job=>!["waiting", "running", "failed", "cancelled"].includes(job.status));
-	}
+
 }
 
 

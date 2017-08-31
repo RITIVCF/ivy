@@ -13,10 +13,14 @@ export default class JobManagerWrapper extends React.Component {
 			subscription: {
 				deletedUsers: Meteor.subscribe("deletedUsers", {
 					onReady: () => {this.load()}
-				}),
-			loading: true
+				})
+			},
+			loading: true,
+			filter: {
+				type: "",
+				status: []
 			}
-		}
+		};
 
 		this.load = this.load.bind(this);
 
@@ -39,7 +43,10 @@ export default class JobManagerWrapper extends React.Component {
 
 	load(){
 		this.setState({loading: true});
-		Meteor.call("getJobs", (error, jobs) => {
+		let query = {};
+		query.type = this.state.filter.type;
+		query.status = {$in: this.state.filter.status};
+		Meteor.call("getJobs", query , (error, jobs) => {
 			this.setState({
 				jobs: jobs,
 				loading: false
@@ -52,6 +59,8 @@ export default class JobManagerWrapper extends React.Component {
 			<JobManager
 				jobs={this.state.jobs}
 				onLoad={this.load}
+				onToggleStatus={this.toggleStatus.bind(this)}
+				onFilterChange={this.handleFilterChange.bind(this)}
 			/>
 		)
 	}
@@ -64,6 +73,9 @@ export default class JobManagerWrapper extends React.Component {
 				</NavbarItem>
 				<NavbarItem onClick={this.getWork.bind(this)}>
 					<MaterialIcon icon="archive" className="black-text" />
+				</NavbarItem>
+				<NavbarItem onClick={()=>{console.log(this.state)}}>
+					<MaterialIcon icon="add" className="black-text" />
 				</NavbarItem>
 			</Navbar>
 		)
@@ -88,5 +100,19 @@ export default class JobManagerWrapper extends React.Component {
 			}
 
 		});
+	}
+
+	toggleStatus(status){
+		let statuses = this.state.filter.status;
+		if(statuses.includes(status)){
+        statuses.splice(array.indexOf(id), 1);
+    }else{
+        statuses.push(status);
+    }
+		this.setState({"filter.status": statuses});
+	}
+
+	handleFilterChange(newValue){
+		this.setState({"filter.type": newValue});
 	}
 }

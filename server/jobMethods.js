@@ -6,8 +6,8 @@ import {
 } from '/server/jobs.js';
 
 Meteor.methods({
-	getJobs(){
-		return loadJobs();
+	getJobs(query){
+		return loadJobs(query);
 	},
 	cancelJob(jid){
 		cancelJob(jid);

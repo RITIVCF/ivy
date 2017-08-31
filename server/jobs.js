@@ -6,8 +6,8 @@ export {
 	getWork
 }
 
-function loadJobs(){
-	return jobCollection.find().fetch();
+function loadJobs(query){
+	return jobCollection.find(query).fetch();
 }
 
 function cancelJob(jid){
