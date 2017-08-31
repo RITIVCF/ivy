@@ -48,6 +48,24 @@ newEventFollowUpEmailJob = function(eid, uid){
 	return createNewJob('sendEventFollowUpEmail', jobDoc);
 }
 
+newEmailJob = function(emailObj){
+	// this requires an Email package email obj like
+	//  {
+	//		to:
+	//		from:
+	//		subject:
+	//		html:
+	//  }
+
+	const jobDoc = {
+		email: emailObj
+	}
+
+	let job = createNewJob('sendEmail', jobDoc);
+	job.save();
+	return job;
+}
+
 scheduleJobAndSubmit = function (job, afterValue){
 	job.after( afterValue );
 	job.save();
@@ -170,8 +188,13 @@ export function restartJob(job){
 	);
 }
 
-//let worker =
-Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
+
+
+const checkFunnelStatusOptions = {
+	pollInterval: 2000
+};
+
+Job.processJobs('jobQueue', 'checkFunnelStatus', checkFunnelStatusOptions, function(job, cb){
 	try {
 		let data = job.data;
 		let threshold = getThreshold();
@@ -236,18 +259,12 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 	}
 
-
-
-
-
-
-
 });
 
 
 
-
-Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+const sendNewsletterOptions = {pollInterval: 2000};
+Job.processJobs('jobQueue', 'sendNewsletter', sendNewsletterOptions, function(job, cb){
 	try {
 		sendNewsletter(job.data.emid);
 
@@ -294,6 +311,27 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 	}
 
 });
+
+
+// Send Email throttler and sender
+let sendEmailFailed = false;
+Meteor.setInterval(()=>{
+	if(!sendEmailFailed){
+		try {
+			const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1});
+			console.log(jobs);
+			if(jobs.length > 0){
+				const job = jobs[0]._doc;
+				console.log("Executing job: ", job._id);
+				sendEmail(job.data.email);
+				jobs[0].done();
+			}
+		} catch (e) {
+			sendEmailFailed = true;
+		}
+	}
+
+}, 10000);
 
 
 Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
