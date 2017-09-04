@@ -3,9 +3,15 @@ import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 import { processExpiredContacts } from '/server/contactStatus.js';
 import { shouldCalculateFunnel } from '/lib/contactStatus.js';
+import { log } from '/server/logger.js';
+import { isSendMailGateOpen } from '/lib/jobs.js';
+
+export {
+	openSendMailGate,
+	closeSendMailGate
+}
 
 
-jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
 createJobAndDelay = function(uid, delayAmount, notValidIntervals = 0){
@@ -314,24 +320,43 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 
 
 // Send Email throttler and sender
-let sendEmailFailed = false;
 Meteor.setInterval(()=>{
-	if(!sendEmailFailed){
+	if(isSendMailGateOpen()){
 		try {
 			const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1});
-			console.log(jobs);
 			if(jobs.length > 0){
 				const job = jobs[0]._doc;
-				console.log("Executing job: ", job._id);
 				sendEmail(job.data.email);
-				jobs[0].done();
+				jobs[0].done("Email sent to " + job.data.email.to + " successfully!", (error, result)=>{
+					if(error){
+						log.error('Error marking as done: \n' + error);
+					}
+				});
 			}
 		} catch (e) {
-			sendEmailFailed = true;
+			let data = {};
+			if(job){
+				data.job = job;
+			}
+			data.error = e;
+			try{
+				closeSendMailGate();
+			} catch (closeGateError) {
+				log.error("Send email failed. Close gate failed. This is still running.", {error: closeGateError});
+			}
+			log.error("Send email failed. Gate closed.", data);
 		}
 	}
 
 }, 10000);
+
+function closeSendMailGate(){
+	Options.update("emailqueuestatus", {$set: {open: false}});
+}
+
+function openSendMailGate(){
+	Options.update("emailqueuestatus", {$set: {open: true}});
+}
 
 
 Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
