@@ -51,7 +51,7 @@ NavbarItem = function(props) {
 	return (
 		<li onClick={props.onClick}>
 			{
-				hover ? 
+				hover ?
 					<a href={props.href}>
 						{props.children}
 					</a>
@@ -89,6 +89,17 @@ CardContent = function(props) {
 	return (
 		<div className="card-content">
 			<span className="card-title">{props.title}</span>
+			{props.children}
+		</div>
+	)
+}
+
+
+Chip = function(props) {
+	const style = props.color && {backgroundColor: props.color};
+	return (
+		<div className="chip" style={style}>
+			{props.image&&<img src={props.image.src} alt={props.image.alt} />}
 			{props.children}
 		</div>
 	)

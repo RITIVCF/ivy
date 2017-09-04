@@ -661,3 +661,9 @@ Meteor.publish("currentStatus", function(){
     {$group: {_id: "$uid", status: {$last: "$status"}}}
 	]);
 });
+
+
+Meteor.publish("jobCollection", function(){
+	let query = {};
+	return jobCollection.find(query);
+});
