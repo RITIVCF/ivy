@@ -524,6 +524,14 @@ let options = [
 	      "canChooseLayout": true
 	    }
 	  ]
+	},
+	{
+		_id: "emailqueuestatus",
+		open: true
+	},
+	{
+		_id: "emailsendoverride",
+		val: false
 	}
 ];
 

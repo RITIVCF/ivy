@@ -3,6 +3,11 @@ export {
 	loadJobs,
 	cancelJob,
 	restartJob,
+	pauseJob,
+	resumeJob,
+	readyJob,
+	rerunJob,
+	removeJob,
 	getWork
 }
 
@@ -24,5 +29,23 @@ function getWork(type){
 	return jobCollection.getWork(type);
 }
 
+function pauseJob(jid){
+	jobCollection.pauseJobs([jid]);
+}
 
-// Randon change
+function resumeJob(jid){
+	jobCollection.resumeJobs([jid])
+}
+
+function readyJob(jid){
+	jobCollection.readyJobs([jid]);
+}
+
+function rerunJob(jid){
+	const job = jobCollection.getJob(jid);
+	job.rerun();
+}
+
+function removeJob(jid){
+	jobCollection.removeJobs([jid]);
+}

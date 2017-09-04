@@ -1,19 +1,20 @@
 import React from 'react';
+import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '/client/MainBox.jsx';
 import LoaderCircle from '/client/LoaderCircle.jsx';
 import MaterialIcon from '/client/sharedcomponents/MaterialIcon.jsx';
 import JobManager from './JobManager';
+import { isSendMailGateOpen } from '/lib/jobs.js';
 
-export default class JobManagerWrapper extends React.Component {
+export default class JobManagerWrapper extends TrackerReact(React.Component) {
 	constructor(){
 		super();
 
 		this.state = {
 			jobs: [],
 			subscription: {
-				deletedUsers: Meteor.subscribe("deletedUsers", {
-					onReady: () => {this.load()}
-				})
+				deletedUsers: Meteor.subscribe("deletedUsers"),
+				jobs: Meteor.subscribe("jobCollection")
 			},
 			loading: true,
 			filter: {
@@ -22,18 +23,21 @@ export default class JobManagerWrapper extends React.Component {
 			}
 		};
 
-		this.load = this.load.bind(this);
-
 	}
 
 	componentWillUnmount(){
 		this.state.subscription.deletedUsers.stop();
+		this.state.subscription.jobs.stop();
 	}
 
 	render(){
+		let loading = true;
+		if(this.state.subscription.jobs.ready()){
+			loading = false;
+		}
 		return (
 			<MainBox
-        content={this.state.loading?<LoaderCircle />:this.getContent()}
+        content={loading?<LoaderCircle />:this.getContent()}
         subheader={this.getSubHeader()}
         showinfobar={true}
         infobar={this.getInfoBar()}
@@ -42,22 +46,21 @@ export default class JobManagerWrapper extends React.Component {
 	}
 
 	load(){
-		this.setState({loading: true});
 		let query = {};
-		query.type = this.state.filter.type;
+		if(this.state.filter.type){
+			query.type = this.state.filter.type;
+		}
 		query.status = {$in: this.state.filter.status};
-		Meteor.call("getJobs", query , (error, jobs) => {
-			this.setState({
-				jobs: jobs,
-				loading: false
-			});
-		});
+		return jobCollection.find(query, {sort: {after: 1}}).fetch();
 	}
 
 	getContent(){
+		const jobs = this.load();
 		return (
 			<JobManager
-				jobs={this.state.jobs}
+				jobs={jobs}
+				activeStatuses={this.state.filter.status}
+				activeFilter={this.state.filter.type}
 				onLoad={this.load}
 				onToggleStatus={this.toggleStatus.bind(this)}
 				onFilterChange={this.handleFilterChange.bind(this)}
@@ -68,26 +71,14 @@ export default class JobManagerWrapper extends React.Component {
 	getSubHeader(){
 		return (
 			<Navbar>
-				<NavbarItem onClick={this.load}>
-					<MaterialIcon icon="refresh" className="black-text" />
-				</NavbarItem>
-				<NavbarItem onClick={this.getWork.bind(this)}>
-					<MaterialIcon icon="archive" className="black-text" />
-				</NavbarItem>
-				<NavbarItem onClick={()=>{console.log(this.state)}}>
-					<MaterialIcon icon="add" className="black-text" />
-				</NavbarItem>
+				
 			</Navbar>
 		)
 	}
 
 	getInfoBar(){
 		return (
-			<Row>
-				<Column>
-					This is infobar content.
-				</Column>
-			</Row>
+			<JobManagerPanel />
 		)
 	}
 
@@ -105,14 +96,82 @@ export default class JobManagerWrapper extends React.Component {
 	toggleStatus(status){
 		let statuses = this.state.filter.status;
 		if(statuses.includes(status)){
-        statuses.splice(array.indexOf(id), 1);
+        statuses.splice(statuses.indexOf(status), 1);
     }else{
         statuses.push(status);
     }
-		this.setState({"filter.status": statuses});
+		let filter = this.state.filter;
+		filter.status = statuses;
+		this.setState({"filter": filter});
 	}
 
 	handleFilterChange(newValue){
-		this.setState({"filter.type": newValue});
+		let filter = this.state.filter;
+		filter.type = newValue;
+		this.setState({"filter": filter});
 	}
+}
+
+
+
+class JobManagerPanel extends TrackerReact(React.Component) {
+	constructor(){
+		super();
+
+		this.openGate = this.openGate.bind(this);
+		this.closeGate = this.closeGate.bind(this);
+
+	}
+
+	render(){
+		const isOpen = isSendMailGateOpen();
+		return (
+			<Row>
+				<Column>
+					Send Mail Gate Status: {this.getStatusChip(isOpen)}
+					{
+						isOpen ?
+							<Button
+								onClick={this.closeGate}>
+								Close Gate
+							</Button>
+						:
+						<Button
+							onClick={this.openGate}>
+							Open Gate
+						</Button>
+					}
+				</Column>
+			</Row>
+		)
+	}
+
+	isGateOpen(){
+		const statusObj = Options.findOne("emailqueuestatus");
+		if(statusObj){
+			return statusObj.open;
+		} else {
+			return false;
+		}
+	}
+
+	getStatusChip(isOpen){
+		let statusMessage = "Closed";
+		let color = "Red";
+		if(isOpen){
+			statusMessage = "Open";
+			color = "Green";
+		}
+
+		return <Chip color={color}><span className="white-text">{statusMessage}</span></Chip>
+	}
+
+	closeGate(){
+		Meteor.call("closeSendMailGate");
+	}
+
+	openGate(){
+		Meteor.call("openSendMailGate");
+	}
+
 }

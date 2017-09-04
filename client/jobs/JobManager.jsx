@@ -8,7 +8,7 @@ export default class JobManager extends React.Component {
 		super();
 
 		this.state = {
-			statuses: ["successful", "waiting", "ready", "running", "failed"]
+			statuses: ["completed", "waiting", "paused", "ready", "running", "failed"]
 		}
 
 	}
@@ -25,11 +25,13 @@ export default class JobManager extends React.Component {
 										return <Checkbox key={status}
 											label={status}
 											onChange={this.handleCheck.bind(this, status)}
-											checked={this.state.statuses.includes(status)} />
+											checked={this.props.activeStatuses.includes(status)} />
 									})}
 								</Column>
 								<Column width={"s6"}>
-									<select onChange={this.handleFilterChange.bind(this)} className="browser-default">
+									<select onChange={this.handleFilterChange.bind(this)} value={this.props.activeFilter} className="browser-default">
+										<option value="">Select a Job Type</option>
+										<option value="sendEmail">Send Email</option>
 										<option value="sendNewsletter">Send Newsletter</option>
 										<option value="sendEventFollowUpEmail">Send Event Follow Up</option>
 										<option value="checkFunnelStatus">Check Funnel Status</option>
@@ -71,16 +73,38 @@ class Job extends React.Component {
 	constructor(){
 		super();
 
-		this.handleCancelClick = this.cancelJob.bind(this);
-		this.handleRestartClick = this.restartJob.bind(this);
+		this.actions = {
+			waiting: ["Cancel","Pause","Ready"],
+			ready: ["Cancel","Pause"],
+			paused: ["Cancel","Resume"],
+			running: ["Cancel"],
+			cancelled: ["Remove","Restart"],
+			failed: ["Remove","Restart"],
+			completed: ["Rerun"]
+		};
+
+		this.methods = {
+			Remove: "removeJob",
+			Cancel: "cancelJob"	,
+			Pause: "pauseJob",
+			Resume: "resumeJob",
+			Restart: "restartJob",
+			Ready: "readyJob",
+			Rerun: "rerunJob"
+		}
 	}
 
 	render(){
 		const job = this.props.job;
 		const hasUser = !!job.data.uid;
+		const isSendEmail = job.type == "sendEmail";
+		const actions = this.actions[job.status]; //Returns array
 		let user;
 		if ( hasUser ) {
 			user = getUser(job.data.uid);
+		}
+		if ( isSendEmail ){
+			recipient = getUser({"emails.address": job.data.email.to});
 		}
 		return (
 			<Card title={job.type}>
@@ -90,23 +114,16 @@ class Job extends React.Component {
 							<p><b>_id:</b> {job._id}</p>
 							<p><b>Status:</b> {job.status}</p>
 							{hasUser&&<p><b>User:</b> {user.getName()}</p>}
+							{isSendEmail&&<p><b>Recipient: </b>{recipient.getName()}</p>}
+							{isSendEmail&&<p><b>Email: </b>{recipient.getEmail()}</p>}
 							<p><b>After:</b> {dateFormat(job.after)}</p>
 							<p><b>Created:</b> {dateFormat(job.created)}</p>
 						</Row>
-						<Row>
-							<Button
-								onClick={this.handleCancelClick}
-							>
-								Cancel Job
-							</Button>
-						</Row>
-						<Row>
-							<Button
-								onClick={this.handleRestartClick}
-							>
-								Restart Job
-							</Button>
-						</Row>
+
+						{actions.map( (action) => {
+							return <Row><Button onClick={()=>{this.handleClick(action)}}>{action} Job</Button></Row>
+						})}
+
 					</Column>
 					<Column width="s6">
 						<MaterialCollection
@@ -132,22 +149,14 @@ class Job extends React.Component {
 		return log;
 	}
 
-	cancelJob(){
-		Meteor.call("cancelJob", this.props.job._id, (error)=> {
+	handleClick(action){
+		const method = this.methods[action];
+		Meteor.call(method, this.props.job._id, (error) => {
 			if(error){
-				console.error("Problem in cancelJob: ", error);
+				console.error("Problem performing action " + action + " on job: ", error);
 			}
 		});
-		this.props.onCancel();
 	}
 
-	restartJob(){
-		Meteor.call("restartJob", this.props.job._id, (error)=> {
-			if(error){
-				console.error("Problem in restartJob: ", error);
-			}
-		});
-		this.props.onRestart();
-	}
 
 }
