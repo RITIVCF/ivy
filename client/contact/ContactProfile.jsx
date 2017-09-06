@@ -167,6 +167,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
 								<ContactMajor contact={contact} disabled={disable} />
 							}
 
+							<label>How did you hear about us?</label>
+							<p>{contact.howhear}</p>
+
             </div>
           </div>
           {viewmember&&
