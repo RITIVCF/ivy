@@ -268,7 +268,7 @@ sendIntegrationNotification = function(tktId) {
     leaders.push(leader);
   });
   leaders.forEach( (leader) => {
-    Email.send({
+    newEmailJob({
       to: leader.getEmail(),
       from: "Ivy Information System",
       subject: "New Integration Ticket For: " + contact.getName(),

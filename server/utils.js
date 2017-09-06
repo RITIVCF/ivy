@@ -5,7 +5,7 @@ export {
 };
 
 sendErrorEmail = function(subject, html){
-	Email.send({
+	newEmailJob({
 		to: "awe6013@rit.edu",
 		from: "no-reply@ivy.rit.edu",
 		subject: "Error Notification: " + subject,
@@ -160,7 +160,7 @@ function migrateEvents(){
 		html += event.debrief.notes;
 		html += "<br><br><br>";
 	});
-	Email.send({
+	newEmailJob({
 		to: "awe6013@rit.edu",
 		from: "no-reply@ivy.rit.edu",
 		subject: "Event Debrief Content",

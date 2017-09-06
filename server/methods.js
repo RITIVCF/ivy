@@ -19,7 +19,7 @@ Meteor.methods({
     var event = Events.findOne(eid);
     this.unblock();
 
-    Email.send({
+    newEmailJob({
       to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Event Service Request: " + event.name + " - " +pos,
@@ -33,7 +33,7 @@ Meteor.methods({
     });
   },
   contactEmailConfirmation(contact){
-    Email.send({
+    newEmailJob({
       to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "Account Creation Confirmation Email",
@@ -51,7 +51,7 @@ Meteor.methods({
       contact = new Contact(contact);
       emails.push(contact.getEmail());
     });
-    Email.send({
+    newEmailJob({
       to: emails,
       from: "Ivy Information System",
       subject: "New Ticket Assigned to Your Group: "+group.name,
@@ -63,7 +63,7 @@ Meteor.methods({
   userAssignedEmail(uid, tid){
     var ticket = Tickets.findOne(tid);
     var contact = new Contact(Meteor.users.findOne(uid));
-    Email.send({
+    newEmailJob({
       to: contact.getEmail(),
       from: "Ivy Information System",
       subject: "New Ticket Assigned to You: \""+ticket.subject+"\"",  // Insert Ticket Subject in subject line
