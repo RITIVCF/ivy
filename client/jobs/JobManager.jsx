@@ -8,7 +8,7 @@ export default class JobManager extends React.Component {
 		super();
 
 		this.state = {
-			statuses: ["completed", "waiting", "paused", "ready", "running", "failed"]
+			statuses: ["completed", "waiting", "paused", "ready", "running", "failed", "cancelled"]
 		}
 
 	}
