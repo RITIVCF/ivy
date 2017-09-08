@@ -1,5 +1,6 @@
 import React from 'react';
 import { getUser } from '/lib/users.js';
+import LoaderCircle from '/client/LoaderCircle.jsx';
 import Checkbox from '/client/contact/Checkbox.jsx';
 import MaterialCollection from '/client/sharedcomponents/MaterialCollection/MaterialCollection.jsx';
 
@@ -73,6 +74,10 @@ class Job extends React.Component {
 	constructor(){
 		super();
 
+		this.state = {
+			loading: false
+		}
+
 		this.actions = {
 			waiting: ["Cancel","Pause","Ready"],
 			ready: ["Cancel","Pause"],
@@ -120,9 +125,14 @@ class Job extends React.Component {
 							<p><b>Created:</b> {dateFormat(job.created)}</p>
 						</Row>
 
-						{actions.map( (action) => {
-							return <Row><Button onClick={()=>{this.handleClick(action)}}>{action} Job</Button></Row>
-						})}
+						{
+							this.state.loading?
+								<LoaderCircle />
+							:
+							actions.map( (action) => {
+								return <Row key={action}><Button onClick={()=>{this.handleClick(action)}}>{action} Job</Button></Row>
+							})
+						}
 
 					</Column>
 					<Column width="s6">
@@ -150,11 +160,14 @@ class Job extends React.Component {
 	}
 
 	handleClick(action){
+		this.setState({loading: true});
 		const method = this.methods[action];
 		Meteor.call(method, this.props.job._id, (error) => {
 			if(error){
 				console.error("Problem performing action " + action + " on job: ", error);
+				window.alert("Problem performing action " + action + " on job. View log for details.");
 			}
+			this.setState({loading: false});
 		});
 	}
 
