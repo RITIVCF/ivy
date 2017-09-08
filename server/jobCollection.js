@@ -325,13 +325,24 @@ Meteor.setInterval(()=>{
 		try {
 			const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1});
 			if(jobs.length > 0){
-				const job = jobs[0]._doc;
-				sendEmail(job.data.email);
-				jobs[0].done("Email sent to " + job.data.email.to + " successfully!", (error, result)=>{
-					if(error){
-						log.error('Error marking as done: \n' + error);
-					}
-				});
+				try {
+					const job = jobs[0]._doc;
+					sendEmail(job.data.email);
+					jobs[0].done("Email sent to " + job.data.email.to + " successfully!", (error, result)=>{
+						if(error){
+							log.error('Error marking as done: \n' + error);
+						}
+					});
+				} catch (e) {
+					log.error("Error sending email: \n" + e);
+					jobs[0].fail(
+						{
+							reason: "Failed to send email",
+							code: 1
+						}
+					);
+				}
+
 			}
 		} catch (e) {
 			let data = {};
