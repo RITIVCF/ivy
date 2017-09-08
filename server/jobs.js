@@ -20,9 +20,7 @@ function cancelJob(jid){
 }
 
 function restartJob(jid){
-	const job = jobCollection.find().fetch();
 	jobCollection.restartJobs([jid]);
-	getWork(job.type);
 }
 
 function getWork(type){
