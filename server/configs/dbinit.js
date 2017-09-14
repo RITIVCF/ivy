@@ -532,7 +532,12 @@ let options = [
 	{
 		_id: "emailsendoverride",
 		val: false
+	},
+	{
+		_id: "defaulteventgroups",
+		gids: []
 	}
+	// group perm template: {id:groupId, edit: false}
 ];
 
 options.forEach( (option) => {
