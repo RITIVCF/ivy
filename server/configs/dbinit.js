@@ -532,6 +532,26 @@ let options = [
 	{
 		_id: "emailsendoverride",
 		val: false
+	},
+	{
+		_id: "duplicateeventfields",
+		vals: [
+			"name",
+			"description",
+			"start",
+			"end",
+			"location",
+			"tags",
+			"permUser",
+			"permGroup",
+			"evr",
+			"pic",
+			"status",
+			"notes",
+			"attachements",
+			"reserved",
+			"groupId"
+		]
 	}
 ];
 
