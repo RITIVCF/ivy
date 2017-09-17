@@ -534,6 +534,10 @@ let options = [
 		val: false
 	},
 	{
+		_id: "defaulteventgroups",
+		gids: []
+  },
+  {
 		_id: "duplicateeventfields",
 		vals: [
 			"name",
@@ -553,6 +557,7 @@ let options = [
 			"groupId"
 		]
 	}
+	// group perm template: {id:groupId, edit: false}
 ];
 
 options.forEach( (option) => {
