@@ -142,13 +142,18 @@ export default class EventPreview extends TrackerReact(React.Component) {
 			isFormOpen
 		);
 
+		const imgPath = this.props.event.pic ? this.props.event.pic : "/images/defaultEventSmall.png";
+
 		return (
       <div className='row'>
 				<div className="col s12">
 	        <div>
-	          <h4>{this.props.event.name}</h4>
+						<Img src={imgPath} style={{width: '100%'}} />
+	          <h5>{this.props.event.name}</h5>
 	          <p>{this.props.event.description}</p>
 	          {this.getDateTime()}
+						<p>Location: {this.props.event.location}</p>
+						<p>Leader: {leader.getName()}<br/>{leader.getEmail()}</p>
 	        </div>
 	        <div>
 	          {((canEditEvent||canViewEvent)&&!isEventReviewed)&&

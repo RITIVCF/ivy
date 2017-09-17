@@ -62,6 +62,12 @@ NavbarItem = function(props) {
 	)
 }
 
+Img = function(props) {
+	return (
+		<img src={props.src} className={props.className} style={props.style} />
+	)
+}
+
 Card = function(props) {
 	return (
 		<div
@@ -80,7 +86,7 @@ Card = function(props) {
 CardImage = function(props) {
 	return (
 		<div className="card-image">
-			<img src={props.src} className="circle" />
+			<Img src={props.src} className="circle" />
 		</div>
 	)
 }
