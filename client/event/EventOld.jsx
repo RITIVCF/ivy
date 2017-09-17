@@ -31,7 +31,7 @@ export default class EventOld extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Old Events";
+    
 		return (
       <div>
       <div className="sidebar">

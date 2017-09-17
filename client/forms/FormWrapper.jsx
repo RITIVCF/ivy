@@ -7,19 +7,6 @@ export default class FormWrapper extends TrackerReact(React.Component) {
   constructor() {
     super();
 
-    this.state = {
-      subscription: {
-
-      }
-    };
-  }
-
-  componentWillUnmount() {
-    //this.state.subscription.Users.stop();
-  }
-
-  componentDidMount(){
-
   }
 
   getSubHeader(){
@@ -29,10 +16,6 @@ export default class FormWrapper extends TrackerReact(React.Component) {
   }
 
 	render() {
-    // document.title = "Ivy - Groups Dashboard";
-    // if(){
-    //   return (<LoaderCircle />)
-    // }
 		return (
       <MainBox
         content={<div/>}

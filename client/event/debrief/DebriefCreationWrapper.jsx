@@ -10,7 +10,7 @@ import DebriefInfoBar from './DebriefInfoBar.jsx';
 export default class DebriefCreationWrapper extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
-		document.title="Ivy - Debrief Questions";
+		
 
     this.state = {
 			subscription: {

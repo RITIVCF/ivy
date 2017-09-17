@@ -35,7 +35,7 @@ export default class ChangePassword extends TrackerReact(React.Component) {
   }
 
 	render() {
-    document.title="Ivy - Change Password";
+    
 		return (
       <div className="container">
         <div className="row">

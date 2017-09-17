@@ -25,7 +25,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
   }
 
 	componentDidMount(){
-		document.title = "Ivy - Contact Profile";
+		
 	}
 
 	componentWillUnmount() {

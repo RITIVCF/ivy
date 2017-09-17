@@ -18,18 +18,9 @@ export default class UserProfileWrapper extends TrackerReact(React.Component) {
 
   }
 
-	componentDidMount(){
-		document.title = "Ivy - My Contact Profile";
-	}
-
 	componentWillUnmount() {
 		this.state.subscription.Events.stop();
   }
-
-
-	componentWillMount(){
-
-	}
 
 	getContact(){
 		return new Contact(Meteor.user());

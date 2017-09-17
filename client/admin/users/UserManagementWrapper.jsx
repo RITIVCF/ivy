@@ -12,7 +12,7 @@ export default class UserManagementWrapper extends TrackerReact(React.Component)
 				Contacts: Meteor.subscribe("userContacts")
 			}
 		};
-		document.title="Ivy - User Management";
+		
 
 	}
 

@@ -20,7 +20,7 @@ export default class DuplicateContactWrapper extends TrackerReact(React.Componen
 	}
 
 	render() {
-		document.title="Ivy - Duplicate Contacts";
+		
 		if(!this.state.subscription.Contacts.ready()){
 			return <LoaderCircle />
 		}

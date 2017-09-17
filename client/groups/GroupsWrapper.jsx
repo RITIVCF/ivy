@@ -80,7 +80,6 @@ export default class GroupsWrapper extends TrackerReact(React.Component) {
   }
 
 	render() {
-    document.title = "Ivy - Groups Dashboard";
     if(!(this.state.subscription.Groups.ready()&&this.state.subscription.Contacts.ready())){
       return (<LoaderCircle />)
     }
