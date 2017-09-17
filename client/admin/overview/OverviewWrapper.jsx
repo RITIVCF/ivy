@@ -14,7 +14,7 @@ export default class OverviewWrapper extends TrackerReact(React.Component) {
 				Funnel: Meteor.subscribe("funnelHistory")
 			}
 		};
-		document.title="Ivy - Chapter Overview";
+		
 
 	}
 

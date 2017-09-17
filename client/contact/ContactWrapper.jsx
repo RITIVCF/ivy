@@ -73,7 +73,7 @@ export default class ContactWrapper extends TrackerReact(React.Component){
     if(!checkPermission("contacts")){
       return <NoPerm />
     }
-    document.title="Ivy - Contact Dashboard";
+    
     var status;
     var perm = checkPermission("ticket");
     return (

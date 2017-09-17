@@ -120,15 +120,17 @@ FlowRouter.triggers.exit([removeTooltips]);
 let dashboardRoute = FlowRouter.group({
 	prefix: "/",
 	name: "dashboard"
-})
+});
 
 dashboardRoute.route('/',{
 	name: "dashboard",
 	action() {
+		const title = "Dashboard";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Dashboard",
+			header: title,
 			content: (<DashboardWrapper />)
-		})
+		});
 	}
 });
 
@@ -140,8 +142,10 @@ const changePasswordRoute = FlowRouter.group({
 changePasswordRoute.route('/', {
 	name: "changepassword",
 	action() {
+		const title = "My Account";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "My Account",
+			header: title,
 			content: (<ChangePassword />)
 		})
 	}
@@ -154,8 +158,10 @@ let profileRoutes = FlowRouter.group({
 
 profileRoutes.route('/',{
 	action() {
+		const title = "My Profile";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "My Profile",
+			header: title,
 			content: (<UserProfileWrapper />)
 		})
 	}
@@ -170,8 +176,10 @@ let adminRoutes = FlowRouter.group({
 
 adminRoutes.route('/', {
 	action() {
+		const title = "Administration";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Administration",
+			header: title,
 			content: (<AdminDashboard />)
 		})
 	}
@@ -186,8 +194,10 @@ adminRoutes.route('/', {
 	structuresRoutes.route('/', {
 		name: "structures",
 		action() {
+			const title = "Structures";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Structures",
+				header: title,
 				content: (<GroupsWrapper />)
 			})
 		}
@@ -202,8 +212,10 @@ adminRoutes.route('/', {
 	pagePermissionsRoutes.route('/', {
 		name: "pagepermissions",
 		action() {
+			const title = "Administration";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Administration",
+				header: title,
 				content: <PagePermissionsWrapper />
 			})
 		}
@@ -218,8 +230,10 @@ adminRoutes.route('/', {
 	settingRoutes.route('/', {
 		name: "settings",
 		action() {
+			const title = "Chapter Settings";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Site Settings",
+				header: title,
 				content: <SiteSettingsWrapper />
 			})
 		}
@@ -234,8 +248,10 @@ adminRoutes.route('/', {
 	duplicateContactsRoutes.route('/', {
 		name: "duplicatecontacts",
 		action() {
+			const title = "Duplicate Contacts";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Duplicate Contacts",
+				header: title,
 				content: <DuplicateContactWrapper />
 			})
 		}
@@ -250,8 +266,10 @@ adminRoutes.route('/', {
 	overviewRoutes.route('/', {
 		name: "overview",
 		action() {
+			const title = "Chapter Overview";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Chapter Overview",
+				header: title,
 				content: <OverviewWrapper />
 			})
 		}
@@ -266,8 +284,10 @@ adminRoutes.route('/', {
  	jobmanagerRoutes.route('/', {
  		name: "jobmanager",
  		action() {
+			const title = "Job Manager";
+			setDocumentTitle(title);
  			mount(MainLayout, {
- 				header: "Job Manager",
+ 				header: title,
  				content: (<JobManagerWrapper />)
  			})
  		}
@@ -285,8 +305,10 @@ let peopleRoutes = FlowRouter.group({
 peopleRoutes.route('/', {
 	name: "people",
 	action(){
+		const title = "People";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "People",
+			header: title,
 			content: (<ContactWrapper />)
 		})
 	}
@@ -295,6 +317,8 @@ peopleRoutes.route('/', {
 peopleRoutes.route('/new', {
 	name: "newcontactform",
 	action() {
+		const title = "New Contact";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: <NewContactWrapper />
 		})
@@ -303,8 +327,10 @@ peopleRoutes.route('/new', {
 
 peopleRoutes.route('/:cid',{
 	action(params) {
+		const title = "People";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "People",
+			header: title,
 			content: (<ContactProfileWrapper cid={params.cid} />)
 		})
 	}
@@ -324,6 +350,8 @@ let publicRoutes = FlowRouter.group({
 publicRoutes.route('/newcontact', {
 	name: "publicnewcontact",
 	action(){
+		const title = "New Contact";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: (<NewContactWrapper route={"signup"} />)
 		})
@@ -333,6 +361,8 @@ publicRoutes.route('/newcontact', {
 publicRoutes.route('/login', {
 	name: "login",
 	action(params, queryParams) {
+		const title = "Log In";
+		setDocumentTitle(title);
 		mount(FormLayout,  {
 			content: (<LoginWrapper route={queryParams.r} />)
 		})
@@ -343,6 +373,8 @@ publicRoutes.route('/login', {
 publicRoutes.route('/signup', {
 	name: "signupform",
 	action() {
+		const title = "Sign Up";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: (<SelectContactWrapper />)
 		})
@@ -352,6 +384,8 @@ publicRoutes.route('/signup', {
 publicRoutes.route('/signup/:t', {
 	name: "signup",
 	action(params) {
+		const title = "Create Password";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: (<SignUpWrapper token={params.t}/>)
 		})
@@ -361,6 +395,8 @@ publicRoutes.route('/signup/:t', {
 
 publicRoutes.route('/forgotpassword/:token', {
 	action(params) {
+		const title = "Reset Password";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: (<ForgotPassword token={params.token} />)
 		})
@@ -370,6 +406,8 @@ publicRoutes.route('/forgotpassword/:token', {
 publicRoutes.route('/forgotpassword', {
 	name: "forgotpasswordform",
 	action() {
+		const title = "Forgot Password";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 			content: (<ForgotPassword />)
 		})
@@ -396,8 +434,10 @@ let eventsRoutes = FlowRouter.group({
 eventsRoutes.route('/', {
 	name: "events",
 	action() {
+		const title = "Events";
+		setDocumentTitle(title + " Calendar");
 		mount(MainLayout, {
-			header: "Events",
+			header: title,
 			content: (<EventCalendarWrapper />)
 		})
 	}
@@ -406,8 +446,10 @@ eventsRoutes.route('/', {
 eventsRoutes.route('/attendance/:eid',{
 	name: "eventattendance",
 	action(params) {
+		const title = "Attendance";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Attendance",
+			header: title,
 			content: (<EventDetailWrapper eid={params.eid} />)
 		})
 	}
@@ -417,8 +459,10 @@ eventsRoutes.route('/attendance/:eid',{
 eventsRoutes.route('/workspace/:eid',{
 	name: "workspace",
 	action(params) {
+		const title = "Event Workspace";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Event Workspace",
+			header: title,
 			content: (<EventWorkspaceWrapper eid={params.eid} />)
 		})
 	}
@@ -432,17 +476,12 @@ eventsRoutes.route('/servicerequests/:aord/:eid/:jid',{
 		else{
 			Meteor.call("declineJobRequest", params.eid, params.jid);
 		}
-		// mount(MainLayout, {
-		// 	header: params.aord=="accept"?"Accept":"Decline",
-		// 	content: (< />)
-		// })
 		FlowRouter.go("/");
 	}
 });
 
 eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	action(params) {
-		//let ev = Events.findOne(params.eid);
 		Meteor.call("getEvent", params.eid, function(error,result){
 			if(result){
 				let ev = result;
@@ -471,8 +510,10 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	debriefRoutes.route('/',{
 		name: "debriefssummary",
 		action(params) {
+			const title = "Event Debriefs";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Event Debriefs",
+				header: title,
 				content: (<EventsDebriefsWrapper />)
 			})
 		}
@@ -481,8 +522,10 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	debriefRoutes.route('/view/:eid',{
 		name: "viewdebrief",
 		action(params) {
+			const title = "Event Debrief";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Event Debrief",
+				header: title,
 				content: (<EventsDebriefWrapper eid={params.eid} />)
 			})
 		}
@@ -491,8 +534,10 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	debriefRoutes.route('/edit/:eid',{
 		name: "editdebrief",
 		action(params) {
+			const title = "Edit Event Debrief";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Edit Event Debrief",
+				header: title,
 				content: (<EventsDebriefWrapper eid={params.eid} edit={true} />)
 			})
 		}
@@ -502,8 +547,10 @@ eventsRoutes.route("/workspace/:vore/:eid/:uid",{
 	debriefRoutes.route('/edit',{
 		name: "editdebriefquestions",
 		action(){
+			const title = "Set Debrief Questions";
+			setDocumentTitle(title);
 			mount(MainLayout, {
-				header: "Set Debrief Questions",
+				header: title,
 				content: (<DebriefCreationWrapper />)
 			})
 		}
@@ -523,8 +570,10 @@ let ticketsRoutes = FlowRouter.group({
 ticketsRoutes.route('/',{
 	name: "tickets",
 	action() {
+		const title = "To-Dos";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "To-Dos",
+			header: title,
 			content: (<TicketWrapper />)
 		})
 	}
@@ -532,8 +581,10 @@ ticketsRoutes.route('/',{
 
 ticketsRoutes.route('/:tid',{
 	action(params) {
+		const title = "To-Dos";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "To-Dos",
+			header: title,
 			content: (<EditTicketWrapper tid={params.tid} />)
 		})
 	}
@@ -550,8 +601,10 @@ let churchesRoutes = FlowRouter.group({
 churchesRoutes.route('/',{
 	name:"churches",
 	action() {
+		const title = "Churches";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Churches",
+			header: title,
 			content: (<ChurchesWrapper />)
 		})
 	}
@@ -569,8 +622,10 @@ let emailsRoutes = FlowRouter.group({
 emailsRoutes.route('/',{
 	name: "emails",
 	action(){
+		const title = "Emails";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Emails",
+			header: title,
 			content: (<EmailWrapper />)
 		})
 	}
@@ -579,8 +634,10 @@ emailsRoutes.route('/',{
 emailsRoutes.route('/workspace/:emid',{
 	name: "emailworkspace",
 	action(params){
+		const title = "Email Workspace";
+		setDocumentTitle(title);
 		mount(MainLayout, {
-			header: "Email Workspace",
+			header: title,
 			content: (<EmailWorkspaceWrapper emid={params.emid} />)
 		})
 	}
@@ -596,6 +653,8 @@ const formRoutes = FlowRouter.group({
 formRoutes.route('/signin/:eid', {
 	name: "signinform",
 	action(params) {
+		const title = "Welcome to InterVarsity";
+		setDocumentTitle(title);
 		mount(FormLayout, {
 				content: (<SigninWrapper eid={params.eid} />)
 			}
@@ -648,6 +707,8 @@ unsubRoutes.route('/:subid', {
 
 FlowRouter.notFound = {
   action() {
+		const title = "Page Not Found";
+		setDocumentTitle(title);
     mount(ErrorLayout, {
 				content: (<ErrorPage />)
 			}

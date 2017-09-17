@@ -44,7 +44,7 @@ export default class SmallGroupsSummary extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Small Groups Dashboard";
+    
 		return (
       <div>
 				<h1>Small Groups Dashboard</h1>

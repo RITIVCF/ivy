@@ -10,7 +10,7 @@ export default class PagePermissionsWrapper extends TrackerReact(React.Component
 	}
 
 	render() {
-		document.title="Ivy - Page Permissions";
+		
 		if(!checkPermission("admin")){
 			return <div>Sorry you don't have permission to view this page. Please see the leadership team to get acces.</div>
 		}

@@ -53,7 +53,7 @@ export default class SignUpWrapper extends TrackerReact(React.Component){
   }
 
   render() {
-    document.title="Ivy - Set Password";
+    
     return (
       <div className="card">
         <div className="card-content">

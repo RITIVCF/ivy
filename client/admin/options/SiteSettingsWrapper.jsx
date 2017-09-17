@@ -12,7 +12,7 @@ export default class SiteSettingsWrapper extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		document.title="Ivy - Site Settings";
+		
 		if(!checkPermission("admin")){
 			return <NoPerm />
 		}

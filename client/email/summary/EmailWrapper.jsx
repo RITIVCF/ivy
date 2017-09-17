@@ -100,7 +100,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     if(!checkPermission("emails")){
       return <NoPerm />
     }
-    document.title="Ivy - Emails";
+    
 		let selectedEmail = this.getSelectEmail();
 
     return (
