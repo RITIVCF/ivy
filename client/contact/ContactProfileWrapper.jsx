@@ -18,7 +18,7 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 				contact: Meteor.subscribe("contact", FlowRouter.getParam('cid')),
 				ticket: Meteor.subscribe("ticket", FlowRouter.getParam('cid')),
 				options: Meteor.subscribe("allOptions"),
-				Events: Meteor.subscribe("myAttendedEvents")
+				Events: Meteor.subscribe("myAttendedEvents", props.cid)
 			}
 		};});
 
@@ -49,6 +49,9 @@ export default class ContactProfileWrapper extends TrackerReact(React.Component)
 	render() {
 		if(!this.state.subscription.contact.ready()){
 			return(<LoaderCircle />)
+		}
+		if(!this.state.subscription.ticket.ready()){
+			return <LoaderCircle />
 		}
 		if(!checkPermission("contacts")){
 			return <NoPerm />
