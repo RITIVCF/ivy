@@ -14,6 +14,32 @@ Meteor.methods({
   passReset(uid){
       Accounts.sendResetPasswordEmail(uid);
   },
+	sendErrorEmail(route, message, stack){
+		let name = "Not signed in.";
+		if(!!Meteor.userId()){
+			name = Meteor.user().name;
+		}
+		const body = `
+			<b><i>Error report</i></b>
+			<br><br>
+			<b>User:</b>
+			${name}
+			<br><br>
+			<b>Message:</b><br>
+			${message}
+			<br><br>
+			<b>Stack:</b><br>
+			${stack}
+		`;
+		Meteor.defer(()=>{
+			sendEmail({
+				to: "awe6013@rit.edu",
+				from: "Ivy Error Handling <ivy@rit.edu>",
+				subject: "Client-Side Error",
+				html: body
+			});
+		});
+	},
   sendEventServiceRequest(uid,eid,pos){
     var contact = new Contact(Meteor.users.findOne(uid));
     var event = Events.findOne(eid);
