@@ -223,7 +223,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 					]}
 					subheader={this.getSubheader(ev, perms.edit)}
 					showinfobar={true}
-					infobar={<WorkspacePanel perm={perms.edit} ev={ev} />}
+					infobar={<WorkspacePanel perms={perms} ev={ev} />}
 				/>
 		)
 	}
