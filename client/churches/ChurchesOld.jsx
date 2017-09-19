@@ -31,7 +31,7 @@ export default class ChurchesOld extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title=" RIT IVCF - Old/Inactive Churches";
+    
 		return (
       <div>
       

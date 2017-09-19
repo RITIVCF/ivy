@@ -26,40 +26,41 @@ Meteor.methods({
   ///       howhear str,
   ///       learnmore  bool
   handleEventSignIn(signin){
-    // If not new, sign in and skip
-    if(!signin.new){
-      addAttendanceRecord(signin);
-    }
-    else{
-      // Create new user and get uid
-			signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
-			let userDoc = {
-				name: signin.name,
-        email: signin.email,
-        phone: signin.phone,
-        major: signin.major,
-        howhear: signin.howhear
+		Meteor.defer(()=>{
+			// If not new, sign in and skip
+	    if(!signin.new){
+	      addAttendanceRecord(signin);
+	    }
+	    else{
+	      // Create new user and get uid
+				signin.name = signin.name[0].toUpperCase() + signin.name.slice(1);
+				let userDoc = {
+					name: signin.name,
+	        email: signin.email,
+	        phone: signin.phone,
+	        major: signin.major,
+	        howhear: signin.howhear
+				}
+	      signin.uid = createNewUser(userDoc);
+
+	      // Create follow up ticket
+	      addAttendanceTicket(signin.eid, signin.uid);
+
+	      addAttendanceRecord(signin);
+
+	      if(signin.newsletter){
+	        Meteor.call("updateNewsletter", signin.uid, true);
+	      }
+	      if(signin.learnmore){
+	        Meteor.call("addLearnMoreTicket", signin.uid);
+	      }
+
+	    }
+
+			if( signin.new ){
+				createNewEventFollowUpEmail(signin.eid, signin.uid);
 			}
-      signin.uid = createNewUser(userDoc);
-
-      // Create follow up ticket
-      addAttendanceTicket(signin.eid, signin.uid);
-
-      addAttendanceRecord(signin);
-
-      if(signin.newsletter){
-        Meteor.call("updateNewsletter", signin.uid, true);
-      }
-      if(signin.learnmore){
-        Meteor.call("addLearnMoreTicket", signin.uid);
-      }
-
-    }
-
-		if( signin.new ){
-			createNewEventFollowUpEmail(signin.eid, signin.uid);
-		}
-
+		});
 
   },
 

@@ -23,7 +23,7 @@ export default class FeedbackWrapper extends TrackerReact(React.Component) {
   }
 
 	render() {
-    document.title="Ivy - Feedback";
+    
     if(!this.state.subscription.Contacts.ready()){
       return <LoaderCircle />
     }

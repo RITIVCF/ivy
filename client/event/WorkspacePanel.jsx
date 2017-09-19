@@ -55,10 +55,14 @@ export default class WorkspacePanel extends React.Component {
 	render() {
 		let ev = this.props.ev;
 		let perm = this.props.perm;
+		const canPublish =
+			(ev.location.length > 0) &&
+			(ev.description.length > 0) &&
+			(ev.tags.length > 0)
 		return (
 			<div>
 				{perm?
-					<ButtonPublish published={ev.isPublished()} eid={ev._id} />
+					<ButtonPublish published={ev.isPublished()} eid={ev._id} canPublish={canPublish} />
 				:
 				<p>Published: {ev.isPublished()?"Published":"Not Published"}</p>
 				}

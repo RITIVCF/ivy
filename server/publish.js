@@ -12,8 +12,12 @@ Meteor.publish("summaryEvents", function(){
 
 });
 
-Meteor.publish("myAttendedEvents", function(){
-  return Events.find({"attendees._id": this.userId, deleted: {$ne: true}});
+Meteor.publish("myAttendedEvents", function(cid){
+	let _id = this.userId;
+	if(cid){
+		_id = cid;
+	}
+  return Events.find({"attendees._id": _id, deleted: {$ne: true}});
 });
 
 Meteor.publish("ownerEvents", function(){

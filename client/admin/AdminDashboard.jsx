@@ -32,7 +32,7 @@ export default class AdminDashboard extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		document.title="Ivy - Admin Dashboard";
+		
 		if(!checkPermission("admin")){
 			<div>Sorry you don't have permission to view this page. Please see the leadership team to get acces.</div>
 		}

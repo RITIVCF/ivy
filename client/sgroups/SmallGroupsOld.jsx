@@ -31,7 +31,7 @@ export default class SmallGroupsOld extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title=" RIT IVCF - Old/Inactive Small Groups";
+    
 		return (
       <div>
       <h1>Old/Inactive Small Groups</h1>

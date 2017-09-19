@@ -74,8 +74,8 @@ export default class EventImageControl extends Component {
 
   render(){
     return (
-			<NavbarItem>
-				<i className="tiny material-icons black-text" onClick={this.openModal.bind(this)}>photo</i>
+			<NavbarItem  onClick={this.openModal.bind(this)}>
+				<i className="tiny material-icons black-text">photo</i>
 				<Modal
 					id={"EventImageModal"}
 					content={this.getContent()}

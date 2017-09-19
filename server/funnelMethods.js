@@ -208,25 +208,20 @@ getInterval = function(){
 
 checkIntegration = function(status, uid){
   let curstatus = getUserFunnelStatus(uid);
-  let nonIntegrated = ["Visitor", "Crowd", "Contact"];
+  let nonIntegrated = ["Crowd", "Contact"];
   switch (curstatus) {
     case "Multiplier":
     case "Leader":
     case "Server":
     case "Member":
-      if (nonIntegrated.includes(status)) {
-        addIntegrationTicket(uid);
-      }
-      break;
     case "Visitor":
-      if (status == "Crowd" || status == "Contact") {
-        addIntegrationTicket(uid);
-      }
+			if (nonIntegrated.includes(status)) {
+				addIntegrationTicket(uid);
+			}
       break;
     default:
       break;
   }
-
 
 }
 
