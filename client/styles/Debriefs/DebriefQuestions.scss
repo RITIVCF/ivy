@@ -10,4 +10,10 @@
 	display: block;
 	resize: vertical;
 	width: 90%;
+	border: solid 1px grey;
+	padding: 0 5px;
+}
+
+.commentOpen > .materialize-textarea {
+	margin: 0;
 }
