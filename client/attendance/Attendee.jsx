@@ -18,7 +18,25 @@ export default class Attendee extends TrackerReact(React.Component) {
     FlowRouter.go("/people/"+this.props.contact._id);
   }
 
+	getStatusMessage(){
+		let message = "";
+		switch (this.props.contact.status) {
+			case "Out Of Scope":
+			case "Deleted":
+			case "Graduated":
+				message = this.props.contact.status;
+				break;
+			default:
+				message = "";
+		}
 
+		if(!message){
+			return "";
+		} else {
+			return `(${message})`;
+		}
+
+	}
 
   viewTicket(event){
     event.stopPropagation();
@@ -68,7 +86,7 @@ export default class Attendee extends TrackerReact(React.Component) {
 					checkPermission("tickets") &&
 					<td style={{textAlign: "center"}} className={status} />
 				}
-        <td>{this.props.contact.getName()}</td>
+        <td>{this.props.contact.getName()} {this.getStatusMessage()}</td>
         <td>{this.props.contact.getEmail()}</td>
         <td>{this.props.contact.getPhone()}</td>
         <td>{this.props.contact.firsttime && "Yes"}</td>

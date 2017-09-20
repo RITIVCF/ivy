@@ -18,7 +18,8 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
 				Contacts: Meteor.subscribe("allContacts"),
 				graduatedContacts: Meteor.subscribe("graduatedContacts"),
 				expiredContacts: Meteor.subscribe("expiredContacts"),
-				outofscopeContacts: Meteor.subscribe("outofscopeContacts")
+				outofscopeContacts: Meteor.subscribe("outofscopeContacts"),
+				deletedContact: Meteor.subscribe("deletedUsers")
       },
       num:10
     };
@@ -28,10 +29,22 @@ export default class AttendanceWrapper extends TrackerReact(React.Component) {
     this.state.subscription.Events.stop();
     this.state.subscription.Tickets.stop();
 		this.state.subscription.Contacts.stop();
+		this.state.subscription.graduatedContacts.stop();
+		this.state.subscription.expiredContacts.stop();
+		this.state.subscription.outofscopeContacts.stop();
+		this.state.subscription.deletedContact.stop();
   }
 
   subsReady(){
-    return (this.state.subscription.Events.ready()&&this.state.subscription.Tickets.ready()&&this.state.subscription.Contacts.ready())?true:false
+    return (
+			this.state.subscription.Events.ready()&&
+			this.state.subscription.Tickets.ready()&&
+			this.state.subscription.Contacts.ready()&&
+			this.state.subscription.graduatedContacts.ready()&&
+			this.state.subscription.expiredContacts.ready()&&
+			this.state.subscription.outofscopeContacts.ready()&&
+			this.state.subscription.deletedContact.ready()
+		)?true:false
   }
 
   getEvent(){
