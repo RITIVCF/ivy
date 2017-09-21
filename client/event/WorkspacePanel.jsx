@@ -54,7 +54,8 @@ export default class WorkspacePanel extends React.Component {
 
 	render() {
 		let ev = this.props.ev;
-		let perm = this.props.perm;
+		let perm = this.props.perms.edit;
+		const hasOwnerPerm = this.props.perms.owner;
 		const canPublish =
 			(ev.location.length > 0) &&
 			(ev.description.length > 0) &&
@@ -85,9 +86,12 @@ export default class WorkspacePanel extends React.Component {
 					}
 				</div>
 
-					<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
-					{Meteor.userId()==ev.owner&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
-					{Meteor.userId()==ev.owner ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}
+				<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
+				{hasOwnerPerm&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
+				{hasOwnerPerm ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}
+				{(hasOwnerPerm && (Meteor.userId()!=ev.owner)) &&
+					<p>Leader: {this.getLeader()}</p>
+				}
 			</div>
 		)
 	}
