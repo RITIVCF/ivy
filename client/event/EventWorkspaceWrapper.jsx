@@ -44,6 +44,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
     this.state.subscription.Event.stop();
 		this.state.subscription.tickets.stop();
 		this.state.subscription.contacts.stop();
+		$("#RecurringModal").remove();
   }
 
 	componentDidMount() {
@@ -51,15 +52,15 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 	repeatEvent() {
-		this.refs.modal.open();
+		$("#RecurringModal").appendTo("body").modal("open");
+	}
+
+	componentDidUpdate() {
+		$('#RecurringModal').modal();
 	}
 
 	cancelRecur() {
-		try {
-    	this.refs.modal.close();
-		}
-		catch(err) {
-		}
+		console.log("Close recurring modal");
 		try {
 			$('#RepeatEventModal').modal('close');
 		} catch (e) {
@@ -74,8 +75,6 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 
 	setRepeat() {
 		if (this.state.recurGroup) {
-			this.refs.modal.close();
-			this.cancelRecur.bind(this.refs.closebtn);
 			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
 				if(error) {
 					Materialize.toast("There was an error creating the recurring events", 2000);
@@ -86,8 +85,6 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		} else if (this.getEvent().tags.includes("Small Group")) {
 			Materialize.toast("Associated small group is required", 2000);
 		} else {
-			this.refs.modal.close();
-			this.cancelRecur.bind(this.refs.closebtn);
 			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
 				if(error) {
 					Materialize.toast("There was an error creating the recurring events", 2000);
@@ -119,7 +116,6 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 	deleteAllRecur() {
-		this.refs.modal.close();
 		let result = window.confirm("Are you sure you want to delete all recurring events? *This action cannot be undone.*");
     if(result == true){
 			Meteor.call('deleteAllRecurEvents', this.getEvent()._id, (error) => {
@@ -209,27 +205,25 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		return (
 				<MainBox
 					content={[<EventWorkspace key={0} perm={perms.edit} ev={ev} />,
-						<Modal
-							key={1}
-							id={"RepeatEventModal"}
-							ref="modal"
-							content={recurTrue?<div>{
+					<div id="RecurringModal" key={1} className={recurTrue?"modal":"modal modal-fixed-footer"}>
+	          <div className="modal-content">
+	            {recurTrue?<div>{
 								anyUnpublishedRecurring(ev.recurId)?<a className="btn" onClick={this.publishAllRecur.bind(this)}>Publish All</a>:
 								<a className="btn" onClick={this.unpublishAllRecur.bind(this)}>Unpublish All</a>
 							}
 								<a className="btn red" onClick={this.deleteAllRecur.bind(this)}>Delete All</a>
 							</div>:
 							<RecurringModal ev={ev} perm={perms.edit} defaultEndDate={this.state.enddate} group={(newValue) => {this.setState({recurGroup: newValue})}} onpick={(newValue) => {this.setState({enddate: newValue})}} />}
-							onClose={this.closeRecur.bind(this)}
-							type={recurTrue?'':"fixed-footer"}
-							footer={recurTrue?<div>
-								<a className="btn modal-action modal-close" ref="closebtn" onClick={this.cancelRecur.bind(this)}>Close</a>
+	          </div>
+	          <div className="modal-footer">
+							{recurTrue?<div>
+
 							</div>:<div>
 								<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
-								<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
 							</div>
 							}
-						/>
+	          </div>
+		      </div>
 					]}
 					subheader={this.getSubheader(ev, perms.edit)}
 					showinfobar={true}
@@ -238,3 +232,32 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		)
 	}
 }
+
+/*
+	<Modal
+		key={1}
+		id={"RepeatEventModal"}
+		ref="modal"
+		content={recurTrue?<div>{
+			anyUnpublishedRecurring(ev.recurId)?<a className="btn" onClick={this.publishAllRecur.bind(this)}>Publish All</a>:
+			<a className="btn" onClick={this.unpublishAllRecur.bind(this)}>Unpublish All</a>
+		}
+			<a className="btn red" onClick={this.deleteAllRecur.bind(this)}>Delete All</a>
+		</div>:
+		<RecurringModal ev={ev} perm={perms.edit} defaultEndDate={this.state.enddate} group={(newValue) => {this.setState({recurGroup: newValue})}} onpick={(newValue) => {this.setState({enddate: newValue})}} />}
+
+
+
+		onClose={this.closeRecur.bind(this)}
+		type={recurTrue?'':"fixed-footer"}
+		footer={recurTrue?<div>
+			<a className="btn modal-action modal-close" ref="closebtn" onClick={this.cancelRecur.bind(this)}>Close</a>
+		</div>:<div>
+			<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
+			<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
+		</div>
+		}
+	/>
+
+
+	*/
