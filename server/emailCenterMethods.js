@@ -9,6 +9,7 @@ import {
 	stageNewsletter,
 	unstageNewsletter,
 	changeNewsletterSendDateTime,
+	createNewEventFollowUpEmail,
 	sendToMe
 } from '/lib/emails.js';
 import {
@@ -239,9 +240,13 @@ Meteor.methods({
 			}
 		);
   },
-    
+
 	sendToMe(emid) {
 		sendToMe(emid, Meteor.userId());
+	},
+
+	createNewEventFollowUpEmail(eid, uid){
+		createNewEventFollowUpEmail(eid, uid);
 	}
 
 });

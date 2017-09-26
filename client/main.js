@@ -49,3 +49,12 @@ Meteor.call("getRootURL", (error, ROOT_URL) => {
 	}
 
 })
+
+
+window.addEventListener('error', function (e) {
+	console.log("Exception", e);
+  var error = e.error;
+	console.log(error);
+  Meteor.call("sendErrorEmail", error.message, error.stack);
+	Materialize.toast("Something went wrong. Please refresh the page and try again. If the issue persists, please report it via Ivy Feedback.<br>Thank you<br>- Ivy Development Team", 5000);
+});

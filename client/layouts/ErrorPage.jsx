@@ -13,7 +13,7 @@ export default class ErrorPage extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		document.title="Ivy";
+		
 		return (
 		<div>
 			<h1>Not Found</h1>

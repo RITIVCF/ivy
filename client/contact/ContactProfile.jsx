@@ -117,6 +117,7 @@ export default class ContactProfile extends TrackerReact(React.Component){
 		}
     var disable = true;
     var viewmember = false;
+		var viewAttendance = false;
 
     if(contact.isCurrentUser()||checkPermission("contactdetails")){
       disable = false;
@@ -124,6 +125,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
     if((contact.isCurrentUser()||checkPermission("memberdetail"))&&contact.isMember()){
       viewmember = true;
     }
+		if( contact.isCurrentUser() || checkPermission("attendance") ) {
+			viewAttendance = true;
+		}
 
     return (
       <div className="row">
@@ -167,6 +171,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
 								<ContactMajor contact={contact} disabled={disable} />
 							}
 
+							<label>How did you hear about us?</label>
+							<p>{contact.howhear}</p>
+
             </div>
           </div>
           {viewmember&&
@@ -206,21 +213,24 @@ export default class ContactProfile extends TrackerReact(React.Component){
 								<ContactCurrYear contact={contact} disabled={disable} />
 							</div>
 						</div>}
-          <div className="card">
-            <div className="card-content">
-              <span className="card-title">Events</span>
-              <ul className="collection">
-                {this.getEvents().map((event)=>{
-                  return <Event key={event._id} event={event} />
-                })}
-              </ul>
+					{
+						<div className="card">
+	            <div className="card-content">
+	              <span className="card-title">Events</span>
+	              <ul className="collection">
+	                {this.getEvents().map((event)=>{
+	                  return <Event key={event._id} event={event} />
+	                })}
+	              </ul>
 
-              {(!this.state.viewallevents && this.getEvents().length > 3) &&
-                <a onClick={this.viewAllEvents.bind(this)} className="btn">View All</a>
-              }
+	              {(!this.state.viewallevents && this.getEvents().length == 3) &&
+	                <a onClick={this.viewAllEvents.bind(this)} className="btn">View All</a>
+	              }
 
-            </div>
-          </div>
+	            </div>
+	          </div>
+					}
+
         </div>
 				{this.props.modal&&
 					<div>

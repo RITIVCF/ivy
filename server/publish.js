@@ -12,8 +12,12 @@ Meteor.publish("summaryEvents", function(){
 
 });
 
-Meteor.publish("myAttendedEvents", function(){
-  return Events.find({"attendees._id": this.userId, deleted: {$ne: true}});
+Meteor.publish("myAttendedEvents", function(cid){
+	let _id = this.userId;
+	if(cid){
+		_id = cid;
+	}
+  return Events.find({"attendees._id": _id, deleted: {$ne: true}});
 });
 
 Meteor.publish("ownerEvents", function(){
@@ -660,4 +664,10 @@ Meteor.publish("currentStatus", function(){
 		{$sort: {date: -1}},
     {$group: {_id: "$uid", status: {$last: "$status"}}}
 	]);
+});
+
+
+Meteor.publish("jobCollection", function(){
+	let query = {};
+	return jobCollection.find(query);
 });

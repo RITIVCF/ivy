@@ -80,6 +80,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 				<li onClick={this.prevCal.bind(this)} id="mob-date-left-li"><a id="mob-date-left"><i className="material-icons black-text">skip_previous</i></a></li>
 				<li id="mob-date-center"><h1>{this.state.viewtitle}</h1></li>
 				<li onClick={this.nextCal.bind(this)} id="mob-date-right-li"><a id="mob-date-right"><i className="material-icons black-text">skip_next</i></a></li>
+				{!this.state.subscription.myEvents.ready()&&<NavbarItem><LoaderCircle style={{"paddingTop": "0px"}} /></NavbarItem>}
       </ul>
       <ul className="right hide-on-small-only">
         <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>
@@ -113,8 +114,6 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	}
 
 	render() {
-    document.title="Ivy - Event Calendar";
-    //if(Options.findOne("calendarview")&&Options.findOne("eventtags")){
     if(SiteOptions.ready()){
 			let selectedEvent = this.getSelectedEvent();
       return (<div>

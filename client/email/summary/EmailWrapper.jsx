@@ -37,7 +37,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 		};
 		Meteor.call("newEmail",
 			"newsletter",
-			"ivcf.rit.edu",
+			"InterVarsity Christian Fellowship <ivcf@rit.edu>",
 			to,
 			function(error, result){
 				if(!!error){
@@ -100,7 +100,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     if(!checkPermission("emails")){
       return <NoPerm />
     }
-    document.title="Ivy - Emails";
+    
 		let selectedEmail = this.getSelectEmail();
 
     return (

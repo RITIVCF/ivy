@@ -58,7 +58,7 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Churches Dashboard";
+    
     if(!(this.state.subscription.Churches.ready()&&this.state.subscription.Contacts.ready())){
       return <LoaderCircle />
     }

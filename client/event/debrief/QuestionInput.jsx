@@ -54,7 +54,9 @@ export default class QuestionInput extends TrackerReact(React.Component) {
 				})}
 				<br />
 				<span style={{userSelect: "none", fontSize: "12px", color: "#777", cursor: "pointer"}} onClick={this.toggleComment.bind(this)}>{commentOpen?"Collapse comment":"Expand comment"}</span>
-				<textarea style={{width: "100%"}} className={commentOpen?"commentDefault commentOpen":"commentDefault"} onChange={this.handleCommentChange} value={question.comment} />
+				<div className={commentOpen?"commentDefault commentOpen":"commentDefault"}>
+					<textarea style={{width: "100%"}} className="materialize-textarea" onChange={this.handleCommentChange} value={question.comment} />
+				</div>
 			</div>
 		)
 	}

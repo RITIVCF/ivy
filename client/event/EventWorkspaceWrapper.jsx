@@ -12,16 +12,6 @@ import EventImageControl from './components/EventImageControl';
 
 import Event from '/lib/classes/Event.js';
 
-
-getUserGroupPermission = function(){
-	var grps = Groups.find({users: Meteor.userId()}).fetch();
-	var ids = [];
-	grps.forEach(function(group){
-		ids.push(group._id);
-	});
-	return ids;
-}
-
 export default class EventWorkspaceWrapper extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
@@ -227,7 +217,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 					]}
 					subheader={this.getSubheader(ev, perms.edit)}
 					showinfobar={true}
-					infobar={<WorkspacePanel perm={perms.edit} ev={ev} />}
+					infobar={<WorkspacePanel perms={perms} ev={ev} />}
 				/>
 		)
 	}

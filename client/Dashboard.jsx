@@ -18,7 +18,6 @@ export default class DashboardWrapper extends TrackerReact(React.Component) {
 	}
 
 	render() {
-		setDocumentTitle("Dashboard");
 		return (
 				<div className="row">
 					<div className="col s12 m6">

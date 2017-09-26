@@ -58,7 +58,7 @@ export default class TicketWrapper extends TrackerReact(React.Component) {
 
 
 	render() {
-    document.title="Ivy - Ticket Dashboard";
+    
     if(!this.checkSubs()){
       return <LoaderCircle />
     }

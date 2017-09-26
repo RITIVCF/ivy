@@ -3,9 +3,15 @@ import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 import { processExpiredContacts } from '/server/contactStatus.js';
 import { shouldCalculateFunnel } from '/lib/contactStatus.js';
+import { log } from '/server/logger.js';
+import { isSendMailGateOpen } from '/lib/jobs.js';
+
+export {
+	openSendMailGate,
+	closeSendMailGate
+}
 
 
-jobCollection = JobCollection('jobQueue');
 jobCollection.startJobServer();
 
 createJobAndDelay = function(uid, delayAmount, notValidIntervals = 0){
@@ -46,6 +52,24 @@ newEventFollowUpEmailJob = function(eid, uid){
 	}
 
 	return createNewJob('sendEventFollowUpEmail', jobDoc);
+}
+
+newEmailJob = function(emailObj){
+	// this requires an Email package email obj like
+	//  {
+	//		to:
+	//		from:
+	//		subject:
+	//		html:
+	//  }
+
+	const jobDoc = {
+		email: emailObj
+	}
+
+	let job = createNewJob('sendEmail', jobDoc);
+	job.save();
+	return job;
 }
 
 scheduleJobAndSubmit = function (job, afterValue){
@@ -170,8 +194,13 @@ export function restartJob(job){
 	);
 }
 
-//let worker =
-Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
+
+
+const checkFunnelStatusOptions = {
+	pollInterval: 2000
+};
+
+Job.processJobs('jobQueue', 'checkFunnelStatus', checkFunnelStatusOptions, function(job, cb){
 	try {
 		let data = job.data;
 		let threshold = getThreshold();
@@ -236,18 +265,12 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', function(job, cb){
 
 	}
 
-
-
-
-
-
-
 });
 
 
 
-
-Job.processJobs('jobQueue', 'sendNewsletter', function(job, cb){
+const sendNewsletterOptions = {pollInterval: 2000};
+Job.processJobs('jobQueue', 'sendNewsletter', sendNewsletterOptions, function(job, cb){
 	try {
 		sendNewsletter(job.data.emid);
 
@@ -294,6 +317,57 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 	}
 
 });
+
+
+// Send Email throttler and sender
+Meteor.setInterval(()=>{
+	if(isSendMailGateOpen()){
+		try {
+			const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1});
+			if(jobs.length > 0){
+				try {
+					const job = jobs[0]._doc;
+					sendEmail(job.data.email);
+					jobs[0].done("Email sent to " + job.data.email.to + " successfully!", (error, result)=>{
+						if(error){
+							log.error('Error marking as done: \n' + error);
+						}
+					});
+				} catch (e) {
+					log.error("Error sending email: \n" + e);
+					jobs[0].fail(
+						{
+							reason: "Failed to send email",
+							code: 1
+						}
+					);
+				}
+
+			}
+		} catch (e) {
+			let data = {};
+			if(job){
+				data.job = job;
+			}
+			data.error = e;
+			try{
+				closeSendMailGate();
+			} catch (closeGateError) {
+				log.error("Send email failed. Close gate failed. This is still running.", {error: closeGateError});
+			}
+			log.error("Send email failed. Gate closed.", data);
+		}
+	}
+
+}, 10000);
+
+function closeSendMailGate(){
+	Options.update("emailqueuestatus", {$set: {open: false}});
+}
+
+function openSendMailGate(){
+	Options.update("emailqueuestatus", {$set: {open: true}});
+}
 
 
 Job.processJobs('jobQueue', 'processExpiredContacts', function(job, cb){
