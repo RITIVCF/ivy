@@ -162,8 +162,8 @@ Meteor.methods({
   },
   currentFunnel(){
     var result = Meteor.users.aggregate([
-      {"$match": {deleted: {$ne: true}}},
-      {$group: {_id: "$status", count: {$sum: 1}}}
+      {"$match": {status: {$in: ["Present","Absent"]}}},
+      {$group: {_id: "$funnelStatus", count: {$sum: 1}}}
     ]);
     var rst = {};
     var max = 0;//var cnts = [];
@@ -185,9 +185,9 @@ Meteor.methods({
   },
   currentFunnelMembership(){
     var result = Meteor.users.aggregate([
-      {"$match": {deleted: {$ne: true}}},
+      {"$match": {status: {$in: ["Present","Absent"]}}},
       {"$match": {member: true}},
-      {$group: {_id: "$status", count: {$sum: 1}}}
+      {$group: {_id: "$funnelStatus", count: {$sum: 1}}}
     ]);
     var rst = {};
     var max = 0;//var cnts = [];

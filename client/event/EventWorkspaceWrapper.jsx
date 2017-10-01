@@ -31,6 +31,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
     this.state.subscription.Event.stop();
 		this.state.subscription.tickets.stop();
 		this.state.subscription.contacts.stop();
+		$("#RecurringModal").remove();
   }
 
 	componentDidMount() {
