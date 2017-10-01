@@ -20,7 +20,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
     }
 
     componentDidMount(){
-      $('.modal').modal();
+			Materialize.updateTextFields();
     }
 
     shouldComponentUpdate(nextProps, nextState){
@@ -35,7 +35,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 
     stateSync()
     {
-        let evt = this.props.ev; //parent.getEvent();
+        let evt = this.props.ev;
         let keys = Object.keys(evt.permUser);
         let gKeys = Object.keys(evt.permGroup);
         for(var i = 0; i < keys.length; i++)
@@ -46,11 +46,6 @@ export default class PermissionWindow extends TrackerReact(React.Component)
         {
             this.state.permissions.groups[gKeys[i]] = evt.permGroup[gKeys[i]];
         }
-    }
-
-    open()
-    {
-        $("#permwindow").appendTo("body").modal('open');
     }
 
     users()
@@ -69,20 +64,7 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 
     setPerm(event)
     {
-        // var id = event.target.id;
-        // var usrIdStart = id.indexOf("_") + 1;
-        // var usrIdEnd = id.lastIndexOf("_");
-        // var usrId = id.substring(usrIdStart, usrIdEnd);
-        // if(id.indexOf("user") != -1)
-        // {
-        //     this.state.permissions.users[usrId] = (event.target.id.substring(0, 4) == "edit");
-        // }
-        // else
-        // {
-        //     this.state.permissions.groups[usrId] = (event.target.id.substring(0, 4) == "edit");
-        // }
-        // this.forceUpdate();
-        // this.submitChanges();
+
     }
 
     addGroupPerm(group){
@@ -93,39 +75,8 @@ export default class PermissionWindow extends TrackerReact(React.Component)
     addUserPerm(user)
     {
       Meteor.call("addEventUserPerm", this.props.ev._id, user._id);
-      //user.component.forceUpdate();
-        // var newOwnerId = ReactDOM.findDOMNode(this.refs.newPermSelect).value;
-        // var lastUnderscoreIndex = newOwnerId.lastIndexOf("_");
-        // var type = newOwnerId.substring(lastUnderscoreIndex + 1);
-        // newOwnerId = newOwnerId.substring(0, lastUnderscoreIndex);
-        // if(type == "USER")
-        // {
-        //     this.state.permissions.users[newOwnerId] = false;
-        // }
-        // else
-        // {
-        //     this.state.permissions.groups[newOwnerId] = false;
-        // }
-        // this.submitChanges();
-    }
 
-//     deletePerm(event)
-//     {
-//         var id = event.target.id;
-//         var usrIdStart = id.indexOf("_") + 1;
-//         var usrIdEnd = id.lastIndexOf("_");
-//         usrId = id.substring(usrIdStart, usrIdEnd);
-//         if(id.indexOf("user") != -1)
-//         {
-//             delete this.state.permissions.users[usrId];
-//         }
-//         else
-//         {
-//             delete this.state.permissions.groups[usrId];
-//         }
-//         this.submitChanges();
-// //        this.forceUpdate();
-//     }
+    }
 
     submitChanges()
     {
@@ -177,12 +128,11 @@ export default class PermissionWindow extends TrackerReact(React.Component)
       var permGroups = event.permGroup;
 
       return (
-        <div id="permwindow" className="modal modal-fixed-footer bottom-sheet">
-          <div className="modal-content">
-
-            <div className="row">
-              <div className="col s12 m5 l3">
-                <SelectUser
+				<Row>
+					<Column>
+						<Row>
+							<div className="col s12 m5 l3">
+								<SelectUser
 									parent={this}
 									id={"owner"}
 									label="Event Leader"
@@ -191,10 +141,10 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 									initialValue={owner.name}
 									ref={"owner"}
 								/>
-              </div>
-              <div className="col s12 m2 l6"></div>
-              <div className="col s12 m5 l3">
-                <label>Add Group:
+							</div>
+							<div className="col s12 m2 l6"></div>
+							<div className="col s12 m5 l3">
+								<label>Add Group:
 									<SelectTeam
 										parent={this}
 										id={"group"}
@@ -202,9 +152,9 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 										updateContact={this.addGroupPerm.bind(this)}
 										initialValue={""}
 										ref={"group"}
-                  /></label><br/>
+									/></label><br/>
 
-                <SelectUser
+								<SelectUser
 									parent={this}
 									id={"user"}
 									label="Add User"
@@ -213,40 +163,32 @@ export default class PermissionWindow extends TrackerReact(React.Component)
 									initialValue={""}
 									ref={"user"}
 								/>
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col s12">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Remove</th>
-                      <th>Group/User Name</th>
-                      <th>Edit</th>
-                      <th>View Only</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {event.permGroup.map( (perm,i)=>{
-                      return <Permission key={perm.id+"group"+i} perm={perm} eid={this.props.ev._id} type={"groups"} />
-                    })}
-                    {event.permUser.map( (perm,i)=>{
-                      return <Permission key={perm.id+"user"+i} perm={perm} eid={this.props.ev._id} type={"users"} />
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div className="row">
-
-            </div>
-						
-          </div>
-          <div className="modal-footer">
-            <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-          </div>
-        </div>
-      );
+							</div>
+						</Row>
+		        <Row>
+							<Column>
+								<table>
+									<thead>
+										<tr>
+											<th>Remove</th>
+											<th>Group/User Name</th>
+											<th>Edit</th>
+											<th>View Only</th>
+										</tr>
+									</thead>
+									<tbody>
+										{event.permGroup.map( (perm,i)=>{
+											return <Permission key={perm.id+"group"+i} perm={perm} eid={this.props.ev._id} type={"groups"} />
+										})}
+										{event.permUser.map( (perm,i)=>{
+											return <Permission key={perm.id+"user"+i} perm={perm} eid={this.props.ev._id} type={"users"} />
+										})}
+									</tbody>
+								</table>
+							</Column>
+						</Row>
+					</Column>
+				</Row>
+			)
     }
 }

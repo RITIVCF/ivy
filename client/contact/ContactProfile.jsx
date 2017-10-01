@@ -24,17 +24,24 @@ export default class ContactProfile extends TrackerReact(React.Component){
   constructor(props) {
     super(props);
     this.state = {
-      viewallevents: false
-    }
+      viewallevents: false,
+			ticketModalOpen: false
+    };
+
+		this.handleTicketModalClose = this.handleTicketModalClose.bind(this);
+		this.handleMemberModalClose = this.handleMemberModalClose.bind(this);
   }
 
   componentDidMount(){
     $('select').material_select();
-    $('.modal').modal();
   }
 
   openTicket(){
-    $('#ticketmodal').appendTo("body").modal("open");
+    this.setState({ticketModalOpen: true});
+  }
+
+	handleTicketModalClose(){
+    this.setState({ticketModalOpen: false});
   }
 
   viewAllEvents(){
@@ -70,8 +77,12 @@ export default class ContactProfile extends TrackerReact(React.Component){
   }
 
   openMemberOverlay(){
-    this.refs.becmemwin.open();
+    this.setState({memberModalOpen: true});
   }
+
+	handleMemberModalClose(){
+		this.setState({memberModalOpen: false});
+	}
 
 	setAsPresent(){
 		if(confirm("Are you sure?")){
@@ -132,7 +143,9 @@ export default class ContactProfile extends TrackerReact(React.Component){
     return (
       <div className="row">
         {(contact.isCurrentUser()&&!contact.isMember())&&
-          <MemberForm ref="becmemwin" />}
+          <MemberForm
+						onClose={this.handleMemberModalClose}
+						open={this.state.memberModalOpen} />}
         <div className="col s12">
           {/*Contact profile header here: name, picture, wall picture*/}
           <div className="card">{/*
@@ -310,15 +323,16 @@ export default class ContactProfile extends TrackerReact(React.Component){
 					</div>
 				}
 
-        {(this.props.modal&&contact.hasTicket())&&<div id="ticketmodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
-          <div className="modal-content">
-            <EditTicketForm ticket={this.getTicket()} modal={false} />
-          </div>
-          <div className="modal-footer">
-            <a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
-            <a className="btn modal-action modal-close" href={"/tickets/"+this.getTicket()._id}>Open Ticket Page</a>
-          </div>
-        </div>}
+        {(this.props.modal&&contact.hasTicket())&&
+					<Modal
+						open={this.state.ticketModalOpen}
+						onClose={this.handleTicketModalClose}
+					>
+						<EditTicketForm ticket={this.getTicket()} modal={false} />
+						<a className="btn-flat" onClick={this.handleTicketModalClose}>Close</a>
+						<a className="btn" href={"/tickets/"+this.getTicket()._id}>Open Ticket Page</a>
+					</Modal>
+				}
       </div>
     )
   }

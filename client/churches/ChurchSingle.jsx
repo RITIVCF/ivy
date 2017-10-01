@@ -5,9 +5,12 @@ import ChurchesWorkspace from './ChurchesWorkspace.jsx';
 export default class ChurchSingle extends Component {
   constructor() {
     super();
-    // this.state = {
-    //   editting: false
-    // };
+
+    this.state = {
+      open: false
+    };
+
+		this.closeModal = this.closeModal.bind(this);
   }
 
   select(event){
@@ -17,20 +20,24 @@ export default class ChurchSingle extends Component {
 
   edit(event){
     event.stopPropagation();
-    this.refs.modal.open();
+    this.setState({open: true});
   }
+
+	closeModal(){
+		this.setState({open: false});
+	}
 
   render() {
 
     return (
       <div className="col s12 m6 l4">
         <div className={this.props.selected?
-                        this.props.church.isActive()?
-                        "card left addBorderToCard":"card left grey addBorderToCard"
-                        :
-                        this.props.church.isActive()?
-                        "card left"
-                        :"card grey left"}
+					this.props.church.isActive()?
+					"card left addBorderToCard":"card left grey addBorderToCard"
+				:
+				this.props.church.isActive()?
+					"card left"
+				:"card grey left"}
           onClick={this.select.bind(this)} onDoubleClick={this.edit.bind(this)} >
 
           <div className="card-image">
@@ -39,10 +46,18 @@ export default class ChurchSingle extends Component {
           </div>
           <div className="card-content">
             <span className="card-title">{this.props.church.getName()}</span>
-            {/*}<p className="truncate">{this.props.church.url}</p>*/}
           </div>
         </div>
-        <ChurchesWorkspace ch={this.props.church} ref="modal" />
+				<Modal
+					open={this.state.open}
+					onClose={this.closeModal}
+				>
+					<ChurchesWorkspace ch={this.props.church}
+						onDelete={this.closeModal}
+						onToggle={this.closeModal}
+					/>
+				</Modal>
+
       </div>
     )
   }

@@ -9,7 +9,7 @@ export default class Event extends Component {
 
   go(){
     if(checkPermission("attendance")){
-        FlowRouter.go("/attendance/event/"+this.props.event._id);
+        FlowRouter.go("/events/attendance/"+this.props.event._id);
     }
   }
 
