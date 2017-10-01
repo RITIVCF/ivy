@@ -7,20 +7,25 @@ export default class GroupsSingle extends Component {
     super();
 
     this.state = {
-      editting: false
+      open: false
     };
+
+		this.handleCloseModal = this.handleCloseModal.bind(this);
 
   }
 
   componentDidMount(){
-    $('.modal').modal();
     $('select').material_select();
   }
 
   edit(event){
     event.preventDefault();
-    this.refs.modal.open();
+    this.setState({open: true});
   }
+
+	handleCloseModal(){
+		this.setState({open: false});
+	}
 
   getMembers(){
     return Meteor.users.find({_id: {$in: this.props.group.users}}).fetch();
@@ -48,7 +53,15 @@ export default class GroupsSingle extends Component {
 
           </div>
         </div>
-        <EditGroupModal ref="modal" group={this.props.group} />
+				<Modal
+					open={this.state.open}
+					onClose={this.handleCloseModal}
+				>
+					<EditGroupModal
+						group={this.props.group}
+						onClose={this.handleCloseModal}
+					/>
+				</Modal>
       </div>
 
     )

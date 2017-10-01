@@ -6,7 +6,9 @@ export default class ButtonActive extends Component {
 
   toggleActiveChurch(event){
 		event.preventDefault();
-    this.props.parent.close();
+		if(this.props.onToggle){
+			this.props.onToggle();
+		}
 		this.props.ch.toggleActive();
 	}
 
@@ -20,7 +22,7 @@ export default class ButtonActive extends Component {
         value={true} >
         Retire
       </a>)
-    }else{
+    } else {
       return(<a
         ref="togglePublish"
         type="button"

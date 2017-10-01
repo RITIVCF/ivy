@@ -85,7 +85,7 @@ export default class GroupsWrapper extends TrackerReact(React.Component) {
     }
 		return (
       <MainBox
-        content={<GroupsSummary parent={this} />}
+        content={<GroupsSummary />}
         subheader={this.getSubHeader()}
         showinfobar={false}
         infobar={<div></div>}

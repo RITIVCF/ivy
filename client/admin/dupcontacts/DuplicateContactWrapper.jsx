@@ -20,7 +20,7 @@ export default class DuplicateContactWrapper extends TrackerReact(React.Componen
 	}
 
 	render() {
-		
+
 		if(!this.state.subscription.Contacts.ready()){
 			return <LoaderCircle />
 		}
@@ -30,7 +30,15 @@ export default class DuplicateContactWrapper extends TrackerReact(React.Componen
 		return (
 			<div className="container">
 				<div className="row">
-						<DuplicateContactForm  />
+					<div className="center-align" style={{paddingTop:"50px"}}>
+						<div className="card-panel">
+							<div className="card-content">
+								<p>This area is currently under construction until further notice.</p>
+							</div>
+						</div>
+					</div>
+					
+					{/* <DuplicateContactForm  /> */}
 				</div>
 			</div>
 		)
