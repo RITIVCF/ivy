@@ -1,7 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../../MainBox.jsx';
-import Modal from '../../sharedcomponents/Modal.jsx';
 import NewEmailForm from './NewEmailForm.jsx';
 import EmailPreview from './EmailPreview.jsx';
 import LoaderCircle from '../../LoaderCircle.jsx';
@@ -16,6 +15,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     super();
 
     this.state = {
+			open: false,
       subscription: {
         email: Meteor.subscribe("myEmails")
       }
@@ -28,8 +28,12 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     this.state.subscription.email.stop();
   }
 
+	closeModal(){
+		this.setState({open: false});
+	}
+
   openModal(){
-    //this.refs.modal.open();
+    //this.setState({open: true});
 		let to = {
 			users: [],
 			groups: [],
@@ -100,7 +104,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
     if(!checkPermission("emails")){
       return <NoPerm />
     }
-    
+
 		let selectedEmail = this.getSelectEmail();
 
     return (
@@ -109,10 +113,11 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 					<EmailSummary key={0} />,
 					<Modal
 						key={1}
-						id={"NewEmailFormModal"}
-						ref="modal"
-						content={<NewEmailForm />}
-					/>
+						open={this.state.open}
+						onClose={this.closeModal.bind(this)}
+					>
+						<NewEmailForm />
+					</Modal>
 				]}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.emails_infobar}

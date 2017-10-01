@@ -1,3 +1,6 @@
+import React from 'react';
+import { Random } from 'meteor/random';
+
 export {
 	Row,
 	Column,
@@ -5,10 +8,15 @@ export {
 	Button
 }
 
-Row = function(props){
+const TOOLTIP_DEFAULT_DELAY = 50;
+const TOOLTIP_DEFAULT_TEXT = "This is a tooltip";
+const TOOLTIP_DEFAULT_HTML = "";
+const TOOLTIP_DEFAULT_POSITION = "BOTTOM";
+
+Row = function({children, style}){
 	return (
-		<div className="row">
-			{props.children}
+		<div className="row" style={style}>
+			{children}
 		</div>
 	)
 }
@@ -30,6 +38,9 @@ Button = function(props){
 	if(props.color){
 		className += props.color + " ";
 	}
+	if ( props.className ) {
+		className += props.className + " ";
+	}
 	return (
 		<button
 			disabled={props.disabled}
@@ -46,20 +57,67 @@ Navbar = function(props) {
 	</ul>
 }
 
-NavbarItem = function(props) {
-	const hover = (props.onClick||props.href);
-	return (
-		<li onClick={props.onClick}>
-			{
-				hover ?
-					<a href={props.href}>
-						{props.children}
-					</a>
-				:
-				props.children
-			}
-		</li>
-	)
+class NavbarItem extends React.Component {
+	constructor(props){
+		super();
+
+		this.state = {
+
+		}
+
+		if(props.tooltip){
+			this.state.tooltipID = Random.id(5);
+		}
+	}
+
+	componentDidMount(){
+		if(this.props.tooltip){
+			this.initializeTooltip();
+		}
+	}
+
+	componentWillUnmount(){
+		$('#'+this.state.tooltipID).tooltip('remove');
+	}
+
+	render(){
+		const props = this.props;
+		const hover = (props.onClick||props.href);
+		const id = this.state.tooltipID ? this.state.tooltipID:"";
+		const className = this.getClassName();
+		return (
+			<li className={className} onClick={props.onClick} id={id} >
+				{
+					hover ?
+						<a href={props.href}>
+							{props.children}
+						</a>
+					:
+					props.children
+				}
+			</li>
+		)
+	}
+
+	getClassName(){
+		return this.props.className;
+	}
+
+	initializeTooltip(){
+		let options = {
+			delay: TOOLTIP_DEFAULT_DELAY,
+			position: TOOLTIP_DEFAULT_POSITION
+		};
+		if(this.props.tooltip.text){
+			options.tooltip = this.props.tooltip.text;
+		} else if (this.props.tooltip.HTML) {
+			options.html = this.props.tooltip.html;
+		} else {
+			options.tooltip = TOOLTIP_DEFAULT_TEXT;
+		}
+
+		$('#'+this.state.tooltipID).tooltip(options);
+	}
 }
 
 Img = function(props) {

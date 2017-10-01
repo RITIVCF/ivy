@@ -1,6 +1,7 @@
 import { Accounts } from 'meteor/accounts-base';
 import { runDbMigration } from '/server/utils.js';
 import Contact from '/lib/classes/Contact.js';
+import { getUsers } from '/lib/users.js';
 
 Meteor.methods({
   getRootURL() {
@@ -162,8 +163,8 @@ Meteor.methods({
   },
   currentFunnel(){
     var result = Meteor.users.aggregate([
-      {"$match": {deleted: {$ne: true}}},
-      {$group: {_id: "$status", count: {$sum: 1}}}
+      {"$match": {status: {$in: ["Present","Absent"]}}},
+      {$group: {_id: "$funnelStatus", count: {$sum: 1}}}
     ]);
     var rst = {};
     var max = 0;//var cnts = [];
@@ -185,9 +186,9 @@ Meteor.methods({
   },
   currentFunnelMembership(){
     var result = Meteor.users.aggregate([
-      {"$match": {deleted: {$ne: true}}},
+      {"$match": {status: {$in: ["Present","Absent"]}}},
       {"$match": {member: true}},
-      {$group: {_id: "$status", count: {$sum: 1}}}
+      {$group: {_id: "$funnelStatus", count: {$sum: 1}}}
     ]);
     var rst = {};
     var max = 0;//var cnts = [];
@@ -253,64 +254,17 @@ Meteor.methods({
     }
     return rst;
   },
-  updateContactFunnelStatus(uid){
-    var intervl = 7; //In days
-    var period = 4; //In intervls
-    var threshold = 2; //Integer # of intervals
-    var endDate = new Date();
-    var startDate = new Date();
-    //startDate.setDate(startDate.getDate() - period);
-    startDate = new moment(startDate.toISOString()).subtract(intervl,"days")._d
-    //var eventsPerInterval = {};
-    var eventsPerInterval = [];
-    for (var c = 0; c < period; c++) { //Sets up an object with key:number of intervals ago, and value:a list of events that went on in that interval.
-      var events = [];
-      startDate = new moment(endDate.toISOString()).subtract(intervl,"days")._d;
-      //eventsPerInterval[(c+1)] = Events.find({
-      var eventsFound = Events.find({
-        start:{
-          $gte : startDate,//startDate.setDate(startDate.getDate() - intervl),
-          $lt : endDate
-        },
-        published: true
-      }).fetch();
-      if(eventsFound.length==0){
-        endDate = startDate;
-        c--;
-        continue;
-      }
-      eventsFound.forEach((event)=>{
-        events.push(event._id);
-      });
-      eventsPerInterval.push(events);
-      endDate = startDate;
-    }
-    var mults = Groups.findOne("multipliers").users;
-    let user = Meteor.users.findOne(uid);
-    if(Groups.find({_id: "multipliers", users: uid}).fetch().length>0){
-      Meteor.users.update({_id : uid}, {$set : {status : "Multiplier"}});
-    } else if (Groups.find({leader : uid}).fetch().length > 0) {
-      Meteor.users.update({_id : uid}, {$set : {status : "Leader"}});
-    } else if (Groups.find({type : "Team", users : uid}).fetch().length > 0) {
-      Meteor.users.update({_id : uid}, {$set : {status : "Server"}});
-    } else if (user.member) {
-      Meteor.users.update({_id : uid}, {$set : {status : "Member"}});
-    } else {
-      var count = 0;
-
-      eventsPerInterval.forEach((intvl)=>{
-
-        if(Events.find({_id: {$in: intvl}, "attendees._id": uid}).fetch().length>0){
-          count++
-        }
-      });
-
-      if (count>=threshold) {
-        Meteor.users.update({_id : uid}, {$set : {status : "Visitor"}});
-      } else {
-
-        Meteor.users.update({_id : uid}, {$set : {status : "Crowd"}});
-      }
+  calculateFunnelStatusByUserID(uid){
+		if(checkPermission("admin")){
+			calculateFunnelStatus(uid);
+		}
+  },
+	calculateFunnelStatusBatch(){
+		if(checkPermission("admin")){
+			const users = getUsers({status: {$in: ["Present","Absent"]}});
+			users.forEach( (user) => {
+				calculateFunnelStatus(user._id);
+			});
 		}
   },
 	addEmailModuleLabels(){

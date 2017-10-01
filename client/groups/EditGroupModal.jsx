@@ -6,28 +6,33 @@ export default class EditGroupModal extends TrackerReact(React.Component) {
   constructor(){
     super();
 
+		this.noDeleteList = [
+			"admin",
+			'multipliers'
+		];
+
   }
 
   delete(){
-    Meteor.call("removeGroup",this.props.group._id);
-  }
-
-  open(){
-    $("#editgroupmodal"+this.props.group._id).appendTo("body").modal("open");
+    Meteor.call("removeGroup",this.props.group._id, (error, result)=>{
+			if(error){
+				console.log(error);
+				window.alert(error + "\n" + error.details);
+			}
+		});
+		if(this.props.onClose){
+			this.props.onClose();
+		}
   }
 
   render() {
-    let show = false;
+    let show = !this.noDeleteList.includes(this.props.group._id);
     return (
-      <div id={"editgroupmodal"+this.props.group._id} className="modal modal-fixed-footer">
-        <div className="modal-content">
-          <GroupWorkspace group={this.props.group} />
-        </div>
-        <div className="modal-footer">{/*buttons top to bottom go right to left */}
-          <a className="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-          {show&&<a onClick={this.delete.bind(this)} className="modal-action modal-close waves-effect waves-green btn red">Remove</a>}
-        </div>
-      </div>
+			<Row>
+				<a className="btn-flat" onClick={this.props.onClose}>Close</a>
+				{show&&<a onClick={this.delete.bind(this)} className="btn red">Remove</a>}
+				<GroupWorkspace group={this.props.group} />
+			</Row>
     )
   }
 }

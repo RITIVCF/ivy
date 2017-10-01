@@ -4,17 +4,12 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 export default class NewChurchModal extends TrackerReact(React.Component) {
   constructor(){
     super();
+
     this.state = {
       disabled: true
-    }
-  }
+    };
 
-  componentDidMount(){
-    $('.modal').modal();
-  }
-
-  open(){
-    $("#newchurchmodal").appendTo("body").modal("open");
+		this.close = this.close.bind(this);
   }
 
   check(){
@@ -30,12 +25,16 @@ export default class NewChurchModal extends TrackerReact(React.Component) {
     event.preventDefault();
     Meteor.call('addChurch', this.refs.name.value);
     this.refs.name.value="";
-    $('#newchurchmodal').modal("close");
+		this.props.onClose();
   }
+
+	close(){
+		this.props.onClose();
+	}
 
   render() {
     return (
-      <div id="newchurchmodal" className="modal">
+      <Modal open={this.props.open} onClose={this.close}>
         <form onSubmit={this.create.bind(this)}>
           <div className="modal-content">
             <div className="row">
@@ -47,12 +46,10 @@ export default class NewChurchModal extends TrackerReact(React.Component) {
               </div>
             </div>
           </div>
-          <div className="modal-footer">
-            <button type="submit" disabled={this.state.disabled} className="modal-action modal-close waves-effect waves-light btn-flat">Create</button>
-            <a className="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
-          </div>
+					<button type="submit" disabled={this.state.disabled} className="btn-flat">Create</button>
+					<Button onClick={this.close} className="btn-flat">Close</Button>
         </form>
-      </div>
+			</Modal>
     )
   }
 }
