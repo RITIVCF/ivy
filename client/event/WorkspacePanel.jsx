@@ -1,6 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import ServiceRequestModal from './jobs/ServiceRequestModal.jsx';
+import ServiceRequestControl from './jobs/ServiceRequestControl.jsx';
 
 import ButtonPublish from './components/ButtonPublish.jsx';
 import ButtonDelete from './components/ButtonDelete.jsx';
@@ -21,6 +21,7 @@ export default class WorkspacePanel extends React.Component {
     super(props);
 
     this.state = {
+			permWindowOpen: false
     };
   }
 
@@ -33,7 +34,7 @@ export default class WorkspacePanel extends React.Component {
 	}
 
 	openPerm(){
-		this.refs.permwindow.open();
+		this.setState({permWindowOpen: true});
 	}
 
 	getLeader(){
@@ -78,17 +79,15 @@ export default class WorkspacePanel extends React.Component {
 				<h5>Event Types</h5>
 				<EventTags ev={ev} perm={perm} />
 
-				<div className="row" style={{marginTop: "1em"}}>
-					{perm&&
-						<a className="btn" onClick={this.viewJobs.bind(this)}>
-							Service Requests
-						</a>
-					}
-				</div>
 
-				<ServiceRequestModal eid={this.props.ev._id} ref="servwindow"/>
+				{perm&&<ServiceRequestControl event={this.props.ev} />}
+
 				{hasOwnerPerm&&<a className="btn" onClick={this.openPerm.bind(this)}>Permissions</a>}
-				{hasOwnerPerm ? <PermissionWindow ref="permwindow" parent={this} ev={ev} />:"Leader: "+this.getLeader()}
+				{hasOwnerPerm ?
+					<Modal open={this.state.permWindowOpen} onClose={()=>{this.setState({permWindowOpen: false})}}>
+						<PermissionWindow ref="permwindow" ev={ev} />
+					</Modal>
+				:"Leader: "+this.getLeader()}
 				{(hasOwnerPerm && (Meteor.userId()!=ev.owner)) &&
 					<p>Leader: {this.getLeader()}</p>
 				}

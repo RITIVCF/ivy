@@ -17,16 +17,20 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
     }
 
 		this.onClose = this.onClose.bind(this);
+		this.handleCustomerModalClose = this.handleCustomerModalClose.bind(this);
   }
 
   componentDidMount(){
     Materialize.updateTextFields();
     $('select').material_select();
-    $('.modal').modal();
   }
 
   openProfile(){
-    $('#profilemodal').appendTo("body").modal("open");
+    this.setState({customerModalOpen: true});
+  }
+
+	handleCustomerModalClose(){
+    this.setState({customerModalOpen: false});
   }
 
   getUser(id){
@@ -299,15 +303,18 @@ export default class EditTicketForm extends TrackerReact(React.Component) {
 					<a className="waves-effect waves-light btn" disabled={this.state.notedisable} onClick={this.addNote.bind(this)} >Add Note</a>
 				</div>
 
-				{(this.props.modal&&this.props.ticket.customer)&&<div id="profilemodal" className="modal bottom-sheet modal-fixed-footer" style={{height: "100%"}}>
-					<div className="modal-content">
-						<ContactProfile cid={this.props.ticket.customer} modal={false} />
-					</div>
-					<div className="modal-footer">
-						<a className="btn-flat modal-action modal-close waves-effect waves-light">Close</a>
-						<a className="btn modal-action modal-close" href={"/people/"+this.props.ticket.customer}>Open Profile Page</a>
-					</div>
-				</div>}
+				{(this.props.modal&&this.props.ticket.customer)&&
+					<Modal
+						open={this.state.customerModalOpen}
+						onClose={this.handleCustomerModalClose}
+					>
+						<ContactProfile
+							cid={this.props.ticket.customer}
+							modal={false} />
+						<a className="btn-flat" onClick={this.handleCustomerModalClose}>Close</a>
+						<a className="btn" href={"/people/"+this.props.ticket.customer}>Open Profile Page</a>
+					</Modal>
+				}
 			</div>
 
   )

@@ -1,69 +1,32 @@
-import React, {Component} from 'react';
-import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import React, {PropTypes} from 'react';
+import { inject } from 'narcissus';
+import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 
-export default class Modal extends React.Component {
-  constructor(){
-    super();
-
-  }
-
-  componentDidMount(){
-    $('.modal').modal();
-  }
-
-  open(){
-    $('#' + this.props.id).appendTo("body").modal('open');
-  }
-
-	close(){
-		$('#' + this.props.id).modal('close');
-		this.props.onClose();
-	}
-
-	render() {
-    return (
-      <div id={this.props.id} className={this.getModalType()}>
-        {this.getModalContent()}
-				
-				{this.getModalFooter()}
-      </div>
-    )
-  }
-
-	getModalType(){
-		let className = "modal";
-		switch (this.props.type) {
-			case "bottom-sheet":
-				className += " bottom-sheet";
-				break;
-			case "fixed-footer":
-				className += " modal-fixed-footer"
-				break;
-			default:
-		}
-		return className;
-	}
-
-	getModalContent(){
+Modal = function({children, open, onClose}){
+	if(open){
 		return (
-			<div className="modal-content">
-				{this.props.content}
-			</div>
+			<ModalContainer className={className} style={styles.Container} onClose={()=>{onClose()}}>
+				<ModalDialog style={styles.Dialog} onClose={()=>{onClose()}}>
+					{open&&children}
+				</ModalDialog>
+			</ModalContainer>
 		)
+	} else {
+		return null;
 	}
-
-	getModalFooter(){
-		if(!!this.props.footer){
-			return (
-				<div className="modal-footer">
-					{this.props.footer}
-				</div>
-			)
-		}
-		else{
-			return false;
-		}
-
-	}
-
 }
+
+const styles = {
+	"Container": {
+		cursor: "default"
+	},
+	"Dialog": {
+		cursor: "default",
+		width: "80%",
+		height: "auto"
+	}
+};
+
+const className = inject({
+  cursor: 'default',
+});

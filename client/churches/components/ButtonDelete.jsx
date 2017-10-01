@@ -4,7 +4,9 @@ export default class ButtonDelete extends Component {
   deleteChurch(event){
     var result = window.confirm("Are you sure you want to delete church?");
     if(result == true){
-      this.props.parent.close();
+      if(this.props.onDelete){
+				this.props.onDelete();
+			}
       this.props.ch.remove();
     }
   }

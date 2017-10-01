@@ -6,6 +6,7 @@ import MainBox from '../MainBox.jsx';
 import EventPreview from './EventPreview.jsx';
 import EventHelp from './EventHelp.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
+import { NavbarItem } from '/client/materialize.jsx';
 import NoPerm from '../NoPerm.jsx';
 import Event from '/lib/classes/Event.js';
 
@@ -83,19 +84,31 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 				{!this.state.subscription.myEvents.ready()&&<NavbarItem><LoaderCircle style={{"paddingTop": "0px"}} /></NavbarItem>}
       </ul>
       <ul className="right hide-on-small-only">
-        <li><a href="/events/debrief" className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Event Debriefs"><i className="material-icons black-text">subject</i></a></li>
+				<NavbarItem href={"/events/debrief"} tooltip={{text: "Event Debriefs"}}>
+					<i className="material-icons black-text">subject</i>
+				</NavbarItem>
 				<li><a id="eventdropdownbutton" className="dropdown-button tooltipped" data-activates="caldrop" data-position="bottom" data-delay="50" data-tooltip="Views">
 					{view=="month" ? <i className="material-icons black-text">today</i> :
 						view=="agendaWeek" ? <i className="material-icons black-text">view_week</i> :
 						view=="listWeek" ? <i className="material-icons black-text">view_list</i> : 'test' }
 				</a></li>
-				<li className="hide-on-small-only"><a>|</a></li>
-				<li onClick={this.toggleInfoBar.bind(this)}><a className="tooltipped hide-on-med-and-down" data-position="bottom" data-delay="50" data-tooltip="Show/Hide Infobar">
+				<NavbarItem className={"hide-on-small-only"}>|</NavbarItem>
+				<NavbarItem
+					className="hide-on-med-and-down"
+					onClick={this.toggleInfoBar.bind(this)}
+					tooltip={{text: "Show/Hide Infobar"}}
+				>
 					<i className="material-icons black-text">
 						{Meteor.user().preferences.events_infobar?"info":"info_outline"}
 					</i>
-				</a></li>
-				<li><a onClick={this.openHelp.bind(this)} className="tooltipped hide-on-small-only" data-position="bottom" data-delay="50" data-tooltip="Help"><i className="material-icons black-text">live_help</i></a></li>
+				</NavbarItem>
+				<NavbarItem
+					className="hide-on-small-only"
+					onClick={this.openHelp.bind(this)}
+					tooltip={{text:"Help"}}
+				>
+					<i className="material-icons black-text">live_help</i>
+				</NavbarItem>
       </ul>
 			<ul id="caldrop" className="dropdown-content hide-on-small-only">
 				<li onClick={this.monthView.bind(this)}><a><i className={view=="month" ? "material-icons gold-text" : "material-icons black-text"}>today</i></a></li>

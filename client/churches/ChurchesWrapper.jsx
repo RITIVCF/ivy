@@ -41,8 +41,12 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
   }
 
   openNew(){
-    this.refs.modal.open();
+    this.setState({open: true});
   }
+
+	closeNew(){
+		this.setState({open: false});
+	}
 
   getSubHeader(){
     var left = <ul className="left" key={1} >
@@ -58,7 +62,6 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
 
 
 	render() {
-    
     if(!(this.state.subscription.Churches.ready()&&this.state.subscription.Contacts.ready())){
       return <LoaderCircle />
     }
@@ -68,7 +71,7 @@ export default class ChurchesWrapper extends TrackerReact(React.Component) {
 		return (
       <MainBox
         content={[<ChurchesSummary key={1} />,
-          <NewChurchModal ref="modal" key={2} />]}
+          <NewChurchModal onClose={this.closeNew.bind(this)} open={this.state.open} key={2} />]}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.churches_infobar}
         infobar={<ChurchPreview ch={new Church(Churches.findOne(Session.get("chselected")))} />}

@@ -64,8 +64,9 @@ export default class SiteSettingsForm extends TrackerReact(React.Component) {
 								initialValue={this.getContactGroupDefault()}
 								ref={"contacttype"}
 							/>
-							{this.getTypes().map((type)=>{
+							{this.getTypes().map((type,i)=>{
 								return <SelectTeam
+									key={i}
 									parent={this}
 									id={type.label+"type"}
 									label={"Default "+type.label+" Event Request Team"}

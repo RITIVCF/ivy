@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Modal from '/client/sharedcomponents/Modal.jsx';
 import TextInput from '/client/sharedcomponents/TextInput';
 import { Row, Column, Button, NavbarItem } from '/client/materialize.jsx';
 
@@ -8,6 +7,7 @@ export default class EventImageControl extends Component {
 		super(props);
 
 		this.state = {
+			open: false,
 			editing: false,
 			value: ""
 		};
@@ -15,12 +15,13 @@ export default class EventImageControl extends Component {
 		this.updateURL = this.updateURL.bind(this);
 		this.toggleEdit = this.toggleEdit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 	}
 
 	toggleEdit(){
 		this.setState({
 			editing: !this.state.editing,
-			value: this.props.ev.pic
+			value: this.props.event.pic
 		});
 	}
 
@@ -30,23 +31,23 @@ export default class EventImageControl extends Component {
 
 	updateURL(event){
 		event.preventDefault();
-		Meteor.call("updateEventImage", this.props.ev._id, this.state.value);
+		Meteor.call("updateEventImage", this.props.event._id, this.state.value);
 		this.toggleEdit();
 	}
 
   getContent(){
-		const ev = this.props.ev;
+		const event = this.props.event;
 		return (
 			<Row>
 				<Column>
 					{this.state.editing ?
 						<form onSubmit={this.updateURL}>
 							<TextInput
-								id={ev._id+"_img"}
+								id={event._id+"_img"}
 								ref="url"
 								label="Image URL"
 								onChange={this.handleChange}
-								defaultValue={ev.pic}
+								defaultValue={event.pic}
 							/>
 							<Button type={"submit"}>Save</Button>
 						</form>
@@ -61,11 +62,11 @@ export default class EventImageControl extends Component {
 	}
 
 	openModal(){
-		this.refs.modal.open();
+		this.setState({open: true});
 	}
 
 	closeModal(){
-		this.refs.modal.close();
+		this.setState({open: false});
 	}
 
 	getFooter(){
@@ -74,14 +75,17 @@ export default class EventImageControl extends Component {
 
   render(){
     return (
-			<NavbarItem  onClick={this.openModal.bind(this)}>
+			<NavbarItem
+				onClick={this.openModal.bind(this)}
+				tooltip={{text: "Add/Edit Photo"}}
+			>
 				<i className="tiny material-icons black-text">photo</i>
 				<Modal
-					id={"EventImageModal"}
-					content={this.getContent()}
-					footer={this.getFooter()}
-					ref="modal"
-				/>
+					open={this.state.open}
+					onClose={this.closeModal}
+				>
+					{this.getContent()}
+				</Modal>
 			</NavbarItem>
     )
   }

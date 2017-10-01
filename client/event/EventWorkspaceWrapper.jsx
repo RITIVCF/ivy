@@ -5,9 +5,7 @@ import MainBox from '../MainBox.jsx';
 import WorkspacePanel from './WorkspacePanel.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
-import Modal from '../sharedcomponents/Modal.jsx';
-import RecurringModal from './RecurringModal.jsx';
-import {anyUnpublishedRecurring} from '/lib/events.js';
+import RecurringEventControl from './RecurringEventControl';
 import EventImageControl from './components/EventImageControl';
 
 import Event from '/lib/classes/Event.js';
@@ -15,19 +13,18 @@ import Event from '/lib/classes/Event.js';
 export default class EventWorkspaceWrapper extends TrackerReact(React.Component) {
 	constructor(props) {
     super(props);
-		var thiz = this;
+
     this.state = {
       subscription: {
-        Event: Meteor.subscribe("thisEvent", props.eid, function(){thiz.setState({ready: true})}),
+        Event: Meteor.subscribe("thisEvent", props.eid, ()=>{this.setState({ready: true})}),
 				tickets: Meteor.subscribe("eventTickets", props.eid),
 				contacts: Meteor.subscribe("allContacts")
 		},
 		groups: getUserGroupPermission(),
 		ready: false,
-		submitted: false,
-		enddate: new Date(),
-		recurGroup: false
+		submitted: false
     };
+
   }
 
   componentWillUnmount() {
@@ -40,98 +37,14 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		$('.tooltipped').tooltip({delay: 50});
 	}
 
-	repeatEvent() {
-		this.refs.modal.open();
-	}
-
-	cancelRecur() {
-		try {
-    	this.refs.modal.close();
-		}
-		catch(err) {
-		}
-		try {
-			$('#RepeatEventModal').modal('close');
-		} catch (e) {
-
-		}
-
-	}
-
-	closeRecur() {
-		// for refresh 2
-	}
-
-	setRepeat() {
-		if (this.state.recurGroup) {
-			this.refs.modal.close();
-			this.cancelRecur.bind(this.refs.closebtn);
-			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
-				if(error) {
-					Materialize.toast("There was an error creating the recurring events", 2000);
-				} else {
-					Materialize.toast("Created recurring events", 2000);
-				}
-			});
-		} else if (this.getEvent().tags.includes("Small Group")) {
-			Materialize.toast("Associated small group is required", 2000);
-		} else {
-			this.refs.modal.close();
-			this.cancelRecur.bind(this.refs.closebtn);
-			Meteor.call('createEventRecurrence', this.getEvent()._id, this.state.enddate, this.state.recurGroup._id, (error) => {
-				if(error) {
-					Materialize.toast("There was an error creating the recurring events", 2000);
-				} else {
-					Materialize.toast("Created recurring events", 2000);
-				}
-			});
-		}
-	}
-
-	publishAllRecur() {
-		Meteor.call('publishAllRecurEvents', this.getEvent()._id, (error) => {
-			if(error) {
-				Materialize.toast("There was an error publishing all recurring events", 2000);
-			} else {
-				Materialize.toast("Published all recurring events", 2000);
-			}
-		});
-	}
-
-	unpublishAllRecur() {
-		Meteor.call('unpublishAllRecurEvents', this.getEvent()._id, (error) => {
-			if(error) {
-				Materialize.toast("There was an error unpublishing all recurring events", 2000);
-			} else {
-				Materialize.toast("Unpublished all recurring events", 2000);
-			}
-		});
-	}
-
-	deleteAllRecur() {
-		this.refs.modal.close();
-		let result = window.confirm("Are you sure you want to delete all recurring events? *This action cannot be undone.*");
-    if(result == true){
-			Meteor.call('deleteAllRecurEvents', this.getEvent()._id, (error) => {
-				if(error) {
-					Materialize.toast("There was an error deleting all recurring events", 2000);
-				} else {
-					Session.set("evselected","");
-					routeTo("events");
-				}
-			});
-		}
-	}
-
 	request(event){
 		event.preventDefault();
-		var thiz = this;
-		Meteor.call("eventRequestPerm", this.props.eid, function(error){
+		Meteor.call("eventRequestPerm", this.props.eid, (error)=>{
 			if(error){
 				window.alert(error);
 				console.error(error);
 			}else{
-				thiz.setState({submitted: true});
+				this.setState({submitted: true});
 			}
 
 		});
@@ -141,19 +54,11 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		return new Event(Events.findOne(this.props.eid));
 	}
 
-	checkGroup(id){
-		return this.state.groups.indexOf(id)>-1;
-	}
-
 	getSubheader(ev, perm){
 		return (
 			<ul>
-				<li>
-					<a className="tooltipped" data-position="bottom" data-delay="50" data-tooltip="Set recurrence" onClick={this.repeatEvent.bind(this)}>
-						<i className="material-icons black-text">content_copy</i>
-					</a>
-				</li>
-				<EventImageControl key={2} ref="" ev={ev} perm={perm} />
+				{perm&&<RecurringEventControl event={ev} />}
+				{perm&&<EventImageControl event={ev} />}
 			</ul>
 		)
 	}
@@ -198,29 +103,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 		}
 		return (
 				<MainBox
-					content={[<EventWorkspace key={0} perm={perms.edit} ev={ev} />,
-						<Modal
-							key={1}
-							id={"RepeatEventModal"}
-							ref="modal"
-							content={recurTrue?<div>{
-								anyUnpublishedRecurring(ev.recurId)?<a className="btn" onClick={this.publishAllRecur.bind(this)}>Publish All</a>:
-								<a className="btn" onClick={this.unpublishAllRecur.bind(this)}>Unpublish All</a>
-							}
-								<a className="btn red" onClick={this.deleteAllRecur.bind(this)}>Delete All</a>
-							</div>:
-							<RecurringModal ev={ev} perm={perms.edit} defaultEndDate={this.state.enddate} group={(newValue) => {this.setState({recurGroup: newValue})}} onpick={(newValue) => {this.setState({enddate: newValue})}} />}
-							onClose={this.closeRecur.bind(this)}
-							type={recurTrue?'':"fixed-footer"}
-							footer={recurTrue?<div>
-								<a className="btn modal-action modal-close" ref="closebtn" onClick={this.cancelRecur.bind(this)}>Close</a>
-							</div>:<div>
-								<a className="btn" onClick={this.setRepeat.bind(this)}>Repeat</a>
-								<a className="btn red" onClick={this.cancelRecur.bind(this)}>Cancel</a>
-							</div>
-							}
-						/>
-					]}
+					content={<EventWorkspace key={0} perm={perms.edit} ev={ev} />}
 					subheader={this.getSubheader(ev, perms.edit)}
 					showinfobar={true}
 					infobar={<WorkspacePanel perms={perms} ev={ev} />}

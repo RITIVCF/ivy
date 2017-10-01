@@ -12,56 +12,28 @@ export default class ChurchesWorkspace extends TrackerReact(React.Component) {
 	constructor() {
     super();
 
-    this.state = {
-
-			contact: false
-    };
   }
-
-  componentWillUnmount() {
-
-  }
-
-	componentDidMount(){
-		$('.modal').modal();
-	}
-
-	open(){
-		$("#"+this.props.ch._id).appendTo("body").modal("open");
-	}
-
-	close(){
-		$("#"+this.props.ch._id).modal('close');
-	}
-
-	preventPropo(event){
-		event.stopPropagation();
-	}
 
 	render() {
-		let ch = this.props.ch; //this.getChurch();
+		let ch = this.props.ch;
 
 		return (
-		<div id={ch._id} className="modal modal-fixed-footer" onClick={this.preventPropo.bind(this)}>
-			<div className="modal-content">
-				<div className="row">
-					<ChurchName ch={ch} />
-				</div>
-				<div className="row">
-					<ChurchURL ch={ch} />
-				</div>
-
-
-				<ChurchTimes ch={ch} />
-				<ChurchContactsControls ch={ch} />
-			</div>
-			<div className="modal-footer">
-				<a className="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
-				<ButtonActive ch={ch} parent={this} />
-				<ButtonDelete ch={ch} parent={this} />
-			</div>
-
-		</div>
+			<Row>
+				<Column>
+					<Row>
+						<ChurchName ch={ch} />
+					</Row>
+					<Row>
+						<ChurchURL ch={ch} />
+					</Row>
+					<ChurchTimes ch={ch} />
+					<ChurchContactsControls ch={ch} />
+					<Row>
+						<ButtonActive ch={ch} onToggle={this.props.onToggle} />
+						<ButtonDelete ch={ch} onDelete={this.props.onDelete} />
+					</Row>
+				</Column>
+			</Row>
 		)
 	}
 }
