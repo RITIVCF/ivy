@@ -6,6 +6,11 @@ export default class EditGroupModal extends TrackerReact(React.Component) {
   constructor(){
     super();
 
+		this.noDeleteList = [
+			"admin",
+			'multipliers'
+		];
+
   }
 
   delete(){
@@ -21,11 +26,11 @@ export default class EditGroupModal extends TrackerReact(React.Component) {
   }
 
   render() {
-    let show = false;
+    let show = !this.noDeleteList.includes(this.props.group._id);
     return (
 			<Row>
 				<a className="btn-flat" onClick={this.props.onClose}>Close</a>
-				<a onClick={this.delete.bind(this)} className="btn red">Remove</a>
+				{show&&<a onClick={this.delete.bind(this)} className="btn red">Remove</a>}
 				<GroupWorkspace group={this.props.group} />
 			</Row>
     )
