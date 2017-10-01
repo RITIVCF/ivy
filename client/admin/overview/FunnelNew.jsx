@@ -35,7 +35,8 @@ export default class FunnelNew extends TrackerReact(React.Component) {
 				leader: '#5DA5DA',
 				multiplier: '#F15854'
 			},
-      data: {}
+      data: {},
+			trimmedData: {}
 		};
 	}
 
@@ -49,6 +50,15 @@ export default class FunnelNew extends TrackerReact(React.Component) {
 					label: "Counts",
 					backgroundColor: [colors.contact, colors.crowd, colors.visitor, colors.member, colors.server, colors.leader, colors.multiplier],
 					data: [result.Contact, result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
+				}]
+			}
+      });
+			this.setState({trimmedData: {
+				labels: ["Crowd", "Visitor", "Member", "Server", "Leader", "Multiplier"],
+				datasets: [{
+					label: "Counts",
+					backgroundColor: [colors.crowd, colors.visitor, colors.member, colors.server, colors.leader, colors.multiplier],
+					data: [result.Crowd, result.Visitor, result.Member, result.Server, result.Leader, result.Multiplier]
 				}]
 			}
       });
@@ -86,21 +96,37 @@ export default class FunnelNew extends TrackerReact(React.Component) {
     return (
       <div>
         <HorizontalBar data={this.state.data} options={{
-           legend: {
+					legend: {
              display: false
-           },
-           scales: {
-             yAxes: [{
-               ticks: {
-                }
-              }],
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+							}
+						}],
             xAxes: [{
               ticks: {
-               }
-              }]
-             },
-            title: { text: "title" }
-         }} />
+							}
+						}]
+					},
+					title: { text: "title" }
+				}} />
+				<HorizontalBar data={this.state.trimmedData} options={{
+					legend: {
+             display: false
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+							}
+						}],
+            xAxes: [{
+              ticks: {
+							}
+						}]
+					},
+					title: { text: "title" }
+				}} />
       </div>
     );
   }
