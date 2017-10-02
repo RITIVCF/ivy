@@ -4,6 +4,7 @@ import MainBox from '../../MainBox.jsx';
 import EmailWorkspace from './EmailWorkspace.jsx'
 import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
+import { NavbarItem } from '/client/materialize.jsx';
 
 import EmailWorkspacePanel from './EmailWorkspacePanel.jsx';
 import { loadEmail } from '/lib/emails.js';
