@@ -67,13 +67,13 @@ export default class ContactWrapper extends TrackerReact(React.Component){
   }
 
   render() {
-    if(!this.state.subscription.Contacts.ready()){
+    /*if(!this.state.subscription.Contacts.ready()){
       return (<LoaderCircle />)
-    }
+    }*/
     if(!checkPermission("contacts")){
       return <NoPerm />
     }
-    
+
     var status;
     var perm = checkPermission("ticket");
     return (

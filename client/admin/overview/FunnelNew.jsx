@@ -2,6 +2,7 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import Chart from 'chart.js';
 import {HorizontalBar} from 'react-chartjs-2';
+import FunnelContainer from './funnel/FunnelContainer.jsx';
 
 /*const data = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -92,7 +93,6 @@ export default class FunnelNew extends TrackerReact(React.Component) {
 	}
 
   render() {
-    console.log("data",this.state.data);
     return (
       <div>
         <HorizontalBar data={this.state.data} options={{
@@ -127,6 +127,7 @@ export default class FunnelNew extends TrackerReact(React.Component) {
 					},
 					title: { text: "title" }
 				}} />
+			<FunnelContainer />
       </div>
     );
   }
