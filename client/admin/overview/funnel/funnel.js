@@ -5,14 +5,40 @@ export {
 	loadData
 }
 
+
+function hexToRGB(hex){
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return {
+					red: (c>>16)&255,
+					green: (c>>8)&255,
+					blue: c&255
+				};
+    }
+    throw new Error('Bad Hex');
+}
+
+function colors(hex){
+	const { red, green, blue } = hexToRGB(hex);
+	let rgb = `${red}, ${green}, ${blue}`;
+	return function (opacity) {
+		return `rgba(${rgb}, ${opacity})`;
+	}
+}
+
 const COLORS = {
-	Contact: '#999',
-	Crowd: '#DECF3F',
-	Visitor: '#B276B2',
-	Member: '#FAA43A',
-	Server: '#60BD68',
-	Leader: '#5DA5DA',
-	Multiplier: '#F15854'
+	Contact: colors('#999'),
+	Crowd: colors('#DECF3F'),
+	Visitor: colors('#B276B2'),
+	Member: colors('#FAA43A'),
+	Server: colors('#60BD68'),
+	Leader: colors('#5DA5DA'),
+	Multiplier: colors('#F15854')
 };
 
 
@@ -258,13 +284,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Contact"].total, style: {
 							width: getWidth( counts["Contact"].total, counts["Contact"].total ),
-							backgroundColor: COLORS["Contact"],
-							opacity: opacities["Contact"]
+							backgroundColor: COLORS["Contact"](opacities["Contact"])
 						}}, // Total
 						{label: "Members", count: counts["Contact"].members, style: {
 							width: getWidth( counts["Contact"].members, counts["Contact"].total ),
-							backgroundColor: COLORS["Contact"],
-							opacity: opacities["Contact"]
+							backgroundColor: COLORS["Contact"](opacities["Contact"])
 						}} // Members
 					],
 					style: {
@@ -275,13 +299,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Crowd"].total, style: {
 							width: getWidth( counts["Crowd"].total, counts["Crowd"].total ),
-							backgroundColor: COLORS["Crowd"],
-							opacity: opacities["Crowd"]
+							backgroundColor: COLORS["Crowd"](opacities["Crowd"])
 						}}, // Total
 						{label: "Members", count: counts["Crowd"].members, style: {
 							width: getWidth( counts["Crowd"].members, counts["Crowd"].total ),
-							backgroundColor: COLORS["Crowd"],
-							opacity: opacities["Crowd"]
+							backgroundColor: COLORS["Crowd"](opacities["Crowd"])
 						}} // Members
 					],
 					style: {
@@ -292,13 +314,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Visitor"].total, style: {
 							width: getWidth( counts["Visitor"].total, counts["Visitor"].total ),
-							backgroundColor: COLORS["Visitor"],
-							opacity: opacities["Visitor"]
+							backgroundColor: COLORS["Visitor"](opacities["Visitor"])
 						}}, // Total
 						{label: "Members", count: counts["Visitor"].members, style: {
 							width: getWidth( counts["Visitor"].members, counts["Visitor"].total ),
-							backgroundColor: COLORS["Visitor"],
-							opacity: opacities["Visitor"]
+							backgroundColor: COLORS["Visitor"](opacities["Visitor"])
 						}} // Members
 					],
 					style: {
@@ -315,13 +335,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Member"].total, style: {
 							width: getWidth( counts["Member"].total, counts["Member"].total ),
-							backgroundColor: COLORS["Member"],
-							opacity: opacities["Member"]
+							backgroundColor: COLORS["Member"](opacities["Member"])
 						}}, // Total
 						{label: "Members", count: counts["Member"].members, style: {
 							width: getWidth( counts["Member"].members, counts["Member"].total ),
-							backgroundColor: COLORS["Member"],
-							opacity: opacities["Member"]
+							backgroundColor: COLORS["Member"](opacities["Member"])
 						}} // Members
 					],
 					style: {
@@ -332,13 +350,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Server"].total, style: {
 							width: getWidth( counts["Server"].total, counts["Server"].total ),
-							backgroundColor: COLORS["Server"],
-							opacity: opacities["Server"]
+							backgroundColor: COLORS["Server"](opacities["Server"])
 						}}, // Total
 						{label: "Members", count: counts["Server"].members, style: {
 							width: getWidth( counts["Server"].members, counts["Server"].total ),
-							backgroundColor: COLORS["Server"],
-							opacity: opacities["Server"]
+							backgroundColor: COLORS["Server"](opacities["Server"])
 						}} // Members
 					],
 					style: {
@@ -349,13 +365,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Leader"].total, style: {
 							width: getWidth( counts["Leader"].total, counts["Leader"].total ),
-							backgroundColor: COLORS["Leader"],
-							opacity: opacities["Leader"]
+							backgroundColor: COLORS["Leader"](opacities["Leader"])
 						}}, // Total
 						{label: "Members", count: counts["Leader"].members, style: {
 							width: getWidth( counts["Leader"].members, counts["Leader"].total ),
-							backgroundColor: COLORS["Leader"],
-							opacity: opacities["Leader"]
+							backgroundColor: COLORS["Leader"](opacities["Leader"])
 						}} // Members
 					],
 					style: {
@@ -366,13 +380,11 @@ function loadData(){
 					bars: [
 						{label: "Total", count: counts["Multiplier"].total, style: {
 							width: getWidth( counts["Multiplier"].total, counts["Multiplier"].total ),
-							backgroundColor: COLORS["Multiplier"],
-							opacity: opacities["Multiplier"]
+							backgroundColor: COLORS["Multiplier"](opacities["Multiplier"])
 						}}, // Total
 						{label: "Members", count: counts["Multiplier"].members, style: {
 							width: getWidth( counts["Multiplier"].members, counts["Multiplier"].total ),
-							backgroundColor: COLORS["Multiplier"],
-							opacity: opacities["Multiplier"]
+							backgroundColor: COLORS["Multiplier"](opacities["Multiplier"])
 						}} // Members
 					],
 					style: {
