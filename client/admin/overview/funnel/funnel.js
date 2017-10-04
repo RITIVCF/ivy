@@ -219,19 +219,21 @@ function loadCounts(status){
 	}
 }
 
-function getWidth({num, denom}){
+function getWidth(num, denom){
+	console.log("num: ", num);
+	console.log("denom: ", denom);
 	if(denom == 0) {
 		return 0;
 	} else {
 		let width = num/denom;
-		return width + "%";
+		return width*100 + "%";
 	}
 }
 
 function getOpacity(struct){
-	const length = Object.keys(struct);
+	const length = Object.keys(struct).length;
 	const opacity = 1/length;
-	return opacity + "%";
+	return opacity;// + "%";
 }
 
 
