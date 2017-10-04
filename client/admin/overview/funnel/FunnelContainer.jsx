@@ -19,8 +19,7 @@ const data = [
         label: "Leader"
       }
     ],
-    label: "core",
-    style: {border: "2px solid black"}
+    label: "core"
   },
   {data: [
       {bars: [
@@ -48,9 +47,9 @@ export default class FunnelContainer extends TrackerReact(React.Component) {
 
   render() {
     return(
-      <div>
+      <div className="funnel-container">
         {data.map( (block, i) => {
-          return <FunnelBlock key={i} block={block} />
+          return <FunnelBlock key={i} label={block.label} data={block.data} style={block.style} />
         })}
       </div>
     )
