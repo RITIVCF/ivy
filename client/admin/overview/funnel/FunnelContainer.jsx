@@ -9,10 +9,11 @@ export default class FunnelContainer extends TrackerReact(React.Component) {
 	}
 
   render() {
+    const data = this.props.data;
     return(
-      <div>
-        {this.props.data.map( (block, i) => {
-          return <FunnelBlock key={i} block={block} />
+      <div className="funnel-container">
+        {data.map( (block, i) => {
+          return <FunnelBlock key={i} label={block.label} data={block.data} style={block.style} />
         })}
       </div>
     )
