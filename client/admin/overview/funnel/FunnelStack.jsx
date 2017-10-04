@@ -14,7 +14,7 @@ export default class FunnelStack extends TrackerReact(React.Component) {
       label = label + bar.label + ": " + bar.count + "\n"
     })
     return(
-      <div className="funnel-stack" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} data-tooltip={label}>
+      <div className="funnel-stack" style={this.props.style} onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} data-tooltip={label}>
         {this.renderBar(this.props.bars)}
       </div>
     )

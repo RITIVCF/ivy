@@ -21,7 +21,7 @@ export default class FunnelBlock extends TrackerReact(React.Component) {
       <div className="funnel-block" style={this.props.style}>
         <span className="block-label">{this.props.label}</span>
         {this.props.data.map( (stack, i) => {
-          return <FunnelStack key={i} bars={stack.bars} label={stack.label} />
+          return <FunnelStack key={i} style={stack.style} bars={stack.bars} label={stack.label} />
         })}
       </div>
     )

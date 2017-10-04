@@ -293,7 +293,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Contact"].total, max )
-					}
+					},
+					label: "Contact"
 				},
 				{ /* Crowd */
 					bars: [
@@ -308,7 +309,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Crowd"].total, max )
-					}
+					},
+					label: "Crowd"
 				},
 				{ /* Visitor */
 					bars: [
@@ -323,7 +325,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Visitor"].total, max )
-					}
+					},
+					label: "Visitor"
 				}
 			],
 			label: "",
@@ -344,7 +347,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Member"].total, max )
-					}
+					},
+					label: "Member"
 				},
 				{ /* Server */
 					bars: [
@@ -359,7 +363,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Server"].total, max )
-					}
+					},
+					label: "Server"
 				},
 				{ /* Leader */
 					bars: [
@@ -374,7 +379,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Leader"].total, max )
-					}
+					},
+					label: "Leader"
 				},
 				{ /* Multiplier */
 					bars: [
@@ -389,7 +395,8 @@ function loadData(){
 					],
 					style: {
 						width: getWidth( counts["Multiplier"].total, max )
-					}
+					},
+					label: "Multiplier"
 				}
 			],
 			label: "Core",
