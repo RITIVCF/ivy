@@ -286,10 +286,10 @@ function loadData(){
 							width: getWidth( counts["Contact"].total, counts["Contact"].total ),
 							backgroundColor: COLORS["Contact"](opacities["Contact"])
 						}}, // Total
-						{label: "Members", count: counts["Contact"].members, style: {
-							width: getWidth( counts["Contact"].members, counts["Contact"].total ),
-							backgroundColor: COLORS["Contact"](opacities["Contact"])
-						}} // Members
+						// {label: "Members", count: counts["Contact"].members, style: {
+						// 	width: getWidth( counts["Contact"].members, counts["Contact"].total ),
+						// 	backgroundColor: COLORS["Contact"](opacities["Contact"])
+						// }} // Members
 					],
 					style: {
 						width: getWidth( counts["Contact"].total, max )
@@ -302,10 +302,10 @@ function loadData(){
 							width: getWidth( counts["Crowd"].total, counts["Crowd"].total ),
 							backgroundColor: COLORS["Crowd"](opacities["Crowd"])
 						}}, // Total
-						{label: "Members", count: counts["Crowd"].members, style: {
-							width: getWidth( counts["Crowd"].members, counts["Crowd"].total ),
-							backgroundColor: COLORS["Crowd"](opacities["Crowd"])
-						}} // Members
+						// {label: "Members", count: counts["Crowd"].members, style: {
+						// 	width: getWidth( counts["Crowd"].members, counts["Crowd"].total ),
+						// 	backgroundColor: COLORS["Crowd"](opacities["Crowd"])
+						// }} // Members
 					],
 					style: {
 						width: getWidth( counts["Crowd"].total, max )
@@ -318,10 +318,10 @@ function loadData(){
 							width: getWidth( counts["Visitor"].total, counts["Visitor"].total ),
 							backgroundColor: COLORS["Visitor"](opacities["Visitor"])
 						}}, // Total
-						{label: "Members", count: counts["Visitor"].members, style: {
-							width: getWidth( counts["Visitor"].members, counts["Visitor"].total ),
-							backgroundColor: COLORS["Visitor"](opacities["Visitor"])
-						}} // Members
+						// {label: "Members", count: counts["Visitor"].members, style: {
+						// 	width: getWidth( counts["Visitor"].members, counts["Visitor"].total ),
+						// 	backgroundColor: COLORS["Visitor"](opacities["Visitor"])
+						// }} // Members
 					],
 					style: {
 						width: getWidth( counts["Visitor"].total, max )
@@ -336,10 +336,10 @@ function loadData(){
 			data: [
 				{ /* Member */
 					bars: [
-						{label: "Total", count: counts["Member"].total, style: {
-							width: getWidth( counts["Member"].total, counts["Member"].total ),
-							backgroundColor: COLORS["Member"](opacities["Member"])
-						}}, // Total
+						// {label: "Total", count: counts["Member"].total, style: {
+						// 	width: getWidth( counts["Member"].total, counts["Member"].total ),
+						// 	backgroundColor: COLORS["Member"](opacities["Member"])
+						// }}, // Total
 						{label: "Members", count: counts["Member"].members, style: {
 							width: getWidth( counts["Member"].members, counts["Member"].total ),
 							backgroundColor: COLORS["Member"](opacities["Member"])
