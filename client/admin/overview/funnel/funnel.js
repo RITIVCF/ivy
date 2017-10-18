@@ -245,13 +245,18 @@ function loadCounts(status){
 	}
 }
 
+function scale(num) {
+	return Math.log(num)*Math.pow(num,1/8);
+
+}
+
 function getWidth(num, denom){
 	console.log("num: ", num);
 	console.log("denom: ", denom);
 	if(denom == 0) {
 		return 0;
 	} else {
-		let width = num/denom;
+		let width = scale(num)/scale(denom);
 		return width*100 + "%";
 	}
 }
