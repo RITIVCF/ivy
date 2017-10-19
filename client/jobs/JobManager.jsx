@@ -109,7 +109,7 @@ class Job extends React.Component {
 			user = getUser(job.data.uid);
 		}
 		if ( isSendEmail ){
-			recipient = getUser({"emails.address": job.data.email.to});
+			const recipient = getUser({"emails.address": job.data.email.to});
 		}
 		return (
 			<Card title={job.type}>
@@ -119,8 +119,12 @@ class Job extends React.Component {
 							<p><b>_id:</b> {job._id}</p>
 							<p><b>Status:</b> {job.status}</p>
 							{hasUser&&<p><b>User:</b> {user.getName()}</p>}
-							{isSendEmail&&<p><b>Recipient: </b>{recipient.getName()}</p>}
-							{isSendEmail&&<p><b>Email: </b>{recipient.getEmail()}</p>}
+							{recipient&&<p><b>Recipient: </b>{recipient.getName()}</p>}
+							{isSendEmail&&<p>
+								<b>Email: </b>
+								{recipient?recipient.getEmail():job.data.email.to}
+							</p>
+							}
 							<p><b>After:</b> {dateFormat(job.after)}</p>
 							<p><b>Created:</b> {dateFormat(job.created)}</p>
 						</Row>
