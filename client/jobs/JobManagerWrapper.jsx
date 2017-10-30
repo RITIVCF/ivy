@@ -1,9 +1,9 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '/client/MainBox.jsx';
-import LoaderCircle from '/client/LoaderCircle.jsx';
 import MaterialIcon from '/client/sharedcomponents/MaterialIcon.jsx';
-import JobManager from './JobManager';
+import JobManagerListContainer from './JobManagerListContainer';
+import JobManagerFilter from './JobManagerFilter';
 import { isSendMailGateOpen } from '/lib/jobs.js';
 
 export default class JobManagerWrapper extends TrackerReact(React.Component) {
@@ -11,67 +11,54 @@ export default class JobManagerWrapper extends TrackerReact(React.Component) {
 		super();
 
 		this.state = {
-			jobs: [],
-			subscription: {
-				deletedUsers: Meteor.subscribe("deletedUsers"),
-				jobs: Meteor.subscribe("jobCollection")
-			},
-			loading: true,
-			filter: {
-				type: "",
-				status: []
-			}
+			type: ""
 		};
+
+		if(Session.get("jobstatusfilter")===undefined){
+			Session.set("jobstatusfilter", []);
+		}
 
 	}
 
-	componentWillUnmount(){
-		this.state.subscription.deletedUsers.stop();
-		this.state.subscription.jobs.stop();
+	getStatus(){
+		const sessionStatus = Session.get("jobstatusfilter");
+		if ( !sessionStatus ) {
+			return [];
+		} else {
+			return sessionStatus;
+		}
 	}
 
 	render(){
-		let loading = true;
-		if(this.state.subscription.jobs.ready()){
-			loading = false;
-		}
+		const { type } = this.state;
+		const status = this.getStatus();
+		console.log("rendering: ", {
+			type: type,
+			status: status
+		});
 		return (
 			<MainBox
-        content={loading?<LoaderCircle />:this.getContent()}
         subheader={this.getSubHeader()}
         showinfobar={true}
         infobar={this.getInfoBar()}
-			/>
-		)
-	}
-
-	load(){
-		let query = {};
-		if(this.state.filter.type){
-			query.type = this.state.filter.type;
-		}
-		query.status = {$in: this.state.filter.status};
-		return jobCollection.find(query, {sort: {after: 1}}).fetch();
-	}
-
-	getContent(){
-		const jobs = this.load();
-		return (
-			<JobManager
-				jobs={jobs}
-				activeStatuses={this.state.filter.status}
-				activeFilter={this.state.filter.type}
-				onLoad={this.load}
-				onToggleStatus={this.toggleStatus.bind(this)}
-				onFilterChange={this.handleFilterChange.bind(this)}
-			/>
+			>
+				<div>
+					<JobManagerFilter
+						activeStatuses={status}
+						activeFilter={type}
+						onToggleStatus={this.toggleStatus.bind(this)}
+						onFilterChange={this.handleFilterChange.bind(this)}
+					/>
+					<JobManagerListContainer type={type} status={status} />
+				</div>
+			</MainBox>
 		)
 	}
 
 	getSubHeader(){
 		return (
 			<Navbar>
-				
+
 			</Navbar>
 		)
 	}
@@ -93,22 +80,19 @@ export default class JobManagerWrapper extends TrackerReact(React.Component) {
 		});
 	}
 
-	toggleStatus(status){
-		let statuses = this.state.filter.status;
-		if(statuses.includes(status)){
+	toggleStatus( status ){
+		let statuses = Session.get("jobstatusfilter");
+		if ( statuses.includes(status) ) {
         statuses.splice(statuses.indexOf(status), 1);
-    }else{
+    } else {
         statuses.push(status);
     }
-		let filter = this.state.filter;
-		filter.status = statuses;
-		this.setState({"filter": filter});
+		Session.set("jobstatusfilter", statuses);
+		// this.setState({status: statuses},()=>{this.forceUpdate()});
 	}
 
-	handleFilterChange(newValue){
-		let filter = this.state.filter;
-		filter.type = newValue;
-		this.setState({"filter": filter});
+	handleFilterChange( newValue ){
+		this.setState({type: newValue});
 	}
 }
 

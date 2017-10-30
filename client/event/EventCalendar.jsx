@@ -21,7 +21,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       Session.set("calendartagfilter", tags);
     }
     this.state = {
-       mounted: false
+      mounted: false
     }
   }
 
@@ -64,6 +64,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         thiz.props.settitle();
         Meteor.call("setCalendarView", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
+				// Refresh subscription
+				this.props.onNewDateRange(view.start._d, view.end._d);
         var height = $('#mainbox > div').height();
         $('#calendar').fullCalendar('option','height', height);
       },

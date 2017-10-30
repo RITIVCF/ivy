@@ -19,10 +19,9 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
         Event: Meteor.subscribe("thisEvent", props.eid, ()=>{this.setState({ready: true})}),
 				tickets: Meteor.subscribe("eventTickets", props.eid),
 				contacts: Meteor.subscribe("allContacts")
-		},
-		groups: getUserGroupPermission(),
-		ready: false,
-		submitted: false
+			},
+			ready: false,
+			submitted: false
     };
 
   }

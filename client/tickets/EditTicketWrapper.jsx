@@ -17,7 +17,7 @@ export default class EditTicketsWrapper extends TrackerReact(React.Component) {
     //    options: Meteor.subscribe("allOptions"),
     //    events: Meteor.subscribe("allEvents"),
         //users: Meteor.subscribe("allUsers"),
-        contacts: Meteor.subscribe("allContacts")
+        contacts: Meteor.subscribe("publicContacts")
       },
 			infobarOpen: false
     };

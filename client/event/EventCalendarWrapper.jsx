@@ -3,19 +3,18 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import EventCalendar from './EventCalendar.jsx';
 import LegendFilter from './LegendFilter.jsx';
 import MainBox from '../MainBox.jsx';
-import EventPreview from './EventPreview.jsx';
+import EventPreviewContainer from './EventPreviewContainer';
 import EventHelp from './EventHelp.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import { NavbarItem } from '/client/materialize.jsx';
 import NoPerm from '../NoPerm.jsx';
 import Event from '/lib/classes/Event.js';
 
-//Events = new Mongo.Collection("events");
 
 export default class EventCalendarWrapper extends TrackerReact(React.Component) {
   constructor() {
     super();
-    var thiz = this;
+
     this.state = {
       subscription: {
         myEvents: Meteor.subscribe("myEvents"),
@@ -41,7 +40,6 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
   openHelp(){
       this.refs.eventhelp.open();
-      //$("#helpmodal").modal("open");
   }
 
   toggleInfoBar(){
@@ -118,38 +116,58 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 		</div>
   }
 
-	getSelectedEvent(){
-		let event = Events.findOne(Session.get("evselected"));
-		if(!!event){
-			return new Event(event);
-		}
-		return false;
-	}
-
 	render() {
     if(SiteOptions.ready()){
-			let selectedEvent = this.getSelectedEvent();
       return (<div>
 				<MainBox
 					content={<div className="row">
             <div className="col s12">
               <div className="card">
                 <div className="card-content">
-                  <LegendFilter />
-                  <EventCalendar ref="calendar" settitle={this.settitle.bind(this)} />
+									<LegendFilter />
+									<EventCalendar
+										ref="calendar"
+										settitle={this.settitle.bind(this)}
+										onNewDateRange={(start, end)=>{this.handleNewDateRange(start, end)}}
+									/>
                 </div>
               </div>
             </div>
           </div>}
 					subheader={this.getSubHeader()}
 					showinfobar={Meteor.user().preferences.events_infobar}
-					infobar={<EventPreview event={selectedEvent} ready={this.state.subscription.myEvents.ready()} />}
+					infobar={this.getInfoBar()}
         />
-      <EventHelp ref="eventhelp" />
+				<EventHelp ref="eventhelp" />
       </div>
     )
 
     }
 		return (<LoaderCircle />)
+	}
+
+	handleNewDateRange(start, end){
+		this.state.subscription.myEvents.stop();
+    this.state.subscription.UnpublishedEvents.stop();
+		const sub = {
+			myEvents: Meteor.subscribe("myEvents", start, end),
+			UnpublishedEvents:Meteor.subscribe("otherUnpublishedEvents", start, end)
+		};
+		this.setState({subscription: sub});
+	}
+
+	getInfoBar(){
+		const eid = Session.get("evselected");
+		if(!eid){
+      return (
+				<Row>
+					<Column>
+						<h2>Event Calendar</h2>
+						<p>Select an event to continue...</p>
+					</Column>
+				</Row>
+			);
+    }
+		return <EventPreviewContainer eid={eid} />;
 	}
 }

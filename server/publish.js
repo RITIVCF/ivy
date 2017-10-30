@@ -28,9 +28,81 @@ Contacts.allow({update: function(){return true;}});
 Counters.allow({update: function(){return true;}});
 Tickets.allow({insert: function(){return true;}});
 
-Meteor.publish("thisEvent", function(evid){
-	return Events.find({_id: evid});
+
+Meteor.publishComposite('thisEvent', function( evid ) {
+	return {
+		find() {
+			return Events.find({_id: evid});
+		},
+		children: [
+			{ // all related users
+				find(event){
+					let uids = [
+						event.owner,
+						event.createdBy
+					];
+					// Attendees
+					event.attendees.forEach( (attendee) => {
+						uids.push(attendee._id);
+					});
+					// jobs
+					event.jobs.forEach( (user) => {
+						uids.push(user.id);
+					});
+					return Meteor.users.find({_id: {$in: uids}});
+				}
+			}
+		]
+	}
 });
+
+
+Meteor.publishComposite('eventAttendance', function( evid ) {
+	return { // Events
+		find(){
+			return Events.find({_id: evid})
+		},
+		children: [
+			{ // Get attendees
+				find(event){
+					let uids = [];
+					// Attendees
+					event.attendees.forEach( (attendee) => {
+						uids.push(attendee._id);
+					});
+					return Meteor.users.find({_id: {$in: uids}});
+				},
+				children: [
+					{ // Get the ticket for the attendees
+						find(user){
+							return Tickets.find(
+								{_id: user.ticket},
+								{fields: {
+									_id: 1,
+									assigneduser: 1,
+									status: 1
+								}}
+							)
+						},
+						children: [
+							{ // Get the assigned user for the ticket
+								find(ticket){
+									return Meteor.users.find(
+										{_id: ticket.assigneduser},
+										{fields: {
+											name: 1
+										}}
+									)
+								}
+							}
+						]
+					}
+				]
+			}
+		]
+	}
+});
+
 
 
 Meteor.publish("Event", function(eid){
@@ -70,26 +142,35 @@ Meteor.publish("AttendedEvents", function(){
   }, {sort: {start: -1},limit: 3});
 });
 
-Meteor.publish("myEvents", function(){
+Meteor.publish("myEvents", function(start, end){
   var grps = Groups.find({users: this.userId}).fetch();
 	var ids = [];
 	grps.forEach(function(group){
 		ids.push(group._id);
 	});
-	return Events.find({$or: [
-    {owner: this.userId},
-    {status: {$in: ["Published", "Reviewed"]}},
-    {"permUser.id": this.userId},
-    {"permGroup.id": {$in: ids}}
-  ], deleted: {$ne: true}});
+	return Events.find({
+		start: {$gte: start},
+		end: {$lte: end},
+		$or: [
+    	{owner: this.userId},
+    	{status: {$in: ["Published", "Reviewed"]}},
+    	{"permUser.id": this.userId},
+    	{"permGroup.id": {$in: ids}}
+  	],
+		deleted: {$ne: true}
+	});
 });
 
-Meteor.publish("otherUnpublishedEvents", function(){
+Meteor.publish("otherUnpublishedEvents", function( start, end ){
   var options = {fields: {start: 1, end:1, status: 1, permUser: 1, permGroup: 1,owner: 1, tags: 1}};
   if(Groups.find({_id:"admin", users: this.userId}).fetch().length==1){
 		options = {};
 	}
-    return Events.find({deleted: {$ne: true}}, options);
+    return Events.find({
+			start: {$gte: start},
+			end: {$lte: end},
+			deleted: {$ne: true}
+		}, options);
 });
 
 // all published events, plus my unpublished events
@@ -183,6 +264,47 @@ Meteor.publish("activeChurches", function(){
 });
 
 /*  Contact functions*/
+
+Meteor.publishComposite('contactSummary', function( statuses=[], filter="" ){
+	return {
+		find() {
+			let query= {};
+			query.funnelStatus = {$in: statuses};
+			query.status = {$in: ["Present", "Absent"]};
+			let options = {sort: {name: 1}} //, limit: this.state.num};
+			if(filter!=""){
+				query.name={ $regex : filter, $options : 'i'};
+			}
+			return Meteor.users.find(query,{fields:{
+				name: 1, emails: 1, phone: 1, newsletter: 1, member: 1, status: 1, funnelStatus: 1, ticket: 1
+			}});
+		}
+	}
+});
+
+Meteor.publishComposite('contactPreview', function( cid ) {
+	return {
+		find() {
+			return Meteor.users.find({_id: cid});
+		},
+		children: [
+			{
+				find( contact ) {
+					return Events.find({'attendees._id': contact._id});
+				}
+			},
+			{
+				find( contact ) {
+					return Tickets.find({
+						customer: contact._id,
+						type: "Contact"
+					});
+				}
+			}
+		]
+	}
+});
+
 Meteor.publish("contact", function(cid){
   if(!cid){
     try{
@@ -368,7 +490,7 @@ Meteor.publish("oldContacts", function(filtr, srt){
 Meteor.publish("publicContacts", function(num){
   // This publish is for the public submittedby
 
-  var selector = {deleted: {$ne: true}};
+  var selector = {status: {$ne: "Deleted"}};
   var options = {
     fields: {
       name: 1,
@@ -557,18 +679,33 @@ Meteor.publish("allTicketStatus", function(){
   return Tickets.find({},{fields:{status: 1, assigneduser: 1}});
 });
 
-Meteor.publish("thisTicket", function(tid){
-  var ticket = Tickets.findOne(tid);
-	let customer = {ticket: ""};
-	if(ticket.customer){
-		customer = getUser(ticket.customer);
-	}
+Meteor.publishComposite('thisTicket', function( tid ) {
+	return {
+		find() {
+			return Tickets.find({_id: tid});
+		},
+		children: [
+			{ // all related users
+				find(ticket){
+					let uids = [
+						ticket.customer,
+						ticket.assigneduser
+					];
 
-  return [
-		Tickets.find({_id: {$in: [tid, customer.ticket]}}),
-		Events.find({_id:ticket.eid}),
-		Meteor.users.find()
-	];
+					ticket.activities.forEach( (activity) => {
+						uids.push(activity.user);
+					});
+
+					return Meteor.users.find({_id: {$in: uids}});
+				}
+			},
+			{ // all related events
+				find(ticket){
+					return Events.find({_id: ticket.eid});
+				}
+			}
+		]
+	}
 });
 
 Meteor.publish("ticket", function(cid){
@@ -668,7 +805,43 @@ Meteor.publish("currentStatus", function(){
 });
 
 
-Meteor.publish("jobCollection", function(){
+Meteor.publish("jobCollection", function() {
 	let query = {};
 	return jobCollection.find(query);
+});
+
+Meteor.publishComposite('jobManager', function( type='', status=[] ) {
+	console.log("Filter: ", {
+		type: type,
+		status: status
+	});
+	return {
+		find(){
+			let query = {};
+			if(type){
+				query.type = type;
+			}
+			query.status = {$in: status};
+			return jobCollection.find(query);
+		},
+		children: [
+			{ // User
+				find(job){
+					let query = {};
+					if( job.data.uid ){
+						query._id = job.data.uid;
+					}
+					if ( job.data.email ){
+						query['emails.address'] = {$in:
+							[job.data.email.to, job.data.email.from]
+						};
+					}
+					if ( Object.keys(query).length < 1 ){
+						return;
+					}
+					return Meteor.users.find(query);
+				}
+			}
+		]
+	}
 });
