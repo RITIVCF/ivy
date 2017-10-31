@@ -68,7 +68,9 @@ export default class EventCalendar extends TrackerReact(React.Component) {
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
 				// Refresh subscription
 				this.props.onNewDateRange(view.start._d, view.end._d);
-        var height = $('#mainbox > div').height();
+        console.log($('#mainbox .card-content').height());
+        console.log($('.legend').height());
+        var height = $('#mainbox').height() - $('.legend').height() - 101;
         $('#calendar').fullCalendar('option','height', height);
       },
       defaultDate: Session.get("calendardate"),
