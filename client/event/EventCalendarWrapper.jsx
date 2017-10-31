@@ -17,8 +17,8 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 
     this.state = {
       subscription: {
-        myEvents: Meteor.subscribe("myEvents"),
-        UnpublishedEvents: Meteor.subscribe("otherUnpublishedEvents")
+        //myEvents: Meteor.subscribe("myEvents"),
+        //UnpublishedEvents: Meteor.subscribe("otherUnpublishedEvents")
       },
       viewtitle: ''
     };
@@ -79,7 +79,7 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 				<li onClick={this.prevCal.bind(this)} id="mob-date-left-li"><a id="mob-date-left"><i className="material-icons black-text">skip_previous</i></a></li>
 				<li id="mob-date-center"><h1>{this.state.viewtitle}</h1></li>
 				<li onClick={this.nextCal.bind(this)} id="mob-date-right-li"><a id="mob-date-right"><i className="material-icons black-text">skip_next</i></a></li>
-				{!this.state.subscription.myEvents.ready()&&<NavbarItem><LoaderCircle style={{"paddingTop": "0px"}} /></NavbarItem>}
+				{this.state.subscription.myEvents && (!this.state.subscription.myEvents.ready()&&<NavbarItem><LoaderCircle style={{"paddingTop": "0px"}} /></NavbarItem>)}
       </ul>
       <ul className="right hide-on-small-only">
 				<NavbarItem href={"/events/debrief"} tooltip={{text: "Event Debriefs"}}>
@@ -147,13 +147,22 @@ export default class EventCalendarWrapper extends TrackerReact(React.Component) 
 	}
 
 	handleNewDateRange(start, end){
-		this.state.subscription.myEvents.stop();
-    this.state.subscription.UnpublishedEvents.stop();
+		console.log("handleNewDateRange");
+		console.log("Wrapper state: ", this.state);
+		const oldSub = this.state.subscription;
+		if(!!oldSub.myEvents && !!oldSub.UnpublishedEvents){
+			this.state.subscription.myEvents.stop();
+			this.state.subscription.UnpublishedEvents.stop();
+		}
 		const sub = {
-			myEvents: Meteor.subscribe("myEvents", start, end),
-			UnpublishedEvents:Meteor.subscribe("otherUnpublishedEvents", start, end)
+			myEvents: Meteor.subscribe("myEvents", start, end, function(){console.log("myEvents Ready")}),
+			UnpublishedEvents:Meteor.subscribe("otherUnpublishedEvents", start, end, function(){console.log("UnpublishedEvents Ready")})
 		};
-		this.setState({subscription: sub});
+		this.setState({subscription: sub}, function(){
+			console.log("Successfully set sub: ", sub);
+			console.log("Start: ", start);
+			console.log("End: ", end);
+		});
 	}
 
 	getInfoBar(){

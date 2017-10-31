@@ -61,6 +61,8 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       height: this.props.height,
       scrollTime: "12:00:00",
       viewRender: (view, element) => {
+				console.log("viewRender");
+				console.log("Calendar state:", this.state);
         thiz.props.settitle();
         Meteor.call("setCalendarView", view.name);
         Session.set("calendardate", $(calendar).fullCalendar( 'getDate' )._d.toISOString() );
