@@ -16,13 +16,13 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 
     this.state = {
       subscription: {
-        Event: Meteor.subscribe("thisEvent", props.eid, ()=>{this.setState({ready: true})}),
+        Event: Meteor.subscribe("thisEvent", props.eid, ()=>{this.setState({eventReady: true})}),
 				tickets: Meteor.subscribe("eventTickets", props.eid),
-				contacts: Meteor.subscribe("allContacts")
-		},
-		groups: getUserGroupPermission(),
-		ready: false,
-		submitted: false
+				contacts: Meteor.subscribe("publicContacts", ()=>{this.setState({contactsReady: true})})
+			},
+			eventReady: false,
+			contactsReady: false,
+			submitted: false
     };
 
   }
@@ -65,7 +65,7 @@ export default class EventWorkspaceWrapper extends TrackerReact(React.Component)
 	}
 
 	render() {
-		if(!this.state.ready){
+		if(!this.state.eventReady && !this.state.contactsReady){
 			return (<LoaderCircle />);
 		}
 		if(!checkPermission('events')){

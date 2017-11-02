@@ -23,7 +23,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 	export(){
 		var csvContent = "data:text/csv;charset=utf-8,";
-		csvContent += "Event Name:,"+this.props.ev.name+"\n";
+		csvContent += "Event Name:,"+this.props.event.name+"\n";
 		csvContent += "Name, Email, Phone, First Time?, Learn More?, How did you hear about us?, Newsletter, Status\n";
 		 this.getAttendees().forEach(function(contact){
 			 var dataString = "";
@@ -43,7 +43,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 		 var encodedUri = encodeURI(csvContent);
 		 var link = document.createElement("a");
 		 link.setAttribute("href", encodedUri);
-		 link.setAttribute("download", this.props.ev.name + " Attendance.csv");
+		 link.setAttribute("download", this.props.event.name + " Attendance.csv");
 		 document.body.appendChild(link); // Required for FF
 
 		 link.click(); // This will download the data file named "my_data.csv".
@@ -53,7 +53,7 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 	getAttendees(){
 		let attendees = [];
-		this.props.ev.attendees.forEach((attendee)=>{
+		this.props.event.attendees.forEach((attendee)=>{
 			contact = new Contact(Meteor.users.findOne(attendee._id));
 			for(var key in attendee){
 				contact[key] = attendee[key];
@@ -91,9 +91,9 @@ export default class EventDetail extends TrackerReact(React.Component) {
 
 	getCountNew(){
 		var count = 0;
-		for(i=0;i < this.props.ev.attendees.length;i++){
+		for(i=0;i < this.props.event.attendees.length;i++){
 
-			if(this.props.ev.attendees[i].firsttime){
+			if(this.props.event.attendees[i].firsttime){
 				count += 1;
 			}
 
@@ -115,85 +115,90 @@ export default class EventDetail extends TrackerReact(React.Component) {
 	}
 
 	render() {
+		const ev = this.props.event;
 
-	let ev = this.props.ev;
-	const showTicketColumn = checkPermission("tickets");
+		const showTicketColumn = checkPermission("tickets");
 
-	const title = (!ev) ? "Event Detail - ": "Event Detail - " + ev.name;
-	setDocumentTitle(title);
-	const imgPath = ev.pic?ev.pic:"/images/defaultEventSmall.png";
+		const title = (!ev) ? "Event Detail - ": "Event Detail - " + ev.name;
+		setDocumentTitle(title);
+		const imgPath = ev.pic?ev.pic:"/images/defaultEventSmall.png";
 
-	return (
-		<div className="card">
-			<div className="eventImage" style={{backgroundImage: `url(${imgPath})`}}>
-				<span className="card-title">{!!ev && ev.name}</span>
-			</div>
-			<div className="card-content">
-				<p>Event Description: <br/>{!!ev && ev.description}</p>
-				<p><b>Event Start:</b> {!!ev && moment(ev.start.toISOString()).format("DD MMM @ h:mmA")}</p>
-				<p><b>Event End:</b> {!!ev && moment(ev.end.toISOString()).format("DD MMM @ h:mmA")}</p>
-				<hr/>
-				<h4>Attendees
-					<a onClick={this.export.bind(this)} className="btn tooltipped right" data-position="bottom"
-					data-delay="50" data-tooltip="Export Attendance">
-						<i className="material-icons">play_for_work</i></a>
-				</h4>
-				<div className="row">
-					<div className="col s12 m5">
-						<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
-							<option value={"All"}>All</option>
-							<option value={"Yes"}>Yes</option>
-							<option value={"No"}>No</option>
-						</select></label>
-						<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
-							<option value={"Name"}>Name</option>
-							<option value={"First Time"}>First Time</option>
-						</select></label>
-					</div>
-					<div className="col s4 m4">
 
-					</div>
-					<div className="col s8 m3">
-						<table style={{outline: "solid 2px"}}>
+		return (
+			<Row>
+				<Column>
+					<div className="card">
+						<div className="eventImage" style={{backgroundImage: `url(${imgPath})`}}>
+							<span className="card-title">{!!ev && ev.name}</span>
+						</div>
+						<div className="card-content">
+							<p>Event Description: <br/>{!!ev && ev.description}</p>
+							<p><b>Event Start:</b> {!!ev && moment(ev.start.toISOString()).format("DD MMM @ h:mmA")}</p>
+							<p><b>Event End:</b> {!!ev && moment(ev.end.toISOString()).format("DD MMM @ h:mmA")}</p>
+							<hr/>
+							<h4>Attendees
+								<a onClick={this.export.bind(this)} className="btn tooltipped right" data-position="bottom"
+								data-delay="50" data-tooltip="Export Attendance">
+									<i className="material-icons">play_for_work</i></a>
+							</h4>
+							<div className="row">
+								<div className="col s12 m5">
+									<label>First time: <select ref="filter" className="browser-default" onChange={this.changeFilter.bind(this)} value={this.state.filter}>
+										<option value={"All"}>All</option>
+										<option value={"Yes"}>Yes</option>
+										<option value={"No"}>No</option>
+									</select></label>
+									<label>Sort: <select ref="sort" className="browser-default" onChange={this.changeSort.bind(this)} value={this.state.sort}>
+										<option value={"Name"}>Name</option>
+										<option value={"First Time"}>First Time</option>
+									</select></label>
+								</div>
+								<div className="col s4 m4">
+
+								</div>
+								<div className="col s8 m3">
+									<table style={{outline: "solid 2px"}}>
+										<thead>
+											<tr>
+												<th colSpan="2"><span style={{textAlign:"center"}}>Attendees</span></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Total:</td>
+												<td>{ev.attendees.length}</td>
+											</tr>
+											<tr>
+												<td>New:</td>
+												<td>{this.getCountNew()}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<table className={checkPermission("contacts")?"highlight responsive-table":"responsive-table"}>
 							<thead>
 								<tr>
-									<th colSpan="2"><span style={{textAlign:"center"}}>Attendees</span></th>
+									<th></th>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>First Time?</th>
+									<th>Learn More?</th>
+									<th>How hear about us?</th>
+									{showTicketColumn && <th>Ticket</th>}
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>Total:</td>
-									<td>{ev.attendees.length}</td>
-								</tr>
-								<tr>
-									<td>New:</td>
-									<td>{this.getCountNew()}</td>
-								</tr>
+								{this.getAttendees().map( (contact)=>{
+									return <Attendee key={contact._id} contact={contact} showTicketColumn={showTicketColumn} />
+								})}
 							</tbody>
 						</table>
 					</div>
-				</div>
-			</div>
-			<table className={checkPermission("contacts")?"highlight responsive-table":"responsive-table"}>
-				<thead>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Email</th>
-						<th>Phone</th>
-						<th>First Time?</th>
-						<th>Learn More?</th>
-						<th>How hear about us?</th>
-						{showTicketColumn && <th>Ticket</th>}
-					</tr>
-				</thead>
-				<tbody>
-					{this.getAttendees().map( (contact)=>{
-						return <Attendee key={contact._id} contact={contact} showTicketColumn={showTicketColumn} />
-					})}
-				</tbody>
-			</table>
-		</div>
+				</Column>
+			</Row>
 		)
 	}
 }

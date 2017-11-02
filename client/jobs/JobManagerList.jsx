@@ -4,69 +4,21 @@ import LoaderCircle from '/client/LoaderCircle.jsx';
 import Checkbox from '/client/contact/Checkbox.jsx';
 import MaterialCollection from '/client/sharedcomponents/MaterialCollection/MaterialCollection.jsx';
 
-export default class JobManager extends React.Component {
-	constructor(){
-		super();
-
-		this.state = {
-			statuses: ["completed", "waiting", "paused", "ready", "running", "failed", "cancelled"]
-		}
-
+export default function JobManagerList({ loading, jobs }) {
+	if ( loading ) {
+		return <LoaderCircle />;
 	}
-
-	render(){
-		return (
-			<Row>
-				<Column>
-					<Card>
-						<CardContent>
-							<Row>
-								<Column width={"s6"}>
-									{this.state.statuses.map((status)=>{
-										return <Checkbox key={status}
-											label={status}
-											onChange={this.handleCheck.bind(this, status)}
-											checked={this.props.activeStatuses.includes(status)} />
-									})}
-								</Column>
-								<Column width={"s6"}>
-									<select onChange={this.handleFilterChange.bind(this)} value={this.props.activeFilter} className="browser-default">
-										<option value="">Select a Job Type</option>
-										<option value="sendEmail">Send Email</option>
-										<option value="sendNewsletter">Send Newsletter</option>
-										<option value="sendEventFollowUpEmail">Send Event Follow Up</option>
-										<option value="checkFunnelStatus">Check Funnel Status</option>
-										<option value="processExpiredContacts">Process Expired Contacts</option>
-									</select>
-								</Column>
-							</Row>
-
-
-						</CardContent>
-					</Card>
-					{
-						this.getJobs().map( (job) => {
-							return <Job key={job._id} job={job} onCancel={this.props.onLoad} onRestart={this.props.onLoad} />
-						})
-					}
-				</Column>
-			</Row>
-		)
-	}
-
-	getJobs(){
-		return this.props.jobs;
-	}
-
-	handleCheck(status){
-		this.props.onToggleStatus(status);
-	}
-
-	handleFilterChange(event){
-		this.props.onFilterChange(event.target.value);
-	}
-
-
+	return (
+		<Row>
+			<Column>
+				{
+					jobs.map( (job) => {
+						return <Job key={job._id} job={job} />
+					})
+				}
+			</Column>
+		</Row>
+	)
 }
 
 
@@ -108,6 +60,7 @@ class Job extends React.Component {
 		if ( hasUser ) {
 			user = getUser(job.data.uid);
 		}
+		let recipient;
 		if ( isSendEmail ){
 			recipient = getUser({"emails.address": job.data.email.to});
 		}
@@ -119,8 +72,12 @@ class Job extends React.Component {
 							<p><b>_id:</b> {job._id}</p>
 							<p><b>Status:</b> {job.status}</p>
 							{hasUser&&<p><b>User:</b> {user.getName()}</p>}
-							{isSendEmail&&<p><b>Recipient: </b>{recipient.getName()}</p>}
-							{isSendEmail&&<p><b>Email: </b>{recipient.getEmail()}</p>}
+							{recipient&&<p><b>Recipient: </b>{recipient.getName()}</p>}
+							{isSendEmail&&<p>
+								<b>Email: </b>
+								{recipient?recipient.getEmail():job.data.email.to}
+							</p>
+							}
 							<p><b>After:</b> {dateFormat(job.after)}</p>
 							<p><b>Created:</b> {dateFormat(job.created)}</p>
 						</Row>

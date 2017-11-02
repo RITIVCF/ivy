@@ -1,8 +1,8 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
-import NoPerm from '../../NoPerm.jsx';
-import LoaderCircle from '../../LoaderCircle.jsx';
-import MainBox from '../../MainBox.jsx';
+import NoPerm from '/client/NoPerm.jsx';
+import LoaderCircle from '/client/LoaderCircle.jsx';
+import MainBox from '/client/MainBox.jsx';
 import DebriefSummary from './DebriefSummary.jsx';
 
 export default class EventDebriefsWrapper extends TrackerReact(React.Component) {
@@ -12,9 +12,7 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
     this.state = {
 			num: 10,
       subscription: {
-				drafts: Meteor.subscribe("myDebriefDrafts"),
-				needDebrief: Meteor.subscribe("needDebrief"),
-       debriefs: Meteor.subscribe("debriefs", 10)
+				needDebrief: Meteor.subscribe("debrief.listing"),
       }
 		};
 
@@ -22,9 +20,7 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
   }
 
 	componentWillUnmount() {
-		this.state.subscription.drafts.stop();
 		this.state.subscription.needDebrief.stop();
-    this.state.subscription.debriefs.stop();
   }
 
 	componentDidUpdate(){
@@ -54,7 +50,7 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 
 
 	render() {
-		if(!(this.state.subscription.drafts.ready()&&this.state.subscription.debriefs.ready()&&this.state.subscription.needDebrief.ready())){
+		if(	!this.state.subscription.needDebrief.ready() ) {
 			return <LoaderCircle />
 		}
 		if(!checkPermission("events")){
@@ -62,15 +58,17 @@ export default class EventDebriefsWrapper extends TrackerReact(React.Component) 
 		}
 		return (
 			<MainBox
-        content={<div className="row">
-            <div className="col s12">
+        content={
+					<div className="row">
+						<div className="col s12">
 							<DebriefSummary />
 						</div>
-          </div>}
+					</div>
+				}
         subheader={this.getSubheader()}
         showinfobar={Meteor.user().preferences.debriefs_infobar}
         infobar={<div/>}
-        />
+			/>
 		)
 	}
 }
