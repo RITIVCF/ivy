@@ -8,6 +8,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     this.state = {
       subscription: {
         Event: Meteor.subscribe("Event", props.eid),
+				contacts: Meteor.subscribe("allContacts"),
 				graduatedContacts: Meteor.subscribe("graduatedContacts"),
 				expiredContacts: Meteor.subscribe("expiredContacts"),
 				outofscopeContacts: Meteor.subscribe("outofscopeContacts")
@@ -31,7 +32,7 @@ export default class SignInWrapper extends TrackerReact(React.Component){
     if(!ev){
       return(<div></div>)
     }
-		
+
     document.title = "Ivy - " + ev.name + " Sign In";
 
     return (

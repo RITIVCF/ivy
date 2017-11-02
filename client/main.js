@@ -5,12 +5,12 @@ document.title="Ivy";
 //For testing
 //Meteor.subscribe("allUsers");
 
-Meteor.subscribe("allContacts");
-Meteor.subscribe("userContacts");
-Meteor.subscribe("graduatedContacts");
-Meteor.subscribe("expiredContacts");
-Meteor.subscribe("oldContacts");
-Meteor.subscribe("contact");
+// Meteor.subscribe("allContacts");
+// Meteor.subscribe("userContacts");
+// Meteor.subscribe("graduatedContacts");
+// Meteor.subscribe("expiredContacts");
+// Meteor.subscribe("oldContacts");
+// Meteor.subscribe("contact");
 Meteor.subscribe("userSelf");
 Meteor.subscribe("allGroups");
 Meteor.subscribe("allCounters");

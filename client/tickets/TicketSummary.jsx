@@ -2,7 +2,6 @@ import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import TicketRow from './TicketRow.jsx';
 import NewTicketWindow from './NewTicketWindow.jsx';
-import EditTicketWindow from './EditTicketWindow.jsx';
 
 
 export default class TicketsSummary extends TrackerReact(React.Component) {

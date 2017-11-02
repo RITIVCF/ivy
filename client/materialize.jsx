@@ -126,17 +126,18 @@ Img = function(props) {
 	)
 }
 
-Card = function(props) {
+Card = function({ children, onClick, onDoubleClick, img, title, table }) {
 	return (
 		<div
 			className="card"
-			onClick={props.onClick}
-			onDoubleClick={props.onDoubleClick}
+			onClick={onClick}
+			onDoubleClick={onDoubleClick}
 		>
-			{props.img&&<CardImage src={props.img} />}
-			<CardContent title={props.title} >
-				{props.children}
+			{img&&<CardImage src={img} />}
+			<CardContent title={title} >
+				{children}
 			</CardContent>
+			{table&&table}
 		</div>
 	)
 }
@@ -149,11 +150,11 @@ CardImage = function(props) {
 	)
 }
 
-CardContent = function(props) {
+CardContent = function({ children, title }) {
 	return (
 		<div className="card-content">
-			<span className="card-title">{props.title}</span>
-			{props.children}
+			{title && <span className="card-title">{title}</span>}
+			{children}
 		</div>
 	)
 }
