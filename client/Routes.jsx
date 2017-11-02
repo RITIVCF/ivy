@@ -61,8 +61,7 @@ import MySmallGroupWrapper from './sgroups/MySmallGroupWrapper.jsx';
 // ************************
 
 // ****    Attendance   *******
-import AttendanceSummary from './attendance/AttendanceWrapper.jsx';
-import EventDetailWrapper from './attendance/AttendanceWrapper.jsx';
+import AttendanceContainer from './attendance/AttendanceContainer.jsx';
 // ****************************
 
 // ****    Tickets     ********
@@ -450,7 +449,7 @@ eventsRoutes.route('/attendance/:eid',{
 		setDocumentTitle(title);
 		mount(MainLayout, {
 			header: title,
-			content: (<EventDetailWrapper eid={params.eid} />)
+			content: (<AttendanceContainer eid={params.eid} />)
 		})
 	}
 });

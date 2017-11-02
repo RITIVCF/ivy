@@ -1,31 +1,16 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../MainBox.jsx';
-import ContactPreview from './ContactPreview.jsx';
 import LoaderCircle from '../LoaderCircle.jsx';
 import NoPerm from '../NoPerm.jsx';
 import MaterialIcon from '../sharedcomponents/MaterialIcon.jsx';
 
-import ContactSummary from './ContactSummary.jsx';
-//Contacts = new Mongo.Collection('contacts');
+import ContactSummary from './summary/ContactSummary.jsx';
+import ContactInfobar from './ContactInfobar';
 
 export default class ContactWrapper extends TrackerReact(React.Component){
   constructor() {
     super();
-
-    this.state = {
-      subscription: {
-        Contacts: Meteor.subscribe("allContacts", "All", "Name"),
-        Events: Meteor.subscribe("EventAttendees")
-      }
-    };
-
-
-  }
-
-  componentWillUnmount() {
-    this.state.subscription.Contacts.stop();
-    this.state.subscription.Events.stop();
   }
 
   toggleView(){
@@ -67,22 +52,20 @@ export default class ContactWrapper extends TrackerReact(React.Component){
   }
 
   render() {
-    if(!this.state.subscription.Contacts.ready()){
-      return (<LoaderCircle />)
-    }
     if(!checkPermission("contacts")){
       return <NoPerm />
     }
+
+    var perm = checkPermission("tickets");
     
-    var status;
-    var perm = checkPermission("ticket");
     return (
       <MainBox
-        content={<ContactSummary perm={perm} />}
         subheader={this.getSubHeader()}
         showinfobar={Meteor.user().preferences.contacts_infobar}
-        infobar={<ContactPreview cid={Session.get("conselected")} />}
-        />
+        infobar={<ContactInfobar />}
+			>
+				<ContactSummary perm={perm} />
+			</MainBox>
     )
   }
 }

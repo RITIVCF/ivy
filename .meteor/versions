@@ -100,6 +100,7 @@ reactive-dict@1.1.8
 reactive-var@1.0.11
 reload@1.1.11
 retry@1.0.9
+reywood:publish-composite@1.4.2
 routepolicy@1.0.12
 rzymek:tinymce-cdn@4.0.0_2
 service-configuration@1.0.11
