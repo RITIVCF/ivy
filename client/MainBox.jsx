@@ -8,7 +8,7 @@ import InfoBarMobile from './layouts/InfoBarMobile.jsx';
 export default class MainBox extends TrackerReact(React.Component) {
 	constructor(){
 		super();
-		
+
 	}
 
 	stopit(event){
@@ -25,15 +25,16 @@ export default class MainBox extends TrackerReact(React.Component) {
 	        <SubHeader content={this.props.subheader} />
 	        <div id="mainbox" className={this.props.showinfobar?"main-box":"main-box info-hide"}>
 						{this.props.content}
+						{this.props.children}
 	        </div>
 
 	        <InfoBar
 	          show={this.props.showinfobar}
 	          content={this.props.infobar}
-	          />
+					/>
 					<InfoBarMobile
 	          content={this.props.infobar}
-	          />
+					/>
 	      </div>
 
 
