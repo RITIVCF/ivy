@@ -767,6 +767,32 @@ Meteor.publish("myDebriefDrafts", function(){
 Meteor.publish("allDebriefQuestions", function(){
 	return DebriefQuestions.find();
 });
+
+Meteor.publishComposite('debrief.listing', function(){
+	return {
+		find() {
+			return Events.find({
+				start: {$lte: new Date()},
+				debrief: {$exists: false}
+			});
+		},
+		children: [
+			{
+				find(event) {
+					const query = {
+						_id: event.owner
+					};
+					const options = {
+						fields: {
+							name: 1
+						}
+					};
+					return Meteor.users.find(query, options);
+				}
+			}
+		]
+	}
+});
 // *********************************
 
 Meteor.publish("allCounters", function(){
@@ -811,10 +837,6 @@ Meteor.publish("jobCollection", function() {
 });
 
 Meteor.publishComposite('jobManager', function( type='', status=[] ) {
-	console.log("Filter: ", {
-		type: type,
-		status: status
-	});
 	return {
 		find(){
 			let query = {};

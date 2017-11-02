@@ -70,54 +70,27 @@ export default class EventPreview extends TrackerReact(React.Component) {
 		return (
       <Row>
 				<Column>
-					<div style={styles.actionBar}>
-						{((canEditEvent||canViewEvent)&&!isEventReviewed)&&
-							<div style={styles.label}>
-								<label>{canEditEvent?"Edit":"View"}</label>
-							</div>
-						}
-						{canViewAttendance&&
-							<div style={styles.label}>
-								<label>Attendance</label>
-							</div>
-						}
-						{canEditDebrief&&
-							<div style={styles.label}>
-								<label>Debrief</label>
-							</div>
-						}
-						{canViewDebrief&&
-							<div style={styles.label}>
-								<label>Rating</label>
-							</div>
-						}
-						{isFormOpen&&
-							<div style={styles.label}>
-								<label>Form</label>
-							</div>
-						}
-					</div>
 					<Row style={styles.actionBar}>
 						{((canEditEvent||canViewEvent)&&!isEventReviewed)&&
-							<a href={"/events/workspace/" + event._id} style={styles.action}
+							<a href={"/events/workspace/" + event._id} style={styles.action} title="Edit"
 							className="waves-effect waves-light btn">
 								<i className="material-icons">{canEditEvent?"build":"visibility"}</i>
 							</a>
 						}
 						{canViewAttendance&&
-							<a href={"events/attendance/" + event._id} style={styles.action}
+							<a href={"events/attendance/" + event._id} style={styles.action} title="Attendance"
 							className="waves-effect waves-light btn"><i className="material-icons">supervisor_account</i></a>
 						}
 						{canEditDebrief&&
-							<a href={"events/debrief/edit/" + event._id} style={styles.action}
+							<a href={"events/debrief/edit/" + event._id} style={styles.action} title="Edit Debrief"
 							className="waves-effect waves-light btn"><i className="material-icons">assignment</i></a>
 						}
 						{canViewDebrief&&
-							<a href={"events/debrief/view/" + event._id} style={styles.action}
+							<a href={"events/debrief/view/" + event._id} style={styles.action} title="View Debrief"
 							className="waves-effect waves-light btn"><i className="material-icons">assessment</i></a>
 						}
 						{isFormOpen&&
-							<a href={"/forms/signin/" + event._id} style={styles.action}
+							<a href={"/forms/signin/" + event._id} style={styles.action}  title="Open Form"
 							className="waves-effect waves-light btn"><i className="material-icons">launch</i></a>
 						}
 					</Row>

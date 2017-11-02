@@ -7,26 +7,12 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
     super();
 
 		this.state = {
-			show: true,
-			search: "",
-			filter: []
+			show: true
 		}
   }
 
 	handleSearchChange(event){
 		this.setState({search: event.target.value});
-	}
-
-	Events(){
-		let qry = {debrief: {$exists: true}};
-		if(this.state.search!=""){
-			qry.name={ $regex : this.state.search, $options : 'i'};
-		}
-		if(this.state.filter.length!=0){
-			qry.tags={$in: this.state.filter};
-		}
-		var events = Events.find(qry,{sort: {start: -1}}).fetch();
-		return events;
 	}
 
 	NoBrief(){
@@ -39,63 +25,44 @@ export default class DebriefSummary extends TrackerReact(React.Component) {
 
 	render() {
 		let nobrief = this.NoBrief();
+		if ( !(nobrief.length > 0) ) {
+			return <AllCompleteMessage />
+		}
+
 		return (
-			<div>
-				{nobrief.length!=0&&
-					<div className="card">
-						<div className="card-content"  >
-							<span className="card-title">Pending Debrief</span>
-							<a className="btn-flat right"	onClick={this.showHide.bind(this)}>
-								<i className="material-icons">{this.state.show?"expand_less":"expand_more"}</i></a>
-						</div>
-						{this.state.show&&
-							<table className="responsive-table">
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Start</th>
-										<th>Type</th>
-										<th>Leader</th>
-									</tr>
-								</thead>
-								<tbody>
-									{nobrief.map((event)=>{
-										return <Event key={event._id} ev={event} />
-									})}
-								</tbody>
-							</table>}
-					</div>
-				}
-
-				<div className="card">
-					<div className="card-content">
-						<div className="row">
-							<div className="col s12 m6">
-
-							</div>
-							<div className="input-field col s12 m6">
-								<input type="text" id="search" onChange={this.handleSearchChange.bind(this)} />
-								<label htmlFor="search">Search Name</label>
-							</div>
-						</div>
-					</div>
+			<Card
+				title="Pending Debrief"
+				table={this.state.show&&
 					<table className="responsive-table">
 						<thead>
 							<tr>
 								<th>Name</th>
 								<th>Start</th>
-								<th>Tag(s)</th>
+								<th>Type</th>
 								<th>Leader</th>
 							</tr>
 						</thead>
 						<tbody>
-							{this.Events().map((event)=>{
+							{nobrief.map( (event) => {
 								return <Event key={event._id} ev={event} />
 							})}
 						</tbody>
-					</table>
-				</div>
-			</div>
+					</table>}
+			>
+				<a className="btn-flat right"	onClick={this.showHide.bind(this)}>
+					<i className="material-icons">{this.state.show?"expand_less":"expand_more"}</i>
+				</a>
+			</Card>
 		)
 	}
+}
+
+
+
+function AllCompleteMessage(){
+	return (
+		<Card>
+			<p>All debriefs complete.</p>
+		</Card>
+	)
 }
