@@ -52,14 +52,12 @@ export default class ContactWrapper extends TrackerReact(React.Component){
   }
 
   render() {
-    if(!SiteOptions.ready()){
-      return (<LoaderCircle />)
-    }
     if(!checkPermission("contacts")){
       return <NoPerm />
     }
 
     var perm = checkPermission("tickets");
+    
     return (
       <MainBox
         subheader={this.getSubHeader()}
