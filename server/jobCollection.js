@@ -8,7 +8,8 @@ import { isSendMailGateOpen } from '/lib/jobs.js';
 
 export {
 	openSendMailGate,
-	closeSendMailGate
+	closeSendMailGate,
+	getJobCollectionJobByUserId
 }
 
 

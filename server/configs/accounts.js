@@ -1,6 +1,7 @@
 import {Meteor} from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { insertStatus } from '/lib/contactStatus.js';
+import { insertAndUpdateFunnelStatus } from '/server/funnelMethods.js';
 
 const DEFAULT_FUNNEL_STATUS = "Contact";
 

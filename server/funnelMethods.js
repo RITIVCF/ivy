@@ -1,6 +1,7 @@
 import { isContactPresent } from '/lib/contactStatus.js';
 import { getUser } from '/lib/users.js';
 import Contact from '/lib/classes/Contact.js';
+import { getJobCollectionJobByUserId } from '/server/jobCollection';
 
 calculateFunnelStatus = function(uid){
   var threshold = getThreshold(); //Integer # of intervals
@@ -270,4 +271,8 @@ sendIntegrationNotification = function(tktId) {
       html: contact.getName()+" has not been coming for a while.<br>"+contact.getEmail()+"<br>"+contact.getPhone()+"<br>"+contact.getHowHear()+"<br><a href='http://ivy.rit.edu/tickets/"+tktId+"'>View the ticket here</a>"
     });
   });
+}
+
+export {
+  insertAndUpdateFunnelStatus
 }

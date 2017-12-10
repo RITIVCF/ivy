@@ -1,4 +1,5 @@
 //import "./jobCollection.js";
+import './funnelMethods.js';
 import { getStatus, insertStatus, isStatusValid } from '/lib/contactStatus.js';
 export {
 	convertStatusArchitecture

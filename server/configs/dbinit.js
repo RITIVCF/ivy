@@ -4,19 +4,6 @@ import { Accounts } from 'meteor/accounts-base';
 import { newEmailModule } from '/lib/modules.js';
 import { createNewUser } from '/lib/users.js';
 
-// Set admin user
-let adminUserId = null;
-let adminUser = Meteor.users.findOne({username: "admin"});
-if(!adminUser){
-	let userDoc = {
-		name: "Administrator",
-		username: "admin",
-		password: Meteor.settings.adminpassword
-	}
-
-	adminUserId = createNewUser(userDoc, true);
-}
-
 
 //Set up Groups
 let groups = [
@@ -33,19 +20,6 @@ groups.forEach( (group) => {
 		Groups.insert(group);
 	}
 });
-
-
-// If admin user needs to be created
-if(!!adminUserId){
-	let adminGroup = Groups.findOne({
-		_id: "admin",
-		users: adminUserId
-	});
-	if(!adminGroup){
-		Groups.update("admin", {$addToSet: {users: adminUserId}});
-	}
-}
-
 
 //Set up Options
 let options = [
@@ -623,7 +597,7 @@ let emailTemplates = [
 	},
 	{
 	  "_id": "eventfollowup",
-	  "to": {
+		"to": {
 	    "users": [],
 	    "groups": [],
 	    "emails": []
@@ -797,3 +771,27 @@ pagePermissions.forEach( (perm) => {
 // 		deleted: true
 // 	});
 // }
+
+// Set admin user
+let adminUserId = null;
+let adminUser = Meteor.users.findOne({username: "admin"});
+if(!adminUser){
+	let userDoc = {
+		name: "Administrator",
+		username: "admin",
+		password: Meteor.settings.adminpassword
+	}
+
+	adminUserId = createNewUser(userDoc, true);
+}
+
+// If admin user needs to be created
+if(!!adminUserId){
+	let adminGroup = Groups.findOne({
+		_id: "admin",
+		users: adminUserId
+	});
+	if(!adminGroup){
+		Groups.update("admin", {$addToSet: {users: adminUserId}});
+	}
+}
