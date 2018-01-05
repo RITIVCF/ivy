@@ -3,6 +3,7 @@ import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import MainBox from '../../MainBox.jsx';
 import NewEmailForm from './NewEmailForm.jsx';
 import EmailPreview from './EmailPreview.jsx';
+import NewEmail from './NewEmail';
 import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
 import { loadEmail } from '/lib/emails.js';
@@ -64,9 +65,7 @@ export default class EmailWrapper extends TrackerReact(React.Component){
 
   getSubHeader(){
     return [<ul className="left" key="0">
-      <li onClick={this.openModal.bind(this)}><a>
-        <i className="material-icons black-text">add</i></a>
-      </li>
+      <NewEmail />
     </ul>,
 		<ul className="right" key="1">
 			<li onClick={this.toggleInfoBar.bind(this)}><a>
