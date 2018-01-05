@@ -8,7 +8,9 @@ export default class EditGroupModal extends TrackerReact(React.Component) {
 
 		this.noDeleteList = [
 			"admin",
-			'multipliers'
+			'multipliers',
+      'prayergroupleaders',
+      'prayergroup'
 		];
 
   }
