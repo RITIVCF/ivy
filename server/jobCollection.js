@@ -1,4 +1,5 @@
 // Makes sure jobCollection var is in global scope
+import EventEmitter from 'events';
 import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 import { processExpiredContacts } from '/server/contactStatus.js';
@@ -319,44 +320,50 @@ Job.processJobs('jobQueue', 'sendEventFollowUpEmail', function(job, cb){
 });
 
 
+const EmailEmitter = new EventEmitter();
+
+EmailEmitter.on('email', function( job ){
+	const jobDoc = job._doc;
+	try {
+		try {
+			sendEmail(jobDoc.data.email);
+			job.done("Email sent to " + jobDoc.data.email.to + " successfully!", (error, result)=>{
+				if(error){
+					log.error('Error marking as done: \n' + error);
+				}
+			});
+		} catch (e) {
+			log.error("Error sending email: \n" + e);
+			job.fail(
+				{
+					reason: "Failed to send email",
+					code: 1
+				}
+			);
+		}
+	} catch (e) {
+		let data = {};
+		if(jobDoc){
+			data.job = jobDoc;
+		}
+		data.error = e;
+		try{
+			closeSendMailGate();
+		} catch (closeGateError) {
+			log.error("Send email failed. Close gate failed. This is still running.", {error: closeGateError});
+		}
+		log.error("Send email failed. Gate closed.", data);
+	}
+});
+
 // Send Email throttler and sender
 Meteor.setInterval(()=>{
 	if(isSendMailGateOpen()){
-		try {
-			const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1});
-			if(jobs.length > 0){
-				try {
-					const job = jobs[0]._doc;
-					sendEmail(job.data.email);
-					jobs[0].done("Email sent to " + job.data.email.to + " successfully!", (error, result)=>{
-						if(error){
-							log.error('Error marking as done: \n' + error);
-						}
-					});
-				} catch (e) {
-					log.error("Error sending email: \n" + e);
-					jobs[0].fail(
-						{
-							reason: "Failed to send email",
-							code: 1
-						}
-					);
-				}
-
-			}
-		} catch (e) {
-			let data = {};
-			if(job){
-				data.job = job;
-			}
-			data.error = e;
-			try{
-				closeSendMailGate();
-			} catch (closeGateError) {
-				log.error("Send email failed. Close gate failed. This is still running.", {error: closeGateError});
-			}
-			log.error("Send email failed. Gate closed.", data);
+		const jobs = jobCollection.getWork('sendEmail',{maxJobs: 1}); // Returns an array of length 1
+		if(jobs.length > 0){
+			EmailEmitter.emit('email', jobs[0]);
 		}
+
 	}
 
 }, 10000);
