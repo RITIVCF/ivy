@@ -12,6 +12,7 @@ export default class NewEmail extends React.Component {
     };
 
     this.state = {...this.default};
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount(){
@@ -61,7 +62,7 @@ export default class NewEmail extends React.Component {
     if ( checkPermission('ivrep') ) {
       options.newsletter = "Newsletter";
     }
-    if ( Groups.findOne({_id: "prayergroup", users: Meteor.userId()}) ) {
+    if ( getUser(Meteor.userId()).isPrayerGroupLeader ) {
       options.prayergroup = "Prayer Group";
     }
     return options;
@@ -74,7 +75,7 @@ export default class NewEmail extends React.Component {
     }
 
     if ( template == "prayergroup" ) {
-      return getUser(Metoer.userId()).getEmail();
+      return getUser(Meteor.userId()).getEmail();
     }
 
     throw "No valid template provided.";

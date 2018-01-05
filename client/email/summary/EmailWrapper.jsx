@@ -6,7 +6,9 @@ import EmailPreview from './EmailPreview.jsx';
 import NewEmail from './NewEmail';
 import LoaderCircle from '../../LoaderCircle.jsx';
 import NoPerm from '../../NoPerm.jsx';
+import { NavbarItem } from '/client/materialize';
 import { loadEmail } from '/lib/emails.js';
+import { getUser } from '/lib/users.js';
 
 import EmailSummary from './EmailSummary.jsx';
 //Contacts = new Mongo.Collection('contacts');
@@ -64,26 +66,23 @@ export default class EmailWrapper extends TrackerReact(React.Component){
   }
 
   getSubHeader(){
-    return [<ul className="left" key="0">
-      <NewEmail />
-    </ul>,
-		<ul className="right" key="1">
-			<li onClick={this.toggleInfoBar.bind(this)}><a>
-        <i className="material-icons black-text">{Meteor.user().preferences.emails_infobar?"info":"info_outline"}</i></a>
-      </li>
-		</ul>,
-    <ul key="2" style={{marginRight: "20px"}} className="right">
-      <li>
-        <a href="/emails/workspace/newsletter" className="black-text">
-					Edit Newsletter Template
-				</a>
-			</li>
-			<li>
-				<a href="/emails/workspace/eventfollowup" className="black-text">
-					Edit Event Follow Up Template
-				</a>
-			</li>
-    </ul>]
+    return [
+
+      <ul className="left" key="0">
+        <NewEmail />
+      </ul>,
+
+    	<ul className="right" key="1">
+    		<li onClick={this.toggleInfoBar.bind(this)}><a>
+          <i className="material-icons black-text">{Meteor.user().preferences.emails_infobar?"info":"info_outline"}</i></a>
+        </li>
+    	</ul>,
+
+      <ul key="2" style={{marginRight: "20px"}} className="right">
+        {this.getTemplateButtons()}
+      </ul>
+
+    ];
   }
 
 	getSelectEmail(){
@@ -126,4 +125,37 @@ export default class EmailWrapper extends TrackerReact(React.Component){
         />
     )
   }
+
+  getTemplateButtons() {
+    let buttons = [];
+
+    if ( checkPermission('ivrep') ) {
+      buttons.push(
+        <TemplateEditButton key="newsletter" templateID="newsletter" text="Edit Newsletter Template" />
+      );
+
+      buttons.push(
+        <TemplateEditButton key="eventfollowup" templateID="eventfollowup" text="Edit Event Follow Up Template" />
+      );
+    }
+
+    if ( getUser(Meteor.userId()).isPrayerGroupLeader ) {
+      buttons.push(
+        <TemplateEditButton key="prayergroup" templateID="prayergroup" text="Edit Prayer Group Template" />
+      );
+    }
+
+    return buttons;
+  }
+
+}
+
+function TemplateEditButton({ templateID, text }) {
+  return (
+    <NavbarItem href={"/emails/workspace/" + templateID} >
+      <span className="black-text">
+        {text}
+      </span>
+    </NavbarItem>
+  )
 }
