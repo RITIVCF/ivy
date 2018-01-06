@@ -100,7 +100,7 @@ import FormWrapper from './forms/FormWrapper.jsx';
 
 
 function signInForceCheck(context) {
-	const exclude = ["public", "unsubscribe", ""];
+	const exclude = ["public", "unsubscribe"];
 	if(!exclude.includes(context.route.group.name)){
 		if(!Meteor.userId()){
 			routeTo('login', {}, {r: context.path});
