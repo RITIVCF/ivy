@@ -6,9 +6,9 @@ import {
 	setUserEmailRecipients,
 	addGroupEmailRecipient,
 	addEmailEmailRecipient,
-	stageNewsletter,
-	unstageNewsletter,
-	changeNewsletterSendDateTime,
+	stageEmail,
+	unstageEmail,
+	changeSendDateTime,
 	createNewEventFollowUpEmail,
 	sendToMe
 } from '/lib/emails.js';
@@ -43,7 +43,7 @@ Meteor.methods({
     Emails.update(emid, {$set: {from: from}});
   },
   updateEmailWhen(emid, when){
-    changeNewsletterSendDateTime(emid, when);
+    changeSendDateTime(emid, when);
   },
   updateEmailStaged(emid, stg){
     Emails.update(emid, {$set: {staged: stg}});
@@ -57,15 +57,11 @@ Meteor.methods({
   },
 
   stageEmail(emid){
-    stageNewsletter(emid);
+    stageEmail(emid);
   },
 
 	unstageEmail(emid){
-		unstageNewsletter(emid);
-	},
-
-	stageNewsletter(emid){
-		stageNewsletter(emid);
+		unstageEmail(emid);
 	},
 
   newEmailTemplate(email, ttle){

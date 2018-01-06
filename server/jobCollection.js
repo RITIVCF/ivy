@@ -1,5 +1,5 @@
 // Makes sure jobCollection var is in global scope
-import { sendNewsletter, sendEventFollowUpEmail } from '/lib/emails.js';
+import { sendEmailCenterEmail, sendEventFollowUpEmail } from '/lib/emails.js';
 import { getUsers } from '/lib/users.js';
 import { processExpiredContacts } from '/server/contactStatus.js';
 import { shouldCalculateFunnel } from '/lib/contactStatus.js';
@@ -8,7 +8,8 @@ import { isSendMailGateOpen } from '/lib/jobs.js';
 
 export {
 	openSendMailGate,
-	closeSendMailGate
+	closeSendMailGate,
+	newEmailJob
 }
 
 
@@ -37,12 +38,12 @@ newFunnelCalulateJob = function(uid, notValidIntervals = 0){
 	return createNewJob('checkFunnelStatus', jobDoc);
 }
 
-newNewsletterJob = function(emid){
+newEmailJob = function(emid){
 	let jobDoc = {
 		emid: emid
 	};
 
-	return createNewJob('sendNewsletter', jobDoc);
+	return createNewJob('email', jobDoc);
 }
 
 newEventFollowUpEmailJob = function(eid, uid){
@@ -54,7 +55,7 @@ newEventFollowUpEmailJob = function(eid, uid){
 	return createNewJob('sendEventFollowUpEmail', jobDoc);
 }
 
-newEmailJob = function(emailObj){
+newSendEmailJob = function(emailObj){
 	// this requires an Email package email obj like
 	//  {
 	//		to:
@@ -269,10 +270,10 @@ Job.processJobs('jobQueue', 'checkFunnelStatus', checkFunnelStatusOptions, funct
 
 
 
-const sendNewsletterOptions = {pollInterval: 2000};
-Job.processJobs('jobQueue', 'sendNewsletter', sendNewsletterOptions, function(job, cb){
+const emailOptions = {pollInterval: 2000};
+Job.processJobs('jobQueue', 'email', emailOptions, function(job, cb){
 	try {
-		sendNewsletter(job.data.emid);
+		sendEmailCenterEmail(job.data.emid);
 
 		// Mark as finished
 		job.done();
@@ -280,10 +281,10 @@ Job.processJobs('jobQueue', 'sendNewsletter', sendNewsletterOptions, function(jo
 		cb();
 
 	} catch (e) {
-		console.error("Error in sendNewsletter job (emid: "+job.data.emid+"): ", e);
+		console.error("Error in email job (emid: "+job.data.emid+"): ", e);
 		failJob(job, e);
 		sendErrorEmail(
-			"sendNewsletter Job",
+			"email Job",
 			"Debug: <br>" + "Data.emid: " + job.data.emid + "<br><br>" + e
 		);
 

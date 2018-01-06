@@ -25,6 +25,12 @@ let groups = [
 		name: "Administrator",
 		users: [],
 		type: "Permission Group"
+	},
+	{
+		_id: "newsletter",
+		name: "Newsletter Recipients",
+		users: [],
+		type: "Mailing List"
 	}
 ];
 groups.forEach( (group) => {

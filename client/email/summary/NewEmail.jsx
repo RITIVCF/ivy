@@ -48,7 +48,7 @@ export default class NewEmail extends React.Component {
             })}
           </select>
         </NavbarItem>
-        <NavbarItem onClick={this.handleSubmit}>
+        <NavbarItem onClick={this.handleSubmit} tooltip={{text: "Create new email based on selected template"}}>
           <MaterialIcon className="black-text" icon="add" />
         </NavbarItem>
       </form>
@@ -86,7 +86,7 @@ export default class NewEmail extends React.Component {
 const tos = {
   newsletter: {
     users: [],
-    groups: [],
+    groups: ["newsletter"],
     emails: []
   },
   prayergroup: {
