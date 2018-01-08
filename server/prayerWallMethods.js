@@ -2,7 +2,8 @@
 import {
   submitPrayerRequest,
   submitPrayerRequestUpdate,
-  publishPrayerRequest
+  publishPrayerRequest,
+  prayForRequest
 } from '/server/prayerwall';
 
 Meteor.methods({
@@ -18,5 +19,8 @@ Meteor.methods({
   },
   publishPrayerRequest({ requestID }){
     return publishPrayerRequest({ requestID });
+  },
+  prayForRequest({ requestID }){
+    return prayForRequest({ requestID });
   }
 });

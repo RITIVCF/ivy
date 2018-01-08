@@ -1,13 +1,16 @@
 // Imports
 import { Random } from 'meteor/random';
 import { getUsers, getUser } from '/lib/users.js';
+import { failJob } from '/server/jobCollection';
 
 export {
   getPrayerRequest,
   getPrayerRequests,
   submitPrayerRequest,
   submitPrayerRequestUpdate,
-  publishPrayerRequest
+  publishPrayerRequest,
+  prayForRequest,
+  sendPrayedForNotifications
 };
 
 const FROM = "InterVarsity Christian Fellowship <ivcf.rit.edu>";
@@ -141,8 +144,17 @@ function publishPrayerRequest({ requestID }) {
 
 }
 
+function prayForRequest({ requestID }) {
+  return PrayerRequests.update( requestID, {
+    $inc: { prayedForCount: 1 },
+    $set: { newPrayers: true }
+  });
+}
+
+// Generic functions for handling DB stuff
+
 function updatePrayerRequest({ requestID, update }) {
-  PrayerRequests.update(requestID, {$set: update});
+  return PrayerRequests.update(requestID, {$set: update});
 }
 
 function getPrayerRequest(query){
@@ -187,6 +199,7 @@ function defaultPrayerRequest() {
   	reported: false,
   	audience: "Leaders",
     prayedForCount: 0,
+    newPrayers: false,
   	updates: []
   };
 }
@@ -197,4 +210,74 @@ function defaultPrayerRequestUpdate() {
     createdAt: new Date(),
     content: ''
   };
+}
+
+
+// Prayer Wall Jobs
+// - Set up the worker to process the job runs
+// - If job not created, create it
+// - Define functions used in jobs
+const PRAYED_FOR_NOTIFICATION_JOB_TYPE = "sendPrayedForNotifications";
+Job.processJobs('jobQueue', PRAYED_FOR_NOTIFICATION_JOB_TYPE, function(job, cb){
+	try {
+		sendPrayedForNotifications();
+
+		//Mark as finished
+		job.done();
+		//job.remove();
+		cb();
+
+	} catch (e) {
+		console.error(`Error in ${PRAYED_FOR_NOTIFICATION_JOB_TYPE} job (`+job._id+"): ", e);
+		failJob(job, e);
+		sendErrorEmail(
+			PRAYED_FOR_NOTIFICATION_JOB_TYPE +" job ",
+			"Debug:<br><br>" + e
+		);
+
+	}
+
+});
+
+// If job not created, create it
+const existingJob = jobCollection.findOne({type: PRAYED_FOR_NOTIFICATION_JOB_TYPE});
+if ( !existingJob ) {
+  new Job(jobCollection, PRAYED_FOR_NOTIFICATION_JOB_TYPE, {})
+  .repeat({schedule: jobCollection.later.parse.text('at 11:00 am')})
+  .save();
+}
+
+function sendPrayedForNotifications() {
+  let updatedRequests = getPrayerRequests({newPrayers: true});
+
+  updatedRequests.forEach( ({ _id, email, prayedForCount }) => {
+    // build message
+    const HTML = `
+      <p>Hi</p>
+      <p>This is placeholder stuff</p>
+      <p>Number of people prayed for you: ${prayedForCount}</p>
+      <p>
+        You can view your post here:<br>
+        ${CONFIRMATION_LINK + _id}
+      </p>
+      <p>
+        - InterVarsity Christian Fellowship's Prayer Team
+        <a href="mailto:ivcf.rit.edu">ivcf.rit.edu</a>
+      </p>
+    `;
+
+    // send email to requester
+    Email.send({
+      to: email,
+      from: FROM,
+      subject: "New people have prayed for you!",
+      html: HTML
+    });
+
+    // Mark sent:
+    updatePrayerRequest({
+      requestID: _id,
+      update: {newPrayers: false}
+    });
+  });
 }
