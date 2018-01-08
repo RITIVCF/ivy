@@ -9,6 +9,9 @@ export {
   submitPrayerRequest,
   submitPrayerRequestUpdate,
   publishPrayerRequest,
+  reportPrayerRequest,
+  acceptPrayerRequestReport,
+  rejectPrayerRequestReport,
   prayForRequest,
   sendPrayedForNotifications
 };
@@ -90,24 +93,33 @@ function notify( request, notifyType ) {
   notificationBody += `<p>- Ivy</p>`;
 
   if ( audience != "Leaders" ) {
-    sendEmailToGroup( 'prayergroup' );
-  }
-  sendEmailToGroup( 'prayergroupleaders' );
-
-
-  function sendEmailToGroup( groupID ){
-    const group = Groups.findOne( groupID );
-    const users = getUsers({_id: {$in: group.users}});
-    users.forEach((user)=>{
-      Email.send({
-        to: user.getEmail(),
-        from: IVY_FROM,
-        subject: subject,
-        html: notificationBody
-      });
+    sendEmailToGroup({
+      groupID: 'prayergroup',
+      subject,
+      notificationBody
     });
+
   }
 
+  sendEmailToGroup({
+    groupID: 'prayergroupleaders',
+    subject,
+    notificationBody
+  });
+
+}
+
+function sendEmailToGroup({ groupID, subject, notificationBody }){
+  const group = Groups.findOne( groupID );
+  const users = getUsers({_id: {$in: group.users}});
+  users.forEach((user)=>{
+    Email.send({
+      to: user.getEmail(),
+      from: IVY_FROM,
+      subject: subject,
+      html: notificationBody
+    });
+  });
 }
 
 function getRequestHTMLForNotification({ name, content, createdAt, audience, updates }) {
@@ -148,6 +160,39 @@ function prayForRequest({ requestID }) {
   return PrayerRequests.update( requestID, {
     $inc: { prayedForCount: 1 },
     $set: { newPrayers: true }
+  });
+}
+
+function reportPrayerRequest({ requestID }) {
+  const leadersPortalLink = process.env.ROOT_URL + '/prayergroup';
+  const HTML = `
+    <p>
+      Someone reported a prayer request. Please follow the link below to approve or reject the request.
+    </p>
+    <p><a href="${leadersPortalLink}">${leadersPortalLink}</a></p>
+  `;
+
+  sendEmailToGroup({
+    groupID: 'prayergroupleaders',
+    subject: "Someone Reported a Prayer Request",
+    notificationBody: HTML
+  });
+
+  return updatePrayerRequest({
+    requestID,
+    update: {reported: true}
+  });
+}
+
+function acceptPrayerRequestReport({ requestID }){
+  // Delete the request. We don't need to keep it
+  return PrayerRequests.remove({ _id: requestID, reported: true });
+}
+
+function rejectPrayerRequestReport({ requestID }){
+  return updatePrayerRequest({
+    requestID,
+    update: {reported: false}
   });
 }
 
