@@ -872,5 +872,5 @@ Meteor.publish("reportedPrayers", function() {
 });
 
 Meteor.publish("postedPrayers", function() {
-	return PrayerRequests.find({ audience: 'Wall', published: true })
+	return PrayerRequests.find({ audience: 'Wall' })
 });
