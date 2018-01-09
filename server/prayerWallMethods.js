@@ -2,7 +2,12 @@
 import {
   submitPrayerRequest,
   submitPrayerRequestUpdate,
-  publishPrayerRequest
+  publishPrayerRequest,
+  reportPrayerRequest,
+  acceptPrayerRequestReport,
+  rejectPrayerRequestReport,
+  prayForRequest,
+  deletePrayerRequest
 } from '/server/prayerwall';
 
 Meteor.methods({
@@ -18,5 +23,20 @@ Meteor.methods({
   },
   publishPrayerRequest({ requestID }){
     return publishPrayerRequest({ requestID });
+  },
+  prayForRequest({ requestID }){
+    return prayForRequest({ requestID });
+  },
+  reportPrayerRequest({ requestID }){
+    return reportPrayerRequest({ requestID });
+  },
+  acceptPrayerRequestReport({ requestID }){
+    return acceptPrayerRequestReport({ requestID });
+  },
+  rejectPrayerRequestReport({ requestID }){
+    return rejectPrayerRequestReport({ requestID });
+  },
+  deletePrayerRequest({ requestID }){
+    return deletePrayerRequest({ requestID });
   }
 });

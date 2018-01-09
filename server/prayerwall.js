@@ -1,13 +1,19 @@
 // Imports
-import { Random } from 'meteor/random';
-import { getUsers, getUser } from '/lib/users.js';
+import { getUsers } from '/lib/users.js';
+import { failJob } from '/server/jobCollection';
 
 export {
   getPrayerRequest,
   getPrayerRequests,
   submitPrayerRequest,
   submitPrayerRequestUpdate,
-  publishPrayerRequest
+  publishPrayerRequest,
+  reportPrayerRequest,
+  acceptPrayerRequestReport,
+  rejectPrayerRequestReport,
+  prayForRequest,
+  deletePrayerRequest,
+  sendPrayedForNotifications
 };
 
 const FROM = "InterVarsity Christian Fellowship <ivcf.rit.edu>";
@@ -30,8 +36,6 @@ function submitPrayerRequestUpdate({  prayerRequestID, content, type }) {
     content,
     type
   });
-
-  console.log("Request: ", prayerRequest);
 
   // send notification
   notify( prayerRequest, "update" );
@@ -87,27 +91,36 @@ function notify( request, notifyType ) {
   notificationBody += `<p>- Ivy</p>`;
 
   if ( audience != "Leaders" ) {
-    sendEmailToGroup( 'prayergroup' );
-  }
-  sendEmailToGroup( 'prayergroupleaders' );
-
-
-  function sendEmailToGroup( groupID ){
-    const group = Groups.findOne( groupID );
-    const users = getUsers({_id: {$in: group.users}});
-    users.forEach((user)=>{
-      Email.send({
-        to: user.getEmail(),
-        from: IVY_FROM,
-        subject: subject,
-        html: notificationBody
-      });
+    sendEmailToGroup({
+      groupID: 'prayergroup',
+      subject,
+      notificationBody
     });
+
   }
+
+  sendEmailToGroup({
+    groupID: 'prayergroupleaders',
+    subject,
+    notificationBody
+  });
 
 }
 
-function getRequestHTMLForNotification({ name, content, createdAt, audience, updates }) {
+function sendEmailToGroup({ groupID, subject, notificationBody }){
+  const group = Groups.findOne( groupID );
+  const users = getUsers({_id: {$in: group.users}});
+  users.forEach((user)=>{
+    Email.send({
+      to: user.getEmail(),
+      from: IVY_FROM,
+      subject: subject,
+      html: notificationBody
+    });
+  });
+}
+
+function getRequestHTMLForNotification({ name, content, audience, updates }) {
   let begin = `
     <p>
       Name: ${name}<br>
@@ -141,8 +154,50 @@ function publishPrayerRequest({ requestID }) {
 
 }
 
+function prayForRequest({ requestID }) {
+  return PrayerRequests.update( requestID, {
+    $inc: { prayedForCount: 1 },
+    $set: { newPrayers: true }
+  });
+}
+
+function reportPrayerRequest({ requestID }) {
+  const leadersPortalLink = process.env.ROOT_URL + '/prayergroup';
+  const HTML = `
+    <p>
+      Someone reported a prayer request. Please follow the link below to approve or reject the request.
+    </p>
+    <p><a href="${leadersPortalLink}">${leadersPortalLink}</a></p>
+  `;
+
+  sendEmailToGroup({
+    groupID: 'prayergroupleaders',
+    subject: "Someone Reported a Prayer Request",
+    notificationBody: HTML
+  });
+
+  return updatePrayerRequest({
+    requestID,
+    update: {reported: true}
+  });
+}
+
+function acceptPrayerRequestReport({ requestID }){
+  // Delete the request. We don't need to keep it
+  return PrayerRequests.remove({ _id: requestID, reported: true });
+}
+
+function rejectPrayerRequestReport({ requestID }){
+  return updatePrayerRequest({
+    requestID,
+    update: {reported: false}
+  });
+}
+
+// Generic functions for handling DB stuff
+
 function updatePrayerRequest({ requestID, update }) {
-  PrayerRequests.update(requestID, {$set: update});
+  return PrayerRequests.update(requestID, {$set: update});
 }
 
 function getPrayerRequest(query){
@@ -177,17 +232,22 @@ function insertPrayerRequestUpdate({ prayerRequestID, content, type }){
   return getPrayerRequest(prayerRequestID);
 }
 
+function deletePrayerRequest({ requestID }){
+  return PrayerRequests.remove({ _id: requestID });
+}
+
 function defaultPrayerRequest() {
   return {
-  	name: '',
-  	email: '',
-  	content: '',
-  	createdAt: new Date(),
-  	published: false,
-  	reported: false,
-  	audience: "Leaders",
+    name: '',
+    email: '',
+    content: '',
+    createdAt: new Date(),
+    published: false,
+    reported: false,
+    audience: "Leaders",
     prayedForCount: 0,
-  	updates: []
+    newPrayers: false,
+    updates: []
   };
 }
 
@@ -197,4 +257,74 @@ function defaultPrayerRequestUpdate() {
     createdAt: new Date(),
     content: ''
   };
+}
+
+
+// Prayer Wall Jobs
+// - Set up the worker to process the job runs
+// - If job not created, create it
+// - Define functions used in jobs
+const PRAYED_FOR_NOTIFICATION_JOB_TYPE = "sendPrayedForNotifications";
+Job.processJobs('jobQueue', PRAYED_FOR_NOTIFICATION_JOB_TYPE, function(job, cb){
+	try {
+		sendPrayedForNotifications();
+
+		//Mark as finished
+		job.done();
+		//job.remove();
+		cb();
+
+	} catch (e) {
+		console.error(`Error in ${PRAYED_FOR_NOTIFICATION_JOB_TYPE} job (`+job._id+"): ", e);
+		failJob(job, e);
+		sendErrorEmail(
+			PRAYED_FOR_NOTIFICATION_JOB_TYPE +" job ",
+			"Debug:<br><br>" + e
+		);
+
+	}
+
+});
+
+// If job not created, create it
+const existingJob = jobCollection.findOne({type: PRAYED_FOR_NOTIFICATION_JOB_TYPE});
+if ( !existingJob ) {
+  new Job(jobCollection, PRAYED_FOR_NOTIFICATION_JOB_TYPE, {})
+  .repeat({schedule: jobCollection.later.parse.text('at 11:00 am')})
+  .save();
+}
+
+function sendPrayedForNotifications() {
+  let updatedRequests = getPrayerRequests({newPrayers: true});
+
+  updatedRequests.forEach( ({ _id, email, prayedForCount }) => {
+    // build message
+    const HTML = `
+      <p>Hi</p>
+      <p>This is placeholder stuff</p>
+      <p>Number of people prayed for you: ${prayedForCount}</p>
+      <p>
+        You can view your post here:<br>
+        ${CONFIRMATION_LINK + _id}
+      </p>
+      <p>
+        - InterVarsity Christian Fellowship's Prayer Team
+        <a href="mailto:ivcf.rit.edu">ivcf.rit.edu</a>
+      </p>
+    `;
+
+    // send email to requester
+    Email.send({
+      to: email,
+      from: FROM,
+      subject: "New people have prayed for you!",
+      html: HTML
+    });
+
+    // Mark sent:
+    updatePrayerRequest({
+      requestID: _id,
+      update: {newPrayers: false}
+    });
+  });
 }
