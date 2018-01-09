@@ -866,3 +866,11 @@ Meteor.publishComposite('jobManager', function( type='', status=[] ) {
 		]
 	}
 });
+
+Meteor.publish("reportedPrayers", function() {
+	return PrayerRequests.find({ reported: true })
+});
+
+Meteor.publish("postedPrayers", function() {
+	return PrayerRequests.find({ audience: 'Wall', published: true })
+});
