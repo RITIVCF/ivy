@@ -6,7 +6,8 @@ import {
   reportPrayerRequest,
   acceptPrayerRequestReport,
   rejectPrayerRequestReport,
-  prayForRequest
+  prayForRequest,
+  deletePrayerRequest
 } from '/server/prayerwall';
 
 Meteor.methods({
@@ -34,5 +35,8 @@ Meteor.methods({
   },
   rejectPrayerRequestReport({ requestID }){
     return rejectPrayerRequestReport({ requestID });
+  },
+  deletePrayerRequest({ requestID }){
+    return deletePrayerRequest({ requestID });
   }
 });

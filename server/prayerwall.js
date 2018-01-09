@@ -1,6 +1,5 @@
 // Imports
-import { Random } from 'meteor/random';
-import { getUsers, getUser } from '/lib/users.js';
+import { getUsers } from '/lib/users.js';
 import { failJob } from '/server/jobCollection';
 
 export {
@@ -13,6 +12,7 @@ export {
   acceptPrayerRequestReport,
   rejectPrayerRequestReport,
   prayForRequest,
+  deletePrayerRequest,
   sendPrayedForNotifications
 };
 
@@ -36,8 +36,6 @@ function submitPrayerRequestUpdate({  prayerRequestID, content, type }) {
     content,
     type
   });
-
-  console.log("Request: ", prayerRequest);
 
   // send notification
   notify( prayerRequest, "update" );
@@ -122,7 +120,7 @@ function sendEmailToGroup({ groupID, subject, notificationBody }){
   });
 }
 
-function getRequestHTMLForNotification({ name, content, createdAt, audience, updates }) {
+function getRequestHTMLForNotification({ name, content, audience, updates }) {
   let begin = `
     <p>
       Name: ${name}<br>
@@ -234,18 +232,22 @@ function insertPrayerRequestUpdate({ prayerRequestID, content, type }){
   return getPrayerRequest(prayerRequestID);
 }
 
+function deletePrayerRequest({ requestID }){
+  return PrayerRequests.remove({ _id: requestID });
+}
+
 function defaultPrayerRequest() {
   return {
-  	name: '',
-  	email: '',
-  	content: '',
-  	createdAt: new Date(),
-  	published: false,
-  	reported: false,
-  	audience: "Leaders",
+    name: '',
+    email: '',
+    content: '',
+    createdAt: new Date(),
+    published: false,
+    reported: false,
+    audience: "Leaders",
     prayedForCount: 0,
     newPrayers: false,
-  	updates: []
+    updates: []
   };
 }
 
