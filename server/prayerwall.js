@@ -162,24 +162,28 @@ function prayForRequest({ requestID }) {
 }
 
 function reportPrayerRequest({ requestID }) {
-  const leadersPortalLink = process.env.ROOT_URL + '/prayergroup';
-  const HTML = `
-    <p>
-      Someone reported a prayer request. Please follow the link below to approve or reject the request.
-    </p>
-    <p><a href="${leadersPortalLink}">${leadersPortalLink}</a></p>
-  `;
+  let prayerRequest = PrayerRequests.find({ _id: requestID });
+  if (!prayerRequest.reported) {
+    const leadersPortalLink = process.env.ROOT_URL + '/prayergroup';
+    const HTML = `
+      <p>
+        Someone reported a prayer request. Please follow the link below to approve or reject the request.
+      </p>
+      <p><a href="${leadersPortalLink}">${leadersPortalLink}</a></p>
+    `;
 
-  sendEmailToGroup({
-    groupID: 'prayergroupleaders',
-    subject: "Someone Reported a Prayer Request",
-    notificationBody: HTML
-  });
+    sendEmailToGroup({
+      groupID: 'prayergroupleaders',
+      subject: "Someone Reported a Prayer Request",
+      notificationBody: HTML
+    });
 
-  return updatePrayerRequest({
-    requestID,
-    update: {reported: true}
-  });
+    return updatePrayerRequest({
+      requestID,
+      update: {reported: true}
+    });
+  }
+
 }
 
 function acceptPrayerRequestReport({ requestID }){

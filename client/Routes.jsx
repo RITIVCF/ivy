@@ -92,6 +92,7 @@ import UnsubscribeForm from './email/UnsubscribeForm.jsx'
 
 // **** Prayer Group **********
 import PrayerGroupJoinLanding from '/client/prayergroup/PrayerGroupJoinLanding';
+import PrayerGroupPortal from '/client/prayergroup/PrayerGroupPortal';
 // ****************************
 
 // **** Forms  ***************
@@ -711,6 +712,18 @@ unsubRoutes.route('/:subid', {
 const prayerGroupRoutes = FlowRouter.group({
 	prefix: '/prayergroup',
 	name: 'prayergroup'
+});
+
+prayerGroupRoutes.route('/', {
+	name: "prayergroupportal",
+	action( params ) {
+		const title = "Prayer Portal";
+		setDocumentTitle(title);
+		mount(MainLayout, {
+			header: title,
+			content: ( <PrayerGroupPortal />)
+		});
+	}
 });
 
 prayerGroupRoutes.route('/join', {
