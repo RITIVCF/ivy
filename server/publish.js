@@ -867,6 +867,8 @@ Meteor.publishComposite('jobManager', function( type='', status=[] ) {
 	}
 });
 
+
+// Prayer Wall
 Meteor.publish("reportedPrayers", function() {
 	return PrayerRequests.find({ reported: true })
 });
@@ -874,3 +876,7 @@ Meteor.publish("reportedPrayers", function() {
 Meteor.publish("postedPrayers", function() {
 	return PrayerRequests.find({ audience: 'Wall' })
 });
+
+Meteor.publish("prayerGroup", function() {
+  return Groups.find({ _id: 'prayergroup' })
+})
