@@ -1,0 +1,45 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "meteor": true
+  },
+  "extends": ['eslint:recommended', 'plugin:react/recommended'],
+  "plugins": [
+    "react"
+  ],
+  "globals": {
+    "Meteor": true,
+    "Materialize": true,
+    "Churches": true,
+    "Church": true,
+    "Contacts": true,
+    "Events": true,
+    "Debriefs": true,
+    "Tickets": true,
+    "Groups": true,
+    "Feedback": true,
+    "Emails": true,
+    "Counters": true,
+    "Options": true,
+    "PagePermissions": true,
+    "FunnelHistory": true,
+    "Funnel": true,
+    "DebriefQuestions": true,
+    "Status": true,
+    "jobCollection": true,
+    "JobCollection": true,
+    "PrayerRequests": true,
+    "Contact": true,
+    "Debrief": true,
+    "Email": true,
+    "EmailModule": true,
+    "Event": true
+  }
+}

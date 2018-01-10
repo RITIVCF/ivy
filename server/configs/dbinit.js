@@ -37,6 +37,12 @@ let groups = [
 		name: "Prayer Group Leaders",
 		users: [],
 		type: "Role"
+  },
+  {
+		_id: "newsletter",
+		name: "Newsletter Recipients",
+		users: [],
+		type: "Mailing List"
 	}
 ];
 groups.forEach( (group) => {
