@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import EventPreview from './EventPreview';
+import React from 'react';
 import Event from '/lib/classes/Event.js'
-import { createContainer } from 'meteor/react-meteor-data';
+import { withTracker } from 'meteor/react-meteor-data';
+import PassesProps from '/imports/api/PassesProps';
 
-export default EventPreviewContainer = createContainer(({ eid }) => {
+export default withTracker(({ eid }) => {
   const eventSub = Meteor.subscribe('thisEvent', eid);
   const loading = !eventSub.ready();
   const event = getSelectedEvent(eid);
@@ -13,11 +13,12 @@ export default EventPreviewContainer = createContainer(({ eid }) => {
     event,
     eventExists
   };
-}, EventPreview);
+})(PassesProps);
+
 
 function getSelectedEvent(eid){
 	let event = Events.findOne(eid);
-	if(!!event){
+	if(event){
 		return new Event(event);
 	}
 	return false;

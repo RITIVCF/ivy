@@ -4,7 +4,8 @@ import LoaderCircle from '../LoaderCircle.jsx';
 import EventCalendar from './EventCalendar.jsx';
 import LegendFilter from './LegendFilter.jsx';
 import MainBox from '../MainBox.jsx';
-import EventPreviewContainer from './EventPreviewContainer';
+import WithEvent from './EventPreviewContainer';
+import EventPreview from './EventPreview';
 import EventHelp from './EventHelp.jsx';
 import { NavbarItem } from '/client/materialize.jsx';
 import NoPerm from '../NoPerm.jsx';
@@ -173,6 +174,10 @@ export default class EventCalendarPage extends TrackerReact(React.Component) {
 				</Row>
 			);
     }
-		return <EventPreviewContainer eid={eid} />;
+		return (
+      <WithEvent eid={eid}>
+        <EventPreview />
+      </WithEvent>
+    );
 	}
 }
