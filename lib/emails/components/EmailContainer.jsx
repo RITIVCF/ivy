@@ -242,10 +242,10 @@ export default class EmailContainer {
 
     return (
       headstr + `<table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="right" width="100%" style="max-width: 680px; font-size:12px; font-family: sans-serif; line-height:18px; text-align:right; color: #000000;"><tr><td><a target="_blank" href="`+ process.env.ROOT_URL +`emailrender/` + LZString.compressToEncodedURIComponent(headstr + this.EmailHeader.renderHTML() +
-      this.EmailBody.renderHTML(email.modules, email.when) + this.EmailFooter.renderHTML() + footstr) +
+      this.EmailBody.renderHTML(email.modules, email.when) + this.EmailFooter.renderHTML(LZString.compressToEncodedURIComponent(uid),email.template) + footstr) +
       `">View in browser</a></td></tr></table>` +
       this.EmailHeader.renderHTML() +
-      this.EmailBody.renderHTML(email.modules, email.when) + this.EmailFooter.renderHTML(LZString.compressToEncodedURIComponent(uid)) + footstr
+      this.EmailBody.renderHTML(email.modules, email.when) + this.EmailFooter.renderHTML(LZString.compressToEncodedURIComponent(uid),email.template) + footstr
     )
   }
 }

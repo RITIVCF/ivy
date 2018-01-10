@@ -18,7 +18,7 @@ if(!adminUser){
 }
 
 
-//Set up Groups
+// Set up Groups
 let groups = [
 	{
 		_id:"admin",
@@ -27,6 +27,18 @@ let groups = [
 		type: "Permission Group"
 	},
 	{
+		_id: "prayergroup",
+		name: "Prayer Group",
+		users: [],
+		type: "Mailing List"
+	},
+	{
+		_id: "prayergroupleaders",
+		name: "Prayer Group Leaders",
+		users: [],
+		type: "Role"
+  },
+  {
 		_id: "newsletter",
 		name: "Newsletter Recipients",
 		users: [],
@@ -657,6 +669,22 @@ let emailTemplates = [
 	  "title": "ToDo Email",
 	  "modules": [
 			newEmailModule("custom")
+		]
+	},
+	{
+		"_id": "prayergroup",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "",
+	  "subject": "Prayer Group Update Email Subject",
+	  "isTemplate": true,
+	  "title": "Prayer Group Update",
+	  "modules": [
+			newEmailModule("custom"),
+			newEmailModule("prayer")
 		]
 	}
 ];
