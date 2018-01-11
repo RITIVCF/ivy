@@ -874,9 +874,21 @@ Meteor.publish("reportedPrayers", function() {
 });
 
 Meteor.publish("postedPrayers", function() {
-	return PrayerRequests.find({ audience: 'Wall' })
+	return PrayerRequests.find({ audience: 'Wall', published: true })
 });
 
-Meteor.publish("prayerGroup", function() {
-  return Groups.find({ _id: 'prayergroup' })
-})
+Meteor.publishComposite("prayerGroup", function() {
+  return {
+    find() {
+      return Groups.find({ _id: 'prayergroup' })
+    },
+    children: [
+      {
+        find(group) {
+          let users = group.users;
+          return Meteor.users.find({_id: {$in: users}});
+        }
+      }
+    ]
+  }
+});
