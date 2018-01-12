@@ -873,6 +873,10 @@ Meteor.publish("reportedPrayers", function() {
 	return PrayerRequests.find({ reported: true })
 });
 
+Meteor.publish("PrayerRequest.single", function(requestID){
+  return PrayerRequests.find({ _id: requestID });
+});
+
 Meteor.publish("postedPrayers", function() {
 	return PrayerRequests.find({ audience: 'Wall' })
 });
