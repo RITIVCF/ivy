@@ -1,6 +1,9 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
 import LoaderCircle from '/client/LoaderCircle';
+import NoPerm from '/client/NoPerm.jsx';
+import SelectUser from '/client/sharedcomponents/SelectUser';
+
 
 export default class PrayerGroupPortal extends TrackerReact(React.Component) {
 
@@ -13,6 +16,8 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
         PrayerGroup: Meteor.subscribe("prayerGroup")
       }
     };
+
+    this.addToPrayerGroup = this.addToPrayerGroup.bind(this);
 
   }
 
@@ -31,9 +36,17 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
     return Groups.find({ _id: 'prayergroup' }).fetch();
   }
 
+  addToPrayerGroup(user){
+		Meteor.call("addToPrayerGroup", {user});
+  }
+
   render() {
     let ready=this.state.subscription.PrayerRequests.ready();
     let groupready=this.state.subscription.PrayerGroup.ready();
+    if(!checkPermission("prayerportal")){
+      return <NoPerm />
+    }
+    setDocumentTitle("Prayer Group Portal");
     return (
       <div>
         <div className="card">
@@ -41,7 +54,11 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
           <div className="card-content">
             <div className="card-title">
               Prayer group members:
-
+              <SelectUser
+                initialValue={""}
+                updateUser={this.addToPrayerGroup}
+                id="prayergroupselect"
+                ref="prayergroupselect" />
             </div>
             <ul className="collection">
               {groupready?this.getPrayerGroup().length!=0?this.getPrayerGroup().map((user)=>{
