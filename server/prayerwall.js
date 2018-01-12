@@ -18,7 +18,7 @@ export {
 
 const FROM = "InterVarsity Christian Fellowship <ivcf.rit.edu>";
 const IVY_FROM = "Ivy Information System <ivy.rit.edu>";
-const CONFIRMATION_LINK = 'http://ivcf.rit.edu/prayerwall/';
+const CONFIRMATION_LINK = 'http://ivcf.rit.edu/prayer/';
 
 function submitPrayerRequest({ name, email, content, audience }) {
   const requestID = insertPrayerRequest({ name, email, content, audience });
