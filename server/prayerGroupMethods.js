@@ -7,8 +7,10 @@ Meteor.methods({
   joinPrayerGroup( ) {
     addUserToPrayerGroup({uid: Meteor.userId()});
   },
+  addToPrayerGroup({user}) {
+    addUserToPrayerGroup({uid: user._id});
+  },
   leavePrayerGroup({ uid }) {
-    console.log(uid);
     removeUserFromPrayerGroup(uid);
   }
 });

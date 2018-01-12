@@ -383,6 +383,14 @@ let options = [
 	      "children": []
 	    },
 	    {
+	      "id": "prayerportal",
+	      "name": "prayerportal",
+	      "icon": "wifi",
+	      "text": "Prayer Portal",
+	      "permission": "prayerportal",
+	      "children": []
+	    },
+	    {
 	      "id": "admin",
 	      "name": "admin",
 	      "icon": "perm_data_settings",
@@ -810,6 +818,13 @@ let pagePermissions = [
 	    "admin"
 	  ],
 	  "pagename": "System Administrator"
+	},
+	{
+		"_id": "prayerportal",
+		"groups": [
+			"prayergroupleaders"
+		],
+		"pagename": "Manage Prayer Group"
 	}
 ];
 
