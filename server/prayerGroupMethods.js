@@ -1,4 +1,7 @@
-import { addUserToPrayerGroup } from '/lib/groups.js';
+import {
+  addUserToPrayerGroup,
+  removeUserFromPrayerGroup
+} from '/lib/groups.js';
 
 Meteor.methods({
   joinPrayerGroup( ) {
@@ -6,5 +9,8 @@ Meteor.methods({
   },
   addToPrayerGroup({user}) {
     addUserToPrayerGroup({uid: user._id});
+  },
+  leavePrayerGroup({ uid }) {
+    removeUserFromPrayerGroup(uid);
   }
 });

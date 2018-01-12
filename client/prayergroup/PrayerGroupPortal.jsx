@@ -18,7 +18,10 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
     };
 
     this.addToPrayerGroup = this.addToPrayerGroup.bind(this);
-
+    this.getReportedPrayers = this.getReportedPrayers.bind(this)
+    this.getPrayerGroup = this.getPrayerGroup.bind(this)
+    this.deletePost = this.deletePost.bind(this)
+    this.keepPost = this.keepPost.bind(this)
   }
 
   componentWillUmount(){
@@ -31,9 +34,23 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
   }
 
   getPrayerGroup() {
-    let prayergroup = Groups.find({ _id: 'prayergroup' }).fetch();
-    console.log(prayergroup.users);
-    return Groups.find({ _id: 'prayergroup' }).fetch();
+    let group = Groups.findOne({ _id: 'prayergroup' });
+    return Meteor.users.find({_id: {$in: group.users}}).fetch();
+  }
+
+  deletePost(requestID) {
+    if (window.confirm("This will delete the post forever")) {
+      return Meteor.call("acceptPrayerRequestReport", { requestID })
+    }
+  }
+
+  keepPost(requestID) {
+    return Meteor.call("rejectPrayerRequestReport", { requestID })
+  }
+
+  removeUser(uid) {
+    console.log(uid);
+    return Meteor.call("leavePrayerGroup", { uid })
   }
 
   addToPrayerGroup(user){
@@ -50,6 +67,27 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
     return (
       <div>
         <div className="card">
+          <div className="card-content">
+            <span className="card-title">Reported posts:</span>
+            <ul className="collection">
+              {ready?this.getReportedPrayers().length!=0?this.getReportedPrayers().map((prayer)=>{
+                return (
+                  <li key={prayer._id} className="collection-item">
+                    {prayer.content}
+                    <Button className="right" onClick={() => {this.deletePost(prayer._id)}}>
+                      Delete post
+                    </Button>
+                    <Button className="right" onClick={() => {this.keepPost(prayer._id)}}>
+                      Keep post
+                    </Button>
+                    <div style={{ clear: "both" }}></div>
+                  </li>
+                )
+              }):<p style={{textAlign: "center"}}>No reported prayer requests</p>:<LoaderCircle />}
+            </ul>
+          </div>
+        </div>
+        <div className="card">
 
           <div className="card-content">
             <div className="card-title">
@@ -63,22 +101,15 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
             <ul className="collection">
               {groupready?this.getPrayerGroup().length!=0?this.getPrayerGroup().map((user)=>{
               return (
-                <li className="collection-item">{user._id}</li>
+                <li key={user._id} className="collection-item">
+                  {user.name}
+                  <Button className="right" onClick={() => {this.removeUser(user._id)}}>
+        						Remove
+        					</Button>
+                  <div style={{ clear: "both" }}></div>
+                </li>
               )
               }):<p style={{textAlign: "center"}}>No members of prayer group</p>:<LoaderCircle />}
-            </ul>
-          </div>
-
-        </div>
-        <div className="card">
-          <div className="card-content">
-            <span className="card-title">Reported posts:</span>
-            <ul className="collection">
-              {ready?this.getReportedPrayers().length!=0?this.getReportedPrayers().map((prayer)=>{
-              return (
-                <li className="collection-item">{prayer.content}</li>
-              )
-              }):<p style={{textAlign: "center"}}>No reported prayer requests</p>:<LoaderCircle />}
             </ul>
           </div>
         </div>
