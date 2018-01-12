@@ -119,11 +119,12 @@ class Job extends React.Component {
 	handleClick(action){
 		this.setState({loading: true});
 		const method = this.methods[action];
-		Meteor.call(method, this.props.job._id, (error) => {
+		Meteor.call(method, this.props.job._id, (error, result) => {
 			if(error){
 				console.error("Problem performing action " + action + " on job: ", error);
 				window.alert("Problem performing action " + action + " on job. View log for details.");
 			}
+			console.log("Result: ", result);
 			this.setState({loading: false});
 		});
 	}

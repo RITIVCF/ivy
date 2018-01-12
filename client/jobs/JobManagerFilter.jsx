@@ -31,6 +31,7 @@ export default class JobManagerFilter extends React.Component {
 										<option value="">Select a Job Type</option>
 										<option value="sendEmail">Send Email</option>
 										<option value="email">Email Center Email</option>
+										<option value="sendPrayedForNotifications">Send Prayed For Notifications</option>
 										<option value="sendEventFollowUpEmail">Send Event Follow Up</option>
 										<option value="checkFunnelStatus">Check Funnel Status</option>
 										<option value="processExpiredContacts">Process Expired Contacts</option>

@@ -123,9 +123,9 @@ function sendEmailToGroup({ groupID, subject, notificationBody }){
 function getRequestHTMLForNotification({ name, content, audience, updates }) {
   let begin = `
     <p>
-      Name: ${name}<br>
-      Audience: ${audience}
-      Request:<br>
+      <strong>Name:</strong> ${name}<br>
+      <strong>Audience:</strong> ${audience}<br>
+      <strong>Request:</strong><br>
       ${content}
     </p>
     <p>`;
@@ -164,7 +164,7 @@ function prayForRequest({ requestID }) {
 function reportPrayerRequest({ requestID }) {
   let prayerRequest = PrayerRequests.find({ _id: requestID });
   if (!prayerRequest.reported) {
-    const leadersPortalLink = process.env.ROOT_URL + '/prayergroup';
+    const leadersPortalLink = process.env.ROOT_URL + 'prayergroup';
     const HTML = `
       <p>
         Someone reported a prayer request. Please follow the link below to approve or reject the request.
