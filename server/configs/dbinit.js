@@ -383,8 +383,8 @@ let options = [
 	      "children": []
 	    },
 	    {
-	      "id": "prayerportal",
-	      "name": "prayerportal",
+	      "id": "prayergroupportal",
+	      "name": "prayergroupportal",
 	      "icon": "wifi",
 	      "text": "Prayer Portal",
 	      "permission": "prayerportal",

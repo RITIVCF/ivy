@@ -1,5 +1,6 @@
 import React from 'react';
 import TrackerReact from 'meteor/ultimatejs:tracker-react';
+import { getUsers } from '/lib/users.js';
 import LoaderCircle from '/client/LoaderCircle';
 import NoPerm from '/client/NoPerm.jsx';
 import SelectUser from '/client/sharedcomponents/SelectUser';
@@ -13,7 +14,8 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
     this.state ={
       subscription: {
         PrayerRequests: Meteor.subscribe("reportedPrayers"),
-        PrayerGroup: Meteor.subscribe("prayerGroup")
+        PrayerGroup: Meteor.subscribe("prayerGroup"),
+        AllContacts: Meteor.subscribe("allContacts")
       }
     };
 
@@ -27,6 +29,7 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
   componentWillUmount(){
     this.state.subscription.PrayerRequests.stop();
     this.state.subscription.PrayerGroup.stop();
+    this.state.subscription.AllContacts.stop();
   }
 
   getReportedPrayers() {
@@ -35,7 +38,7 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
 
   getPrayerGroup() {
     let group = Groups.findOne({ _id: 'prayergroup' });
-    return Meteor.users.find({_id: {$in: group.users}}).fetch();
+    return getUsers({_id: {$in: group.users}});
   }
 
   deletePost(requestID) {
@@ -49,12 +52,11 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
   }
 
   removeUser(uid) {
-    console.log(uid);
     return Meteor.call("leavePrayerGroup", { uid })
   }
 
   addToPrayerGroup(user){
-		Meteor.call("addToPrayerGroup", {user});
+		Meteor.call("addToPrayerGroup", user._id);
   }
 
   render() {
@@ -63,7 +65,6 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
     if(!checkPermission("prayerportal")){
       return <NoPerm />
     }
-    setDocumentTitle("Prayer Group Portal");
     return (
       <div>
         <div className="card">
@@ -92,20 +93,25 @@ export default class PrayerGroupPortal extends TrackerReact(React.Component) {
           <div className="card-content">
             <div className="card-title">
               Prayer group members:
-              <SelectUser
-                initialValue={""}
-                updateUser={this.addToPrayerGroup}
-                id="prayergroupselect"
-                ref="prayergroupselect" />
+
             </div>
+            <SelectUser
+              initialValue={""}
+              updateUser={this.addToPrayerGroup}
+              id="userselect"
+              ref="user" />
             <ul className="collection">
               {groupready?this.getPrayerGroup().length!=0?this.getPrayerGroup().map((user)=>{
               return (
-                <li key={user._id} className="collection-item">
-                  {user.name}
-                  <Button className="right" onClick={() => {this.removeUser(user._id)}}>
-        						Remove
-        					</Button>
+                <li key={user._id} className="collection-item" style={{display: "flex"}}>
+                  <div style={{flex: 1, alignSelf: 'center'}}>
+                    {user.getName()} - {user.getEmail()}
+                  </div>
+                  <div style={{flex: 1}}>
+                    <Button className="right" onClick={() => {this.removeUser(user._id)}}>
+                      Remove
+                    </Button>
+                  </div>
                   <div style={{ clear: "both" }}></div>
                 </li>
               )
