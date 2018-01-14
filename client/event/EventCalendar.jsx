@@ -117,7 +117,7 @@ export default class EventCalendar extends TrackerReact(React.Component) {
       }
     );
     $(calendar).fullCalendar( 'addEventSource',
-      {events: this.props.unpublishedEvent,
+      {events: this.props.unpublishedEvents,
         className: "unpublishedEvent"
       }
     );
