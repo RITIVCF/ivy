@@ -36,7 +36,7 @@ function resumeJob(jid){
 }
 
 function readyJob(jid){
-	jobCollection.readyJobs([jid]);
+	return jobCollection.readyJobs([jid]);
 }
 
 function rerunJob(jid){

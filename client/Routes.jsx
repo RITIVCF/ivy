@@ -90,13 +90,18 @@ import EmailWorkspaceWrapper from './email/workspace/EmailWorkspaceWrapper.jsx';
 import UnsubscribeForm from './email/UnsubscribeForm.jsx'
 // ****************************
 
+// **** Prayer Group **********
+import PrayerGroupJoinLanding from '/client/prayergroup/PrayerGroupJoinLanding';
+import PrayerGroupPortal from '/client/prayergroup/PrayerGroupPortal';
+// ****************************
+
 // **** Forms  ***************
 import FormWrapper from './forms/FormWrapper.jsx';
 // ****************************
 
 
 function signInForceCheck(context) {
-	const exclude = ["public", "unsubscribe"]
+	const exclude = ["public", "unsubscribe"];
 	if(!exclude.includes(context.route.group.name)){
 		if(!Meteor.userId()){
 			routeTo('login', {}, {r: context.path});
@@ -701,6 +706,42 @@ unsubRoutes.route('/:subid', {
 				content: (<UnsubscribeForm token={params.subid} />)
 			}
 		)
+	}
+});
+
+let prayerGroupRoutes = FlowRouter.group({
+	prefix: '/prayergroup',
+	name: 'prayergroup'
+});
+
+prayerGroupRoutes.route('/', {
+	name: "prayergroupportal",
+	action() {
+		const title = "Prayer Portal";
+		setDocumentTitle(title);
+		mount(MainLayout, {
+			header: title,
+			content: ( <PrayerGroupPortal />)
+		})
+	}
+});
+
+
+prayerGroupRoutes.route('/join', {
+	name: "prayergroupjoin",
+	action( params ) {
+		Meteor.call('joinPrayerGroup', function(err) {
+			let status = "success";
+			if (err) {
+				status = "error";
+			}
+			mount(FormLayout, {
+				content: ( <PrayerGroupJoinLanding status={status} />)
+			});
+		});
+		mount(FormLayout, {
+			content: ( <PrayerGroupJoinLanding status={"pending"} />)
+		});
 	}
 });
 

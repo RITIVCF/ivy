@@ -34,23 +34,15 @@ export default class EmailSummary extends TrackerReact(React.Component){
 	// The specification of template: newsletter can be remove once the email area is used for
 	// more than just newsletters
   getDrafts(){
-    return Emails.find({status: "draft", template: "newsletter"}, {sort: {when: -1}}).fetch();
+    return Emails.find({...baseEmailQuery, status: "draft"}, {sort: {when: -1}}).fetch();
   }
 
   getStaged(){
-    return Emails.find({status: "staged", template: "newsletter"}, {sort: {when: -1}}).fetch();
+    return Emails.find({...baseEmailQuery, status: "staged"}, {sort: {when: -1}}).fetch();
   }
 
   getSent(){
-    return Emails.find({status: "sent", template: "newsletter"}, {sort: {when: -1}}).fetch();
-  }
-
-  getRows(num){
-    var array = [];
-    for(i=0; i<=num; i++){
-      array.push("");
-    }
-    return array;
+    return Emails.find({...baseEmailQuery, status: "sent"}, {sort: {when: -1}}).fetch();
   }
 
   render() {
@@ -103,3 +95,12 @@ export default class EmailSummary extends TrackerReact(React.Component){
     )
   }
 }
+
+const baseEmailQuery = {
+  template: {
+    $ne: [
+      "todoemail",
+      "eventfollowup"
+    ]
+  }
+};

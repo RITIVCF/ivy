@@ -18,13 +18,31 @@ if(!adminUser){
 }
 
 
-//Set up Groups
+// Set up Groups
 let groups = [
 	{
 		_id:"admin",
 		name: "Administrator",
 		users: [],
 		type: "Permission Group"
+	},
+	{
+		_id: "prayergroup",
+		name: "Prayer Group",
+		users: [],
+		type: "Mailing List"
+	},
+	{
+		_id: "prayergroupleaders",
+		name: "Prayer Group Leaders",
+		users: [],
+		type: "Role"
+  },
+  {
+		_id: "newsletter",
+		name: "Newsletter Recipients",
+		users: [],
+		type: "Mailing List"
 	}
 ];
 groups.forEach( (group) => {
@@ -365,6 +383,14 @@ let options = [
 	      "children": []
 	    },
 	    {
+	      "id": "prayergroupportal",
+	      "name": "prayergroupportal",
+	      "icon": "wifi",
+	      "text": "Prayer Portal",
+	      "permission": "prayerportal",
+	      "children": []
+	    },
+	    {
 	      "id": "admin",
 	      "name": "admin",
 	      "icon": "perm_data_settings",
@@ -652,6 +678,22 @@ let emailTemplates = [
 	  "modules": [
 			newEmailModule("custom")
 		]
+	},
+	{
+		"_id": "prayergroup",
+	  "to": {
+	    "users": [],
+	    "groups": [],
+	    "emails": []
+	  },
+	  "from": "",
+	  "subject": "Prayer Group Update Email Subject",
+	  "isTemplate": true,
+	  "title": "Prayer Group Update",
+	  "modules": [
+			newEmailModule("custom"),
+			newEmailModule("prayer")
+		]
 	}
 ];
 
@@ -776,6 +818,13 @@ let pagePermissions = [
 	    "admin"
 	  ],
 	  "pagename": "System Administrator"
+	},
+	{
+		"_id": "prayerportal",
+		"groups": [
+			"prayergroupleaders"
+		],
+		"pagename": "Manage Prayer Group"
 	}
 ];
 
