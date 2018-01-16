@@ -866,3 +866,33 @@ Meteor.publishComposite('jobManager', function( type='', status=[] ) {
 		]
 	}
 });
+
+
+// Prayer Wall
+Meteor.publish("reportedPrayers", function() {
+	return PrayerRequests.find({ reported: true })
+});
+
+Meteor.publish("PrayerRequest.single", function(requestID){
+  return PrayerRequests.find({ _id: requestID });
+});
+
+Meteor.publish("postedPrayers", function() {
+	return PrayerRequests.find({ audience: 'Wall', published: true })
+});
+
+Meteor.publishComposite("prayerGroup", function() {
+  return {
+    find() {
+      return Groups.find({ _id: 'prayergroup' })
+    },
+    children: [
+      {
+        find(group) {
+          let users = group.users;
+          return Meteor.users.find({_id: {$in: users}});
+        }
+      }
+    ]
+  }
+});

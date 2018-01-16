@@ -40,7 +40,7 @@ Meteor.methods({
 	},
 	readyJob(jid){
 		if(checkPermission("admin")){
-			readyJob(jid);
+			return readyJob(jid);
 		}
 	},
 	rerunJob(jid){

@@ -8,6 +8,7 @@ import {
 import { addTicket } from '/lib/tickets.js';
 import Contact from '/lib/classes/Contact.js';
 import { createNewUser } from '/lib/users.js';
+import { addUserToNewsletterMailingList } from '/lib/groups.js';
 
 
 Meteor.methods({
@@ -49,7 +50,7 @@ Meteor.methods({
 	      addAttendanceRecord(signin);
 
 	      if(signin.newsletter){
-	        Meteor.call("updateNewsletter", signin.uid, true);
+					addUserToNewsletterMailingList(signin.uid);
 	      }
 	      if(signin.learnmore){
 	        Meteor.call("addLearnMoreTicket", signin.uid);

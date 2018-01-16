@@ -83,9 +83,9 @@ export default class EmailSummary extends TrackerReact(React.Component){
 			<li className={"collection-item trunc-cell"+this.isSelected()}
 				onClick={this.handleClick.bind(this)}
 				onDoubleClick={this.handleDoubleClick.bind(this)} >
-				<span style={{width: "20%", display: "inline-block"}}>{email.subject}</span>
+				<span style={{width: "20%", display: "inline-block"}} title={email.subject}>{email.subject}</span>
 				<span style={{width: "30%", display: "inline-block"}}>{this.getTo()}</span>
-				<span style={{width: "15%", display: "inline-block"}}>{email.from}</span>
+				<span style={{width: "15%", display: "inline-block"}} title={email.from}>{email.from}</span>
 				<span style={{width: "15%", display: "inline-block"}}>{this.getTemplate()}</span>
 				<span style={{width: "20%", display: "inline-block"}}>{dateFormat(email.when)}</span>
 			</li>
